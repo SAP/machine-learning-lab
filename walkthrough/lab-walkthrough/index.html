@@ -1,0 +1,1080 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Documentation for the Machine Learning Lab">
+      
+      
+        <link rel="canonical" href="https://github.wdf.sap.corp/pages/sap/machine-learning-lab/walkthrough/lab-walkthrough/">
+      
+      
+        <meta name="author" content="Lukas Masuch & Benjamin Räthlein">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-4.6.3">
+    
+    
+      
+        <title>ML Lab Walkthrough - Machine Learning Lab</title>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
+      
+      
+    
+    <link rel="stylesheet" href="../../css/image-slider.css">
+
+    
+    
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../../css/mllab.css">
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#walkthrough" tabindex="0" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://github.wdf.sap.corp/pages/sap/machine-learning-lab/" title="Machine Learning Lab" aria-label="Machine Learning Lab" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Machine Learning Lab
+            </span>
+            <span class="md-header-nav__topic">
+              
+                ML Lab Walkthrough
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.wdf.sap.corp/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    sap/machine-learning-lab
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://github.wdf.sap.corp/pages/sap/machine-learning-lab/" title="Machine Learning Lab" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Machine Learning Lab
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.wdf.sap.corp/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    sap/machine-learning-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="About ML Lab" class="md-nav__link">
+      About ML Lab
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../getting-started/" title="Getting Started" class="md-nav__link">
+      Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        ML Lab Walkthrough
+      </label>
+    
+    <a href="./" title="ML Lab Walkthrough" class="md-nav__link md-nav__link--active">
+      ML Lab Walkthrough
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#create-project" class="md-nav__link">
+    Create Project
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upload-data" class="md-nav__link">
+    Upload Data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#access-your-workspace" class="md-nav__link">
+    Access your Workspace
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#experimentation" class="md-nav__link">
+    Experimentation
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initialize-environment" class="md-nav__link">
+    Initialize Environment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-data" class="md-nav__link">
+    Download Data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-experiment" class="md-nav__link">
+    Run Experiment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-unified-model" class="md-nav__link">
+    Create Unified Model
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upload-model" class="md-nav__link">
+    Upload Model
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy-model" class="md-nav__link">
+    Deploy Model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    Next Steps
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../installation/install-lab/" title="Installation" class="md-nav__link">
+      Installation
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Usage
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Usage
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../usage/core-concepts/" title="Core Concepts" class="md-nav__link">
+      Core Concepts
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../usage/lab-workspace/" title="Workspace" class="md-nav__link">
+      Workspace
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../usage/lab-python-client/" title="ML Lab Python Client" class="md-nav__link">
+      ML Lab Python Client
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../usage/lab-api/" title="ML Lab REST API" class="md-nav__link">
+      ML Lab REST API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../usage/experiments-dashboard/" title="Experiments Dashboard" class="md-nav__link">
+      Experiments Dashboard
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../usage/how-to-create-a-service/" title="How to create a Service" class="md-nav__link">
+      How to create a Service
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../usage/how-to-create-a-job/" title="How to create a Job" class="md-nav__link">
+      How to create a Job
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Administration
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Administration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../administration/update-lab/" title="Update ML Lab" class="md-nav__link">
+      Update ML Lab
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../administration/uninstall-lab/" title="Uninstall ML Lab" class="md-nav__link">
+      Uninstall ML Lab
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../administration/manage-services/" title="Manage Services" class="md-nav__link">
+      Manage Services
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../administration/backup-data/" title="Backup Data" class="md-nav__link">
+      Backup Data
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Architecture
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Architecture
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../architecture/machine-learning-lifecycle/" title="ML Lifecycle" class="md-nav__link">
+      ML Lifecycle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../architecture/architecture/" title="ML Lab Architecture" class="md-nav__link">
+      ML Lab Architecture
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../faq/" title="FAQ" class="md-nav__link">
+      FAQ
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#create-project" class="md-nav__link">
+    Create Project
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upload-data" class="md-nav__link">
+    Upload Data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#access-your-workspace" class="md-nav__link">
+    Access your Workspace
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#experimentation" class="md-nav__link">
+    Experimentation
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initialize-environment" class="md-nav__link">
+    Initialize Environment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-data" class="md-nav__link">
+    Download Data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-experiment" class="md-nav__link">
+    Run Experiment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-unified-model" class="md-nav__link">
+    Create Unified Model
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upload-model" class="md-nav__link">
+    Upload Model
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy-model" class="md-nav__link">
+    Deploy Model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    Next Steps
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="walkthrough">Walkthrough<a class="headerlink" href="#walkthrough" title="Permanent link">&para;</a></h1>
+<p>In the following visual walkthrough, you will experience most of the features, interaction patterns, and tools that the ML Lab offers. You can either just scroll through everything to get a quick overview of how our platform is meant to be used, or you can use this walkthrough as a tutorial by replicating it step-by-step. Let's get started!</p>
+<p>The first screen you will experience when visiting your ML Lab instance is this beautiful dashboard:</p>
+<p><a href="../../images/lab-home.png"><img alt="Dashboard" src="../../images/lab-home.png" /></a></p>
+<p>This is your project's home section; it gives you an overview of the currently selected project and a section showing other available projects. If you are a new user, it will directly ask you to create your first project. We will get to this in the next section.</p>
+<div class="admonition note">
+<p class="admonition-title">Concept Definition: Project</p>
+<p>A project is a digital space for tackling a specific data science use-case. It consists of multiple datasets, experiments, models, services, and jobs.</p>
+</div>
+<h2 id="create-project">Create Project<a class="headerlink" href="#create-project" title="Permanent link">&para;</a></h2>
+<p>For this walkthrough, we will create a project which we will call <code>demo-project</code>. For your project you need to select a unique name that isn't already used by someone else on the ML Lab instance (e.g. <code>&lt;username&gt;-project</code>).</p>
+<p><a href="../images/walkthrough-create-project.png"><img alt="Create Project" src="../images/walkthrough-create-project.png" /></a></p>
+<p>After the creation, the project will be selected and appear on you home section. Since it is a new project, it does not have any datasets, models, services, and experiments yet.</p>
+<p><a href="../images/walkthrough-created-project.png"><img alt="New Project Created" src="../images/walkthrough-created-project.png" /></a></p>
+<h2 id="upload-data">Upload Data<a class="headerlink" href="#upload-data" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Concept Definition: Dataset</p>
+<p>A dataset is a single file that contains raw- or processed-data, usually preselected for a certain experiment. It is recommended to have the dataset in an easily readable format such as CSV for structured data or GraphML for graph data. If your dataset consists of multiple files (e.g. collection of images), we recommend zipping this dataset to a single file. Our python libraries have built-in support for his type of packaged data.</p>
+</div>
+<p>To start the experimentation process, we first need to upload a dataset. Therefore, we switch to the datasets section and select the upload functionality:</p>
+<p><a href="../images/walkthrough-upload-dataset.png"><img alt="Upload Dataset" src="../images/walkthrough-upload-dataset.png" /></a></p>
+<p>In this dialog, we can select and upload any file. For this walkthrough, we have prepared a dataset that contains a collection of news articles grouped into 20 categories (<a href="http://qwone.com/~jason/20Newsgroups/">20 Newsgroups</a>). Our goal is to train a classification model that is able to predict the topic of a news article. You can download the dataset <a href="../data/download-dataset.html">here</a>.</p>
+<p>After we have uploaded the file, it will be shown as a dataset within the datasets table. Here we can see additional metadata and execute some actions, such as download, remove, and copy the datasets key to clipboard.</p>
+<p><a href="../images/walkthrough-uploaded-dataset.png"><img alt="Uploaded Dataset" src="../images/walkthrough-uploaded-dataset.png" /></a></p>
+<p>Finally, to get started with experiments on this dataset, please navigate to the workspace section.</p>
+<h2 id="access-your-workspace">Access your Workspace<a class="headerlink" href="#access-your-workspace" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Concept Definition: Workspace</p>
+<p>A place for a data scientist to conduct a set of experiments centered on a given project or problem to solve. It can have many different notebooks and scripts containing different experiments that are carried out as the data scientist seek the best model. The workspace is implemented as an all-in-one web IDE specialized for machine learning and data science.</p>
+</div>
+<p>If you are a first-time user, the workspace will need a few seconds to setup and get ready. After it is setup, you will see the Jupyter Notebook Web UI. This workspace is an all-in-one web IDE specialized for machine learning and data science. It comes with Jupyter Notebook, a Desktop GUI, Git Integration, Tensorboard Integration, Hardware Monitoring, and many common ML libraries. It is also <em>project-independent</em>, therefore, you will use the same workspace for all of the projects.</p>
+<p><a href="../../images/lab-workspace.png"><img alt="Workspace with Tools" src="../../images/lab-workspace.png" /></a></p>
+<p>The workspace is equipped with a selection of common tools to help with the data science and experimentation workflow. Many of these tools can be started from the <em>Open Tool</em> menu. Within the workspace you can use our python client library to connect to ML Lab, as we will show below.</p>
+<h2 id="experimentation">Experimentation<a class="headerlink" href="#experimentation" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Concept Definition: Experiment</p>
+<p>An experiment is a single execution of a data science code with specific parameters, data, and results. An experiment in the data science field usually refers to a single model training run, but can also be any other computational task, such as a data transformation, that requires a certain configuration and has some measurable results. All metadata and artifacts for an experiment such as parameters, timestamp, operator, data &amp; model files, environment information, resulting metrics (e.g. accuracy), and other related information can easily be saved and shared with the experiment to enable reproducibility. During the experimentation process, one or more parameters are changed by the data scientist in an organized manner, and the effects of these changes on associated metrics are measured, recorded, and analyzed. Data scientist may try many different approaches, different parameters and fail many times before the required level of a metric is achieved.</p>
+</div>
+<p>To get started with our experimentation, please open the <code>text-classification.ipynb</code> notebook inside the <code>tutorials/</code> directory. Usually, we will have one notebook for every experiment. A notebook contains both computer code (e.g. python) and rich text elements (e.g. markdown).</p>
+<p><a href="../images/walkthrough-workspace-notebook.png"><img alt="Open Notebook" src="../images/walkthrough-workspace-notebook.png" /></a></p>
+<p>This notebook will guide us through the process of training a classification model for our dataset via <a href="https://scikit-learn.org/">sklearn</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In the notebook, you can execute any code cell with this shortcut: <kbd>CTRL</kbd> + <kbd>Enter</kbd></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Clone Repository</p>
+<p>In this case, the notebook that contains the required code to train our classification model already exists in the workspace. However, sometimes you have to download code from external sources and especially if you collaborate with others, tools such as Git should be used to stay in sync. Luckily, Git is already installed within the workspace and can be accessed via the terminal. Conveniently, we also put a web-based UI called <em>Ungit</em> into the workspace. You can open it from the <em>Open Tool</em> menu. </p>
+</div>
+<h3 id="initialize-environment">Initialize Environment<a class="headerlink" href="#initialize-environment" title="Permanent link">&para;</a></h3>
+<p>Before we can get started with model training, we have to initialize the environment. The environment provides functionality to manage all project-related files (e.g. models &amp; datasets) and experiments. The environment can be connected to an ML Lab instance by providing the ML Lab endpoint URL and a valid API token. If connected, the environment provides easy access to the ML Lab API and capabilities to download/upload data, and sync experiments. Locally, the environment has a dedicated folder structure to save and load datasets, models, and experiment data. Please insert the correct project-name for <code>LAB_PROJECT</code>.</p>
+<p><a href="../images/walkthrough-workspace-notebook-init-env.png"><img alt="Initialize Environment" src="../images/walkthrough-workspace-notebook-init-env.png" /></a></p>
+<p>Within this code section, we also initialize an experiment instance with the <code>create_experiment</code> method for our notebook. An experiment should be used to organize all metadata and resources such as parameters, timestamps, input &amp; output files, resulting metrics (e.g. accuracy), and other related information for a single experiment run such as the model training within our demo notebook.</p>
+<h3 id="download-data">Download Data<a class="headerlink" href="#download-data" title="Permanent link">&para;</a></h3>
+<p>Once we have succesfully initialized the environment, we have full access to all the datasets, models, and services of the configured ML Lab project. A few minutes ago, we uploaded a dataset into our project. To access this dataset within or workspace, we need to get the unique file-key of the dataset. We can copy this key in the datasets page of our ML Lab instance by just clicking on the row of the choosen dataset.</p>
+<p><a href="../images/walkthrough-download-data.png"><img alt="Copy Dataset Key" src="../images/walkthrough-download-data.png" /></a></p>
+<p>Once we have the unique key for the dataset, we can use the <code>get_file</code> method in our experiment notebook to download the file into our workspace:</p>
+<p><a href="../images/walkthrough-notebook-download-data.png"><img alt="Download Data" src="../images/walkthrough-notebook-download-data.png" /></a></p>
+<p>Next, please run the explore and transform data sections to prepare the data for model training.</p>
+<h3 id="run-experiment">Run Experiment<a class="headerlink" href="#run-experiment" title="Permanent link">&para;</a></h3>
+<p>Finally, we arrived at the section where the magic happens. First we define our training algorithm and wrap it within a <code>train</code> function. Next, we need to define our hyperparameter configuration for this experiment run (in the <code>params</code> dict) and execute the <code>run_exp</code> function from the <code>Experiment</code> instance with the implemented <code>train</code> function and the <code>params</code> dictionary.</p>
+<p><a href="../images/walkthrough-workspace-notebook-run-exp.png"><img alt="Train Model" src="../images/walkthrough-workspace-notebook-run-exp.png" /></a></p>
+<p>After the execution the training code, the experiment will require a short time for training. During this training, we offer some tools that helps us to monitor our experiment (accesible from the <em>Open Tools</em> selection). For example, you can use netdata during model training and other experimentation to get insights of everything happening on the system (CPU, GPU, memory, disks...) and figure out performance bottlenecks.</p>
+<p><a href="../images/walkthrough-hardware-monitoring.png"><img alt="Monitor Hardware" src="../images/walkthrough-hardware-monitoring.png" /></a></p>
+<p>ML Lab also has integrated an experimentation dashboard for every project, that provides an overview for the team on all running and finished experiments with a lot of metadata to support reproducibility and transparency.</p>
+<p><a href="../images/walkthrough-experiments.png"><img alt="Experiment Dashboard" src="../images/walkthrough-experiments.png" /></a></p>
+<h3 id="create-unified-model">Create Unified Model<a class="headerlink" href="#create-unified-model" title="Permanent link">&para;</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Concept Definition: Model</p>
+<p>A model is an artifact that is created in the training process. A model is something that predicts an output for a given input. Any file created after training from an ML algorithm is a model. The model needs to be deployed as a service in order to offer the model's prediction capabilities for integration into applications.</p>
+</div>
+<p>Once the training is finished, we will get a trained model instance as result which we can now use to predict an output for any given input. This model needs to be deployed as a service in order to offer the model's prediction capabilities for integration into applications. In order to easily share and deploy the trained model, we will use the unified model library to create a self-contained executable model file.</p>
+<p><a href="../images/walkthrough-workspace-notebook-unified-model.png"><img alt="Train Model" src="../images/walkthrough-workspace-notebook-unified-model.png" /></a></p>
+<h3 id="upload-model">Upload Model<a class="headerlink" href="#upload-model" title="Permanent link">&para;</a></h3>
+<p>After a final evaluation of the model accuracy, we want to make the trained model available for deployment so that it can be used from any application. Therefore, we need to upload the trained model artifact into the model storage of our ML Lab project from within the classification notebook via the <code>upload_file</code> method:</p>
+<p><a href="../images/walkthrough-workspace-notebook-upload-model.png"><img alt="Upload Model" src="../images/walkthrough-workspace-notebook-upload-model.png" /></a></p>
+<div class="admonition info">
+<p class="admonition-title">Data Versioning</p>
+<p>Our dataset and model store supports file versioning. This prevents you from overwriting any data or models.</p>
+</div>
+<p>Once we have successfully uploaded the model, we are finished with the notebook for this walktrough.</p>
+<h2 id="deploy-model">Deploy Model<a class="headerlink" href="#deploy-model" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Concept Definition: Service</p>
+<p>A service is a software component that implements and provides specific capabilities. In our landscape, services are deployed as Docker containers and are usually accessible via a REST API over HTTP(S).</p>
+</div>
+<p>In order to deploy the uploaded model as a service into production, navigate to the <em>Services</em> page in the ML Lab. Click on the "Add Service" button and fill in the required fields. There are multiple possibilities how you provide the needed information. Either you create a Docker image that already contains the model or you create a generic image and provide information of how to download the model upon container start via an environment variable. For the latter one we recommend to use the ML Lab Python library in the image and just pass the model's name as an environment variable. ML Lab will inject other needed information such as project name, access token, and URL as environment variables automatically which are used by the Python library. One image that can be used for such a generic use-case is the <em>Unified Model</em>. You can copy the model's path in the <em>Models</em> section of the webapp.</p>
+<p><a href="../images/walkthrough-deploy-model2.png"><img alt="Deploy Model" src="../images/walkthrough-deploy-model2.png" /></a></p>
+<p>After a few seconds, the model service will appear on the services page of the ML Lab. </p>
+<p><a href="../images/walkthrough-services.png"><img alt="View Services" src="../images/walkthrough-services.png" /></a></p>
+<p>If the deployed image follows the ML Lab service specification, you can access the REST API documentation by clicking the access button on the created model service and try the predict method with any kind of input data.</p>
+<p><a href="../images/walkthrough-unified-model-api.png"><img alt="View Unified Model REST API" src="../images/walkthrough-unified-model-api.png" /></a></p>
+<p>Congratulations <img alt="👍" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f44d.png" title=":thumbsup:" /> we have successfully trained a text classification model for the uploaded dataset and deployed it into production.</p>
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../usage/lab-workspace">Workspace</a>: Explore your workspace.</li>
+<li><a href="../../usage/lab-python-client">Python Client</a>: Learn more on how to use the python client libary.</li>
+</ul>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../../getting-started/" title="Getting Started" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Getting Started
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../installation/install-lab/" title="Installation" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Installation
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/sap/machine-learning-lab" target="_blank" rel="noopener" title="github-alt" class="md-footer-social__link fa fa-github-alt"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+    
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
+      
+      <script>app.initialize({version:"1.1.2",url:{base:"../.."}})</script>
+      
+    
+    <script>
+
+(function($) {
+  // https://github.com/waylan/mkdocs-theme_dir-example
+  "use strict";
+  $.fn.sliderResponsive = function(settings) {
+    
+    var set = $.extend( 
+      {
+        slidePause: 5000,
+        fadeSpeed: 800,
+        autoPlay: "on",
+        showArrows: "off", 
+        hideDots: "off", 
+        hoverZoom: "on",
+        titleBarTop: "off"
+      },
+      settings
+    ); 
+    
+    var $slider = $(this);
+    var size = $slider.find("> div").length; //number of slides
+    var position = 0; // current position of carousal
+    var sliderIntervalID; // used to clear autoplay
+      
+    // Add a Dot for each slide
+    $slider.append("<ul></ul>");
+    $slider.find("> div").each(function(){
+      $slider.find("> ul").append('<li></li>');
+    });
+      
+    // Put .show on the first Slide
+    $slider.find("div:first-of-type").addClass("show");
+      
+    // Put .showLi on the first dot
+    $slider.find("li:first-of-type").addClass("showli")
+
+     //fadeout all items except .show
+    $slider.find("> div").not(".show").fadeOut();
+    
+    // If Autoplay is set to 'on' than start it
+    if (set.autoPlay === "on") {
+        startSlider(); 
+    } 
+    
+    // If showarrows is set to 'on' then don't hide them
+    if (set.showArrows === "on") {
+        $slider.addClass('showArrows'); 
+    }
+    
+    // If hideDots is set to 'on' then hide them
+    if (set.hideDots === "on") {
+        $slider.addClass('hideDots'); 
+    }
+    
+    // If hoverZoom is set to 'off' then stop it
+    if (set.hoverZoom === "off") {
+        $slider.addClass('hoverZoomOff'); 
+    }
+    
+    // If titleBarTop is set to 'on' then move it up
+    if (set.titleBarTop === "on") {
+        $slider.addClass('titleBarTop'); 
+    }
+
+    // function to start auto play
+    function startSlider() {
+      sliderIntervalID = setInterval(function() {
+        nextSlide();
+      }, set.slidePause);
+    }
+    
+    // on mouseover stop the autoplay
+    $slider.mouseover(function() {
+      if (set.autoPlay === "on") {
+        clearInterval(sliderIntervalID);
+      }
+    });
+      
+    // on mouseout starts the autoplay
+    $slider.mouseout(function() {
+      if (set.autoPlay === "on") {
+        startSlider();
+      }
+    });
+
+    //on right arrow click
+    $slider.find("> .right").click(nextSlide)
+
+    //on left arrow click
+    $slider.find("> .left").click(prevSlide);
+      
+    // Go to next slide
+    function nextSlide() {
+      position = $slider.find(".show").index() + 1;
+      if (position > size - 1) position = 0;
+      changeCarousel(position);
+    }
+    
+    // Go to previous slide
+    function prevSlide() {
+      position = $slider.find(".show").index() - 1;
+      if (position < 0) position = size - 1;
+      changeCarousel(position);
+    }
+
+    //when user clicks slider button
+    $slider.find(" > ul > li").click(function() {
+      position = $(this).index();
+      changeCarousel($(this).index());
+    });
+
+    //this changes the image and button selection
+    function changeCarousel() {
+      $slider.find(".show").removeClass("show").fadeOut();
+      $slider
+        .find("> div")
+        .eq(position)
+        .fadeIn(set.fadeSpeed)
+        .addClass("show");
+      // The Dots
+      $slider.find("> ul").find(".showli").removeClass("showli");
+      $slider.find("> ul > li").eq(position).addClass("showli");
+    }
+
+    return $slider;
+  };
+})(jQuery);
+
+
+ 
+//////////////////////////////////////////////
+// Activate each slider - change options
+//////////////////////////////////////////////
+$(document).ready(function() {
+  
+  $("#slider1").sliderResponsive({
+    slidePause: 7000,
+    fadeSpeed: 400,
+    autoPlay: "on",
+    showArrows: "off", 
+    hideDots: "on", 
+    hoverZoom: "off", 
+    titleBarTop: "off"
+  });
+}); 
+
+
+
+    </script>
+
+  </body>
+</html>
