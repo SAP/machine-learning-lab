@@ -113,10 +113,6 @@ For more configuration details, check out the [documentation](http://github.com/
 
 <br>
 
-## Contributors
-
-_TODO_
-
 ## Contributing
 
 - Pull requests are encouraged and always welcome. Read our [Contribution Guidelines](https://github.com/sap/machine-learning-lab/tree/master/CONTRIBUTING.md) and check out [help-wanted](https://github.com/sap/machine-learning-lab/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3A"help+wanted"+sort%3Areactions-%2B1-desc+) issues.
