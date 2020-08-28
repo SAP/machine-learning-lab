@@ -59,7 +59,7 @@ For known issues and other questions, check out the [documentation](https://sap.
 
 ## Support & Feedback
 
-The ML Lab project is maintained by [Benjamin Räthelein](https://twitter.com/raethlein) and [Lukas Masuch](https://twitter.com/LukasMasuch). Please understand that we won't be able to provide individual support via email. We also believe that help is much more valuable if it's shared publicly so that more people can benefit from it.
+The ML Lab project is maintained by [Benjamin Räthlein](https://twitter.com/raethlein) and [Lukas Masuch](https://twitter.com/LukasMasuch). Please understand that we won't be able to provide individual support via email. We also believe that help is much more valuable if it's shared publicly so that more people can benefit from it.
 
 | Type                     | Channel                                              |
 | ------------------------ | ------------------------------------------------------ |
