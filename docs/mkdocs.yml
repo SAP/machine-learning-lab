@@ -2,11 +2,11 @@
 site_name: Machine Learning Lab
 site_description: Documentation for the Machine Learning Lab
 site_author: Lukas Masuch & Benjamin Räthlein
-site_url: https://github.wdf.sap.corp/pages/sap/machine-learning-lab/
+site_url: https://sap.github.io/machine-learning-lab/
 
 # Repository
 repo_name: sap/machine-learning-lab
-repo_url: https://github.wdf.sap.corp/sap/machine-learning-lab
+repo_url: https://github.com/sap/machine-learning-lab
 
 # Theme
 theme:

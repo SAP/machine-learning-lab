@@ -55,7 +55,7 @@ Please refer to [our documentatation](#TODO) for further information on deployin
 
 ## Known Issues
 
-For known issues and other questions, check out the [documentation](http://github.com/pages/sap/machine-learning-lab/faq/).
+For known issues and other questions, check out the [documentation](https://sap.github.io/machine-learning-lab/faq/).
 
 ## Support & Feedback
 
@@ -110,7 +110,7 @@ python build.py --help
 
 ### Configuration
 
-For more configuration details, check out the [documentation](http://github.com/pages/sap/machine-learning-lab/install-lab/#configuration).
+For more configuration details, check out the [documentation](https://sap.github.io/machine-learning-lab/installation/install-lab/#configuration).
 
 <br>
 
