@@ -45,11 +45,15 @@ Deploying ML Lab in a single-host deployment (via Docker) is as simple as:
 docker run --rm \
            --env LAB_ACTION=install \
            --env LAB_PORT=8080 \
+           --env BACKEND_SERVICE_IMAGE=docker.pkg.github.com/sap/machine-learning-lab/lab-service:0.1.0 \
+           --env MODEL_SERVICE_IMAGE=docker.pkg.github.com/sap/machine-learning-lab/lab-model-service:0.1.0 \
+           --env WORKSPACE_IMAGE=docker.pkg.github.com/sap/machine-learning-lab/ml-workspace-lab:0.1.0 \
            -v /var/run/docker.sock:/var/run/docker.sock \
-           lab-service:latest
+           docker.pkg.github.com/sap/machine-learning-lab/lab-service:0.1.0
 ```
 
-Voilà, that was easy! Now, Docker will pull the required Docker images to your machine. After the installation is finished, visit http://<HOSTIP>:8080 and login with `admin:admin` (please change the admin password from the user menu).
+Voilà, that was easy! Now, Docker will pull the required Docker images to your machine. We deployed the current version to the GitHub package repository which requires the image environment variables to be set; that might change in the future.
+After the installation is finished, visit http://<HOSTIP>:8080 and login with `admin:admin` (please change the admin password from the user menu).
 
 Please refer to [our documentatation](#TODO) for further information on deploying ML Lab for productive usage, including information about configuration options, Kubernetes deployment, adminisrative task and general usage.
 
