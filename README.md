@@ -13,6 +13,7 @@
     <a href="https://hub.docker.com/r/mltooling/ml-lab" title="Docker Pulls"><img src="https://img.shields.io/docker/pulls/mltooling/ml-lab.svg"></a>
     <a href="https://github.com/sap/machine-learning-lab/commits/" title="Last Commit"><img src="https://img.shields.io/github/last-commit/sap/machine-learning-lab"></a>
     <a href="https://github.com/sap/machine-learning-lab/blob/master/LICENSE" title="ML Lab License"><img src="https://img.shields.io/badge/License-Apache%202.0-green.svg"></a>
+    <a href="https://api.reuse.software/info/github.com/sap/machine-learning-lab" title="REUSE status"><img src="https://api.reuse.software/badge/github.com/sap/machine-learning-lab"></a>
 </p>
 
 <p align="center">
