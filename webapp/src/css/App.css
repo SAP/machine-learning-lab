@@ -1,0 +1,62 @@
+html, body, #root{
+    min-height: 100%
+}
+
+body {
+    margin: 0;
+    padding: 0;
+  }
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(material-ui.woff2) format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -moz-font-feature-settings: 'liga';
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.customdialog {
+  justify-content: center;
+  display: flex;
+}
+
+.customdialog > div[role=document] > div {
+  overflow-y: initial;
+  max-width: 800px;
+}
+
+
+@media (min-width: 600px) {
+  .navBarItem {
+    padding-left: 24px !important;
+  }
+} 
+
+.Toastify__toast--info {
+  background: #9E9E9E;
+}
+.Toastify__toast--success {
+  background: #4CAF50;
+}
+.Toastify__toast--warning {
+  background: #FF9800;
+}
+.Toastify__toast--error {
+  background: #f44336;
+}

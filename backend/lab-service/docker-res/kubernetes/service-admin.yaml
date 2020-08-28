@@ -1,0 +1,211 @@
+# Copyright 2017 The Kubernetes Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# ------------------- Dashboard Secret ------------------- #
+
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: <SERVICE_NAMESPACE>-service-admin
+  name: kubernetes-dashboard-certs
+  namespace: <SERVICE_NAMESPACE>
+type: Opaque
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    k8s-app: <SERVICE_NAMESPACE>-service-admin
+  name: kubernetes-dashboard-csrf
+  namespace: <SERVICE_NAMESPACE>
+type: Opaque
+stringData:
+  csrf: ""
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    k8s-app: <SERVICE_NAMESPACE>-service-admin
+  name: kubernetes-dashboard-key-holder
+  namespace: <SERVICE_NAMESPACE>
+type: Opaque
+
+---
+
+# ------------------- Dashboard Service Account ------------------- #
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: <SERVICE_NAMESPACE>-service-admin
+  name: kubernetes-dashboard
+  namespace: <SERVICE_NAMESPACE>
+
+---
+# ------------------- Dashboard Role & Role Binding ------------------- #
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kubernetes-dashboard-minimal
+  namespace: <SERVICE_NAMESPACE>
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["create"]
+# Allow Dashboard to get, update and delete Dashboard exclusive secrets.
+- apiGroups: [""]
+  resources: ["secrets"]
+  resourceNames: ["kubernetes-dashboard-key-holder", "kubernetes-dashboard-certs", "kubernetes-dashboard-csrf"]
+  verbs: ["get", "update", "delete"]
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["list"]
+
+- apiGroups: [""] # "" indicates the core API group To let lab manage pods and pvcs
+  resources: ["pods", "persistentvolumeclaims"]
+  verbs: ["get", "watch", "list", "create", "delete"]
+# To let lab manage deployments
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "watch", "list", "create", "delete", "update"]
+# TODO: events could probably be removed
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get", "watch", "list"]
+# To let lab manage services
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["list", "create", "delete"]
+# To let lab manage jobs
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["list", "create", "delete"]
+# To deploy the NetworkPolicy
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: ["get", "watch", "list", "create", "delete"]
+# To deploy the service-admin dashboard
+- apiGroups: [""]
+  resources: ["serviceaccounts"]
+  verbs: ["create", "delete"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles", "rolebindings"]
+  verbs: ["create", "delete", "update"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: kubernetes-dashboard-minimal
+  namespace: <SERVICE_NAMESPACE>
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: kubernetes-dashboard-minimal
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-dashboard
+  namespace: <SERVICE_NAMESPACE>
+
+---
+# ------------------- Dashboard Deployment ------------------- #
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    app: <SERVICE_NAMESPACE>-service-admin
+  name: <SERVICE_NAMESPACE>-service-admin
+  namespace: <SERVICE_NAMESPACE>
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: <SERVICE_NAMESPACE>-service-admin
+  template:
+    metadata:
+      labels:
+        app: <SERVICE_NAMESPACE>-service-admin
+        role: kubernetes-dashboard
+    spec:
+      containers:
+      - name: kubernetes-dashboard
+        image: kubernetesui/dashboard:v2.0.0-rc2
+        ports:
+        - containerPort: 8443
+          protocol: TCP
+          name: main
+        - containerPort: 9090
+          protocol: TCP
+          name: liveness-port
+        args:
+          - --enable-insecure-login #--auto-generate-certificates
+          # Uncomment the following line to manually specify Kubernetes API server Host
+          # If not specified, Dashboard will attempt to auto discover the API server and connect
+          # to it. Uncomment only if the default does not work.
+          # - --apiserver-host=http://my-address:port
+          - --namespace=<SERVICE_NAMESPACE>
+        volumeMounts:
+        - name: kubernetes-dashboard-certs
+          mountPath: /certs
+          # Create on-disk volume to store exec logs
+        - mountPath: /tmp
+          name: tmp-volume
+        livenessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /
+            port: liveness-port
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+      volumes:
+      - name: kubernetes-dashboard-certs
+        secret:
+          secretName: kubernetes-dashboard-certs
+      - name: tmp-volume
+        emptyDir: {}
+      serviceAccountName: kubernetes-dashboard
+      # Comment the following tolerations if Dashboard must not be deployed on master
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+
+---
+# ------------------- Dashboard Service ------------------- #
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: kubernetes-dashboard
+    lab.namespace: <SERVICE_NAMESPACE>
+  name: <SERVICE_NAMESPACE>-service-admin #kubernetes-dashboard
+  namespace: <SERVICE_NAMESPACE>
+spec:
+  ports:
+    - port: 9000
+      targetPort: 9090
+  selector:
+    app: <SERVICE_NAMESPACE>-service-admin
+
+---

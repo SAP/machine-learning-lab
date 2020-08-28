@@ -1,0 +1,81 @@
+# First, forbide all communication between pods. Then whitelist specific communication from / to the Lab pod
+
+## restrict the communication of all pods
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-deny
+  namespace: <SERVICE_NAMESPACE>
+spec:
+  podSelector:
+    matchLabels: {}
+
+---
+
+## allow the communication from / to the Lab pod to all pods -> pods can only communciate with the Lab pod
+## The Lab pod is allowed to access all other pods without protocol or port restrictions
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: lab-access
+  namespace: <SERVICE_NAMESPACE>
+spec:
+  podSelector:
+    matchLabels:
+      lab.namespace: <LAB_NAMESPACE>
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels: 
+            lab.feature.name: backend
+
+---
+## all pods are allowed to access the Lab pod over port 8091.
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: service-to-lab-access
+  namespace: <SERVICE_NAMESPACE>
+spec:
+  podSelector:
+    matchLabels:
+      lab.feature.name: backend
+  ingress:
+    - from: [] # empty to allow external traffic, otherwise the web app does not work and also no REST api requests from non-pods
+      ports:
+      - protocol: TCP
+        port: 8091
+
+---
+
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: workspace-to-nfs-access
+  namespace: <SERVICE_NAMESPACE>
+spec:
+  podSelector:
+    matchLabels:
+      lab.feature.name: nfs-server
+  ingress:
+    - from: [] # allow ingress to nfs-server from all containers, otherwise the mount on Pod startup does not work. When container is started, it cannot mount the nfs, as only privileged containers can mount/unmount volumes.
+
+---
+
+## allow access from Lab to the Kubernetes Dashboard
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: lab-to-dashboard-access
+  namespace: <SERVICE_NAMESPACE>
+spec:
+  podSelector:
+    matchLabels:
+      role: kubernetes-dashboard
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels: 
+            lab.feature.name: backend
+
+---

@@ -1,0 +1,18 @@
+flask>=1.0.2
+cloudpickle>=1.0
+setuptools
+six
+pandas
+future
+gevent
+click
+numpy
+tqdm
+
+
+# Server
+flasgger
+
+# Needed for monitoring via
+# flask_monitoringdashboard: https://github.com/flask-dashboard/Flask-MonitoringDashboard
+# flask_profiler

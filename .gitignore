@@ -1,0 +1,52 @@
+# Service Artifacts
+**/node_modules/
+archive/
+
+# Platform Artifacts
+environment/
+logs/
+*.log
+
+# IntelliJ
+target/
+.idea/
+*.iml
+
+# Sublime
+*.sublime-workspace
+
+# Eclipse
+.settings
+
+# VS Code
+.vscode
+.project
+.classpath
+
+# Java
+*.class
+target/
+
+# C
+*.so
+
+# Python
+*.pyc
+*.egg-info
+__pycache__
+.ipynb_checkpoints
+.Python
+dist/
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Other Artifacts
+hs_err_pid*
+*.log
+*.swp
+temp/*
+.DS_Store
