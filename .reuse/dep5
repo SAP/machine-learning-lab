@@ -12,5 +12,6 @@ License: Apache-2.0
 
 Files: ./backend/lab-service/docker-res/jwt_auth/nginx-jwt.lua
 Copyright: 2015 Auth0, Inc. <support@auth0.com> (http://auth0.com)
+           Modifications Copyright SAP SE. 2020. All rights reserved.
 License: MIT
 Comment: Modified original file from https://github.com/auth0/nginx-jwt/blob/master/nginx-jwt.lua to work with our configuration. The original file is licensed under MIT.
