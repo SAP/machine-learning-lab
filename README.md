@@ -53,7 +53,7 @@ docker run --rm \
 ```
 
 Voilà, that was easy! Now, Docker will pull the required Docker images to your machine. We deployed the current version to the GitHub package repository which requires the image environment variables to be set; that might change in the future.
-After the installation is finished, visit http://<HOSTIP>:8080 and login with `admin:admin` (please change the admin password from the user menu).
+After the installation is finished, visit http://localhost:8080 and login with `admin:admin` (please change the admin password from the user menu).
 
 Please refer to [our documentatation](https://sap.github.io/machine-learning-lab/installation/install-lab/) for further information on deploying ML Lab for productive usage, including information about configuration options, Kubernetes deployment, adminisrative task and general usage.
 
