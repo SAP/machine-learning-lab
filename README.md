@@ -18,7 +18,7 @@
 
 <p align="center">
   <a href="#getting-started">Getting Started</a> •
-  <a href="#todo">Documentation</a> •
+  <a href="https://sap.github.io/machine-learning-lab/">Documentation</a> •
   <a href="#support--feedback">Support</a> •
   <a href="https://github.com/sap/machin-learning-lab/issues/new?labels=bug&template=01_bug-report.md">Report a Bug</a> •
   <a href="https://sap.github.io/machine-learning-lab/faq/">FAQ</a> •
