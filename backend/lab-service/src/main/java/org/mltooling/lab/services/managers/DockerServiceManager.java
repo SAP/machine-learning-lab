@@ -415,31 +415,31 @@ public class DockerServiceManager extends AbstractServiceManager {
 
         log.info("Cleanup of local lab landscape with namespace " + LabConfig.LAB_NAMESPACE);
         DockerClient client = DefaultDockerClient.fromEnv().build();
-        try {
-            for (Service service : client.listServices(Service.Criteria.builder().addLabel(LABEL_NAMESPACE, LabConfig.LAB_NAMESPACE).build())) {
-                try {
-                    log.info("Remove container " + service.id());
-                    client.removeService(service.id());
-                    for (Container container : client.listContainers(DockerClient.ListContainersParam.allContainers(), DockerClient.ListContainersParam.withLabel("com.docker.swarm.service.id", service.id()))) {
-                        try {
-                            log.info("Remove container " + container.id() + " - " + container.image());
-                            if (keepVolumes) {
-                                client.removeContainer(container.id(), DockerClient.RemoveContainerParam.removeVolumes(false), DockerClient.RemoveContainerParam.forceKill());
-                            } else {
-                                client.removeContainer(container.id(), DockerClient.RemoveContainerParam.removeVolumes(true), DockerClient.RemoveContainerParam.forceKill());
-                            }
-                        } catch (Exception e) {
-                            log.warn("Failed to remove container.", e);
-                        }
-                    }
-                } catch (Exception e) {
-                    log.warn("Failed to remove service.", e);
-                }
-            }
-            log.info("Removed all services");
-        } catch (Exception e) {
-            log.warn("Failed to remove services. Docker Swarm might not be initialized.", e);
-        }
+        // try {
+        //     for (Service service : client.listServices(Service.Criteria.builder().addLabel(LABEL_NAMESPACE, LabConfig.LAB_NAMESPACE).build())) {
+        //         try {
+        //             log.info("Remove container " + service.id());
+        //             client.removeService(service.id());
+        //             for (Container container : client.listContainers(DockerClient.ListContainersParam.allContainers(), DockerClient.ListContainersParam.withLabel("com.docker.swarm.service.id", service.id()))) {
+        //                 try {
+        //                     log.info("Remove container " + container.id() + " - " + container.image());
+        //                     if (keepVolumes) {
+        //                         client.removeContainer(container.id(), DockerClient.RemoveContainerParam.removeVolumes(false), DockerClient.RemoveContainerParam.forceKill());
+        //                     } else {
+        //                         client.removeContainer(container.id(), DockerClient.RemoveContainerParam.removeVolumes(true), DockerClient.RemoveContainerParam.forceKill());
+        //                     }
+        //                 } catch (Exception e) {
+        //                     log.warn("Failed to remove container.", e);
+        //                 }
+        //             }
+        //         } catch (Exception e) {
+        //             log.warn("Failed to remove service.", e);
+        //         }
+        //     }
+        //     log.info("Removed all services");
+        // } catch (Exception e) {
+        //     log.warn("Failed to remove services. Docker Swarm might not be initialized.", e);
+        // }
 
         Thread.sleep(10000);
         for (Container container : client.listContainers(DockerClient.ListContainersParam.allContainers(), DockerClient.ListContainersParam.withLabel(LABEL_NAMESPACE, LabConfig.LAB_NAMESPACE))) {
