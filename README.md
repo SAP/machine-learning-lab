@@ -50,6 +50,12 @@ docker run --rm \
            --env WORKSPACE_IMAGE=docker.pkg.github.com/sap/machine-learning-lab/ml-workspace-lab:0.1.0 \
            -v /var/run/docker.sock:/var/run/docker.sock \
            docker.pkg.github.com/sap/machine-learning-lab/lab-service:0.1.0
+
+# The following two commands are needed since the GitHub package registry only works when being logged in; even for pulling.
+# See note below.
+docker pull docker.pkg.github.com/sap/machine-learning-lab/lab-model-service:0.1.0
+docker pull docker.pkg.github.com/sap/machine-learning-lab/ml-workspace-lab:0.1.0
+
 ```
 
 *Note: We deployed the current version to the GitHub package repository which requires the image environment variables to be set; that might change in the future. Even to pull public images, you need to login to GitHub package registry as described [here](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages#authenticating-to-github-packages).*
