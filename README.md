@@ -52,8 +52,9 @@ docker run --rm \
            docker.pkg.github.com/sap/machine-learning-lab/lab-service:0.1.0
 ```
 
-Voilà, that was easy! Now, Docker will pull the required Docker images to your machine. 
-We deployed the current version to the GitHub package repository which requires the image environment variables to be set; that might change in the future. Even for public images, you need to login to GitHub package registry as described [here](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages#authenticating-to-github-packages).
+*Note: We deployed the current version to the GitHub package repository which requires the image environment variables to be set; that might change in the future. Even to pull public images, you need to login to GitHub package registry as described [here](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages#authenticating-to-github-packages).*
+
+Voilà, that was easy! Now, Docker will pull the required Docker images to your machine.
 After the installation is finished, visit http://localhost:8080 and login with `admin:admin` (please change the admin password from the user menu).
 
 Please refer to [our documentatation](https://sap.github.io/machine-learning-lab/installation/install-lab/) for further information on deploying ML Lab for productive usage, including information about configuration options, Kubernetes deployment, adminisrative task and general usage.
