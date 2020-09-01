@@ -166,6 +166,10 @@ docker run --rm --env LAB_PORT=8091 -v /var/run/docker.sock:/var/run/docker.sock
 
 After the installation is finished (after several minutes depending on intranet speed), visit `http://<HOSTIP>:8091` and login with `admin:admin`.
 
+
+*Note: We deployed the current version to the GitHub package repository which requires the image environment variables to be set; that might change in the future. Even to pull public images, you need to login to GitHub package registry as described [here](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages#authenticating-to-github-packages).*
+
+
 **Enable SSL**
 
 For SSL setup, create the certificates and mount them into the container's directory at `/resources/ssl` (`-v /workspace/ssl:/resources/ssl:ro`) and start with `--env SERVICE_SSL_ENABLED=true`:
