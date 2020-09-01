@@ -158,6 +158,8 @@ If a proxy is required, you can pass the proxy configuration via the `http_proxy
 
 ### Install with Docker Local Mode
 
+*Note: The install commands here are currently based on the scenario where you built the Docker images locally yourself. For seeing how to use ready images, please check the Readme of the GitHub repository [here](https://github.com/SAP/machine-learning-lab)*
+
 To start  ML Lab in a single-host (local) deployment execute:
 
 ``` bash
@@ -167,7 +169,6 @@ docker run --rm --env LAB_PORT=8091 -v /var/run/docker.sock:/var/run/docker.sock
 After the installation is finished (after several minutes depending on intranet speed), visit `http://<HOSTIP>:8091` and login with `admin:admin`.
 
 
-*Note: We deployed the current version to the GitHub package repository which requires the image environment variables to be set; that might change in the future. Even to pull public images, you need to login to GitHub package registry as described [here](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages#authenticating-to-github-packages).*
 
 
 **Enable SSL**
