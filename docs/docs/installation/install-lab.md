@@ -158,6 +158,8 @@ If a proxy is required, you can pass the proxy configuration via the `http_proxy
 
 ### Install with Docker Local Mode
 
+*Note: The install commands here are currently based on the scenario where you built the Docker images locally yourself. For seeing how to use ready images, please check the Readme of the GitHub repository [here](https://github.com/SAP/machine-learning-lab#getting-started)*
+
 To start  ML Lab in a single-host (local) deployment execute:
 
 ``` bash
