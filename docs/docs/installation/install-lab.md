@@ -168,9 +168,6 @@ docker run --rm --env LAB_PORT=8091 -v /var/run/docker.sock:/var/run/docker.sock
 
 After the installation is finished (after several minutes depending on intranet speed), visit `http://<HOSTIP>:8091` and login with `admin:admin`.
 
-
-
-
 **Enable SSL**
 
 For SSL setup, create the certificates and mount them into the container's directory at `/resources/ssl` (`-v /workspace/ssl:/resources/ssl:ro`) and start with `--env SERVICE_SSL_ENABLED=true`:
