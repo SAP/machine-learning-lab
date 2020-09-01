@@ -933,6 +933,7 @@
 <h4 id="proxy">Proxy<a class="headerlink" href="#proxy" title="Permanent link">&para;</a></h4>
 <p>If a proxy is required, you can pass the proxy configuration via the <code>http_proxy</code> and <code>no_proxy</code> environment variables. For example: <code>--env http_proxy=http://myproxy:1234</code></p>
 <h3 id="install-with-docker-local-mode">Install with Docker Local Mode<a class="headerlink" href="#install-with-docker-local-mode" title="Permanent link">&para;</a></h3>
+<p><em>Note: The install commands here are currently based on the scenario where you built the Docker images locally yourself. For seeing how to use ready images, please check the Readme of the GitHub repository <a href="https://github.com/SAP/machine-learning-lab#getting-started">here</a></em></p>
 <p>To start  ML Lab in a single-host (local) deployment execute:</p>
 <div class="highlight"><pre><span></span><code>docker run --rm --env <span class="nv">LAB_PORT</span><span class="o">=</span><span class="m">8091</span> -v /var/run/docker.sock:/var/run/docker.sock --env <span class="nv">LAB_ACTION</span><span class="o">=</span>install lab-service:latest
 </code></pre></div>
