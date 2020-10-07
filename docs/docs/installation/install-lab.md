@@ -174,6 +174,7 @@ For SSL setup, create the certificates and mount them into the container's direc
 
 ``` bash
 docker run --rm --env LAB_PORT=8091 \
+    --env SERVICE_SSL_ENABLED=true \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /workspace/ssl:/resources/ssl:ro \
     lab-service:latest
