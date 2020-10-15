@@ -22,18 +22,21 @@ public class LocalDockerLauncher extends ExternalResource {
 
     private static final String BUILD_SCRIPT_NAME = "build.py";
     private static final String RUN_SCRIPT_NAME = "run.py";
+    private static final String DEFAULT_HOST = "localhost";
     private static final int DEFAULT_PORT = 8090;
 
     // ================ Members ============================================= //
+    private String serviceHost;
     private Integer servicePort;
     private boolean serviceProxyActivated;
     private String serviceName;
     private String additionalArgs;
 
     // ================ Constructors & Main ================================= //
-    public LocalDockerLauncher(String serviceName, Integer servicePort, boolean serviceProxyActivated, @Nullable String additionalRunArgs)
+    public LocalDockerLauncher(String serviceName, String serviceHost, Integer servicePort, boolean serviceProxyActivated, @Nullable String additionalRunArgs)
             throws Exception {
         this.serviceName = serviceName;
+        this.serviceHost = serviceHost;
         this.servicePort = servicePort;
         this.serviceProxyActivated = serviceProxyActivated;
         this.additionalArgs = additionalRunArgs;
@@ -46,13 +49,13 @@ public class LocalDockerLauncher extends ExternalResource {
     }
 
     private void init() throws Exception {
-        String proxy = "";
-        if (this.serviceProxyActivated) {
-            proxy = " --proxy";
-        }
+        // String proxy = "";
+        // if (this.serviceProxyActivated) {
+        //     proxy = " --proxy";
+        // }
 
-        log.info("Building docker container in " + getExecutionPath());
-        executeCommand("python " + BUILD_SCRIPT_NAME + " --docker --name " + this.serviceName + proxy);
+        // log.info("Building docker container in " + getExecutionPath());
+        // executeCommand("python " + BUILD_SCRIPT_NAME + " --docker --name " + this.serviceName + proxy);
     }
 
     // ================ Methods for/from SuperClass / Interfaces ============ //
@@ -102,7 +105,10 @@ public class LocalDockerLauncher extends ExternalResource {
 
     // ================ Public Methods ====================================== //
     public String getServiceUrl() {
-        return "http://localhost:" + (this.servicePort != null ? String.valueOf(this.servicePort) : String.valueOf(DEFAULT_PORT));
+        //TODO: make localhost configurable
+        String host = (this.serviceHost != null ? String.valueOf(serviceHost) : String.valueOf(DEFAULT_HOST));
+        String port = (this.servicePort != null ? String.valueOf(this.servicePort) : String.valueOf(DEFAULT_PORT));
+        return "http://" + host + ":" + port;
     }
 
     // ================ Private Methods ===================================== //
@@ -124,9 +130,9 @@ public class LocalDockerLauncher extends ExternalResource {
             throw new Exception("Project path does not exist " + pwd.toAbsolutePath());
         }
 
-        if (!Files.exists(pwd.resolve(BUILD_SCRIPT_NAME))) {
-            throw new Exception(BUILD_SCRIPT_NAME + " does not exist in " + pwd.toAbsolutePath());
-        }
+        // if (!Files.exists(pwd.resolve(BUILD_SCRIPT_NAME))) {
+        //     throw new Exception(BUILD_SCRIPT_NAME + " does not exist in " + pwd.toAbsolutePath());
+        // }
 
         if (!Files.exists(pwd.resolve(RUN_SCRIPT_NAME))) {
             throw new Exception(RUN_SCRIPT_NAME + " does not exist in " + pwd.toAbsolutePath());

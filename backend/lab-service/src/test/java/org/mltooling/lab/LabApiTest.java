@@ -17,6 +17,7 @@ import org.mltooling.core.lab.model.*;
 import org.mltooling.core.utils.FileUtils;
 import org.mltooling.core.utils.ListUtils;
 import org.mltooling.core.utils.StringUtils;
+import org.mltooling.core.utils.SystemUtils;
 import org.mltooling.lab.authorization.AuthorizationManager;
 import org.mltooling.lab.authorization.ProjectAuthorizer;
 import org.mltooling.lab.components.ProjectManager;
@@ -50,8 +51,8 @@ public class LabApiTest {
     private static final Logger log = LoggerFactory.getLogger(LabApiTest.class);
 
     private static final long SLEEP = 5000;
-    private final String DEFAULT_HOST = "127.0.0.1";
-    private final int SERVICE_TEST_PORT = 30002; // use a port > 30000 so that it also works in Kubernetes mode (Kubernetes service ports must by default be >30000)
+    private final String DEFAULT_HOST = SystemUtils.getEnvVar("SERVICE_HOST", "localhost");
+    private final int SERVICE_TEST_PORT = Integer.parseInt(SystemUtils.getEnvVar("SERVICE_PORT", "30002")); // use a port > 30000 so that it also works in Kubernetes mode (Kubernetes service ports must by default be >30000)
 
     private static final int DEFAULT_PROJECT_SERVICES_SIZE = 0; // no more initial project services
 
@@ -100,9 +101,9 @@ public class LabApiTest {
         // change to env variable for images?
         
         if (TEST_MODE.equals(TEST_MODES.KUBERNETES.mode)) {
-            this.dockerLauncher = new LocalDockerLauncher("lab-service", SERVICE_TEST_PORT, false, "--kubernetes --env SERVICES_CPU_LIMIT=1 --env SERVICES_MEMORY_LIMIT=2 --env LAB_KUBERNETES_NAMESPACE=lab"); //--swarm --kubernetes
+            this.dockerLauncher = new LocalDockerLauncher("lab-service", DEFAULT_HOST, SERVICE_TEST_PORT, false, "--kubernetes --env SERVICES_CPU_LIMIT=1 --env SERVICES_MEMORY_LIMIT=2 --env LAB_KUBERNETES_NAMESPACE=lab"); //--swarm --kubernetes
         } else {
-            this.dockerLauncher = new LocalDockerLauncher("lab-service", SERVICE_TEST_PORT, false, "");
+            this.dockerLauncher = new LocalDockerLauncher("lab-service", DEFAULT_HOST, SERVICE_TEST_PORT, false, "");
         }
 
         Thread.sleep(SLEEP * 3);

@@ -20,21 +20,29 @@ def call(command):
 
 # calls build scripts in every module with same flags
 def build(module):
-    build_command = "python build.py"
-    if args.maven:
-        build_command += " --maven"
+    build_command = "python -u build.py"
+    # if args.maven:
+    #     build_command += " --maven"
 
-    if args.docker:
-        build_command += " --docker"
+    # if args.docker:
+    #     build_command += " --docker"
 
-    if args.version:
-        build_command += " --version="+str(args.version)
+    # if args.version:
+    #     build_command += " --version="+str(args.version)
 
-    if args.deploy:
-        build_command += " --deploy"
+    # if args.deploy:
+    #     build_command += " --deploy"
 
-    if args.notests:
-        build_command += " --notests"
+    # if args.notests:
+    #     build_command += " --notests"
+    for arg in vars(args):
+        arg_value = getattr(args, arg)
+        if arg_value:
+            # For boolean types, the existence of the flag is enough
+            if type(arg_value) == bool:
+                build_command += f" --{arg}"
+            else:
+                build_command += f" --{arg}={arg_value}"
 
     working_dir = os.path.dirname(os.path.realpath(__file__))
     full_command = "cd '"+module+"' && "+build_command+" && cd '"+working_dir+"'"
@@ -44,6 +52,9 @@ def build(module):
         print("Failed to build module "+module)
         sys.exit()
 
+# TODO: refactor and replace with our version-detection logic!
+if not args.version:
+    args.version = "1.0.0-dev"
 
 # Version Handling
 if args.deploy and not args.version:
