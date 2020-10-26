@@ -13,7 +13,7 @@
 Install via pip:
 
 ```bash
-pip install --upgrade git+TODO
+pip install --upgrade "git+https://github.com/SAP/machine-learning-lab#subdirectory=libraries/ml-lab-py"
 ```
 
 or directly from the source code:
