@@ -20,7 +20,7 @@
     "react-json-view": "^1.19.1",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.3",
+    "react-scripts": "4.0.0",
     "react-select": "3.1.0",
     "react-toastify": "^6.0.8",
     "redux": "^4.0.5",
@@ -29,6 +29,25 @@
     "typeface-roboto": "^0.0.75",
     "uppy": "^1.19.2"
   },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
+    "eslint": "^7.12.0",
+    "eslint-config-airbnb": "18.2.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-jsx-a11y": "^6.3.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "prettier": "^2.1.2",
+    "react-is": "^17.0.1",
+    "stylelint": "^13.7.2",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-standard": "^20.0.0"
+  },
   "browserslist": [
     "last 5 version",
     "> 1%",
@@ -36,9 +55,10 @@
     "not dead"
   ],
   "scripts": {
-    "setup": "npm install && ./additional_build_opts.sh && npm audit fix && npm run build",
+    "comment": "CI=false because of: Treating warnings as errors because process.env.CI = true. | Most CI servers set it automatically.",
+    "setup": "CI=false npm install && npm audit fix && npm run build",
     "start": "REACT_APP_LAB_ENDPOINT=http://localhost:9091/ react-scripts start",
-    "build": "react-scripts build",
+    "build": "CI=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
