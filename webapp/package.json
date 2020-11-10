@@ -60,7 +60,11 @@
     "start": "REACT_APP_LAB_ENDPOINT=http://localhost:9091/ react-scripts start",
     "build": "CI=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "yarn run lint:js ; yarn run lint:css",
+    "lint:js": "eslint --ext js,jsx src/",
+    "lint:css": "stylelint 'src/**/*.css'",
+    "prettier": "prettier --config .prettierrc --write"
   },
   "eslintConfig": {
     "globals": {
