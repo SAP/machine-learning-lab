@@ -1,0 +1,37 @@
+name-template: "$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
+categories:
+  - title: "💥 Breaking Changes"
+    labels:
+      - "breaking"
+  - title: "⚠️ Deprecations"
+  - title: "✨ Features & Improvements"
+    labels:
+      - "feature"
+      - "enhancement"
+  - title: "🐛 Bug Fixes"
+    labels:
+      - "bug"
+  - title: "📝 Documentation"
+    labels:
+      - "documentation"
+  - title: "👷 Maintenance & Refactoring"
+    labels:
+      - "maintenance"
+      - "refactoring"
+  - title: "🔒 Security"
+    labels:
+      - "security"
+  - title: "🔥 Removed"
+  - title: "⚡️ Performance"
+  - title: "✅ Tests"
+  - title: "⬆ Dependencies"
+    labels:
+      - "dependencies"
+change-template: "- $TITLE (#$NUMBER) by @$AUTHOR"
+template: |
+  $CHANGES
+
+  ## 👥 Contributors
+
+  Thanks to $CONTRIBUTORS for the pull requests and contributions.

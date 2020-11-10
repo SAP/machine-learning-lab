@@ -1,0 +1,22 @@
+
+name: "test-local"
+on: 
+  issues:
+    types: [labeled]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    if: (github.event.label.name == 'Breaking change') || (github.event.label.name == 'breaking-change')
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./
+      env:
+        SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+      with:
+        fromMailAddress: '${{ secrets.NOTIFY_EMAIL }}'
+        toMailAddress: '${{ secrets.NOTIFY_EMAIL }}'
+        subject: 'This is a test'
+        subjectPrefix: 'BC:'
+        labelsToMonitor: "breaking-change,Breaking change"
+        verbose: false
