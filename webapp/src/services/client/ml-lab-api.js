@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 
 import { ENDPOINTS } from '../handler/constants';
 
-import LabApi from './lab-api';
+import * as LabApi from './lab-api';
 
 let endpoint = ENDPOINTS.newLabApi;
 if (endpoint.endsWith('/')) {
