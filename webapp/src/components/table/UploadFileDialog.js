@@ -1,27 +1,27 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { withCookies, Cookies } from "react-cookie";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
 
 // material-ui components
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import CloudUpload from "@material-ui/icons/CloudUpload";
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import CloudUpload from '@material-ui/icons/CloudUpload';
 
 //Uppy
-import Uppy from "@uppy/core";
-import Dashboard from "@uppy/dashboard";
-import XHRUpload from "@uppy/xhr-upload";
-import "@uppy/core/dist/style.min.css";
+import Uppy from '@uppy/core';
+import Dashboard from '@uppy/dashboard';
+import XHRUpload from '@uppy/xhr-upload';
+import '@uppy/core/dist/style.min.css';
 import '@uppy/dashboard/dist/style.min.css';
 
-import { getFileUploadUrl } from "../../services/client/ml-lab-api";
-import * as ReduxUtils from "../../services/handler/reduxUtils";
+import { getFileUploadUrl } from '../../services/client/ml-lab-api';
+import * as ReduxUtils from '../../services/handler/reduxUtils';
 
 const uppy = new Uppy({
-  id: "uppy",
+  id: 'uppy',
   meta: {
-    onFileUpload: null
+    onFileUpload: null,
   },
   autoProceed: false,
   debug: false,
@@ -29,42 +29,42 @@ const uppy = new Uppy({
     maxFileSize: false,
     maxNumberOfFiles: false,
     minNumberOfFiles: false,
-    allowedFileTypes: false
+    allowedFileTypes: false,
   },
-  thumbnailGeneration: true
+  thumbnailGeneration: true,
 })
   .use(Dashboard, {
-    target: "#root",
+    target: '#root',
     closeModalOnClickOutside: true,
     showProgressDetails: true,
-    hideProgressAfterFinish: false
+    hideProgressAfterFinish: false,
   })
   .use(XHRUpload, {
-    endpoint: "",
-    method: "post",
-    formData: "true",
-    fieldName: "file",
+    endpoint: '',
+    method: 'post',
+    formData: 'true',
+    fieldName: 'file',
     timeout: 0,
-    withCredentials: "true"
+    withCredentials: 'true',
   });
 
-const styles = theme => ({
+const styles = (theme) => ({
   button: {
     margin: theme.spacing(1),
-    marginLeft: 0
+    marginLeft: 0,
   },
   leftIcon: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   rightIcon: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   dialogContent: {
-    paddingBottom: theme.spacing(1)
+    paddingBottom: theme.spacing(1),
   },
   droppedFiles: {
-    marginTop: theme.spacing(3)
-  }
+    marginTop: theme.spacing(3),
+  },
 });
 
 class UploadFileDialog extends Component {
@@ -72,7 +72,7 @@ class UploadFileDialog extends Component {
     super(props);
     this.state = {
       open: false,
-      files: []
+      files: [],
     };
 
     this.prepareUpload();
@@ -85,35 +85,36 @@ class UploadFileDialog extends Component {
   prepareUpload() {
     let currentProject = this.props.currentProject;
 
-    const uppyAwsXHR = uppy.getPlugin("XHRUpload");
+    const uppyAwsXHR = uppy.getPlugin('XHRUpload');
     uppyAwsXHR.opts.endpoint = getFileUploadUrl(
       currentProject,
       this.props.type
     );
     uppy.opts.meta.onFileUpload = this.props.onFileUpload;
-    uppy.on("complete", this.onUploadComplete);
+    uppy.on('complete', this.onUploadComplete);
     uppy.run();
   }
 
   onUploadComplete(result) {
     if (result.successful.length > 0) {
-      uppy.getPlugin("Dashboard").closeModal();
+      uppy.getPlugin('Dashboard').closeModal();
       uppy.reset();
       uppy.opts.meta.onFileUpload();
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.currentProject 
-      !== this.props.currentProject || 
-        prevProps.type !== this.props.type ||
-        prevProps.onFileUpload !== this.props.onFileUpload) {
-        this.prepareUpload();
+    if (
+      prevProps.currentProject !== this.props.currentProject ||
+      prevProps.type !== this.props.type ||
+      prevProps.onFileUpload !== this.props.onFileUpload
+    ) {
+      this.prepareUpload();
     }
   }
 
   componentWillUnmount() {
-    const dashboard = uppy.getPlugin("Dashboard");
+    const dashboard = uppy.getPlugin('Dashboard');
     if (dashboard.isModalOpen()) {
       dashboard.closeModal();
     }
@@ -122,7 +123,7 @@ class UploadFileDialog extends Component {
   }
 
   handleClickOpen() {
-    uppy.getPlugin("Dashboard").openModal();
+    uppy.getPlugin('Dashboard').openModal();
   }
 
   render() {
@@ -143,7 +144,7 @@ class UploadFileDialog extends Component {
 
 UploadFileDialog.propTypes = {
   onFileUpload: PropTypes.func.isRequired,
-  cookies: PropTypes.instanceOf(Cookies).isRequired
+  cookies: PropTypes.instanceOf(Cookies).isRequired,
 };
 
 export default withCookies(

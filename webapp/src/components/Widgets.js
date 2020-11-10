@@ -1,50 +1,50 @@
-import React, { Component } from "react";
-import { withStyles } from "@material-ui/core/styles";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import Grid from "@material-ui/core/Grid";
-import Icon from "@material-ui/core/Icon";
-import Typography from "@material-ui/core/Typography";
-import { CircularProgress } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
+import Icon from '@material-ui/core/Icon';
+import Typography from '@material-ui/core/Typography';
+import { CircularProgress } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
-import "../css/widget.css";
+import '../css/widget.css';
 
-const styles = theme => ({
+const styles = (theme) => ({
   iconStyles: {
     fontSize: 50,
-    position: "relative",
-    top: "16px",
-    color: "white"
+    position: 'relative',
+    top: '16px',
+    color: 'white',
   },
   text: {
     marginTop: 8,
-    color: "white"
+    color: 'white',
   },
   value: {
-    color: "white"
+    color: 'white',
     // marginTop: 2 - not needed?
   },
   progress: {
-    color: "white"
+    color: 'white',
   },
   link: {
-    textDecoration: "none"
+    textDecoration: 'none',
   },
   pointerCursor: {
-    cursor: "pointer"
-  }
+    cursor: 'pointer',
+  },
 });
 
 class Widget extends Component {
   formatClassNameInfoBox(color) {
-    return "info-box hover-expand-effect bg-" + color;
+    return 'info-box hover-expand-effect bg-' + color;
   }
 
   render() {
     var { classes } = this.props;
     var displayedValue = this.props.value;
-    if (displayedValue === "init") {
+    if (displayedValue === 'init') {
       displayedValue = (
         <CircularProgress className={classes.progress} size={30} />
       );
@@ -92,7 +92,7 @@ class Widgets extends Component {
     const data = this.props.data;
     const colSize = 12 / this.props.data.length <= 3 ? 3 : 4;
 
-    const oWidgets = data.map(item => (
+    const oWidgets = data.map((item) => (
       <Widget
         classes={this.props.classes}
         key={item.NAME}
@@ -114,7 +114,7 @@ class Widgets extends Component {
 
 Widgets.propTypes = {
   classes: PropTypes.object.isRequired,
-  data: PropTypes.array.isRequired
+  data: PropTypes.array.isRequired,
 };
 
 export default withStyles(styles)(Widgets);

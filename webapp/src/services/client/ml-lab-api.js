@@ -1,20 +1,20 @@
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
-import { ENDPOINTS } from "../handler/constants";
+import { ENDPOINTS } from '../handler/constants';
 
-import LabApi from "./lab-api";
+import LabApi from './lab-api';
 
 let endpoint = ENDPOINTS.newLabApi;
-if (endpoint.endsWith("/")) {
+if (endpoint.endsWith('/')) {
   endpoint = endpoint.substring(0, endpoint.length - 1);
 }
 
-const URL_PROJECTS_ENDPOINT = endpoint + "/api/projects/{project}";
-const URL_FILES_ENDPOINT = URL_PROJECTS_ENDPOINT + "/files";
+const URL_PROJECTS_ENDPOINT = endpoint + '/api/projects/{project}';
+const URL_FILES_ENDPOINT = URL_PROJECTS_ENDPOINT + '/files';
 
 function toastErrorMessage(prefix, error) {
   try {
-    error.json().then(errorMessage => {
+    error.json().then((errorMessage) => {
       toast.error(prefix + errorMessage.errors.message);
     });
   } catch (no_json) {
@@ -23,12 +23,12 @@ function toastErrorMessage(prefix, error) {
 }
 
 function toastErrorType(prefix, error) {
-  if (typeof error === "string") {
+  if (typeof error === 'string') {
     toast.error(prefix + error);
   } else if (prefix && !error) {
     toast.error(prefix);
   } else {
-    error.json().then(errorMessage => {
+    error.json().then((errorMessage) => {
       toast.error(prefix + errorMessage.errors.type);
     });
   }
@@ -52,24 +52,25 @@ function toastSuccess(message) {
   successToastId = toast.success(message);
 }
 
-const getFileDownloadUrl = function(project, fileKey) {
-  return (URL_FILES_ENDPOINT + "/download?fileKey=" + encodeURIComponent(fileKey)).replace(
-    "{project}",
-    project
-  );
+const getFileDownloadUrl = function (project, fileKey) {
+  return (
+    URL_FILES_ENDPOINT +
+    '/download?fileKey=' +
+    encodeURIComponent(fileKey)
+  ).replace('{project}', project);
 };
 
-const getFileUploadUrl = function(project, dataType) {
-  return (URL_FILES_ENDPOINT + "/upload?dataType={dataType}")
-    .replace("{project}", project)
-    .replace("{dataType}", dataType);
+const getFileUploadUrl = function (project, dataType) {
+  return (URL_FILES_ENDPOINT + '/upload?dataType={dataType}')
+    .replace('{project}', project)
+    .replace('{dataType}', dataType);
 };
 
-const getServiceUrl = function(project, serviceName, port) {
-  return (URL_PROJECTS_ENDPOINT + "/services/{serviceName}/{port}/")
-    .replace("{project}", project)
-    .replace("{serviceName}", serviceName)
-    .replace("{port}", port);
+const getServiceUrl = function (project, serviceName, port) {
+  return (URL_PROJECTS_ENDPOINT + '/services/{serviceName}/{port}/')
+    .replace('{project}', project)
+    .replace('{serviceName}', serviceName)
+    .replace('{port}', port);
 };
 
 const labApiClient = new LabApi.ApiClient();
@@ -83,11 +84,11 @@ const projectsApi = new LabApi.ProjectsApi(labApiClient);
 function getDefaultApiCallback(resolve, reject, isToastUnauthorized) {
   const UNAUTHORIZED_STATUS_CODE = 401;
   const FORBIDDEN_STATUS_CODE = 403;
-  const LOGIN_PATH = "#/login";
+  const LOGIN_PATH = '#/login';
   isToastUnauthorized =
     isToastUnauthorized === undefined || isToastUnauthorized === null;
 
-  return function(error, data, response) {
+  return function (error, data, response) {
     if (
       response !== undefined &&
       (response.status === UNAUTHORIZED_STATUS_CODE ||
@@ -98,7 +99,7 @@ function getDefaultApiCallback(resolve, reject, isToastUnauthorized) {
         isToastUnauthorized
       ) {
         // don't show this toast in the login screen. Sometimes, the path is not correct, so enforce not showing the toast.
-        toast.error("Not authorized.");
+        toast.error('Not authorized.');
       }
 
       response.isAuthError = true;
@@ -110,7 +111,8 @@ function getDefaultApiCallback(resolve, reject, isToastUnauthorized) {
       response = response || { body: {} };
 
       response.isAuthError = false;
-      let errorBody = (response.body && response.body.errors) ? response.body.errors : {};
+      let errorBody =
+        response.body && response.body.errors ? response.body.errors : {};
 
       if (reject) {
         reject({ error: error, errorBody: errorBody, httpResponse: response });
@@ -136,5 +138,5 @@ export {
   getDefaultApiCallback,
   getFileDownloadUrl,
   getFileUploadUrl,
-  getServiceUrl
+  getServiceUrl,
 };

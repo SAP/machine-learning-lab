@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 //base components
-import IFrameComponent from "../components/IFrameComponent";
+import IFrameComponent from '../components/IFrameComponent';
 
 //controller
-import * as ReduxUtils from "../services/handler/reduxUtils";
-import * as Constants from "../services/handler/constants";
-import CustomDialog from "../components/CustomDialog.js";
+import * as ReduxUtils from '../services/handler/reduxUtils';
+import * as Constants from '../services/handler/constants';
+import CustomDialog from '../components/CustomDialog.js';
 
 import {
   administrationApi,
-  getDefaultApiCallback
-} from "../services/client/ml-lab-api";
+  getDefaultApiCallback,
+} from '../services/client/ml-lab-api';
 
 class Workspace extends Component {
   constructor(props) {
@@ -22,7 +22,7 @@ class Workspace extends Component {
     this.state = {
       startButtonDisabled: true,
       updateButtonDisabled: false,
-      workspaceUpdateDialogOpen: false
+      workspaceUpdateDialogOpen: false,
     };
   }
 
@@ -32,7 +32,7 @@ class Workspace extends Component {
       getDefaultApiCallback(({ httpResponse }) => {
         this.setState({
           workspaceUpdateDialogOpen: JSON.parse(httpResponse.text).metadata
-            .needsUpdate
+            .needsUpdate,
         });
       })
     );
@@ -44,10 +44,10 @@ class Workspace extends Component {
 
   renderUpdateDialog() {
     let { updateButtonDisabled } = this.state;
-    const title = "There is a newer workspace version";
+    const title = 'There is a newer workspace version';
     const contentText =
-      "Please update the workspace to run the most stable version. Out-dated workspaces might be automatically updated after some time. All files stored under /workspace (default Jupyter path) are persisted. Data within other directories will be removed, e.g. installed libraries or machine configuration. The update should take a few seconds to a few minutes.";
-    const primaryActionBtnLabel = "Update";
+      'Please update the workspace to run the most stable version. Out-dated workspaces might be automatically updated after some time. All files stored under /workspace (default Jupyter path) are persisted. Data within other directories will be removed, e.g. installed libraries or machine configuration. The update should take a few seconds to a few minutes.';
+    const primaryActionBtnLabel = 'Update';
 
     let clickUpdateButton = () => {
       this.setState({ updateButtonDisabled: true });
@@ -60,7 +60,7 @@ class Workspace extends Component {
         open={true}
         title={title}
         contentText={contentText}
-        dialogContentTextStyle={{ fontSize: "0.9rem" }}
+        dialogContentTextStyle={{ fontSize: '0.9rem' }}
         primaryActionBtnLabel={primaryActionBtnLabel}
         cancelBtnLabel="Later"
         handlePrimaryAction={clickUpdateButton}

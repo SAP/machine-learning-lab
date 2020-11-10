@@ -1,20 +1,20 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { toast } from "react-toastify";
-import { withCookies, Cookies } from "react-cookie";
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+import { withCookies, Cookies } from 'react-cookie';
 
 // material-ui components
-import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 
 // base components
-import CustomDialog from "../../../components/CustomDialog";
-import * as ProcessToast from "../../../components/ProcessToast";
+import CustomDialog from '../../../components/CustomDialog';
+import * as ProcessToast from '../../../components/ProcessToast';
 
 // scene components
-import CreateProjectButton from "./CreateProjectButton";
+import CreateProjectButton from './CreateProjectButton';
 
 //controller
 import {
@@ -22,20 +22,20 @@ import {
   projectsApi,
   getDefaultApiCallback,
   toastErrorMessage,
-  toastErrorType
-} from "../../../services/client/ml-lab-api";
-import * as ReduxUtils from "../../../services/handler/reduxUtils";
+  toastErrorType,
+} from '../../../services/client/ml-lab-api';
+import * as ReduxUtils from '../../../services/handler/reduxUtils';
 
-const styles = theme => ({
+const styles = (theme) => ({
   progress: {
-    margin: "auto"
+    margin: 'auto',
   },
   toast: {
-    textAlign: "center"
+    textAlign: 'center',
   },
   invalidInput: {
-    color: "#bd0000"
-  }
+    color: '#bd0000',
+  },
 });
 
 class CreateProjectControl extends Component {
@@ -43,8 +43,8 @@ class CreateProjectControl extends Component {
     super(props);
     this.state = {
       open: props.open || false,
-      projectName: "",
-      projectDescription: ""
+      projectName: '',
+      projectDescription: '',
     };
 
     this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -64,10 +64,10 @@ class CreateProjectControl extends Component {
 
   // close dialog
   handleRequestClose() {
-    if (this.props.statusCode !== "noProjects") {
+    if (this.props.statusCode !== 'noProjects') {
       this.setState({
         open: false,
-        projectName: ""
+        projectName: '',
       });
     }
   }
@@ -90,33 +90,34 @@ class CreateProjectControl extends Component {
     let projectName = this.state.projectName;
 
     let toastID = ProcessToast.showProcessToast(
-      "Project " + projectName + " will be created..."
+      'Project ' + projectName + ' will be created...'
     );
 
-    let projectConfig = LabApi.LabProjectConfig.constructFromObject(
-      { name: projectName, description: this.state.projectDescription }
-    );
+    let projectConfig = LabApi.LabProjectConfig.constructFromObject({
+      name: projectName,
+      description: this.state.projectDescription,
+    });
     projectsApi.createProject(
       projectConfig,
       {},
       getDefaultApiCallback(
         () => {
           toast.dismiss(toastID);
-          toast.success("Project " + projectName + " created.");
+          toast.success('Project ' + projectName + ' created.');
           this.setState({
-            projectName: "",
-            open: false
+            projectName: '',
+            open: false,
           });
           this.props.onCreateProject(projectName);
         },
         ({ errorBody }) => {
           this.setState({
-            projectName: "",
-            open: false
+            projectName: '',
+            open: false,
           });
 
           toast.dismiss(toastID);
-          toastErrorMessage("Create project: ", errorBody);
+          toastErrorMessage('Create project: ', errorBody);
         }
       )
     );
@@ -131,20 +132,20 @@ class CreateProjectControl extends Component {
   render() {
     const { classes } = this.props;
 
-    const title = "Create Project";
+    const title = 'Create Project';
     const contentText =
-      "A project is a digital space for tackling a specific data science use-case. " +
-      "It consists of multiple datasets, experiments, models, services, and jobs.";
-    const tfId = "projectName";
-    const tfLabel = "Project name";
-    const isInvalidInput = new RegExp("[^a-zA-Z0-9- ]").test(
+      'A project is a digital space for tackling a specific data science use-case. ' +
+      'It consists of multiple datasets, experiments, models, services, and jobs.';
+    const tfId = 'projectName';
+    const tfLabel = 'Project name';
+    const isInvalidInput = new RegExp('[^a-zA-Z0-9- ]').test(
       this.state.projectName
     );
-    const cancelBtnDisabled = this.props.statusCode === "noProjects";
+    const cancelBtnDisabled = this.props.statusCode === 'noProjects';
     const primaryActionBtnDisabled =
       this.state.projectName.length < 3 ||
-      new RegExp("[^a-zA-Z0-9- ]").test(this.state.projectName);
-    const primaryActionBtnLabel = "Create";
+      new RegExp('[^a-zA-Z0-9- ]').test(this.state.projectName);
+    const primaryActionBtnLabel = 'Create';
 
     const Textfield = (
       <TextField
@@ -154,10 +155,10 @@ class CreateProjectControl extends Component {
         label={tfLabel}
         type="text"
         name="projectName"
-        onChange={e => this.handleInputChange(e)}
+        onChange={(e) => this.handleInputChange(e)}
         fullWidth
         InputProps={{
-          classes: { input: isInvalidInput ? classes.invalidInput : null }
+          classes: { input: isInvalidInput ? classes.invalidInput : null },
         }}
       />
     );
@@ -169,7 +170,7 @@ class CreateProjectControl extends Component {
         multiline
         className={classes.textField}
         name="projectDescription"
-        onChange={e => this.handleInputChange(e)}
+        onChange={(e) => this.handleInputChange(e)}
         margin="dense"
         fullWidth
       />
@@ -209,7 +210,7 @@ CreateProjectControl.propTypes = {
   statusCode: PropTypes.string.isRequired,
   component: PropTypes.string.isRequired,
   showCreateProjectDialog: PropTypes.bool,
-  cookies: PropTypes.instanceOf(Cookies).isRequired // passed by withCookies
+  cookies: PropTypes.instanceOf(Cookies).isRequired, // passed by withCookies
 };
 
 export default withCookies(

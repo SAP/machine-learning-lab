@@ -1,38 +1,38 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
 
-import TextField from "@material-ui/core/TextField";
-import AddIcon from "@material-ui/icons/Add";
-import DelIcon from "@material-ui/icons/Delete";
-import Button from "@material-ui/core/Button";
-import { ENV_NAME_REGEX } from "../../../services/handler/constants";
+import TextField from '@material-ui/core/TextField';
+import AddIcon from '@material-ui/icons/Add';
+import DelIcon from '@material-ui/icons/Delete';
+import Button from '@material-ui/core/Button';
+import { ENV_NAME_REGEX } from '../../../services/handler/constants';
 
-const styles = theme => ({
+const styles = (theme) => ({
   invalidInput: {
-    color: "#bd0000"
+    color: '#bd0000',
   },
   keyValueForm: {
-    padding: "10px 0px",
-    overflow: "auto",
-    maxHeight: "300px"
+    padding: '10px 0px',
+    overflow: 'auto',
+    maxHeight: '300px',
   },
   keyValueText: {
-    margin: "10px 10px 10px 0px"
+    margin: '10px 10px 10px 0px',
   },
   keyValueButton: {
-    minWidth: "35px",
-    padding: "8px 5px"
+    minWidth: '35px',
+    padding: '8px 5px',
   },
   addParameterButton: {
     //margin: theme.spacing.unit,
     marginLeft: 0,
-    paddingLeft: "0px"
+    paddingLeft: '0px',
   },
   rightIcon: {
-    marginLeft: theme.spacing(1)
-  }
+    marginLeft: theme.spacing(1),
+  },
 });
 
 class KeyValueList extends Component {
@@ -41,16 +41,17 @@ class KeyValueList extends Component {
 
     this.state = {
       keyValuePairs: [],
-      isInvalidKeys: []
+      isInvalidKeys: [],
     };
   }
 
   componentDidUpdate(prevProps) {
-    // Only auto-create key value pairs if props changed and 
+    // Only auto-create key value pairs if props changed and
     // if no key value pairs are added in the dialog yet
-    if (prevProps.initialKeyValuePairs !== this.props.initialKeyValuePairs && 
-        this.state.keyValuePairs.length === 0
-      ) {
+    if (
+      prevProps.initialKeyValuePairs !== this.props.initialKeyValuePairs &&
+      this.state.keyValuePairs.length === 0
+    ) {
       let keyValuePairs = [];
 
       // NOTE: adding the key-value pairs like this do not validate them.
@@ -59,34 +60,34 @@ class KeyValueList extends Component {
         keyValuePairs = keyValuePairs.concat({
           index: keyValuePair.index,
           key: keyValuePair.key,
-          value: keyValuePair.value
+          value: keyValuePair.value,
         });
       }
       this.setState({
-        keyValuePairs
+        keyValuePairs,
       });
     }
   }
 
-  onAddKeyValueButtonClick = function() {
+  onAddKeyValueButtonClick = function () {
     let keyValuePairs = this.state.keyValuePairs;
 
     keyValuePairs = keyValuePairs.concat({
       index: keyValuePairs.length,
-      key: "",
-      value: ""
+      key: '',
+      value: '',
     });
 
     this.setState({
-      keyValuePairs
+      keyValuePairs,
     });
   }.bind(this);
 
-  handleKeyValuePairChange = function(index, change, value) {
+  handleKeyValuePairChange = function (index, change, value) {
     const { keyValuePairs, isInvalidKeys } = this.state;
 
     let isInvalidKey = false;
-    if (change === "key") {
+    if (change === 'key') {
       isInvalidKey = !ENV_NAME_REGEX.test(value);
       isInvalidKeys[index] = isInvalidKey;
     }
@@ -94,18 +95,18 @@ class KeyValueList extends Component {
 
     this.setState({
       keyValuePairs,
-      isInvalidKeys
+      isInvalidKeys,
     });
 
     this.props.onKeyValuePairChange(keyValuePairs, isInvalidKeys);
   }.bind(this);
 
-  onDelKeyValueButtonClick = function(index) {
+  onDelKeyValueButtonClick = function (index) {
     var { keyValuePairs, isInvalidKeys } = this.state;
 
     keyValuePairs.splice(index, 1);
     var new_index = 0;
-    keyValuePairs.forEach(function(obj) {
+    keyValuePairs.forEach(function (obj) {
       obj.index = new_index;
       new_index += 1;
     });
@@ -114,7 +115,7 @@ class KeyValueList extends Component {
 
     this.setState({
       keyValuePairs,
-      isInvalidKeys
+      isInvalidKeys,
     });
 
     this.props.onKeyValuePairChange(keyValuePairs, isInvalidKeys);
@@ -124,32 +125,36 @@ class KeyValueList extends Component {
     const { classes } = this.props;
 
     const keyValueText = [
-      { name: "key", placeholder: "Key" },
-      { name: "value", placeholder: "Value" }
+      { name: 'key', placeholder: 'Key' },
+      { name: 'value', placeholder: 'Value' },
     ];
 
     return (
       <div className={classes.keyValueForm}>
-        {this.state.keyValuePairs.map(item => (
+        {this.state.keyValuePairs.map((item) => (
           <div key={item.index}>
-            {keyValueText.map(text => (
+            {keyValueText.map((text) => (
               <TextField
                 key={text.name}
                 placeholder={text.placeholder}
                 className={classes.keyValueText}
                 type="text"
-                name={text.name === "key" ? "configKey" : "configValue"}
+                name={text.name === 'key' ? 'configKey' : 'configValue'}
                 autoComplete="on"
                 value={this.state.keyValuePairs[item.index][text.name]}
-                onChange={e =>
-                  this.handleKeyValuePairChange(item.index, text.name, e.target.value)
+                onChange={(e) =>
+                  this.handleKeyValuePairChange(
+                    item.index,
+                    text.name,
+                    e.target.value
+                  )
                 }
                 InputProps={{
                   classes: {
                     input: this.state.isInvalidKeys[item.index]
                       ? this.props.classes.invalidInput
-                      : null
-                  }
+                      : null,
+                  },
                 }}
               />
             ))}
@@ -157,7 +162,7 @@ class KeyValueList extends Component {
               className={classes.keyValueButton}
               color="default"
               aria-label="del"
-              onClick={e => this.onDelKeyValueButtonClick(item.index)}
+              onClick={(e) => this.onDelKeyValueButtonClick(item.index)}
             >
               <DelIcon />
             </Button>
@@ -179,7 +184,7 @@ class KeyValueList extends Component {
 
 KeyValueList.propTypes = {
   onKeyValuePairChange: PropTypes.func.isRequired,
-  initialKeyValuePairs: PropTypes.array
+  initialKeyValuePairs: PropTypes.array,
 };
 
 export default withStyles(styles)(KeyValueList);

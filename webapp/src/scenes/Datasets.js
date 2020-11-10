@@ -1,36 +1,35 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import Grid from "@material-ui/core/Grid";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
 
 //base components
-import Widgets from "../components/Widgets";
-import BlockHeader from "../components/BlockHeader";
-import TableComponent from "../components/table/TableComponent";
-import UploadFileDialog from "../components/table/UploadFileDialog";
+import Widgets from '../components/Widgets';
+import BlockHeader from '../components/BlockHeader';
+import TableComponent from '../components/table/TableComponent';
+import UploadFileDialog from '../components/table/UploadFileDialog';
 
-import DownloadItemButton from "../components/table/ActionButtons/DownloadItemButton";
-import CopyKeyButton from "../components/table/ActionButtons/CopyKeyButton";
-import DeleteFileButton from "../components/table/ActionButtons/DeleteFileButton";
+import DownloadItemButton from '../components/table/ActionButtons/DownloadItemButton';
+import CopyKeyButton from '../components/table/ActionButtons/CopyKeyButton';
+import DeleteFileButton from '../components/table/ActionButtons/DeleteFileButton';
 
 //controller
-import * as Constants from "../services/handler/constants";
+import * as Constants from '../services/handler/constants';
 import {
   projectsApi,
   getDefaultApiCallback,
   toastErrorMessage,
-  getFileDownloadUrl
-} from "../services/client/ml-lab-api";
-import * as Parser from "../services/handler/parser";
-import * as ReduxUtils from "../services/handler/reduxUtils";
-
+  getFileDownloadUrl,
+} from '../services/client/ml-lab-api';
+import * as Parser from '../services/handler/parser';
+import * as ReduxUtils from '../services/handler/reduxUtils';
 
 class Datasets extends Component {
   constructor(props) {
     super(props);
     this.state = {
       widgetdata: Constants.WIDGET_ITEMS_DATASETS,
-      tabledata: []
+      tabledata: [],
     };
 
     this.reloadData = this.reloadData.bind(this);
@@ -38,29 +37,29 @@ class Datasets extends Component {
   }
 
   updateData(props) {
-    if (props.statusCode === "startApp" || props.statusCode === "noProjects") {
+    if (props.statusCode === 'startApp' || props.statusCode === 'noProjects') {
       return;
     }
 
     projectsApi.getFiles(
       props.currentProject,
       {
-        dataType: "dataset"
+        dataType: 'dataset',
       },
       getDefaultApiCallback(
         ({ result }) => {
           let stats = result.metadata.stats;
           let widgetdata = this.state.widgetdata;
-          widgetdata.forEach(function(element) {
+          widgetdata.forEach(function (element) {
             element.VALUE = Parser.SetVariableFormat(
               stats[element.KEY],
               element.FORMAT
             );
           }, this);
           let data = result.data;
-          data.forEach(function(element) {
+          data.forEach(function (element) {
             if (!element.modifiedBy) {
-              element.modifiedBy = "-";
+              element.modifiedBy = '-';
             }
             element.downloadUrl = getFileDownloadUrl(
               props.currentProject,
@@ -69,23 +68,23 @@ class Datasets extends Component {
           });
           this.setState({
             widgetdata: widgetdata,
-            tabledata: data
+            tabledata: data,
           });
         },
         ({ error }) => {
           var data = [];
           var widgetdata = Constants.WIDGET_ITEMS_DATASETS;
 
-          widgetdata.forEach(function(element) {
-            element.VALUE = "";
+          widgetdata.forEach(function (element) {
+            element.VALUE = '';
           }, this);
 
           this.setState({
             tabledata: data,
-            widgetdata: widgetdata
+            widgetdata: widgetdata,
           });
 
-          toastErrorMessage("Load Datasets: ", error);
+          toastErrorMessage('Load Datasets: ', error);
         }
       )
     );
@@ -109,15 +108,15 @@ class Datasets extends Component {
     let actionButtons = [
       (item) => <DownloadItemButton downloadUrl={item.downloadUrl} />,
       (item) => <CopyKeyButton copyKey={item.key} />,
-      (item) => <DeleteFileButton onItemDelete={this.reloadData} item={item} />
-    ]
+      (item) => <DeleteFileButton onItemDelete={this.reloadData} item={item} />,
+    ];
 
     const primaryActionBtn = (
       <UploadFileDialog onFileUpload={this.reloadData} type="dataset" />
     );
 
     return (
-      <div style={{ width: "100%" }}>
+      <div style={{ width: '100%' }}>
         <BlockHeader name="Datasets" />
         <Widgets data={this.state.widgetdata} />
         <Grid item xs={12} lg={12}>
@@ -139,7 +138,7 @@ class Datasets extends Component {
 
 Datasets.propTypes = {
   statusCode: PropTypes.string.isRequired,
-  currentProject: PropTypes.string.isRequired
+  currentProject: PropTypes.string.isRequired,
 };
 
 export default connect(ReduxUtils.mapStateToProps)(Datasets);

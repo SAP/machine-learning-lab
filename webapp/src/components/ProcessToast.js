@@ -1,19 +1,19 @@
-import React from "react";
-import { toast } from "react-toastify";
+import React from 'react';
+import { toast } from 'react-toastify';
 
 // material-ui components
-import CircularProgress from "@material-ui/core/CircularProgress";
-import DialogContentText from "@material-ui/core/DialogContentText";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
-import * as Constants from "../services/handler/constants";
+import * as Constants from '../services/handler/constants';
 
 const styles = {
   progress: {
-    margin: "auto"
+    margin: 'auto',
   },
   toast: {
-    textAlign: "center"
-  }
+    textAlign: 'center',
+  },
 };
 
 export function showProcessToast(processText) {

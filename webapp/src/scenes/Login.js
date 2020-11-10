@@ -1,81 +1,78 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as ReduxUtils from "../services/handler/reduxUtils";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as ReduxUtils from '../services/handler/reduxUtils';
+import PropTypes from 'prop-types';
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 // material-ui components
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
-import { TextField, Typography } from "@material-ui/core";
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import { TextField, Typography } from '@material-ui/core';
 
 import {
   authorizationApi,
-  getDefaultApiCallback
-} from "../services/client/ml-lab-api";
-import { parseJwtToken } from "../services/handler/utils";
+  getDefaultApiCallback,
+} from '../services/client/ml-lab-api';
+import { parseJwtToken } from '../services/handler/utils';
 
 //TODO: add 'Pending Authentication State' so Login can be hidden when authentication /refreshLogin request is made.
 
 const steps = {
-  login: "login",
-  register: "register"
+  login: 'login',
+  register: 'register',
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   toast: {
-    textAlign: "center",
-    margin: "auto"
-  }
+    textAlign: 'center',
+    margin: 'auto',
+  },
 });
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: "",
-      pass: "",
-      repeatedPass: "",
-      step: steps.login
+      user: '',
+      pass: '',
+      repeatedPass: '',
+      step: steps.login,
     };
   }
 
-  loginUser = base64Credentials => {
-      authorizationApi.loginUser(
-        { authorization: base64Credentials },
-        getDefaultApiCallback(
-          ({ result }) => {
-            let { isAdmin } = parseJwtToken(result.data);
-            this.props.onAuthentication(this.state.user, true, isAdmin);
-            this.props.history.push("/");
-          },
-          ({ httpResponse }) => {
-            this.props.onAuthentication(null, false)
-            let errorMessage = ""
-            try {
-              errorMessage = httpResponse.body.errors.message
-            } catch(err) {
-              // do nothing
-            }
-            toast.error(
-              "Login failed. " + errorMessage
-            );
+  loginUser = (base64Credentials) => {
+    authorizationApi.loginUser(
+      { authorization: base64Credentials },
+      getDefaultApiCallback(
+        ({ result }) => {
+          let { isAdmin } = parseJwtToken(result.data);
+          this.props.onAuthentication(this.state.user, true, isAdmin);
+          this.props.history.push('/');
+        },
+        ({ httpResponse }) => {
+          this.props.onAuthentication(null, false);
+          let errorMessage = '';
+          try {
+            errorMessage = httpResponse.body.errors.message;
+          } catch (err) {
+            // do nothing
           }
-        )
-      );
+          toast.error('Login failed. ' + errorMessage);
+        }
+      )
+    );
   };
 
-  handleLogin = function() {
+  handleLogin = function () {
     let { user, pass } = this.state;
 
-    const authToken = "Basic " + btoa(`${user}:${pass}`);
+    const authToken = 'Basic ' + btoa(`${user}:${pass}`);
 
     this.loginUser(authToken);
   };
 
-  handleRegister = function() {
-
+  handleRegister = function () {
     if (this.state.pass !== this.state.repeatedPass) {
       toast.error("The two passwords don't match");
       return;
@@ -87,27 +84,25 @@ class Login extends Component {
       {},
       getDefaultApiCallback(
         () => {
-          toast.success("Registration was successful. You can login now.");
+          toast.success('Registration was successful. You can login now.');
           this.setState({ step: steps.login });
         },
         ({ httpResponse }) => {
-          let errorMessage = ""
+          let errorMessage = '';
           try {
-            errorMessage = httpResponse.body.errors.message
-          } catch(err) {
+            errorMessage = httpResponse.body.errors.message;
+          } catch (err) {
             // do nothing
           }
-          toast.error(
-            "Registration failed: " + errorMessage
-          );
+          toast.error('Registration failed: ' + errorMessage);
         }
       )
     );
   };
 
-  handleClick = function(e) {
-    if (this.state.user === "" || this.state.pass === "") {
-      toast.error("User or password cannot be empty.");
+  handleClick = function (e) {
+    if (this.state.user === '' || this.state.pass === '') {
+      toast.error('User or password cannot be empty.');
       return;
     }
     if (this.state.step === steps.login) {
@@ -117,13 +112,13 @@ class Login extends Component {
     }
   }.bind(this);
 
-  handleChange = function(e) {
+  handleChange = function (e) {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   }.bind(this);
 
-  handleStepChange = function(e) {
+  handleStepChange = function (e) {
     if (this.state.step === steps.login) {
       this.setState({ step: steps.register });
     } else {
@@ -132,21 +127,21 @@ class Login extends Component {
   };
 
   render() {
-    let buttonText = "Login";
+    let buttonText = 'Login';
     let repeatPasswordField = null;
     let additionalLoginComponent =
       this.state.step === steps.register ? (
         false
       ) : (
         <Typography
-          style={{ marginTop: "2px", fontSize: "12px", color: "gray" }}
+          style={{ marginTop: '2px', fontSize: '12px', color: 'gray' }}
         >
           Login or
         </Typography>
       );
-    let stepChangeText = "Register here!";
+    let stepChangeText = 'Register here!';
     if (this.state.step === steps.register) {
-      buttonText = "Register";
+      buttonText = 'Register';
       repeatPasswordField = (
         <div>
           <TextField
@@ -155,17 +150,17 @@ class Login extends Component {
             type="password"
             margin="normal"
             autoComplete="login pass"
-            onChange={e => this.handleChange(e)}
+            onChange={(e) => this.handleChange(e)}
           />
         </div>
       );
-      stepChangeText = "Go back to login";
+      stepChangeText = 'Go back to login';
     }
     const ENTER_KEY = 13;
     return (
       <div
-        style={{ margin: "auto", marginTop: "48px" }}
-        onKeyPress={e =>
+        style={{ margin: 'auto', marginTop: '48px' }}
+        onKeyPress={(e) =>
           e.charCode === ENTER_KEY ? this.handleClick() : false
         }
       >
@@ -175,7 +170,7 @@ class Login extends Component {
             label="User"
             margin="normal"
             autoComplete="login user"
-            onChange={e => this.handleChange(e)}
+            onChange={(e) => this.handleChange(e)}
           />
         </div>
         <div>
@@ -185,18 +180,18 @@ class Login extends Component {
             type="password"
             margin="normal"
             autoComplete="login pass"
-            onChange={e => this.handleChange(e)}
+            onChange={(e) => this.handleChange(e)}
           />
         </div>
         {repeatPasswordField}
         <Button
           variant="text"
           color="primary"
-          onClick={event => this.handleClick(event)}
+          onClick={(event) => this.handleClick(event)}
           style={{
-            paddingLeft: "0px",
-            justifyContent: "start",
-            marginTop: "4px"
+            paddingLeft: '0px',
+            justifyContent: 'start',
+            marginTop: '4px',
           }}
         >
           {buttonText}
@@ -205,10 +200,10 @@ class Login extends Component {
         <div
           style={{
             fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-            fontSize: "12px",
-            color: "gray",
-            cursor: "pointer",
-            textDecoration: "underline"
+            fontSize: '12px',
+            color: 'gray',
+            cursor: 'pointer',
+            textDecoration: 'underline',
           }}
           onClick={() => this.handleStepChange()}
         >
@@ -220,7 +215,7 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  onAuthentication: PropTypes.func.isRequired // passed by ReduxUtils,
+  onAuthentication: PropTypes.func.isRequired, // passed by ReduxUtils,
 };
 
 export default connect(

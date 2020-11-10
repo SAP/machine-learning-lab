@@ -1,38 +1,36 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 // material-ui components
-import { withStyles } from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
-import IconButton from "@material-ui/core/IconButton";
-import green from "@material-ui/core/colors/green";
+import { withStyles } from '@material-ui/core/styles';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import green from '@material-ui/core/colors/green';
 
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from '@material-ui/core/Tooltip';
 
 //base components
-import CustomDialog from "../../../components/CustomDialog";
+import CustomDialog from '../../../components/CustomDialog';
 
-import * as ReduxUtils from "../../../services/handler/reduxUtils";
+import * as ReduxUtils from '../../../services/handler/reduxUtils';
 
-
-const styles = theme => ({
+const styles = (theme) => ({
   checked: {
     color: green[500],
-    "& + $bar": {
-      backgroundColor: green[500]
-    }
+    '& + $bar': {
+      backgroundColor: green[500],
+    },
   },
-  bar: {}
+  bar: {},
 });
-
 
 class DeleteExperimentButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      bKeepLatestVersion: false
+      bKeepLatestVersion: false,
     };
 
     this.onOpenDeleteDialog = this.onOpenDeleteDialog.bind(this);
@@ -43,7 +41,7 @@ class DeleteExperimentButton extends Component {
 
   handleCheckChange(event) {
     this.setState({
-      bKeepLatestVersion: event.target.checked
+      bKeepLatestVersion: event.target.checked,
     });
   }
 
@@ -58,7 +56,7 @@ class DeleteExperimentButton extends Component {
   // TODO: remove unused param
   onDeleteFile() {
     this.setState({
-      open: false
+      open: false,
     });
 
     this.props.onItemDelete();
@@ -66,17 +64,14 @@ class DeleteExperimentButton extends Component {
 
   render() {
     //CustomDialog
-    const title = "Delete Experiment";
+    const title = 'Delete Experiment';
     const cancelBtnDisabled = false;
     const primaryActionBtnDisabled = false;
-    const primaryActionBtnLabel = "Delete";
-    const onDeleteText =
-      "Do you want to delete this experiment?";
-
-    
+    const primaryActionBtnLabel = 'Delete';
+    const onDeleteText = 'Do you want to delete this experiment?';
 
     return (
-      <div style={{ display: "inline" }}>
+      <div style={{ display: 'inline' }}>
         <Tooltip title="Delete" placement="bottom">
           <IconButton onClick={this.onOpenDeleteDialog}>
             <Icon>delete</Icon>
@@ -90,7 +85,7 @@ class DeleteExperimentButton extends Component {
           primaryActionBtnDisabled={primaryActionBtnDisabled}
           primaryActionBtnLabel={primaryActionBtnLabel}
           handleRequestClose={this.handleRequestClose}
-          handlePrimaryAction={e => this.onDeleteFile()}
+          handlePrimaryAction={(e) => this.onDeleteFile()}
         />
       </div>
     );
@@ -98,7 +93,7 @@ class DeleteExperimentButton extends Component {
 }
 
 DeleteExperimentButton.propTypes = {
-  onItemDelete: PropTypes.func.isRequired
+  onItemDelete: PropTypes.func.isRequired,
 };
 
 export default connect(ReduxUtils.mapStateToProps)(

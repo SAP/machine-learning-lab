@@ -1,28 +1,28 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { connect } from "react-redux";
-import { withCookies } from "react-cookie";
-import PropTypes from "prop-types";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import { withCookies } from 'react-cookie';
+import PropTypes from 'prop-types';
 
 // material-ui components
-import IconButton from "@material-ui/core/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+import IconButton from '@material-ui/core/IconButton';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 
-import CustomDialog from "../../../components/CustomDialog";
+import CustomDialog from '../../../components/CustomDialog';
 
-import * as Parser from "../../../services/handler/parser";
-import * as Constants from "../../../services/handler/constants";
+import * as Parser from '../../../services/handler/parser';
+import * as Constants from '../../../services/handler/constants';
 
 import {
   mapStateToProps,
-  mapDispatchToProps
-} from "../../../services/handler/reduxUtils";
+  mapDispatchToProps,
+} from '../../../services/handler/reduxUtils';
 
 import {
   authorizationApi,
@@ -31,18 +31,18 @@ import {
   toastSuccess,
   toastErrorMessage,
   toastErrorType,
-  projectsApi
-} from "../../../services/client/ml-lab-api";
+  projectsApi,
+} from '../../../services/client/ml-lab-api';
 
 const ORIGINAL_DIALOG = {
   isOpen: false,
-  title: "",
-  contentText: "",
+  title: '',
+  contentText: '',
   action: null,
   customComponent: null,
   hideCancelBtn: false,
   isApiTokenDialog: false,
-  primaryActionBtnLabel: "Ok"
+  primaryActionBtnLabel: 'Ok',
 };
 
 class UserMenu extends React.Component {
@@ -52,20 +52,20 @@ class UserMenu extends React.Component {
     this.state = {
       anchorEl: null,
       dialog: { ...ORIGINAL_DIALOG },
-      apiToken: "",
-      isAnonymousChecked: false
+      apiToken: '',
+      isAnonymousChecked: false,
     };
   }
 
-  handleMenu = event => {
+  handleMenu = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
-  handleDialogInput = e => {
+  handleDialogInput = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleSwitchInput = e => {
+  handleSwitchInput = (e) => {
     this.setState({ [e.target.name]: e.target.checked });
   };
 
@@ -76,17 +76,15 @@ class UserMenu extends React.Component {
       getDefaultApiCallback(({ result }) => {
         let TextField = (
           <div>
-            <Typography
-              paragraph={true}
-              variant="subtitle2"
-            >
-              With this token, all resources can be accessed that can be accessed with your user. 
-              In most cases, the more restrictive Project API Token should be used.
+            <Typography paragraph={true} variant="subtitle2">
+              With this token, all resources can be accessed that can be
+              accessed with your user. In most cases, the more restrictive
+              Project API Token should be used.
             </Typography>
             <Typography
               variant="body1"
-              style={{ wordBreak: "break-all", fontWeight: "initial" }}
-              ref={node => (this.apiTokenField = node)}
+              style={{ wordBreak: 'break-all', fontWeight: 'initial' }}
+              ref={(node) => (this.apiTokenField = node)}
             >
               {result.data}
             </Typography>
@@ -97,12 +95,12 @@ class UserMenu extends React.Component {
           dialog: {
             ...ORIGINAL_DIALOG,
             isOpen: true,
-            title: "User API Token",
+            title: 'User API Token',
             customComponent: TextField,
             hideCancelBtn: true,
-            isApiTokenDialog: true
+            isApiTokenDialog: true,
           },
-          apiToken: result.data
+          apiToken: result.data,
         });
       })
     );
@@ -115,17 +113,15 @@ class UserMenu extends React.Component {
       getDefaultApiCallback(({ result }) => {
         let TextField = (
           <div>
-            <Typography
-              paragraph={true}
-              variant="subtitle2"
-            >
-              With this token, all resources that belong to the project can be accessed. For example, it is possible to
-              access this project's services, jobs, and experiment data.
+            <Typography paragraph={true} variant="subtitle2">
+              With this token, all resources that belong to the project can be
+              accessed. For example, it is possible to access this project's
+              services, jobs, and experiment data.
             </Typography>
             <Typography
               variant="body1"
-              style={{ wordBreak: "break-all", fontWeight: "initial" }}
-              ref={node => (this.apiTokenField = node)}
+              style={{ wordBreak: 'break-all', fontWeight: 'initial' }}
+              ref={(node) => (this.apiTokenField = node)}
             >
               {result.data}
             </Typography>
@@ -136,12 +132,12 @@ class UserMenu extends React.Component {
           dialog: {
             ...ORIGINAL_DIALOG,
             isOpen: true,
-            title: "Project API Token",
+            title: 'Project API Token',
             customComponent: TextField,
             hideCancelBtn: true,
-            isApiTokenDialog: true
+            isApiTokenDialog: true,
           },
-          apiToken: result.data
+          apiToken: result.data,
         });
       })
     );
@@ -157,7 +153,7 @@ class UserMenu extends React.Component {
           name="newPassword"
           label="New Password"
           type="password"
-          onChange={e => this.handleDialogInput(e)}
+          onChange={(e) => this.handleDialogInput(e)}
           fullWidth
         />
         <TextField
@@ -167,7 +163,7 @@ class UserMenu extends React.Component {
           name="newPasswordRepeat"
           label="Repeat new password"
           type="password"
-          onChange={e => this.handleDialogInput(e)}
+          onChange={(e) => this.handleDialogInput(e)}
           fullWidth
         />
       </div>
@@ -183,10 +179,10 @@ class UserMenu extends React.Component {
           {},
           getDefaultApiCallback(
             () => {
-              toastSuccess("Changed password."); 
+              toastSuccess('Changed password.');
               this.handleLogout();
             },
-            ({ error }) => toastErrorMessage("Change password failed: ", error)
+            ({ error }) => toastErrorMessage('Change password failed: ', error)
           )
         );
       }
@@ -196,20 +192,39 @@ class UserMenu extends React.Component {
       dialog: {
         ...ORIGINAL_DIALOG,
         isOpen: true,
-        title: "Change your password",
-        contentText: "You will get logged out and have to login again!",
+        title: 'Change your password',
+        contentText: 'You will get logged out and have to login again!',
         customComponent: changePasswordComponent,
-        primaryActionBtnLabel: "Save",
-        action: onPasswordSend
-      }
+        primaryActionBtnLabel: 'Save',
+        action: onPasswordSend,
+      },
     });
   };
 
   handleAboutDialog = () => {
     const aboutDialogComponent = (
       <div>
-        <Typography>Please find the source code on <Link href={Constants.GITHUB_LINK} target="_blank" rel="noopener noreferrer">GitHub</Link>.</Typography>
-        <Typography>See third party <Link href={Constants.ABOUT_FILE} target="_blank" rel="noopener noreferrer">credits.</Link></Typography>
+        <Typography>
+          Please find the source code on{' '}
+          <Link
+            href={Constants.GITHUB_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </Link>
+          .
+        </Typography>
+        <Typography>
+          See third party{' '}
+          <Link
+            href={Constants.ABOUT_FILE}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            credits.
+          </Link>
+        </Typography>
       </div>
     );
 
@@ -217,25 +232,26 @@ class UserMenu extends React.Component {
       dialog: {
         ...ORIGINAL_DIALOG,
         isOpen: true,
-        title: "About",
+        title: 'About',
         hideCancelBtn: true,
-        customComponent: aboutDialogComponent
-      }
+        customComponent: aboutDialogComponent,
+      },
     });
-  }
+  };
 
   handleLogout = () => {
-    authorizationApi.logoutUser({},
+    authorizationApi.logoutUser(
+      {},
       getDefaultApiCallback(
         () => {
-          toastSuccess("Logged out");
+          toastSuccess('Logged out');
           this.props.cookies.remove(
             Constants.COOKIES.project,
             Constants.COOKIES.options
           );
           this.props.onLogout();
         },
-        ({ error }) => toastErrorMessage("Logout failed: ", error)
+        ({ error }) => toastErrorMessage('Logout failed: ', error)
       )
     );
     //this.props.onInpChange({ target: { value: "" } });
@@ -244,10 +260,10 @@ class UserMenu extends React.Component {
     this.handleClose();
   };
 
-  handleCopyKey = text => {
+  handleCopyKey = (text) => {
     const apiTokenTextField = ReactDOM.findDOMNode(this.apiTokenField);
     Parser.setClipboardText(text, apiTokenTextField);
-    toastInfo("Copied to Clipboard");
+    toastInfo('Copied to Clipboard');
   };
 
   handleClose = () => {
@@ -260,9 +276,9 @@ class UserMenu extends React.Component {
     this.setState({
       dialog: {
         ...this.state.dialog,
-        isOpen: false
+        isOpen: false,
       },
-      anchorEl: null
+      anchorEl: null,
     });
   };
 
@@ -273,7 +289,7 @@ class UserMenu extends React.Component {
     const copyButton = this.state.dialog.isApiTokenDialog ? (
       <Button
         color="primary"
-        onClick={e => this.handleCopyKey(this.state.apiToken)}
+        onClick={(e) => this.handleCopyKey(this.state.apiToken)}
       >
         Copy Token
       </Button>
@@ -287,11 +303,11 @@ class UserMenu extends React.Component {
           <div style={{ marginRight: 12 }}>
               
             {/* Display user name */}
-            <Typography style={{ color: "white", display: "inline-block" }}>
+            <Typography style={{ color: 'white', display: 'inline-block' }}>
               {this.props.user}
             </Typography>
             <IconButton
-              aria-owns={open ? "menu-appbar" : null}
+              aria-owns={open ? 'menu-appbar' : null}
               aria-haspopup="true"
               onClick={this.handleMenu}
               color="inherit"
@@ -302,19 +318,19 @@ class UserMenu extends React.Component {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: "top",
-                horizontal: "right"
+                vertical: 'top',
+                horizontal: 'right',
               }}
               transformOrigin={{
-                vertical: "top",
-                horizontal: "right"
+                vertical: 'top',
+                horizontal: 'right',
               }}
               open={open}
               onClose={this.handleClose}
             >
               <MenuItem>
                 <a
-                  style={{ textDecoration: "none", color: "initial" }}
+                  style={{ textDecoration: 'none', color: 'initial' }}
                   href={Constants.SERVICES.documentation.url}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -325,7 +341,7 @@ class UserMenu extends React.Component {
 
               <MenuItem>
                 <a
-                  style={{ textDecoration: "none", color: "initial" }}
+                  style={{ textDecoration: 'none', color: 'initial' }}
                   href={Constants.SERVICES.apiExplorer.url}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -343,9 +359,7 @@ class UserMenu extends React.Component {
               <MenuItem onClick={this.handleUpdateUserPassword}>
                 Change Password
               </MenuItem>
-              <MenuItem onClick={this.handleAboutDialog}>
-                About
-              </MenuItem>
+              <MenuItem onClick={this.handleAboutDialog}>About</MenuItem>
               <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
             </Menu>
             <CustomDialog
@@ -378,12 +392,9 @@ UserMenu.propTypes = {
   onLogout: PropTypes.func.isRequired,
   onAuthentication: PropTypes.func.isRequired, // from redux
   isAuthenticated: PropTypes.bool.isRequired, // from redux
-  cookies: PropTypes.object // from withCookies
+  cookies: PropTypes.object, // from withCookies
 };
 
 export default withCookies(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(UserMenu)
+  connect(mapStateToProps, mapDispatchToProps)(UserMenu)
 );

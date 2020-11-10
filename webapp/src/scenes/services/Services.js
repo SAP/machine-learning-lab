@@ -1,31 +1,31 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 //base components
-import BlockHeader from "../../components/BlockHeader";
+import BlockHeader from '../../components/BlockHeader';
 
 //scene components
-import ServiceCards from "./components/ServiceCards";
+import ServiceCards from './components/ServiceCards';
 
 //controller
 import {
   projectsApi,
   getDefaultApiCallback,
-  toastErrorMessage
-} from "../../services/client/ml-lab-api";
-import * as ReduxUtils from "../../services/handler/reduxUtils";
+  toastErrorMessage,
+} from '../../services/client/ml-lab-api';
+import * as ReduxUtils from '../../services/handler/reduxUtils';
 
 class Services extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      serviceCardsData: []
+      serviceCardsData: [],
     };
   }
 
   updateData(props) {
-    if (props.statusCode === "startApp") {
+    if (props.statusCode === 'startApp') {
       return;
     }
 
@@ -35,10 +35,10 @@ class Services extends Component {
       getDefaultApiCallback(
         ({ result }) => {
           this.setState({
-            serviceCardsData: result.data
+            serviceCardsData: result.data,
           });
         },
-        ({ error }) => toastErrorMessage("Load Services: ", error)
+        ({ error }) => toastErrorMessage('Load Services: ', error)
       )
     );
   }
@@ -48,7 +48,6 @@ class Services extends Component {
       this.updateData(this.props);
     }
   }
-
 
   componentDidMount() {
     this.updateData(this.props);
@@ -60,7 +59,7 @@ class Services extends Component {
 
   render() {
     return (
-      <div style={{ width: "100%" }}>
+      <div style={{ width: '100%' }}>
         <BlockHeader name="Services" />
         <ServiceCards
           onServiceDeploy={this.onServiceUpdate}
@@ -75,7 +74,7 @@ class Services extends Component {
 
 Services.propTypes = {
   statusCode: PropTypes.string.isRequired,
-  currentProject: PropTypes.string.isRequired
+  currentProject: PropTypes.string.isRequired,
 };
 
 export default connect(ReduxUtils.mapStateToProps)(Services);

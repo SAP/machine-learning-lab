@@ -1,21 +1,21 @@
-import * as FileSizeFormat from "filesize";
-import * as moment from "moment";
+import * as FileSizeFormat from 'filesize';
+import * as moment from 'moment';
 
 export function SetVariableFormat(string, format) {
   if (!string) return string;
 
   switch (format) {
-    case "date":
+    case 'date':
       if (string) {
         return moment(string - 10)
-          .startOf("minute")
+          .startOf('minute')
           .fromNow();
       } else {
-        return "-";
+        return '-';
       }
-    case "size":
+    case 'size':
       return FileSizeFormat(string);
-    case "truncate":
+    case 'truncate':
       return truncate(string, 60);
     default:
       return string;
@@ -25,7 +25,7 @@ export function SetVariableFormat(string, format) {
 export function truncate(fullStr, strLen, separator) {
   if (fullStr.length <= strLen) return fullStr;
 
-  separator = separator || "...";
+  separator = separator || '...';
 
   var sepLen = separator.length,
     charsToShow = strLen - sepLen,
@@ -48,33 +48,33 @@ export function truncate(fullStr, strLen, separator) {
  */
 export function setClipboardText(text, node) {
   if (!node) {
-    var id = "mycustom-clipboard-textarea-hidden-id";
+    var id = 'mycustom-clipboard-textarea-hidden-id';
     var existsTextarea = document.getElementById(id);
 
     if (!existsTextarea) {
-      var textarea = document.createElement("textarea");
+      var textarea = document.createElement('textarea');
       textarea.id = id;
       // Place in top-left corner of screen regardless of scroll position.
-      textarea.style.position = "fixed";
+      textarea.style.position = 'fixed';
       textarea.style.top = 0;
       textarea.style.left = 0;
 
       // Ensure it has a small width and height. Setting to 1px / 1em
       // doesn't work as this gives a negative w/h on some browsers.
-      textarea.style.width = "1px";
-      textarea.style.height = "1px";
+      textarea.style.width = '1px';
+      textarea.style.height = '1px';
 
       // We don't need padding, reducing the size if it does flash render.
       textarea.style.padding = 0;
 
       // Clean up any borders.
-      textarea.style.border = "none";
-      textarea.style.outline = "none";
-      textarea.style.boxShadow = "none";
+      textarea.style.border = 'none';
+      textarea.style.outline = 'none';
+      textarea.style.boxShadow = 'none';
 
       // Avoid flash of white box if rendered for any reason.
-      textarea.style.background = "transparent";
-      document.querySelector("body").appendChild(textarea);
+      textarea.style.background = 'transparent';
+      document.querySelector('body').appendChild(textarea);
       existsTextarea = document.getElementById(id);
     }
 
@@ -82,7 +82,7 @@ export function setClipboardText(text, node) {
     existsTextarea.select();
 
     try {
-      document.execCommand("copy");
+      document.execCommand('copy');
     } catch (err) {
       console.error(err);
     }
@@ -92,7 +92,7 @@ export function setClipboardText(text, node) {
     range.selectNodeContents(node);
     selection.removeAllRanges();
     selection.addRange(range);
-    document.execCommand("copy");
+    document.execCommand('copy');
     selection.removeAllRanges();
   }
 }

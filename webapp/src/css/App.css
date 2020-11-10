@@ -1,17 +1,20 @@
-html, body, #root{
-    min-height: 100%
+html,
+body,
+#root {
+  min-height: 100%;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-  }
+  margin: 0;
+  padding: 0;
+}
 
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: local('Material Icons'), local('MaterialIcons-Regular'), url(material-ui.woff2) format('woff2');
+  src: local('Material Icons'), local('MaterialIcons-Regular'),
+    url(material-ui.woff2) format('woff2');
 }
 
 .material-icons {
@@ -30,32 +33,30 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 .customdialog {
   justify-content: center;
   display: flex;
 }
 
-.customdialog > div[role=document] > div {
+.customdialog > div[role='document'] > div {
   overflow-y: initial;
   max-width: 800px;
 }
-
 
 @media (min-width: 600px) {
   .navBarItem {
     padding-left: 24px !important;
   }
-} 
+}
 
 .Toastify__toast--info {
-  background: #9E9E9E;
+  background: #9e9e9e;
 }
 .Toastify__toast--success {
-  background: #4CAF50;
+  background: #4caf50;
 }
 .Toastify__toast--warning {
-  background: #FF9800;
+  background: #ff9800;
 }
 .Toastify__toast--error {
   background: #f44336;

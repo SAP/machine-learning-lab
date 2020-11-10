@@ -1,37 +1,37 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // material-ui components
-import Icon from "@material-ui/core/Icon";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { withStyles } from "@material-ui/core/styles";
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { withStyles } from '@material-ui/core/styles';
 
 import {
   projectsApi,
-  getDefaultApiCallback
-} from "../../../services/client/ml-lab-api";
+  getDefaultApiCallback,
+} from '../../../services/client/ml-lab-api';
 
-const styles = theme => ({
+const styles = (theme) => ({
   dialogWidth: {
-    maxWidth: "72%"
-  }
+    maxWidth: '72%',
+  },
 });
 
 class LogsButton extends Component {
   state = {
     open: false,
-    logs: ""
+    logs: '',
   };
 
   log = (project, id, callback) => {
-    this.props.type === "job"
+    this.props.type === 'job'
       ? projectsApi.getJobLogs(project, id, {}, callback)
       : projectsApi.getServiceLogs(project, id, {}, callback);
   };
@@ -42,11 +42,11 @@ class LogsButton extends Component {
       project,
       id,
       getDefaultApiCallback(({ result }) => {
-        const logs = result.data === "" ? "No logs available" : result.data;
+        const logs = result.data === '' ? 'No logs available' : result.data;
         this.setState({ logs: logs });
       })
     );
-  }
+  };
 
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -58,11 +58,11 @@ class LogsButton extends Component {
   };
 
   render() {
-    const title = "Logs";
+    const title = 'Logs';
     const { classes } = this.props;
 
     return (
-      <div style={{ display: "inline" }}>
+      <div style={{ display: 'inline' }}>
         <Tooltip title="Logs" placement="bottom">
           <IconButton onClick={this.handleClickOpen}>
             <Icon>assignment</Icon>
@@ -73,15 +73,15 @@ class LogsButton extends Component {
           open={this.state.open}
           onClose={this.handleClose}
           classes={{
-            paper: classes.dialogWidth
+            paper: classes.dialogWidth,
           }}
           scroll="paper"
           aria-labelledby="scroll-dialog-title"
-          style={{ whiteSpace: "pre-wrap" }}
+          style={{ whiteSpace: 'pre-wrap' }}
         >
           <DialogTitle id="scroll-dialog-title">{title}</DialogTitle>
           <DialogContent>
-            <DialogContentText style={{ fontSize: "0.75rem" }}>
+            <DialogContentText style={{ fontSize: '0.75rem' }}>
               {this.state.logs}
             </DialogContentText>
           </DialogContent>
@@ -102,7 +102,7 @@ class LogsButton extends Component {
 LogsButton.propTypes = {
   project: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(["job", "service"]).isRequired
+  type: PropTypes.oneOf(['job', 'service']).isRequired,
 };
 
 export default withStyles(styles)(LogsButton);

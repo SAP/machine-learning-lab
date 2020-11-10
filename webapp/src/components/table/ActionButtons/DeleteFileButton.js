@@ -1,37 +1,37 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { toast } from "react-toastify";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 // material-ui components
-import { withStyles } from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
-import IconButton from "@material-ui/core/IconButton";
-import green from "@material-ui/core/colors/green";
+import { withStyles } from '@material-ui/core/styles';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import green from '@material-ui/core/colors/green';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from "@material-ui/core/Switch";
-import Tooltip from "@material-ui/core/Tooltip";
+import Switch from '@material-ui/core/Switch';
+import Tooltip from '@material-ui/core/Tooltip';
 
 //base components
-import CustomDialog from "../../../components/CustomDialog";
-import * as ProcessToast from "../../../components/ProcessToast";
+import CustomDialog from '../../../components/CustomDialog';
+import * as ProcessToast from '../../../components/ProcessToast';
 
-import * as ReduxUtils from "../../../services/handler/reduxUtils";
+import * as ReduxUtils from '../../../services/handler/reduxUtils';
 import {
   projectsApi,
   getDefaultApiCallback,
-  toastErrorMessage
-} from "../../../services/client/ml-lab-api";
+  toastErrorMessage,
+} from '../../../services/client/ml-lab-api';
 
-const styles = theme => ({
+const styles = (theme) => ({
   checked: {
     color: green[500],
-    "& + $bar": {
-      backgroundColor: green[500]
-    }
+    '& + $bar': {
+      backgroundColor: green[500],
+    },
   },
-  bar: {}
+  bar: {},
 });
 
 const VERSION_SUFFIX_REGEX = /\.v[0-9]+$/;
@@ -41,7 +41,7 @@ class DeleteFileButton extends Component {
     super(props);
     this.state = {
       open: false,
-      bKeepLatestVersion: false
+      bKeepLatestVersion: false,
     };
 
     this.onOpenDeleteDialog = this.onOpenDeleteDialog.bind(this);
@@ -52,7 +52,7 @@ class DeleteFileButton extends Component {
 
   handleCheckChange(event) {
     this.setState({
-      bKeepLatestVersion: event.target.checked
+      bKeepLatestVersion: event.target.checked,
     });
   }
 
@@ -65,9 +65,9 @@ class DeleteFileButton extends Component {
   }
 
   onDeleteFile(item) {
-    var toastID = ProcessToast.showProcessToast("File will be deleted...");
+    var toastID = ProcessToast.showProcessToast('File will be deleted...');
     this.setState({
-      open: false
+      open: false,
     });
 
     // strip the version suffix from the file key before calling the delete API
@@ -84,12 +84,12 @@ class DeleteFileButton extends Component {
       getDefaultApiCallback(
         () => {
           toast.dismiss(toastID);
-          toast.success("File deleted");
+          toast.success('File deleted');
           this.props.onItemDelete();
         },
         ({ error }) => {
           toast.dismiss(toastID);
-          toastErrorMessage("Delete File: ", error);
+          toastErrorMessage('Delete File: ', error);
         }
       )
     );
@@ -99,12 +99,12 @@ class DeleteFileButton extends Component {
     const { classes } = this.props;
 
     //CustomDialog
-    const title = "Delete File";
+    const title = 'Delete File';
     const cancelBtnDisabled = false;
     const primaryActionBtnDisabled = false;
-    const primaryActionBtnLabel = "Delete";
+    const primaryActionBtnLabel = 'Delete';
     const onDeleteText =
-      "Do you want to delete the File " + this.props.item.name + " ?";
+      'Do you want to delete the File ' + this.props.item.name + ' ?';
 
     const checkKeepLatestVersion = (
       <FormGroup row>
@@ -112,11 +112,11 @@ class DeleteFileButton extends Component {
           control={
             <Switch
               checked={this.state.bKeepLatestVersion}
-              onChange={e => this.handleCheckChange(e)}
+              onChange={(e) => this.handleCheckChange(e)}
               value="keepLatestVersion"
               classes={{
                 checked: classes.checked,
-                bar: classes.bar
+                bar: classes.bar,
               }}
             />
           }
@@ -126,7 +126,7 @@ class DeleteFileButton extends Component {
     );
 
     return (
-      <div style={{ display: "inline" }}>
+      <div style={{ display: 'inline' }}>
         <Tooltip title="Delete" placement="bottom">
           <IconButton onClick={this.onOpenDeleteDialog}>
             <Icon>delete</Icon>
@@ -140,7 +140,7 @@ class DeleteFileButton extends Component {
           primaryActionBtnDisabled={primaryActionBtnDisabled}
           primaryActionBtnLabel={primaryActionBtnLabel}
           handleRequestClose={this.handleRequestClose}
-          handlePrimaryAction={e => this.onDeleteFile(this.props.item)}
+          handlePrimaryAction={(e) => this.onDeleteFile(this.props.item)}
           CustomComponent={checkKeepLatestVersion}
         />
       </div>
@@ -151,7 +151,7 @@ class DeleteFileButton extends Component {
 DeleteFileButton.propTypes = {
   item: PropTypes.object.isRequired,
   onItemDelete: PropTypes.func.isRequired,
-  currentProject: PropTypes.string.isRequired
+  currentProject: PropTypes.string.isRequired,
 };
 
 export default connect(ReduxUtils.mapStateToProps)(

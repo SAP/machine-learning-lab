@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 var styles = {
-  height: "56px"
+  height: '56px',
 };
 
 class BlockSpacing extends Component {

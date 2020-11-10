@@ -1,23 +1,22 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // material-ui
-import Icon from "@material-ui/core/Icon";
-import IconButton from "@material-ui/core/IconButton";
-import { withStyles } from "@material-ui/core/styles";
-import CreateButton from "@material-ui/icons/Add";
-import Button from "@material-ui/core/Button";
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import { withStyles } from '@material-ui/core/styles';
+import CreateButton from '@material-ui/icons/Add';
+import Button from '@material-ui/core/Button';
 
-
-const styles = theme => ({
+const styles = (theme) => ({
   button: {
     //margin: theme.spacing.unit,
     marginLeft: 0,
-    padding: "6px 16px"
+    padding: '6px 16px',
   },
   rightIcon: {
-    marginLeft: theme.spacing(1)
-  }
+    marginLeft: theme.spacing(1),
+  },
 });
 
 class CreateProjectButton extends Component {
@@ -25,7 +24,7 @@ class CreateProjectButton extends Component {
     const { classes } = this.props;
 
     //TODO: refactor: only Dashboard is used anymore
-    if (this.props.component === "Dashboard") {
+    if (this.props.component === 'Dashboard') {
       return (
         <Button
           color="primary"
@@ -52,7 +51,7 @@ class CreateProjectButton extends Component {
 
 CreateProjectButton.propTypes = {
   handleClickOpen: PropTypes.func.isRequired,
-  component: PropTypes.string.isRequired
+  component: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(CreateProjectButton);

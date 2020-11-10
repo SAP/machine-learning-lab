@@ -1,21 +1,21 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import Icon from "@material-ui/core/Icon";
-import IconButton from "@material-ui/core/IconButton";
-import PropTypes from "prop-types";
-import Tooltip from "@material-ui/core/Tooltip";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import PropTypes from 'prop-types';
+import Tooltip from '@material-ui/core/Tooltip';
 
 //base components
-import CustomDialog from "../../../components/CustomDialog";
+import CustomDialog from '../../../components/CustomDialog';
 
-import * as ReduxUtils from "../../../services/handler/reduxUtils";
+import * as ReduxUtils from '../../../services/handler/reduxUtils';
 
 class DeleteItemButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      bKeepLatestVersion: false
+      bKeepLatestVersion: false,
     };
 
     this.onOpenDeleteDialog = this.onOpenDeleteDialog.bind(this);
@@ -25,7 +25,7 @@ class DeleteItemButton extends Component {
 
   handleCheckChange(event) {
     this.setState({
-      bKeepLatestVersion: event.target.checked
+      bKeepLatestVersion: event.target.checked,
     });
   }
 
@@ -39,15 +39,15 @@ class DeleteItemButton extends Component {
 
   render() {
     //CustomDialog
-    const title = "Delete Item";
+    const title = 'Delete Item';
     const cancelBtnDisabled = false;
     const primaryActionBtnDisabled = false;
-    const primaryActionBtnLabel = "Delete";
+    const primaryActionBtnLabel = 'Delete';
     const onDeleteText =
-      "Do you want to delete the item " + this.props.item.name + " ?";
+      'Do you want to delete the item ' + this.props.item.name + ' ?';
 
     return (
-      <div style={{ display: "inline" }}>
+      <div style={{ display: 'inline' }}>
         <Tooltip title="Delete" placement="bottom">
           <IconButton onClick={this.onOpenDeleteDialog}>
             <Icon>delete</Icon>
@@ -61,7 +61,7 @@ class DeleteItemButton extends Component {
           primaryActionBtnDisabled={primaryActionBtnDisabled}
           primaryActionBtnLabel={primaryActionBtnLabel}
           handleRequestClose={this.handleRequestClose}
-          handlePrimaryAction={e => this.props.onItemDelete(this.props.item)}
+          handlePrimaryAction={(e) => this.props.onItemDelete(this.props.item)}
         />
       </div>
     );
@@ -71,7 +71,7 @@ class DeleteItemButton extends Component {
 DeleteItemButton.propTypes = {
   item: PropTypes.object.isRequired,
   onItemDelete: PropTypes.func.isRequired,
-  currentProject: PropTypes.string.isRequired
+  currentProject: PropTypes.string.isRequired,
 };
 
 export default connect(ReduxUtils.mapStateToProps)(DeleteItemButton);

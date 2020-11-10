@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
+import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
 import {
   Checkbox,
   FormControlLabel,
@@ -9,50 +9,50 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Typography
-} from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+  Typography,
+} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import {
   authorizationApi,
   projectsApi,
   administrationApi,
-  getDefaultApiCallback
-} from "../services/client/ml-lab-api";
-import { toast } from "react-toastify";
-import Card from "@material-ui/core/Card";
-import Grid from "@material-ui/core/Grid";
+  getDefaultApiCallback,
+} from '../services/client/ml-lab-api';
+import { toast } from 'react-toastify';
+import Card from '@material-ui/core/Card';
+import Grid from '@material-ui/core/Grid';
 
 // import { resolveCname } from "dns";
 
-const styles = theme => ({
+const styles = (theme) => ({
   button: {
     //margin: theme.spacing.unit,
-    marginLeft: 0
+    marginLeft: 0,
   },
   leftIcon: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   root: {
-    display: "flex",
-    flexWrap: "wrap"
+    display: 'flex',
+    flexWrap: 'wrap',
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120
+    minWidth: 120,
   },
   selectEmpty: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   projectCheckbox: {
-    marginBottom: "-12px"
-  }
+    marginBottom: '-12px',
+  },
 });
 
 class AdminArea extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: "",
+      user: '',
       userPermissions: [],
       existingUsers: [],
       userProjects: {},
@@ -79,7 +79,7 @@ class AdminArea extends Component {
       labInactiveUserCount: 0,
       labInactiveProjectsCount: 0,
       isAdmin: false,
-      labProjectExperimentTuple: []
+      labProjectExperimentTuple: [],
     };
 
     this.getProfiles();
@@ -96,56 +96,56 @@ class AdminArea extends Component {
           if (result !== undefined) {
             let statistics = result.data;
             this.setState({
-              labDatasetsCount: statistics["datasetsCount"],
-              labDatasetsTotalSize: statistics["datasetsTotalSize"],
-              labExperimentsCount: statistics["experimentsCount"],
-              labFilesCount: statistics["filesCount"],
-              labFilesTotalSize: statistics["filesTotalSize"],
-              labJobsCount: statistics["jobsCount"],
-              labModelsCount: statistics["modelsCount"],
+              labDatasetsCount: statistics['datasetsCount'],
+              labDatasetsTotalSize: statistics['datasetsTotalSize'],
+              labExperimentsCount: statistics['experimentsCount'],
+              labFilesCount: statistics['filesCount'],
+              labFilesTotalSize: statistics['filesTotalSize'],
+              labJobsCount: statistics['jobsCount'],
+              labModelsCount: statistics['modelsCount'],
               labModelsTotalSizeInGB: (
-                statistics["modelsTotalSize"] * Math.pow(10, -9)
+                statistics['modelsTotalSize'] * Math.pow(10, -9)
               )
                 .toString()
                 .substring(0, 5),
               labDatasetsTotalSizeInGB: (
-                statistics["datasetsTotalSize"] * Math.pow(10, -9)
+                statistics['datasetsTotalSize'] * Math.pow(10, -9)
               )
                 .toString()
                 .substring(0, 5),
-              labProjectsCount: statistics["projectsCount"],
-              labServicesCount: statistics["servicesCount"],
-              labUsersCount: statistics["userCount"],
-              labSharedProjectsCount: statistics["sharedProjectsCount"],
-              labInactiveUserCount: statistics["inactiveUserCount"],
-              labInactiveProjectsCount: statistics["inactiveProjectsCount"],
-              labDownloadedFiles: statistics["downloadedFiles"]
+              labProjectsCount: statistics['projectsCount'],
+              labServicesCount: statistics['servicesCount'],
+              labUsersCount: statistics['userCount'],
+              labSharedProjectsCount: statistics['sharedProjectsCount'],
+              labInactiveUserCount: statistics['inactiveUserCount'],
+              labInactiveProjectsCount: statistics['inactiveProjectsCount'],
+              labDownloadedFiles: statistics['downloadedFiles'],
             });
             // console.log("Stats getStatistics", result);
           }
         },
-        error => {
-          console.log("error in getStatistics");
+        (error) => {
+          console.log('error in getStatistics');
         }
       )
     );
   }
 
   //lab/admin/info
-  handleChange = function(name, value) {
+  handleChange = function (name, value) {
     authorizationApi.getUser(
       value,
       {},
       getDefaultApiCallback(({ result }) => {
         this.setState({
           [name]: value,
-          userPermissions: result.data.permissions
+          userPermissions: result.data.permissions,
         });
       })
     );
   }.bind(this);
 
-  handlePermissionChange = function(e) {
+  handlePermissionChange = function (e) {
     let permission = e.target.name;
     let userPermissions = this.state.userPermissions;
     if (e.target.checked) {
@@ -158,31 +158,31 @@ class AdminArea extends Component {
     }
 
     this.setState({
-      userPermissions: userPermissions
+      userPermissions: userPermissions,
     });
   };
 
-  handleCheck = e => {
+  handleCheck = (e) => {
     let newProjects = [...this.state.userProjects];
     let target = e.target;
     if (e.target.checked) {
       newProjects = [];
     }
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       [target.name]: target.checked,
-      userProjects: newProjects
+      userProjects: newProjects,
     }));
   };
 
   handleAddProject() {
-    this.setState(prevState => ({
-      userProjects: [...prevState.userProjects, {}]
+    this.setState((prevState) => ({
+      userProjects: [...prevState.userProjects, {}],
     }));
   }
 
   handleSelectProject() {
-    this.setState(prevState => ({
-      userProjects: [...prevState.userProjects]
+    this.setState((prevState) => ({
+      userProjects: [...prevState.userProjects],
     }));
   }
 
@@ -192,8 +192,8 @@ class AdminArea extends Component {
       this.state.userPermissions,
       {},
       getDefaultApiCallback(
-        () => toast.success("Saving permissions successful."),
-        () => toast.error("Saving permissions for user failed.")
+        () => toast.success('Saving permissions successful.'),
+        () => toast.error('Saving permissions for user failed.')
       )
     );
   }
@@ -209,7 +209,7 @@ class AdminArea extends Component {
         }
 
         this.setState({
-          labUsers: users
+          labUsers: users,
         });
       })
     );
@@ -225,7 +225,7 @@ class AdminArea extends Component {
             let projectsRaw = [];
 
             for (let i = 0; i < result.data.length; i++) {
-              let project_id = "project-" + result.data[i].id;
+              let project_id = 'project-' + result.data[i].id;
 
               projects.push(project_id);
               // console.info('experiment Count', experimentCount);
@@ -236,11 +236,11 @@ class AdminArea extends Component {
             resolve(projectsRaw);
 
             this.setState({
-              labProjects: projects.sort()
+              labProjects: projects.sort(),
             });
           },
           ({ error }) => {
-            toast.error("Could not load projects", error);
+            toast.error('Could not load projects', error);
           }
         )
       );
@@ -259,7 +259,7 @@ class AdminArea extends Component {
           control={
             <Checkbox
               checked={projectChecked}
-              onChange={e => this.handlePermissionChange(e)}
+              onChange={(e) => this.handlePermissionChange(e)}
               value={project}
               name={project}
             />
@@ -271,7 +271,7 @@ class AdminArea extends Component {
   }
 
   renderUserSpecificControls() {
-    if (this.state.labUsers.length === 0 || this.state.user === "") {
+    if (this.state.labUsers.length === 0 || this.state.user === '') {
       return false;
     }
     const { classes } = this.props;
@@ -280,9 +280,9 @@ class AdminArea extends Component {
         <FormControlLabel
           control={
             <Checkbox
-              checked={this.state.userPermissions.indexOf("admin") > -1}
+              checked={this.state.userPermissions.indexOf('admin') > -1}
               name="admin"
-              onChange={e => this.handlePermissionChange(e)}
+              onChange={(e) => this.handlePermissionChange(e)}
               value="admin"
               color="primary"
             />
@@ -291,7 +291,7 @@ class AdminArea extends Component {
         />
         <div
           style={{
-            marginTop: "16px"
+            marginTop: '16px',
           }}
         >
           <FormControl component="fieldset">
@@ -304,9 +304,9 @@ class AdminArea extends Component {
             color="primary"
             variant="contained"
             className={classes.button}
-            onClick={e => this.handleSave(e)}
+            onClick={(e) => this.handleSave(e)}
             style={{
-              marginTop: "20px"
+              marginTop: '20px',
             }}
           >
             Save
@@ -323,7 +323,7 @@ class AdminArea extends Component {
       // margin: "auto",
       <div
         style={{
-          margin: "48px"
+          margin: '48px',
         }}
       >
         {/* <p>UserProject: {this.state.userProject.length()}</p>*/}
@@ -331,17 +331,17 @@ class AdminArea extends Component {
         <div
           id="userStatisticContainer"
           style={{
-            display: "flex"
+            display: 'flex',
           }}
         >
           {/* float:"right", marginLeft: "48px" */}
           <div
             id="userManagement"
             style={{
-              marginTop: "0px",
+              marginTop: '0px',
               flexGrow: 0,
               flexShrink: 0,
-              flexBasis: "30%"
+              flexBasis: '30%',
             }}
           >
             <Typography variant="h6"> User Management </Typography>
@@ -349,10 +349,12 @@ class AdminArea extends Component {
               <InputLabel htmlFor="user"> User </InputLabel>
               <Select
                 value={this.state.user}
-                onChange={e => this.handleChange(e.target.name, e.target.value)}
+                onChange={(e) =>
+                  this.handleChange(e.target.name, e.target.value)
+                }
                 inputProps={{
-                  name: "user",
-                  id: "user"
+                  name: 'user',
+                  id: 'user',
                 }}
               >
                 {this.state.labUsers.map((user, index) => {
@@ -371,13 +373,13 @@ class AdminArea extends Component {
             style={{
               flexGrow: 0,
               flexShrink: 0,
-              flexBasis: "70%"
+              flexBasis: '70%',
             }}
           >
             {/* float: "left", */}
             <div
               style={{
-                marginRight: "0px"
+                marginRight: '0px',
               }}
             >
               <Typography variant="h6"> Statistics </Typography>
@@ -387,8 +389,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Users
@@ -396,8 +398,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labUsersCount}
@@ -408,8 +410,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Projects
@@ -417,8 +419,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labProjectsCount}
@@ -429,8 +431,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Experiments
@@ -438,8 +440,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labExperimentsCount}
@@ -450,8 +452,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Downl.Files
@@ -459,8 +461,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labDownloadedFiles}
@@ -471,8 +473,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Jobs
@@ -480,8 +482,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labJobsCount}
@@ -492,8 +494,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Datasets
@@ -501,8 +503,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labDatasetsCount}
@@ -513,8 +515,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Datasets Size in GB
@@ -522,8 +524,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labDatasetsTotalSizeInGB}
@@ -534,8 +536,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Models
@@ -543,8 +545,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labModelsCount}
@@ -555,8 +557,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Models Size in GB
@@ -564,8 +566,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labModelsTotalSizeInGB}
@@ -576,8 +578,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Services
@@ -585,8 +587,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labServicesCount}
@@ -597,8 +599,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Shared Projects
@@ -606,8 +608,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labSharedProjectsCount}
@@ -618,8 +620,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Inactive User
@@ -627,8 +629,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labInactiveUserCount}
@@ -639,8 +641,8 @@ class AdminArea extends Component {
                   <Card>
                     <Typography
                       style={{
-                        padding: "5px",
-                        color: "#676767de"
+                        padding: '5px',
+                        color: '#676767de',
                       }}
                     >
                       Inactive Projects
@@ -648,8 +650,8 @@ class AdminArea extends Component {
                     <Typography
                       variant="h6"
                       style={{
-                        padding: "5px",
-                        fontWeight: "400"
+                        padding: '5px',
+                        fontWeight: '400',
                       }}
                     >
                       {this.state.labInactiveProjectsCount}
