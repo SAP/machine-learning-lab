@@ -1,142 +1,132 @@
 package org.mltooling.core.service.tests;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import org.junit.rules.ExternalResource;
 import org.mltooling.core.api.basics.SystemApiClient;
 import org.mltooling.core.utils.StringUtils;
-import org.junit.rules.ExternalResource;
+import org.mltooling.core.utils.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-
 public class LocalDockerLauncher extends ExternalResource {
 
-    // ================ Constants =========================================== //
-    private static final Logger log = LoggerFactory.getLogger(LocalDockerLauncher.class);
+  // ================ Constants =========================================== //
+  private static final Logger log = LoggerFactory.getLogger(LocalDockerLauncher.class);
+  private static final String LAB_TEST_INSTALLATION_CONTAINER = "lab-test-installation";
 
-    private static final String BUILD_SCRIPT_NAME = "build.py";
-    private static final String RUN_SCRIPT_NAME = "run.py";
-    private static final int DEFAULT_PORT = 8090;
+  private static final String ENV_KUBE_CONFIG_PATH =
+      SystemUtils.getEnvVar("KUBE_CONFIG_PATH", null);
 
-    // ================ Members ============================================= //
-    private Integer servicePort;
-    private boolean serviceProxyActivated;
-    private String serviceName;
-    private String additionalArgs;
+  // ================ Members ============================================= //
+  private String serviceHost;
+  private Integer servicePort;
 
-    // ================ Constructors & Main ================================= //
-    public LocalDockerLauncher(String serviceName, Integer servicePort, boolean serviceProxyActivated, @Nullable String additionalRunArgs)
-            throws Exception {
-        this.serviceName = serviceName;
-        this.servicePort = servicePort;
-        this.serviceProxyActivated = serviceProxyActivated;
-        this.additionalArgs = additionalRunArgs;
-        init();
+  private Map<String, String> envVars;
+  private String dockerImage;
+  private boolean isKubernetes;
+
+  // ================ Constructors & Main ================================= //
+
+  public LocalDockerLauncher(String serviceHost, Integer servicePort, Map<String, String> envVars,
+      String dockerImage, boolean isKubernetes) {
+    this.serviceHost = serviceHost;
+    this.servicePort = servicePort;
+    this.envVars = (envVars == null) ? new HashMap<>() : envVars;
+    this.dockerImage = dockerImage;
+    this.isKubernetes = isKubernetes;
+  }
+
+  // ================ Methods for/from SuperClass / Interfaces ============ //
+  @Override
+  protected void before() throws Throwable {
+    log.info("Starting docker container");
+    executeCommand(getDockerInstallCommand(false));
+    do {
+      Thread.sleep(5000);
+    } while (!new SystemApiClient(getServiceUrl()).isHealthy().isSuccessful());
+  }
+
+  @Override
+  protected void after() {
+    log.info("Stopping docker container");
+    try {
+      executeCommand(getDockerInstallCommand(true));
+      Thread.sleep(10000);
+    } catch (Exception e) {
+      log.error("Failed to stop docker container");
+    }
+  }
+
+  private String getDockerInstallCommand(boolean isUninstall) {
+    StringBuilder envArgsBuilder = new StringBuilder("");
+    for (Entry<String, String> envEntry : envVars.entrySet()) {
+      envArgsBuilder.append(String.format(" --env %s=%s", envEntry.getKey(), envEntry.getValue()));
     }
 
-    public LocalDockerLauncher(String serviceName) throws Exception {
-        this.serviceName = serviceName;
-        init();
+
+    String kubernetesArgs = "";
+    if (isKubernetes) {
+      kubernetesArgs = " --env SERVICES_RUNTIME=k8s";
+      if (!StringUtils.isNullOrEmpty(ENV_KUBE_CONFIG_PATH)) {
+        kubernetesArgs = kubernetesArgs + " -v " + ENV_KUBE_CONFIG_PATH + ":/root/.kube/";
+      } else {
+        kubernetesArgs = kubernetesArgs + " -v $HOME/.kube/config:/root/.kube/config";
+      }
     }
 
-    private void init() throws Exception {
-        String proxy = "";
-        if (this.serviceProxyActivated) {
-            proxy = " --proxy";
-        }
+    // TODO: use the Java Client here for more flexibility
+    String labAction = (isUninstall) ? "uninstall" : "install";
+    String dockerCommand = getDockerPath();
+    return dockerCommand + " run --rm --name " + LAB_TEST_INSTALLATION_CONTAINER
+        + " -v /var/run/docker.sock:/var/run/docker.sock" + kubernetesArgs
+        + " --env LAB_DEBUG=true --env LAB_NAMESPACE=lab-test " + " --env LAB_ACTION=" + labAction
+        + " --env LAB_PORT=" + servicePort + envArgsBuilder.toString() + " " + dockerImage;
+  }
 
-        log.info("Building docker container in " + getExecutionPath());
-        executeCommand("python " + BUILD_SCRIPT_NAME + " --docker --name " + this.serviceName + proxy);
+  // ================ Public Methods ====================================== //
+  public String getServiceUrl() {
+    return "http://" + this.serviceHost + ":" + this.servicePort;
+  }
+
+  // ================ Private Methods ===================================== //
+
+  private static String getDockerPath() {
+    final String dockerPath = "/usr/bin/docker"; // path on Ubuntu
+    File f = new File(dockerPath);
+    if (f.exists() && !f.isDirectory()) {
+      return dockerPath;
     }
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
-    @Override
-    protected void before() throws Throwable {
-        log.info("Starting docker container");
-        // System.out.println(System.getProperty("user.dir"));
+    // path on Mac
+    return "/usr/local/bin/docker";
+  }
 
-        if (getExecutionPath() != null) {
-            String port = "";
-            if (this.servicePort != null) {
-                port = " --port " + String.valueOf(this.servicePort);
-            }
-
-            String proxy = "";
-            if (this.serviceProxyActivated) {
-                proxy = " --proxy";
-            }
-
-            if (StringUtils.isNullOrEmpty(additionalArgs)) {
-                additionalArgs = "";
-            } else {
-                additionalArgs = " " + additionalArgs;
-            }
-
-            executeCommand("python " + RUN_SCRIPT_NAME + " --name " + this.serviceName + port + proxy + additionalArgs);
-
-            do {
-                Thread.sleep(5000);
-            }
-            while (!new SystemApiClient(getServiceUrl()).isHealthy().isSuccessful());
-        }
+  private void executeCommand(String command) throws IOException, InterruptedException {
+    log.info("Executing command: {}", command);
+    String line;
+    Process p = Runtime.getRuntime().exec(new String[] {"/bin/bash", "-c", command});
+    // p.waitFor();
+    // BufferedReader inErr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+    // while ((line = inErr.readLine()) != null) {
+    // log.info(line);
+    // }
+    // inErr.close();
+    BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+    while ((line = in.readLine()) != null) {
+      log.info(line);
     }
+    in.close();
+  }
 
-    @Override
-    protected void after() {
-        log.info("Stopping docker container");
-        try {
-            if (getExecutionPath() != null) {
-                executeCommand("docker rm -f " + this.serviceName);
-                Thread.sleep(500);
-            }
-        } catch (Exception e) {
-            log.error("Failed to stop docker container");
-        }
-    }
+  // ================ Getter & Setter ===================================== //
 
-    // ================ Public Methods ====================================== //
-    public String getServiceUrl() {
-        return "http://localhost:" + (this.servicePort != null ? String.valueOf(this.servicePort) : String.valueOf(DEFAULT_PORT));
-    }
+  // ================ Builder Pattern ===================================== //
 
-    // ================ Private Methods ===================================== //
-    private void executeCommand(String command) throws IOException, InterruptedException {
-        log.info("Executing command: " + command);
-        String line;
-        Process p = Runtime.getRuntime().exec(command);
-        //p.waitFor();
-        BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        while ((line = in.readLine()) != null) {
-            log.info(line);
-        }
-        in.close();
-    }
-
-    private Path getExecutionPath() throws Exception {
-        Path pwd = Paths.get("");
-        if (!Files.exists(pwd)) {
-            throw new Exception("Project path does not exist " + pwd.toAbsolutePath());
-        }
-
-        if (!Files.exists(pwd.resolve(BUILD_SCRIPT_NAME))) {
-            throw new Exception(BUILD_SCRIPT_NAME + " does not exist in " + pwd.toAbsolutePath());
-        }
-
-        if (!Files.exists(pwd.resolve(RUN_SCRIPT_NAME))) {
-            throw new Exception(RUN_SCRIPT_NAME + " does not exist in " + pwd.toAbsolutePath());
-        }
-        return pwd;
-    }
-
-    // ================ Getter & Setter ===================================== //
-
-    // ================ Builder Pattern ===================================== //
-
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }
