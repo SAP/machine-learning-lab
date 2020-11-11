@@ -16,35 +16,6 @@ FLAG_FLAVOR = "flavor"
 
 args = build_utils.get_sanitized_arguments(argument_parser=parser)
 
-# REMOTE_IMAGE_PREFIX = "mltooling/"
-
-# # calls build scripts in every module with same flags
-# def build(module):
-
-#     if not os.path.isdir(module):
-#         print("Could not find directory for " + module)
-#         sys.exit(1)
-
-#     build_command = "python build.py"
-
-#     if args.version:
-#         build_command += " --version=" + str(args.version)
-
-#     if args.deploy:
-#         build_command += " --deploy"
-
-#     if args.flavor:
-#         build_command += " --flavor=" + str(args.flavor)
-
-#     working_dir = os.path.dirname(os.path.realpath(__file__))
-#     full_command = "cd " + module + " && " + build_command + " && cd " + working_dir
-#     print("Building " + module + " with: " + full_command)
-#     failed = call(full_command)
-#     if failed:
-#         print("Failed to build module " + module)
-#         sys.exit(1)
-
-
 if not args[FLAG_FLAVOR]:
     args[FLAG_FLAVOR] = "lab"
 
@@ -62,10 +33,6 @@ if args[FLAG_FLAVOR] not in ["lab", "lab-gpu"]:
     # assume that flavor has its own directory with build.py
     build_utils.build(args[FLAG_FLAVOR], args)
     build_utils.exit_process(0)
-
-# service_name = os.path.basename(os.path.dirname(os.path.realpath(__file__)))
-# if args.name:
-#     service_name = args.name
 
 # Add flavor suffix to image name
 # service_name += "-" + args.flavor
@@ -103,44 +70,6 @@ base_image_build_arg = " --build-arg ARG_WORKSPACE_BASE_IMAGE=" + str(base_image
 flavor_build_arg = " --build-arg ARG_WORKSPACE_FLAVOR=" + str(args[FLAG_FLAVOR])
 version_build_arg = " --build-arg ARG_WORKSPACE_VERSION=" + str(args[FLAG_VERSION])
 
-# versioned_image = service_name + ":" + str(args.version)
-# latest_image = service_name + ":latest"
-# failed = call(
-#     "docker build -t "
-#     + versioned_image
-#     + " -t "
-#     + latest_image
-#     + " "
-#     + version_build_arg
-#     + " "
-#     + flavor_build_arg
-#     + " "
-#     + base_image_build_arg
-#     + " "
-#     + vcs_ref_build_arg
-#     + " "
-#     + build_date_build_arg
-#     + " ./"
-# )
-
-# if failed:
-#     print("Failed to build container")
-#     sys.exit(1)
-
-# remote_versioned_image = REMOTE_IMAGE_PREFIX + versioned_image
-# call("docker tag " + versioned_image + " " + remote_versioned_image)
-
-# remote_latest_image = REMOTE_IMAGE_PREFIX + latest_image
-# call("docker tag " + latest_image + " " + remote_latest_image)
-
-# if args.deploy:
-#     call("docker push " + remote_versioned_image)
-
-#     if "SNAPSHOT" not in args.version:
-#         # do not push SNAPSHOT builds as latest version
-#         call("docker push " + remote_latest_image)
-
-
 if args[build_utils.FLAG_MAKE]:
     build_args = (
         version_build_arg
@@ -158,7 +87,6 @@ if args[build_utils.FLAG_MAKE]:
     )
     if completed_process.returncode > 0:
         build_utils.exit_process(1)
-    pass
 
 if args[build_utils.FLAG_RELEASE]:
     build_utils.release_docker_image(COMPONENT_NAME, args[build_utils.FLAG_VERSION], args[build_utils.FLAG_DOCKER_IMAGE_PREFIX])
