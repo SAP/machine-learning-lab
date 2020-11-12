@@ -175,6 +175,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>com.github.stefanbirkner</groupId>
+            <artifactId>system-rules</artifactId>
+            <version>1.19.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -233,7 +240,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <!-- unit and integration testing-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
