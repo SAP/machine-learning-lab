@@ -88,17 +88,25 @@ Please refer to [our documentatation](https://sap.github.io/machine-learning-lab
 
 ## Development
 
-### Requirements
+> **Requirements**:
+> - To build locally: Java >= 8, Python >= 3.6, Npm >= 6.4, Maven, [Docker](https://docs.docker.com/get-docker/)
+> - To build in containerized environment: [Docker](https://docs.docker.com/get-docker/) and [Act](https://github.com/nektos/act#installation) are required to be installed on your machine to execute the containerized build process._
 
-- Java >= 8, Python >= 3.6, Npm >= 6.4, Maven, Docker
+To simplify the process of building this project from scratch, we provide build-scripts that run all necessary steps (build, check, test, and release). There is also an easy way to do so in a containerized environment (see the [workflows](./.github/workflows/) for details).
 
 ### Build
 
 Execute this command in the project root folder to build this project and the respective docker container:
 
 ```bash
-python build.py
+# Locally
+python build.py --make
+
+# Containerized. Add the `-b` flag to bind the directory and save the built artifacts on the host.
+act -j build -s BUILD_ARGS="--make"
 ```
+
+> When the `BUILD_ARGS` secret is omitted for act, the [default flags](./.github/actions/build-environment/entrypoint.sh#L8) are used.
 
 This script compiles the project, assembles the various JAR artifacts (executable service, client, sources) and builds a docker container with the assembled executable jar. For additional script options:
 
@@ -111,7 +119,7 @@ python build.py --help
 Execute this command in the project root folder to push all docker containers to the configured docker registry:
 
 ```bash
-python build.py --deploy --version={MAJOR.MINOR.PATCH-TAG}
+python build.py --release --version={MAJOR.MINOR.PATCH-TAG}
 ```
 
 For deployment, the version has to be provided. The version format should follow the [Semantic Versioning](https://semver.org/) standard (MAJOR.MINOR.PATCH). For additional script options:
