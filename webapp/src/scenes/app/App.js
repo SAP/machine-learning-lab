@@ -72,7 +72,7 @@ class App extends React.Component {
     // of the login-page on page refresh in the UI. The true value will be set after return of the refreshToken-API call.
     // Without a valid token all other backend requests will fail, independent of the isAuthenticated value.
 
-    authorizationApi.refreshToken(
+    this.superagent = authorizationApi.refreshToken(
       {},
       getDefaultApiCallback(
         ({ result }) => {
@@ -100,6 +100,9 @@ class App extends React.Component {
       clearTimeout(this.refreshTimer);
       this.refreshTimer = null;
       this.setState({ isAuthenticationChecked: false });
+    }
+    if (this.superagent) {
+      this.superagent.req.abort();
     }
   }
 
