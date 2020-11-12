@@ -88,6 +88,8 @@ def main(args: Dict[str, Union[bool, str]]):
             build_utils.exit_process(1)
 
     build_utils.build("webapp", args)
+    # format the just generated JavaScript client to make it conform with the project and prevent showing format-related changes in Git
+    build_utils.run("cd webapp; npm run prettier ./src/services/client/; cd ..")
     if args[build_utils.FLAG_MAKE]:
         # Move webapp build into resources
         build_utils.run("rm -r -f backend/lab-service/src/main/resources/app/")
