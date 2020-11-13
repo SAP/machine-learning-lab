@@ -256,7 +256,7 @@ public class LabApiTest {
         new LabProjectsStatistics((Map) response.getMetadata().getStats());
     assertThat(statistics.getServicesCount(), is(equalTo(DEFAULT_PROJECT_SERVICES_SIZE)));
 
-    String TEST_SERVICE_IMAGE = "simple-demo-service:latest";
+    String TEST_SERVICE_IMAGE = "simple-demo-service:" + LabConfig.SERVICE_VERSION;
 
     final String TEST_CONFIG_ITEM = "TEST";
     Map<String, String> serviceConfig = new HashMap<>();
@@ -371,7 +371,7 @@ public class LabApiTest {
 
     assertThat(response.getData().size(), is(equalTo(0))); // No jobs should be started
 
-    String TEST_JOB_IMAGE = "simple-demo-job:latest";
+    String TEST_JOB_IMAGE = "simple-demo-job:" + LabConfig.SERVICE_VERSION;
 
     final String TEST_CONFIG_ITEM = "TEST";
     Map<String, String> jobConfig = new HashMap<>();
