@@ -107,6 +107,7 @@ act -j build -s BUILD_ARGS="--make"
 ```
 
 > When the `BUILD_ARGS` secret is omitted for act, the [default flags](./.github/actions/build-environment/entrypoint.sh#L8) are used.
+> If you set the `-b` flag, the current directory is bound to the act container and the build artifacts appear on your host machine.
 
 This script compiles the project, assembles the various JAR artifacts (executable service, client, sources) and builds a docker container with the assembled executable jar. For additional script options:
 
