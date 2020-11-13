@@ -11,7 +11,7 @@ The service-lib contains basic functionality to easily create REST API services.
 Execute this command in the project root folder to build this project:
 
 ```bash
-python build.py
+python build.py --make
 ```
 
 This script compiles the project and assembles the various JAR artifacts (library, jar-with-dependencies, sources). For additional script options:
@@ -24,12 +24,4 @@ To only compile the Java artifacts and install the library locally (for developm
 
 ```bash
 mvn clean install
-```
-
-## Deploy
-
-Please refer to the [README of the core-platform](../README.md) for information on how to deploy all libraries. **Only deploy this library on its own in special occasions**: 
-
-```bash
-python build.py --deploy
 ```

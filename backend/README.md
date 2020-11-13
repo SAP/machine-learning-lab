@@ -17,7 +17,7 @@ The machine-learning-lab contains the main backend services of the ML Lab and a 
 Execute this command in the project root folder to build the project and all its subprojects for local development:
 
 ```bash
-python build.py
+python build.py --make
 ```
 
 This script compiles the project and all sub-projects, assembles all libraries and services, and builds related docker containers. For additional script options:
@@ -34,10 +34,10 @@ mvn clean package
 
 ### Deploy
 
-Execute this command in the project root folder to deploy all assembled Java artifacts to the configured maven repository and push all docker containers to the configured docker registry:
+Execute this command in the project root folder to push all docker containers to the configured docker registry:
 
 ```bash
-python build.py --deploy --version={MAJOR.MINOR.PATCH-TAG}
+python build.py --release --version {MAJOR.MINOR.PATCH-TAG} --docker-image-prefix {PREFIX}
 ```
 
 For deployment, the version has to be provided. The version format should follow the [Semantic Versioning](https://semver.org/) standard (MAJOR.MINOR.PATCH). For additional script options:

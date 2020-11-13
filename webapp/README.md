@@ -15,9 +15,9 @@ For code styling, [eslint](https://eslint.org) is used for linting and [prettier
 
 Docs should be written in [JSDoc](https://jsdoc.app/about-getting-started.html) format, though overall we advocate self-explanatory code over comments.
 
-It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) (`yarn create react-app react-webapp`) and, thus, uses the pre-configured webpack and babel build tools.
+It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) (`npm create react-app react-webapp`) and, thus, uses the pre-configured webpack and babel build tools.
 
-The used package manager for installing packages is [npm].
+The used package manager for installing packages is npm.
 
 > All `npm` commands in this documentation can be executed via `npm run container` to run it inside of the development container instead of using the host. Hereby, the current directory is mounted into the container. See the `npm run container` command in the [package.json](./package.json).
 
