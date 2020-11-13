@@ -102,7 +102,7 @@ Execute this command in the project root folder to build this project and the re
 # Locally
 python build.py --make
 
-# Containerized. Add the `-b` flag to bind the directory and save the built artifacts on the host.
+# Containerized via act
 act -j build -s BUILD_ARGS="--make"
 ```
 
