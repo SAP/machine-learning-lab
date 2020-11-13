@@ -57,7 +57,7 @@ public class LocalDockerLauncher extends ExternalResource {
     log.info("Stopping docker container");
     try {
       executeCommand(getDockerInstallCommand(true));
-      Thread.sleep(10000);
+      Thread.sleep(30000);
     } catch (Exception e) {
       log.error("Failed to stop docker container");
     }
@@ -72,7 +72,6 @@ public class LocalDockerLauncher extends ExternalResource {
 
     String kubernetesArgs = "";
     if (isKubernetes) {
-      kubernetesArgs = " --env SERVICES_RUNTIME=k8s";
       if (!StringUtils.isNullOrEmpty(ENV_KUBE_CONFIG_PATH)) {
         kubernetesArgs = kubernetesArgs + " -v " + ENV_KUBE_CONFIG_PATH + ":/root/.kube/";
       } else {
@@ -85,7 +84,7 @@ public class LocalDockerLauncher extends ExternalResource {
     String dockerCommand = getDockerPath();
     return dockerCommand + " run --rm --name " + LAB_TEST_INSTALLATION_CONTAINER
         + " -v /var/run/docker.sock:/var/run/docker.sock" + kubernetesArgs
-        + " --env LAB_DEBUG=true --env LAB_NAMESPACE=lab-test " + " --env LAB_ACTION=" + labAction
+        + " --env LAB_DEBUG=true --env LAB_NAMESPACE=lab-test --env LAB_ACTION=" + labAction
         + " --env LAB_PORT=" + servicePort + envArgsBuilder.toString() + " " + dockerImage;
   }
 
