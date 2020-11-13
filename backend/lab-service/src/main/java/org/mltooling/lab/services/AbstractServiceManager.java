@@ -64,7 +64,7 @@ public abstract class AbstractServiceManager {
     protected final long MAX_WAIT_TIME = TimeUnit.MINUTES.toMillis(2); // 2 minutes might be too little, especially if the images have to be pulled first. So, for the very first deployment where the images do not exist on the host yet, the time might be too small.
 
     protected static final int MAX_CONTAINER_SIZE_DISABLED = -1;
-    
+
     // ================ Members ============================================= //
     protected DockerClient client;
 
@@ -733,6 +733,8 @@ public abstract class AbstractServiceManager {
                 client.pull(dockerImage, new DockerUtils.DebugProgressHandler());
                 log.info("Finished pulling " + dockerImage);
                 imageInfo = client.inspectImage(dockerImage);
+            } catch (DockerException ex) {
+              log.info("Error in requesting the docker api");
             }
         }
 
