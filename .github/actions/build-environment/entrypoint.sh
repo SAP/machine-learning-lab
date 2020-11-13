@@ -41,14 +41,4 @@ if [ -n "$INPUT_PYPI_REPOSITORY" ]; then
     BUILD_SECRETS="$BUILD_SECRETS --pypi-repository=$INPUT_PYPI_REPOSITORY"
 fi
 
-# Detect network mode of container
-CONTAINER_NETWORK_MODE=$(docker inspect $(basename "$(cat /proc/1/cpuset)") | jq -r '.[0].HostConfig.NetworkMode | select(. | contains("container:"))')
-if [ -z "$CONTAINER_NETWORK_MODE" ]; then
-    echo "No host network detected. Connect to lab-core network"
-    docker network create lab-core
-    docker network connect lab-core $(basename "$(cat /proc/1/cpuset)")
-    export SERVICE_HOST="lab-backend"
-    export SERVICE_PORT=8091
-fi
-
 python -u build.py $INPUT_BUILD_ARGS $BUILD_SECRETS

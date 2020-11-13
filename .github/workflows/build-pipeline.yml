@@ -27,10 +27,13 @@ jobs:
         run: echo "::set-env name=WORKING_DIRECTORY::${{ github.event.inputs.working_directory }}"
         # new syntax: run: echo "WORKING_DIRECTORY=${{ github.event.inputs.working_directory }}" >> "$GITHUB_ENV"
       - uses: actions/checkout@v2
+      - name: set-service-host
+        run: echo "::set-env name=LAB_SERVICE_HOST::$(docker inspect kind-control-plane | jq -r '.[0].NetworkSettings.IPAddress')"
       - name: run-build-scripts
         uses: ./.github/actions/build-environment
         with:
           build_args: ${{ env.BUILD_ARGS }}
           working_directory: ${{ env.WORKING_DIRECTORY }}
-        #env:
+        env:
+          SERVICE_HOST: ${{ env.LAB_SERVICE_HOST }}
         #  GITHUB_TOKEN: ${{ secret.GITHUB_TOKEN }}
