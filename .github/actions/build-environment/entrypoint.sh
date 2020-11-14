@@ -4,6 +4,7 @@
 set -e
 
 # set default build args if not provided
+export SERVICE_HOST="$_HOST_IP"
 if [ -z "$INPUT_BUILD_ARGS" ]; then
     INPUT_BUILD_ARGS="--check --make --test"
 fi
@@ -41,4 +42,23 @@ if [ -n "$INPUT_PYPI_REPOSITORY" ]; then
     BUILD_SECRETS="$BUILD_SECRETS --pypi-repository=$INPUT_PYPI_REPOSITORY"
 fi
 
+if [[ $INPUT_BUILD_ARGS == *"--test"* ]]; then
+    echo "Start kind cluster for test phase"
+    export kind_cluster_name="ml-lab-testcluster"
+    kind create cluster --config=/kind-config.yaml --name $kind_cluster_name
+    sed -i -E 's/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/'"$_HOST_IP"'/g' ~/.kube/config
+    sed -i '6i\    insecure-skip-tls-verify: true' ~/.kube/config
+    sed -i 's/certificate-authority-data/#certificate-authority-data/g' ~/.kube/config
+    cat ~/.kube/config
+    kube_config_volume="kube-config"
+    docker run --rm -v $kube_config_volume:/kube-config --env KUBE_DATA_CONFIG="$(cat ~/.kube/config | base64)" ubuntu:20.04 /bin/bash -c 'touch /kube-config/config && echo "$KUBE_DATA_CONFIG" | base64 --decode >> /kube-config/config'
+    export SERVICE_HOST=$(docker inspect "$kind_cluster_name"-control-plane | jq -r '.[0].NetworkSettings.Networks["kind"].IPAddress')
+fi
+
 python -u build.py $INPUT_BUILD_ARGS $BUILD_SECRETS
+
+echo "Cleanup Phase"
+if [[ $INPUT_BUILD_ARGS == *"--test"* ]]; then
+    kind delete cluster --name $kind_cluster_name
+    docker volume rm $kube_config_volume
+fi

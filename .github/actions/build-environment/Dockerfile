@@ -72,7 +72,7 @@ RUN apt-get update \
 # hadolint ignore=DL3013
 RUN pip install --upgrade git+https://github.com/ml-tooling/universal-build.git
 
-### Install web development tools
+# Install web development tools
 RUN apt-get update \
     && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
     && apt-get install -y --no-install-recommends nodejs \
@@ -81,7 +81,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-### Install Java
+# Install Java
 ENV JAVA_HOME="/usr/lib/jvm/java-1.14.0-openjdk-amd64"
 RUN \
     add-apt-repository ppa:openjdk-r/ppa && \
@@ -97,6 +97,13 @@ RUN \
     mkdir /usr/local/maven && tar -xzf /tmp/apache-maven.tar.gz -C /usr/local/maven --strip-components=1 && \
     rm -f /tmp/apache-maven.tar.gz /tmp/apache-maven.tar.gz.sha512 && \
     ln -s /usr/local/maven/bin/mvn /usr/local/bin/mvn
+
+# Install kind for Kubernetes testing
+RUN \
+    curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-linux-amd64 \
+    && chmod +x ./kind \
+    && mv ./kind /usr/bin/kind
+COPY kind-config.yaml /kind-config.yaml
 
 COPY entrypoint.sh /entrypoint.sh
 
