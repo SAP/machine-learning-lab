@@ -42,11 +42,17 @@ if args[build_utils.FLAG_TEST]:
             f"kind --name {kind_cluster_name} load docker-image simple-demo-job:{args[build_utils.FLAG_VERSION]}",
             exit_on_error=True,
         )
+        service_host = build_utils.run(
+            f"docker inspect {kind_cluster_name}-control-plane  | jq -r '.[0].NetworkSettings.Networks[\"kind\"].IPAddress'",
+            exit_on_error=True
+        ).stdout.strip()
+
         completed_process = build_utils.run(
             f"SERVICES_RUNTIME=k8s \
             KUBE_CONFIG_PATH=kube-config \
             LAB_DATA_ROOT=/workspace/data \
             SERVICE_VERSION={args[build_utils.FLAG_VERSION]} \
+            SERVICE_HOST={service_host} \
             IS_KIND_CLUSTER=True \
             mvn verify"
         )

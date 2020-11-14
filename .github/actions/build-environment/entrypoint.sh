@@ -52,13 +52,13 @@ if [[ $INPUT_BUILD_ARGS == *"--test"* ]]; then
     cat ~/.kube/config
     kube_config_volume="kube-config"
     docker run --rm -v $kube_config_volume:/kube-config --env KUBE_DATA_CONFIG="$(cat ~/.kube/config | base64)" ubuntu:20.04 /bin/bash -c 'touch /kube-config/config && echo "$KUBE_DATA_CONFIG" | base64 --decode >> /kube-config/config'
-    export SERVICE_HOST=$(docker inspect "$kind_cluster_name"-control-plane | jq -r '.[0].NetworkSettings.Networks["kind"].IPAddress')
 fi
 
 python -u build.py $INPUT_BUILD_ARGS $BUILD_SECRETS
 
 echo "Cleanup Phase"
 if [[ $INPUT_BUILD_ARGS == *"--test"* ]]; then
-    kind delete cluster --name $kind_cluster_name
-    docker volume rm $kube_config_volume
+    # || true => don't make the cleanup fail the pipeline
+    kind delete cluster --name $kind_cluster_name || true
+    docker volume rm $kube_config_volume || true
 fi
