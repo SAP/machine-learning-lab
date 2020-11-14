@@ -709,7 +709,7 @@ public abstract class AbstractServiceManager {
      */
     protected ImageInfo inspectImage(String dockerImage) throws DockerException, InterruptedException {
         String imageVersion = DockerUtils.extractVersionFromImage(dockerImage);
-        ImageInfo imageInfo;
+        ImageInfo imageInfo = null;
 
         // make this check to prevent always pulling. First check whether image is already pulled, as pulling is an expensive (network) operation
         if (!StringUtils.isNullOrEmpty(imageVersion) &&
