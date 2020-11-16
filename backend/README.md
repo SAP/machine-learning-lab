@@ -52,6 +52,12 @@ python build.py --help
 
 Our coding guideline for source code in the Java is based on the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html).  For any code-style related questions, please refer to the [linked guide](https://google.github.io/styleguide/javaguide.html).
 
+Please make sure to format all your Java code changes with the [google-java-formatter](https://github.com/google/google-java-format) before submitting them, e.g. via:
+
+```java
+google-java-format --replace ./**/*
+```
+
 #### Git Workflow
 
 Our git branching for all repositories is based on the [Git-Flow standard](https://datasift.github.io/gitflow/IntroducingGitFlow.html). Please go trough the [linked introduction](https://datasift.github.io/gitflow/IntroducingGitFlow.html), and visit [here](http://nvie.com/posts/a-successful-git-branching-model) and [here](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) for more information.
