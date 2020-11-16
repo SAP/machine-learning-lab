@@ -1,0 +1,14 @@
+name: "test-env"
+on: workflow_dispatch
+
+jobs:
+  test-env:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: echo $GITHUB_WORKSPACE
+        env:
+          GITHUB_WORKSPACE: ${{ env.GITHUB_WORKSPACE }}
+      - run: printenv
+      - name: check-disk
+        run: df -h
