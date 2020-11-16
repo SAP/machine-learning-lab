@@ -54,8 +54,10 @@ if [[ $INPUT_BUILD_ARGS == *"--test"* ]]; then
     docker run --rm -v $kube_config_volume:/kube-config --env KUBE_DATA_CONFIG="$(cat ~/.kube/config | base64)" ubuntu:20.04 /bin/bash -c 'touch /kube-config/config && echo "$KUBE_DATA_CONFIG" | base64 --decode >> /kube-config/config'
 fi
 
-python -u build.py $INPUT_BUILD_ARGS $BUILD_SECRETS
-
+(while true; do
+              df -h
+              sleep 30
+              done) & python -u build.py $INPUT_BUILD_ARGS $BUILD_SECRETS
 echo "Cleanup Phase"
 if [[ $INPUT_BUILD_ARGS == *"--test"* ]]; then
     # || true => don't make the cleanup fail the pipeline
