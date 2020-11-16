@@ -1,4 +1,4 @@
-FROM lab-workspace-lab:latest
+FROM ml-workspace-lab:latest
 
 # Add service code to image
 COPY docker-res/service /workspace/service

@@ -11,7 +11,7 @@ parser.add_argument(
 )
 
 
-COMPONENT_NAME = "lab-workspace"
+COMPONENT_NAME = "ml-workspace"
 FLAG_FLAVOR = "flavor"
 
 args = build_utils.get_sanitized_arguments(argument_parser=parser)

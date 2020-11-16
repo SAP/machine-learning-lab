@@ -1,4 +1,4 @@
-FROM lab-workspace-lab:latest
+FROM ml-workspace-lab:latest
 
 ENV EXECUTE_CODE="true" \
     MODEL_KEY="/default_model"
