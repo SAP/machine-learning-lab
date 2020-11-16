@@ -63,8 +63,8 @@ public abstract class AbstractServiceManager {
   protected final long MAX_WAIT_TIME =
       TimeUnit.MINUTES.toMillis(
           2); // 2 minutes might be too little, especially if the images have to be pulled first.
-              // So, for the very first deployment where the images do not exist on the host yet,
-              // the time might be too small.
+  // So, for the very first deployment where the images do not exist on the host yet,
+  // the time might be too small.
 
   protected static final int MAX_CONTAINER_SIZE_DISABLED = -1;
 
@@ -420,10 +420,9 @@ public abstract class AbstractServiceManager {
     // Set workspace port to 8091 -> the default port might be changed in the future
     envVars.put("WORKSPACE_PORT", "8091");
     // env variables for SSH Tunneling
-    envVars.put(
-        "SSH_JUMPHOST_TARGET",
-        dockerName); // same like Workspace Name, but will be used by Workspace Container to
-                     // differentiate between setup with or without runtime manager
+    // is the same like Workspace Name, but will be used by Workspace Container to differentiate
+    // between setup with or without runtime manager
+    envVars.put("SSH_JUMPHOST_TARGET", dockerName);
 
     // provide proxy settings
     if (!StringUtils.isNullOrEmpty(LabConfig.ENV_HTTP_PROXY)) {
