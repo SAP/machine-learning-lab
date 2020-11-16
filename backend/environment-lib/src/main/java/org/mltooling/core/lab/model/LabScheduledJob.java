@@ -1,99 +1,99 @@
 package org.mltooling.core.lab.model;
 
 import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Date;
 import java.util.Map;
 
-
 public class LabScheduledJob {
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
-    private String id;
-    private String jobName;
-    private String dockerImage;
-    private Map<String, String> configuration;
-    private String schedule;
-    @ApiModelProperty(dataType = "java.lang.Long")
-    private Date addedAt;
-    @ApiModelProperty(dataType = "java.lang.Long")
-    private Date lastExecution;
+  // ================ Members ============================================= //
+  private String id;
+  private String jobName;
+  private String dockerImage;
+  private Map<String, String> configuration;
+  private String schedule;
 
-    // ================ Constructors & Main ================================= //
-    public LabScheduledJob() {}
+  @ApiModelProperty(dataType = "java.lang.Long")
+  private Date addedAt;
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+  @ApiModelProperty(dataType = "java.lang.Long")
+  private Date lastExecution;
 
-    // ================ Public Methods ====================================== //
+  // ================ Constructors & Main ================================= //
+  public LabScheduledJob() {}
 
-    // ================ Private Methods ===================================== //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Getter & Setter ===================================== //
-    public String getId() {
-        return id;
-    }
+  // ================ Public Methods ====================================== //
 
-    public LabScheduledJob setId(String id) {
-        this.id = id;
-        return this;
-    }
+  // ================ Private Methods ===================================== //
 
-    public String getJobName() {
-        return jobName;
-    }
+  // ================ Getter & Setter ===================================== //
+  public String getId() {
+    return id;
+  }
 
-    public LabScheduledJob setJobName(String jobName) {
-        this.jobName = jobName;
-        return this;
-    }
+  public LabScheduledJob setId(String id) {
+    this.id = id;
+    return this;
+  }
 
-    public String getDockerImage() {
-        return dockerImage;
-    }
+  public String getJobName() {
+    return jobName;
+  }
 
-    public LabScheduledJob setDockerImage(String dockerImage) {
-        this.dockerImage = dockerImage;
-        return this;
-    }
+  public LabScheduledJob setJobName(String jobName) {
+    this.jobName = jobName;
+    return this;
+  }
 
-    public Map<String, String> getConfiguration() {
-        return configuration;
-    }
+  public String getDockerImage() {
+    return dockerImage;
+  }
 
-    public LabScheduledJob setConfiguration(Map<String, String> configuration) {
-        this.configuration = configuration;
-        return this;
-    }
+  public LabScheduledJob setDockerImage(String dockerImage) {
+    this.dockerImage = dockerImage;
+    return this;
+  }
 
-    public String getSchedule() {
-        return schedule;
-    }
+  public Map<String, String> getConfiguration() {
+    return configuration;
+  }
 
-    public LabScheduledJob setSchedule(String schedule) {
-        this.schedule = schedule;
-        return this;
-    }
+  public LabScheduledJob setConfiguration(Map<String, String> configuration) {
+    this.configuration = configuration;
+    return this;
+  }
 
-    public Date getAddedAt() {
-        return addedAt;
-    }
+  public String getSchedule() {
+    return schedule;
+  }
 
-    public LabScheduledJob setAddedAt(Date addedAt) {
-        this.addedAt = addedAt;
-        return this;
-    }
+  public LabScheduledJob setSchedule(String schedule) {
+    this.schedule = schedule;
+    return this;
+  }
 
-    public Date getLastExecution() {
-        return lastExecution;
-    }
+  public Date getAddedAt() {
+    return addedAt;
+  }
 
-    public LabScheduledJob setLastExecution(Date lastExecution) {
-        this.lastExecution = lastExecution;
-        return this;
-    }
+  public LabScheduledJob setAddedAt(Date addedAt) {
+    this.addedAt = addedAt;
+    return this;
+  }
 
-    // ================ Builder Pattern ===================================== //
+  public Date getLastExecution() {
+    return lastExecution;
+  }
 
-    // ================ Inner & Anonymous Classes =========================== //
+  public LabScheduledJob setLastExecution(Date lastExecution) {
+    this.lastExecution = lastExecution;
+    return this;
+  }
+
+  // ================ Builder Pattern ===================================== //
+
+  // ================ Inner & Anonymous Classes =========================== //
 }

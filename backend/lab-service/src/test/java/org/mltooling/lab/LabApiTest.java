@@ -64,7 +64,8 @@ public class LabApiTest {
       Integer.parseInt(SystemUtils.getEnvVar("SERVICE_PORT", "30002"));
   private static final int DEFAULT_PROJECT_SERVICES_SIZE = 0; // no more initial project services
 
-  private static final Boolean IS_KIND_CLUSTER = Boolean.parseBoolean(SystemUtils.getEnvVar("IS_KIND_CLUSTER", "False"));
+  private static final Boolean IS_KIND_CLUSTER =
+      Boolean.parseBoolean(SystemUtils.getEnvVar("IS_KIND_CLUSTER", "False"));
 
   private static long MAX_WAIT_TIME = TimeUnit.MINUTES.toMillis(5);
   private static long WAIT_INTERVALS = TimeUnit.SECONDS.toMillis(10);

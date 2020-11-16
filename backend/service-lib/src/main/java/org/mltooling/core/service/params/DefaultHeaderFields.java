@@ -1,29 +1,27 @@
 package org.mltooling.core.service.params;
 
 import io.swagger.annotations.ApiParam;
-
 import javax.ws.rs.HeaderParam;
 
-
 public class DefaultHeaderFields {
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
-    @ApiParam(value = "Authorization Token", required = false)
-    @HeaderParam(value = "authorization")
-    public String authorization;
+  // ================ Members ============================================= //
+  @ApiParam(value = "Authorization Token", required = false)
+  @HeaderParam(value = "authorization")
+  public String authorization;
 
-    // ================ Constructors & Main ================================= //
+  // ================ Constructors & Main ================================= //
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Public Methods ====================================== //
+  // ================ Public Methods ====================================== //
 
-    // ================ Private Methods ===================================== //
+  // ================ Private Methods ===================================== //
 
-    // ================ Getter & Setter ===================================== //
+  // ================ Getter & Setter ===================================== //
 
-    // ================ Builder Pattern ===================================== //
+  // ================ Builder Pattern ===================================== //
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }

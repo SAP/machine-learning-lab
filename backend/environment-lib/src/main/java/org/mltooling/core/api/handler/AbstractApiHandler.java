@@ -1,112 +1,111 @@
 package org.mltooling.core.api.handler;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.mltooling.core.api.format.UnifiedFormat;
 import org.mltooling.core.api.utils.DefaultRequestParams;
 import org.mltooling.core.utils.PerfLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
 public abstract class AbstractApiHandler<T extends AbstractApiHandler<T>> {
 
-    // ================ Constants =========================================== //
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+  // ================ Constants =========================================== //
+  protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    // ================ Members ============================================= //
-    private PerfLogger perfLogger = new PerfLogger();
+  // ================ Members ============================================= //
+  private PerfLogger perfLogger = new PerfLogger();
 
-    protected Map<String, String> queryParams = new HashMap<>();
-    protected Map<String, String> headers = new HashMap<>();
-    protected String requestUrl;
+  protected Map<String, String> queryParams = new HashMap<>();
+  protected Map<String, String> headers = new HashMap<>();
+  protected String requestUrl;
 
-    // ================ Constructors & Main ================================= //
-    public AbstractApiHandler() {
-        this(new HashMap<String, String>(), new HashMap<String, String>());
+  // ================ Constructors & Main ================================= //
+  public AbstractApiHandler() {
+    this(new HashMap<String, String>(), new HashMap<String, String>());
+  }
+
+  public AbstractApiHandler(Map<String, String> queryParams, Map<String, String> headers) {
+    perfLogger.start();
+
+    this.queryParams = queryParams;
+    if (this.queryParams == null) {
+      this.queryParams = new HashMap<>();
     }
 
-    public AbstractApiHandler(Map<String, String> queryParams, Map<String, String> headers) {
-        perfLogger.start();
+    this.headers = headers;
+    if (this.headers == null) {
+      this.headers = new HashMap<>();
+    }
+  }
 
-        this.queryParams = queryParams;
-        if (this.queryParams == null) {
-            this.queryParams = new HashMap<>();
-        }
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-        this.headers = headers;
-        if (this.headers == null) {
-            this.headers = new HashMap<>();
-        }
+  // ================ Public Methods ====================================== //
+  public DefaultRequestParams getRequestParams() {
+    return new DefaultRequestParams(queryParams);
+  }
+
+  public Map<String, String> getQueryParams() {
+    return queryParams;
+  }
+
+  public Map<String, String> getHeaders() {
+    return headers;
+  }
+
+  public String getRequestUrl() {
+    return requestUrl;
+  }
+
+  // ================ Private Methods ===================================== //
+  protected long getExecutionTime() {
+    return perfLogger.end();
+  }
+
+  protected <F extends UnifiedFormat> F prepareResponse(
+      F unifiedFormat, boolean applyDefaultParameters) {
+    if (getRequestParams() == null || unifiedFormat == null) {
+      return unifiedFormat;
     }
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
-
-    // ================ Public Methods ====================================== //
-    public DefaultRequestParams getRequestParams() {
-        return new DefaultRequestParams(queryParams);
+    if (!applyDefaultParameters) {
+      unifiedFormat.prepareResponse(new DefaultRequestParams());
+    } else {
+      unifiedFormat.prepareResponse(getRequestParams());
     }
 
-    public Map<String, String> getQueryParams() {
-        return queryParams;
-    }
+    unifiedFormat.getMetadata().setTime(getExecutionTime());
 
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
+    // clean all query parameter & header after every request
+    queryParams.clear();
+    headers.clear();
 
-    public String getRequestUrl() {
-        return requestUrl;
-    }
+    return unifiedFormat;
+  }
 
-    // ================ Private Methods ===================================== //
-    protected long getExecutionTime() {
-        return perfLogger.end();
-    }
+  protected <F extends UnifiedFormat> F prepareResponse(F unifiedFormat) {
+    return prepareResponse(unifiedFormat, true);
+  }
 
-    protected <F extends UnifiedFormat> F prepareResponse(F unifiedFormat, boolean applyDefaultParameters) {
-        if (getRequestParams() == null || unifiedFormat == null) {
-            return unifiedFormat;
-        }
+  // ================ Getter & Setter ===================================== //
+  public void setQueryParams(Map<String, String> queryParams) {
+    this.queryParams = queryParams;
+  }
 
-        if (!applyDefaultParameters) {
-            unifiedFormat.prepareResponse(new DefaultRequestParams());
-        } else {
-            unifiedFormat.prepareResponse(getRequestParams());
-        }
+  public void setHeaders(Map<String, String> headers) {
+    this.headers = headers;
+  }
 
-        unifiedFormat.getMetadata().setTime(getExecutionTime());
+  public void setRequestUrl(String requestUrl) {
+    this.requestUrl = requestUrl;
+  }
 
-        // clean all query parameter & header after every request
-        queryParams.clear();
-        headers.clear();
+  // ================ Builder Pattern ===================================== //
+  public T setDefaultParams(DefaultRequestParams defaultRequestParams) {
+    queryParams.putAll(defaultRequestParams.getParams());
+    return (T) this;
+  }
 
-        return unifiedFormat;
-    }
-
-    protected <F extends UnifiedFormat> F prepareResponse(F unifiedFormat) {
-        return prepareResponse(unifiedFormat, true);
-    }
-
-    // ================ Getter & Setter ===================================== //
-    public void setQueryParams(Map<String, String> queryParams) {
-        this.queryParams = queryParams;
-    }
-
-    public void setHeaders(Map<String, String> headers) {
-        this.headers = headers;
-    }
-
-    public void setRequestUrl(String requestUrl) {
-        this.requestUrl = requestUrl;
-    }
-
-    // ================ Builder Pattern ===================================== //
-    public T setDefaultParams(DefaultRequestParams defaultRequestParams) {
-        queryParams.putAll(defaultRequestParams.getParams());
-        return (T) this;
-    }
-
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }

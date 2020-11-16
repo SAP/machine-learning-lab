@@ -1,127 +1,127 @@
 package org.mltooling.core.lab.model;
 
 import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Date;
 import java.util.Map;
 
-
 public class LabDeployment<T extends LabDeployment<T>> {
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
-    private String name;
-    private String dockerId;
-    private String dockerName;
-    private String dockerImage;
-    private String adminLink;
-    @ApiModelProperty(dataType = "java.lang.Long")
-    private Date startedAt;
-    private String status;
-    private String featureType;
-    private Map<String, String> configuration;
-    private Map<String, String> labels;
+  // ================ Members ============================================= //
+  private String name;
+  private String dockerId;
+  private String dockerName;
+  private String dockerImage;
+  private String adminLink;
 
-    // ================ Constructors & Main ================================= //
+  @ApiModelProperty(dataType = "java.lang.Long")
+  private Date startedAt;
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+  private String status;
+  private String featureType;
+  private Map<String, String> configuration;
+  private Map<String, String> labels;
 
-    // ================ Public Methods ====================================== //
-    public String getName() {
-        return name;
-    }
+  // ================ Constructors & Main ================================= //
 
-    public T setName(String name) {
-        this.name = name;
-        return (T) this;
-    }
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    public String getDockerId() {
-        return dockerId;
-    }
+  // ================ Public Methods ====================================== //
+  public String getName() {
+    return name;
+  }
 
-    public T setDockerId(String dockerId) {
-        this.dockerId = dockerId;
-        return (T) this;
-    }
+  public T setName(String name) {
+    this.name = name;
+    return (T) this;
+  }
 
-    public String getDockerImage() {
-        return dockerImage;
-    }
+  public String getDockerId() {
+    return dockerId;
+  }
 
-    public T setDockerImage(String dockerImage) {
-        this.dockerImage = dockerImage;
-        return (T) this;
-    }
+  public T setDockerId(String dockerId) {
+    this.dockerId = dockerId;
+    return (T) this;
+  }
 
-    public String getAdminLink() {
-        return adminLink;
-    }
+  public String getDockerImage() {
+    return dockerImage;
+  }
 
-    public T setAdminLink(String adminLink) {
-        this.adminLink = adminLink;
-        return (T) this;
-    }
+  public T setDockerImage(String dockerImage) {
+    this.dockerImage = dockerImage;
+    return (T) this;
+  }
 
-    public Date getStartedAt() {
-        return startedAt;
-    }
+  public String getAdminLink() {
+    return adminLink;
+  }
 
-    public T setStartedAt(Date startedAt) {
-        this.startedAt = startedAt;
-        return (T) this;
-    }
+  public T setAdminLink(String adminLink) {
+    this.adminLink = adminLink;
+    return (T) this;
+  }
 
-    public String getStatus() {
-        return status;
-    }
+  public Date getStartedAt() {
+    return startedAt;
+  }
 
-    public T setStatus(String status) {
-        this.status = status;
-        return (T) this;
-    }
+  public T setStartedAt(Date startedAt) {
+    this.startedAt = startedAt;
+    return (T) this;
+  }
 
-    public Map<String, String> getConfiguration() {
-        return configuration;
-    }
+  public String getStatus() {
+    return status;
+  }
 
-    public T setConfiguration(Map<String, String> configuration) {
-        this.configuration = configuration;
-        return (T) this;
-    }
+  public T setStatus(String status) {
+    this.status = status;
+    return (T) this;
+  }
 
-    public String getDockerName() {
-        return dockerName;
-    }
+  public Map<String, String> getConfiguration() {
+    return configuration;
+  }
 
-    public T setDockerName(String dockerName) {
-        this.dockerName = dockerName;
-        return (T) this;
-    }
+  public T setConfiguration(Map<String, String> configuration) {
+    this.configuration = configuration;
+    return (T) this;
+  }
 
-    public Map<String, String> getLabels() {
-        return labels;
-    }
+  public String getDockerName() {
+    return dockerName;
+  }
 
-    public T setLabels(Map<String, String> labels) {
-        this.labels = labels;
-        return (T) this;
-    }
+  public T setDockerName(String dockerName) {
+    this.dockerName = dockerName;
+    return (T) this;
+  }
 
-    public String getFeatureType() {
-        return featureType;
-    }
+  public Map<String, String> getLabels() {
+    return labels;
+  }
 
-    public T setFeatureType(String featureType) {
-        this.featureType = featureType;
-        return (T) this;
-    }
+  public T setLabels(Map<String, String> labels) {
+    this.labels = labels;
+    return (T) this;
+  }
 
-    // ================ Private Methods ===================================== //
+  public String getFeatureType() {
+    return featureType;
+  }
 
-    // ================ Getter & Setter ===================================== //
+  public T setFeatureType(String featureType) {
+    this.featureType = featureType;
+    return (T) this;
+  }
 
-    // ================ Builder Pattern ===================================== //
+  // ================ Private Methods ===================================== //
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Getter & Setter ===================================== //
+
+  // ================ Builder Pattern ===================================== //
+
+  // ================ Inner & Anonymous Classes =========================== //
 }

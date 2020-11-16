@@ -1,74 +1,72 @@
 package org.mltooling.core.lab.model;
 
 import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Date;
-
 
 public class LabJob extends LabDeployment<LabJob> {
 
-    // ================ Constants =========================================== //
-    public enum State {
-        RUNNING("running"),
-        SUCCEEDED("succeeded"),
-        FAILED("failed");
+  // ================ Constants =========================================== //
+  public enum State {
+    RUNNING("running"),
+    SUCCEEDED("succeeded"),
+    FAILED("failed");
 
-        private String name;
+    private String name;
 
-        State(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return getName();
-        }
+    State(String name) {
+      this.name = name;
     }
 
-
-    // ================ Members ============================================= //
-    @ApiModelProperty(dataType = "java.lang.Long")
-    private Date finishedAt;
-    private Integer exitCode;
-
-    // ================ Constructors & Main ================================= //
-    public LabJob() {}
-
-    // ================ Methods for/from SuperClass / Interfaces ============ //
-
-    // ================ Public Methods ====================================== //
-
-    // ================ Private Methods ===================================== //
-
-    // ================ Getter & Setter ===================================== //
-    public LabJob setStatus(LabJob.State status) {
-        setStatus(status.getName());
-        return this;
+    public String getName() {
+      return name;
     }
 
-    public Date getFinishedAt() {
-        return finishedAt;
+    @Override
+    public String toString() {
+      return getName();
     }
+  }
 
-    public LabJob setFinishedAt(Date finishedAt) {
-        this.finishedAt = finishedAt;
-        return this;
-    }
+  // ================ Members ============================================= //
+  @ApiModelProperty(dataType = "java.lang.Long")
+  private Date finishedAt;
 
-    public Integer getExitCode() {
-        return exitCode;
-    }
+  private Integer exitCode;
 
-    public LabJob setExitCode(Integer exitCode) {
-        this.exitCode = exitCode;
-        return this;
-    }
+  // ================ Constructors & Main ================================= //
+  public LabJob() {}
 
-    // ================ Builder Pattern ===================================== //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Public Methods ====================================== //
+
+  // ================ Private Methods ===================================== //
+
+  // ================ Getter & Setter ===================================== //
+  public LabJob setStatus(LabJob.State status) {
+    setStatus(status.getName());
+    return this;
+  }
+
+  public Date getFinishedAt() {
+    return finishedAt;
+  }
+
+  public LabJob setFinishedAt(Date finishedAt) {
+    this.finishedAt = finishedAt;
+    return this;
+  }
+
+  public Integer getExitCode() {
+    return exitCode;
+  }
+
+  public LabJob setExitCode(Integer exitCode) {
+    this.exitCode = exitCode;
+    return this;
+  }
+
+  // ================ Builder Pattern ===================================== //
+
+  // ================ Inner & Anonymous Classes =========================== //
 }

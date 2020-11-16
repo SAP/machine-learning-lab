@@ -1,5 +1,6 @@
 package org.mltooling.lab.authorization;
 
+import java.util.List;
 import org.mltooling.core.utils.ListUtils;
 import org.mltooling.lab.ComponentManager;
 import org.mltooling.lab.LabConfig;
@@ -7,41 +8,42 @@ import org.pac4j.core.authorization.authorizer.IsAuthenticatedAuthorizer;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.profile.CommonProfile;
 
-import java.util.List;
+public class CustomIsAuthenticatedAuthorizer<U extends CommonProfile>
+    extends IsAuthenticatedAuthorizer<U> {
+  // ================ Constants =========================================== //
 
+  // ================ Members ============================================= //
 
-public class CustomIsAuthenticatedAuthorizer<U extends CommonProfile> extends IsAuthenticatedAuthorizer<U> {
-    // ================ Constants =========================================== //
+  // ================ Constructors & Main ================================= //
 
-    // ================ Members ============================================= //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Constructors & Main ================================= //
-
-    // ================ Methods for/from SuperClass / Interfaces ============ //
-
-    @Override
-    public boolean isAuthorized(final WebContext context, final List<U> profiles) {
-        if (ListUtils.isNullOrEmpty(profiles)) {
-            return false;
-        }
-
-        U profile = profiles.get(0);
-
-        if (LabConfig.ALWAYS_CHECK_PERMISSIONS || (profile.getAttribute(AuthorizationManager.TOKEN_TYPE) != null
-                && profile.getAttribute(AuthorizationManager.TOKEN_TYPE).equals(AuthorizationManager.TOKEN_TYPES.LONG.getName()))) {
-            profile.setPermissions(ComponentManager.INSTANCE.getAuthManager().getDbPermissions(profile));
-        }
-
-        return isAnyAuthorized(context, profiles);
+  @Override
+  public boolean isAuthorized(final WebContext context, final List<U> profiles) {
+    if (ListUtils.isNullOrEmpty(profiles)) {
+      return false;
     }
 
-    // ================ Public Methods ====================================== //
+    U profile = profiles.get(0);
 
-    // ================ Private Methods ===================================== //
+    if (LabConfig.ALWAYS_CHECK_PERMISSIONS
+        || (profile.getAttribute(AuthorizationManager.TOKEN_TYPE) != null
+            && profile
+                .getAttribute(AuthorizationManager.TOKEN_TYPE)
+                .equals(AuthorizationManager.TOKEN_TYPES.LONG.getName()))) {
+      profile.setPermissions(ComponentManager.INSTANCE.getAuthManager().getDbPermissions(profile));
+    }
 
-    // ================ Getter & Setter ===================================== //
+    return isAnyAuthorized(context, profiles);
+  }
 
-    // ================ Builder Pattern ===================================== //
+  // ================ Public Methods ====================================== //
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Private Methods ===================================== //
+
+  // ================ Getter & Setter ===================================== //
+
+  // ================ Builder Pattern ===================================== //
+
+  // ================ Inner & Anonymous Classes =========================== //
 }

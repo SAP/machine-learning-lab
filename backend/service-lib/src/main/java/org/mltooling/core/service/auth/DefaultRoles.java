@@ -2,24 +2,24 @@ package org.mltooling.core.service.auth;
 
 public class DefaultRoles {
 
-    // ================ Constants =========================================== //
-    public static final String USER = "user";
-    public static final String ADMIN = "admin";
-    public static final String PUBLIC = "public";
+  // ================ Constants =========================================== //
+  public static final String USER = "user";
+  public static final String ADMIN = "admin";
+  public static final String PUBLIC = "public";
 
-    // ================ Members ============================================= //
+  // ================ Members ============================================= //
 
-    // ================ Constructors & Main ================================= //
+  // ================ Constructors & Main ================================= //
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Public Methods ====================================== //
+  // ================ Public Methods ====================================== //
 
-    // ================ Private Methods ===================================== //
+  // ================ Private Methods ===================================== //
 
-    // ================ Getter & Setter ===================================== //
+  // ================ Getter & Setter ===================================== //
 
-    // ================ Builder Pattern ===================================== //
+  // ================ Builder Pattern ===================================== //
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }

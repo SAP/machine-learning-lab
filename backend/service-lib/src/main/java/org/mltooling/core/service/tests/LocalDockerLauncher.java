@@ -33,8 +33,12 @@ public class LocalDockerLauncher extends ExternalResource {
 
   // ================ Constructors & Main ================================= //
 
-  public LocalDockerLauncher(String serviceHost, Integer servicePort, Map<String, String> envVars,
-      String dockerImage, boolean isKubernetes) {
+  public LocalDockerLauncher(
+      String serviceHost,
+      Integer servicePort,
+      Map<String, String> envVars,
+      String dockerImage,
+      boolean isKubernetes) {
     this.serviceHost = serviceHost;
     this.servicePort = servicePort;
     this.envVars = (envVars == null) ? new HashMap<>() : envVars;
@@ -69,7 +73,6 @@ public class LocalDockerLauncher extends ExternalResource {
       envArgsBuilder.append(String.format(" --env %s=%s", envEntry.getKey(), envEntry.getValue()));
     }
 
-
     String kubernetesArgs = "";
     if (isKubernetes) {
       if (!StringUtils.isNullOrEmpty(ENV_KUBE_CONFIG_PATH)) {
@@ -82,10 +85,18 @@ public class LocalDockerLauncher extends ExternalResource {
     // TODO: use the Java Client here for more flexibility
     String labAction = (isUninstall) ? "uninstall" : "install";
     String dockerCommand = getDockerPath();
-    return dockerCommand + " run --rm --name " + LAB_TEST_INSTALLATION_CONTAINER
-        + " -v /var/run/docker.sock:/var/run/docker.sock" + kubernetesArgs
-        + " --env LAB_DEBUG=true --env LAB_NAMESPACE=lab-test --env LAB_ACTION=" + labAction
-        + " --env LAB_PORT=" + servicePort + envArgsBuilder.toString() + " " + dockerImage;
+    return dockerCommand
+        + " run --rm --name "
+        + LAB_TEST_INSTALLATION_CONTAINER
+        + " -v /var/run/docker.sock:/var/run/docker.sock"
+        + kubernetesArgs
+        + " --env LAB_DEBUG=true --env LAB_NAMESPACE=lab-test --env LAB_ACTION="
+        + labAction
+        + " --env LAB_PORT="
+        + servicePort
+        + envArgsBuilder.toString()
+        + " "
+        + dockerImage;
   }
 
   // ================ Public Methods ====================================== //
