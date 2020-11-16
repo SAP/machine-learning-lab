@@ -8,7 +8,7 @@ if args[build_utils.FLAG_VERSION]:
         "mvn versions:set -DnewVersion=" + args[build_utils.FLAG_VERSION]
     )
     if completed_process.returncode > 0:
-        print("Failed to apply version " + args[build_utils.FLAG_VERSION])
+        build_utils.log("Failed to apply version " + args[build_utils.FLAG_VERSION])
         build_utils.run("mvn versions:revert")
         build_utils.exit_process(1)
     build_utils.run("mvn versions:commit")
@@ -17,7 +17,7 @@ if args[build_utils.FLAG_MAKE]:
     # Check if all project can be build, otherwise exit build script
     completed_process = build_utils.run("mvn clean package")
     if completed_process.returncode > 0:
-        print("Failed to build project")
+        build_utils.log("Failed to build project")
         build_utils.exit_process(1)
 
     build_utils.run("mvn -N clean install")
