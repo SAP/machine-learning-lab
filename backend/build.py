@@ -2,15 +2,16 @@ from universal_build import build_utils
 
 args = build_utils.get_sanitized_arguments()
 
-# The version is also needed when just tests are executed, so set it independent of the passed flags
-completed_process = build_utils.run(
-    "mvn versions:set -DnewVersion=" + args[build_utils.FLAG_VERSION]
-)
-if completed_process.returncode > 0:
-    print("Failed to apply version " + args[build_utils.FLAG_VERSION])
-    build_utils.run("mvn versions:revert")
-    build_utils.exit_process(1)
-build_utils.run("mvn versions:commit")
+if args[build_utils.FLAG_VERSION]:
+    # The version is also needed when just tests are executed, so set it independent of the passed flags
+    completed_process = build_utils.run(
+        "mvn versions:set -DnewVersion=" + args[build_utils.FLAG_VERSION]
+    )
+    if completed_process.returncode > 0:
+        print("Failed to apply version " + args[build_utils.FLAG_VERSION])
+        build_utils.run("mvn versions:revert")
+        build_utils.exit_process(1)
+    build_utils.run("mvn versions:commit")
 
 if args[build_utils.FLAG_MAKE]:
     # Check if all project can be build, otherwise exit build script
