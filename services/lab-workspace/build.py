@@ -66,7 +66,7 @@ except Exception:
 vcs_ref_build_arg = " --build-arg ARG_VCS_REF=" + str(git_rev)
 build_date_build_arg = " --build-arg ARG_BUILD_DATE=" + str(build_date)
 base_image_build_arg = " --build-arg ARG_WORKSPACE_BASE_IMAGE=" + str(base_image)
-flavor_build_arg = " --build-arg ARG_WORKSPACE_FLAVOR=" + str(args[build_utils.FLAG_FLAVOR])
+flavor_build_arg = " --build-arg ARG_WORKSPACE_FLAVOR=" + str(args[FLAG_FLAVOR])
 version_build_arg = " --build-arg ARG_WORKSPACE_VERSION=" + str(args[build_utils.FLAG_VERSION])
 
 if args[build_utils.FLAG_MAKE]:
