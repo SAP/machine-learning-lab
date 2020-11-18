@@ -228,9 +228,8 @@ def build(component_path: str, args: Dict[str, str]):
     completed_process = run(build_command)
 
     if completed_process.returncode > 0:
-        error_message = completed_process.stderr or completed_process.stdout
         log(
-            f"Failed to build module {component_path}. Code: {completed_process.returncode}. Reason: {error_message}"
+            f"Failed to build module {component_path}. Code: {completed_process.returncode}."
         )
         exit_process(EXIT_CODE_GENERAL)
 
@@ -256,7 +255,7 @@ def run(  # type: ignore
     # Add timeout to command
     if timeout:
         command = f"timeout {timeout} {command}"
-    timestamp = str(int(time.time()))
+    timestamp = str(time.time())
     log(f"Executing ({timestamp}): " + command)
 
     with subprocess.Popen(
