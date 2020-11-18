@@ -27,6 +27,8 @@ public class LocalDockerLauncher extends ExternalResource {
   private String serviceHost;
   private Integer servicePort;
 
+  private String labPort;
+
   private Map<String, String> envVars;
   private String dockerImage;
   private boolean isKubernetes;
@@ -36,11 +38,13 @@ public class LocalDockerLauncher extends ExternalResource {
   public LocalDockerLauncher(
       String serviceHost,
       Integer servicePort,
+      String labPort,
       Map<String, String> envVars,
       String dockerImage,
       boolean isKubernetes) {
     this.serviceHost = serviceHost;
     this.servicePort = servicePort;
+    this.labPort = labPort;
     this.envVars = (envVars == null) ? new HashMap<>() : envVars;
     this.dockerImage = dockerImage;
     this.isKubernetes = isKubernetes;
@@ -93,7 +97,7 @@ public class LocalDockerLauncher extends ExternalResource {
         + " --env LAB_DEBUG=true --env LAB_NAMESPACE=lab-test --env LAB_ACTION="
         + labAction
         + " --env LAB_PORT="
-        + servicePort
+        + labPort
         + envArgsBuilder.toString()
         + " "
         + dockerImage;

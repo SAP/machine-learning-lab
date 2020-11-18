@@ -6,6 +6,8 @@ nodes:
   - role: control-plane
     image:
       kindest/node:v1.14.10@sha256:ce4355398a704fca68006f8a29f37aafb49f8fc2f64ede3ccd0d9198da910146
+    extraPortMappings:
+    - containerPort: 30002
     kubeadmConfigPatches:
       - |
         kind: InitConfiguration

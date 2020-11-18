@@ -45,6 +45,7 @@ import org.mltooling.lab.authorization.AuthorizationManager;
 import org.mltooling.lab.authorization.ProjectAuthorizer;
 import org.mltooling.lab.components.ProjectManager;
 import org.mltooling.lab.services.AbstractServiceManager;
+import org.mltooling.lab.services.CoreService;
 import org.mltooling.lab.services.managers.DockerServiceManager;
 import org.mltooling.lab.services.managers.KubernetesServiceManager;
 import org.slf4j.Logger;
@@ -57,15 +58,6 @@ public class LabApiTest {
   private static final Logger log = LoggerFactory.getLogger(LabApiTest.class);
 
   private static final long SLEEP = 5000;
-  private static final String DEFAULT_HOST = SystemUtils.getEnvVar("SERVICE_HOST", "localhost");
-  // use a port > 30000 so that it also works in Kubernetes mode (Kubernetes service ports must
-  // by default be >30000)
-  private static final int SERVICE_TEST_PORT =
-      Integer.parseInt(SystemUtils.getEnvVar("SERVICE_PORT", "30002"));
-  private static final int DEFAULT_PROJECT_SERVICES_SIZE = 0; // no more initial project services
-
-  private static final Boolean IS_KIND_CLUSTER =
-      Boolean.parseBoolean(SystemUtils.getEnvVar("IS_KIND_CLUSTER", "False"));
 
   private static long MAX_WAIT_TIME = TimeUnit.MINUTES.toMillis(5);
   private static long WAIT_INTERVALS = TimeUnit.SECONDS.toMillis(10);
@@ -80,15 +72,27 @@ public class LabApiTest {
   @Rule public final LocalDockerLauncher dockerLauncher;
   @Rule public final TemporaryFolder tempFolder = new TemporaryFolder();
 
-  @ClassRule
+  // @ClassRule
   // set this namespace so that the .cleanup method clean lab-test resources and not
   // actual resources
   // Comment the other environment variables in if you start the test from within the IDE; otherwise
   // set it on the host machine / container.
-  public static final EnvironmentVariables environmentVariables =
-      new EnvironmentVariables()
-          .set(LabConfig.ENV_NAME_LAB_NAMESPACE, "lab-test")
-          .set(LabConfig.ENV_NAME_K8S_NAMESPACE, "ml-test");
+  // public static final EnvironmentVariables environmentVariables =
+  //     new EnvironmentVariables()
+  //         .set(LabConfig.ENV_NAME_LAB_NAMESPACE, "lab-test")
+  //         .set(LabConfig.ENV_NAME_K8S_NAMESPACE, "ml-test");
+  private final String DEFAULT_HOST = SystemUtils.getEnvVar("SERVICE_HOST", "localhost");
+  // by default use a port > 30000 so that it also works in Kubernetes mode (Kubernetes service ports must
+  // by default be >30000)
+  // private static final int LAB_PORT =
+  //   StringUtils.isNullOrEmpty(SystemUtils.getEnvVar(LabConfig.ENV_NAME_LAB_PORT)) ? 30002 : Integer.parseInt(SystemUtils.getEnvVar(LabConfig.ENV_NAME_LAB_PORT));
+  private final int LAB_PORT = StringUtils.isNullOrEmpty(LabConfig.LAB_PORT) ? CoreService.LAB_BACKEND.getConnectionPort() : Integer.parseInt(LabConfig.LAB_PORT);
+  private final int SERVICE_TEST_PORT =
+      Integer.parseInt(SystemUtils.getEnvVar("LAB_SERVICE_PORT", "" + this.LAB_PORT));
+  private final int DEFAULT_PROJECT_SERVICES_SIZE = 0; // no more initial project services
+
+  private final Boolean IS_KIND_CLUSTER =
+      Boolean.parseBoolean(SystemUtils.getEnvVar("IS_KIND_CLUSTER", "False"));
 
   private LabApi labApi;
   private LabAuthApi authorizationApi;
@@ -108,6 +112,7 @@ public class LabApiTest {
     // currently service name needs to be "lab-service", otherwise the lab service (added in
     // core service) cannot be found
     final String dockerImage = LabConfig.BACKEND_SERVICE_IMAGE;
+
     if (ComponentManager.INSTANCE.isKubernetesRuntime()) {
       Map<String, String> envVars = new HashMap<>();
       envVars.put(LabConfig.ENV_NAME_SERVICES_RUNTIME, LabConfig.SERVICES_RUNTIME);
@@ -117,10 +122,10 @@ public class LabApiTest {
       envVars.put(
           LabConfig.ENV_NAME_HOST_ROOT_DATA_MOUNT_PATH, LabConfig.HOST_ROOT_DATA_MOUNT_PATH);
       this.dockerLauncher =
-          new LocalDockerLauncher(DEFAULT_HOST, SERVICE_TEST_PORT, envVars, dockerImage, true);
+          new LocalDockerLauncher(DEFAULT_HOST, SERVICE_TEST_PORT, LabConfig.LAB_PORT, envVars, dockerImage, true);
     } else {
       this.dockerLauncher =
-          new LocalDockerLauncher(DEFAULT_HOST, SERVICE_TEST_PORT, null, dockerImage, false);
+          new LocalDockerLauncher(DEFAULT_HOST, SERVICE_TEST_PORT, LabConfig.LAB_PORT, null, dockerImage, false);
     }
 
     Thread.sleep(SLEEP * 3);

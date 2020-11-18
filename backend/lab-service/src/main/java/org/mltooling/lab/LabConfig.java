@@ -10,7 +10,7 @@ public class LabConfig {
 
   // ================ Constants =========================================== //
   //
-  private static final String ENV_NAME_LAB_PORT = "LAB_PORT";
+  public static final String ENV_NAME_LAB_PORT = "LAB_PORT";
   public static final String LAB_PORT = SystemUtils.getEnvVar(ENV_NAME_LAB_PORT, "");
 
   private static final String ENV_NAME_LAB_BASE_URL = "LAB_BASE_URL";
