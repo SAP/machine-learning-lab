@@ -128,6 +128,8 @@ act -b -j build -s BUILD_ARGS="--test"
 
 > Before running the tests the project has to be built. You can additionally add the `--make` flag to first build and then test.
 
+The project can be built and tested on *GitHub Actions* by using the [build-pipeline](./actions?query=workflow%3Abuild-pipeline), click on *Run workflow* and pass `--make --test --force --version 0.0.0 --skip-path services/lab-workspace --skip-path services/lab-model-service --skip-path services/simple-workspace-service` to the *Arguments passed to build script.* input. With this input, the project is built and tested; since the Workspace image is really big and not needed for the tests, it is skipped.
+
 ### Deploy
 
 Execute this command in the project root folder to push all docker containers to the configured docker registry:
