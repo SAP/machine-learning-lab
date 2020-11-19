@@ -27,7 +27,7 @@ public class LocalDockerLauncher extends ExternalResource {
   private String serviceHost;
   private Integer servicePort;
 
-  private String labPort;
+  private int labPort;
 
   private Map<String, String> envVars;
   private String dockerImage;
@@ -38,7 +38,7 @@ public class LocalDockerLauncher extends ExternalResource {
   public LocalDockerLauncher(
       String serviceHost,
       Integer servicePort,
-      String labPort,
+      int labPort,
       Map<String, String> envVars,
       String dockerImage,
       boolean isKubernetes) {

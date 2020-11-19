@@ -109,7 +109,4 @@ COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 
-COPY build_utils.py /usr/local/lib/python3.8/dist-packages/universal_build/build_utils.py
-
-
 ENTRYPOINT ["/tini", "-g", "--", "/entrypoint.sh"]

@@ -86,8 +86,8 @@ public class LabApiTest {
   // by default be >30000)
   // private static final int LAB_PORT =
   //   StringUtils.isNullOrEmpty(SystemUtils.getEnvVar(LabConfig.ENV_NAME_LAB_PORT)) ? 30002 : Integer.parseInt(SystemUtils.getEnvVar(LabConfig.ENV_NAME_LAB_PORT));
-  private final int LAB_PORT = StringUtils.isNullOrEmpty(LabConfig.LAB_PORT) ? CoreService.LAB_BACKEND.getConnectionPort() : Integer.parseInt(LabConfig.LAB_PORT);
-  private final int SERVICE_TEST_PORT =
+  private final int LAB_PORT = StringUtils.isNullOrEmpty(LabConfig.LAB_PORT) ? 30002 : Integer.parseInt(LabConfig.LAB_PORT);
+  private final int LAB_SERVICE_PORT =
       Integer.parseInt(SystemUtils.getEnvVar("LAB_SERVICE_PORT", "" + this.LAB_PORT));
   private final int DEFAULT_PROJECT_SERVICES_SIZE = 0; // no more initial project services
 
@@ -122,10 +122,10 @@ public class LabApiTest {
       envVars.put(
           LabConfig.ENV_NAME_HOST_ROOT_DATA_MOUNT_PATH, LabConfig.HOST_ROOT_DATA_MOUNT_PATH);
       this.dockerLauncher =
-          new LocalDockerLauncher(DEFAULT_HOST, SERVICE_TEST_PORT, LabConfig.LAB_PORT, envVars, dockerImage, true);
+          new LocalDockerLauncher(DEFAULT_HOST, LAB_SERVICE_PORT, LAB_PORT, envVars, dockerImage, true);
     } else {
       this.dockerLauncher =
-          new LocalDockerLauncher(DEFAULT_HOST, SERVICE_TEST_PORT, LabConfig.LAB_PORT, null, dockerImage, false);
+          new LocalDockerLauncher(DEFAULT_HOST, LAB_SERVICE_PORT, LAB_PORT, null, dockerImage, false);
     }
 
     Thread.sleep(SLEEP * 3);
@@ -135,8 +135,8 @@ public class LabApiTest {
   @Before
   public void setUp() throws Exception {
     // Connect via API client to Service
-    // final String SERVICE_URL = "http://" + DEFAULT_HOST + ":" + SERVICE_TEST_PORT;
-    serviceUrl = "http://" + DEFAULT_HOST + ":" + SERVICE_TEST_PORT;
+    // final String SERVICE_URL = "http://" + DEFAULT_HOST + ":" + LAB_SERVICE_PORT;
+    serviceUrl = "http://" + DEFAULT_HOST + ":" + LAB_SERVICE_PORT;
     adminAppToken = getAdminToken(serviceUrl);
     LabAuthApiClient authApi = new LabAuthApiClient(serviceUrl, adminAppToken);
     adminApiToken = authApi.createApiToken(ADMIN_USER).getData();
