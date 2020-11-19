@@ -100,21 +100,33 @@ To simplify the process of building this project from scratch, we provide build-
 Execute this command in the project root folder to build this project and the respective docker container:
 
 ```bash
-# Locally
 python build.py --make
 
 # Containerized via act
-act -j build -s BUILD_ARGS="--make"
+# The `-b` flag binds the current directory to the act container and the build artifacts appear on your host machine.
+act -b -j build -s BUILD_ARGS="--make"
 ```
 
 > When the `BUILD_ARGS` secret is omitted for act, the [default flags](./.github/actions/build-environment/entrypoint.sh#L8) are used.
-> If you set the `-b` flag, the current directory is bound to the act container and the build artifacts appear on your host machine.
 
 This script compiles the project, assembles the various JAR artifacts (executable service, client, sources) and builds a docker container with the assembled executable jar. For additional script options:
 
 ```bash
 python build.py --help
 ```
+
+### Test
+
+Running the tests from the repository root execute the [backend tests](./backend/lab-service/src/test/java/org/mltooling/lab) as well as the [webapp](./webapp) tests (all `*.test.js` files).
+
+```bash
+python build.py --test
+
+# Containerized via act
+act -b -j build -s BUILD_ARGS="--test"
+```
+
+> Before running the tests the project has to be built. You can additionally add the `--make` flag to first build and then test.
 
 ### Deploy
 
