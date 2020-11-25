@@ -2,7 +2,7 @@ from universal_build import build_utils
 
 COMPONENT_NAME = "service-lib"
 
-args = build_utils.get_sanitized_arguments()
+args = build_utils.parse_arguments()
 
 if args[build_utils.FLAG_MAKE]:
     completed_process = build_utils.run("mvn clean install")

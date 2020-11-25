@@ -6,7 +6,7 @@ from universal_build import build_utils
 
 COMPONENT_NAME = "ml-lab-webapp"
 
-args = build_utils.get_sanitized_arguments()
+args = build_utils.parse_arguments()
 
 build_utils.log("Install essentials")
 build_utils.run("npm install")

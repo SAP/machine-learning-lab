@@ -2,7 +2,7 @@ from universal_build import build_utils
 
 COMPONENT_NAME = "unified-model-lib"
 
-args = build_utils.get_sanitized_arguments()
+args = build_utils.parse_arguments()
 
 if args[build_utils.FLAG_MAKE]:
     completed_process = build_utils.run("python setup.py develop")

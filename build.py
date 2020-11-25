@@ -115,7 +115,7 @@ def main(args: Dict[str, Union[bool, str]]):
 
 if __name__ == "__main__":
     # Check for valid arguments
-    args = build_utils.get_sanitized_arguments()
+    args = build_utils.parse_arguments()
 
     if args[build_utils.FLAG_RELEASE]:
         # Run main without release to see whether everthing can be built and all tests run through

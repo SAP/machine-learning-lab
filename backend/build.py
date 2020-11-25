@@ -1,6 +1,6 @@
 from universal_build import build_utils
 
-args = build_utils.get_sanitized_arguments()
+args = build_utils.parse_arguments()
 
 if args[build_utils.FLAG_VERSION]:
     # The version is also needed when just tests are executed, so set it independent of the passed flags

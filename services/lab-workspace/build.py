@@ -3,6 +3,7 @@ import argparse
 import datetime
 
 from universal_build import build_utils
+from universal_build.helpers import build_docker
 
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument(
@@ -13,7 +14,7 @@ parser.add_argument(
 COMPONENT_NAME = "ml-workspace"
 FLAG_FLAVOR = "flavor"
 
-args = build_utils.get_sanitized_arguments(argument_parser=parser)
+args = build_utils.parse_arguments(argument_parser=parser)
 
 if not args[FLAG_FLAVOR]:
     args[FLAG_FLAVOR] = "lab"
@@ -81,11 +82,11 @@ if args[build_utils.FLAG_MAKE]:
         + " "
         + build_date_build_arg
     )
-    completed_process = build_utils.build_docker_image(
+    completed_process = build_docker.build_docker_image(
         COMPONENT_NAME, version=args[build_utils.FLAG_VERSION], build_args=build_args
     )
     if completed_process.returncode > 0:
         build_utils.exit_process(1)
 
 if args[build_utils.FLAG_RELEASE]:
-    build_utils.release_docker_image(COMPONENT_NAME, args[build_utils.FLAG_VERSION], args[build_utils.FLAG_DOCKER_IMAGE_PREFIX])
+    build_docker.release_docker_image(COMPONENT_NAME, args[build_utils.FLAG_VERSION], args[build_docker.FLAG_DOCKER_IMAGE_PREFIX])
