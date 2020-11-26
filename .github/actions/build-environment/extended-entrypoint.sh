@@ -24,7 +24,12 @@ fi
 #               done) & python -u build.py $INPUT_BUILD_ARGS $BUILD_SECRETS
 
 # Call the original build-environment entrypoint (doing so, the logic does not have to be copied)
+# Disable immediate stop so that the cleanup phase can run even if entrypoint-sh fails
+set +e
+
+echo "Run original entrypoint"
 /bin/bash /entrypoint.sh "$@"
+exit_code=$?
 
 echo "Cleanup Phase"
 if [[ $INPUT_BUILD_ARGS == *"--test"* ]]; then
@@ -32,3 +37,5 @@ if [[ $INPUT_BUILD_ARGS == *"--test"* ]]; then
     kind delete cluster --name $kind_cluster_name || true
     docker volume rm $kube_config_volume || true
 fi
+
+exit $exit_code
