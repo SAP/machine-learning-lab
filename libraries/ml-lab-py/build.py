@@ -1,19 +1,9 @@
-import os, sys, re
-import subprocess
-import argparse
+from universal_build import build_utils
 
+COMPONENT_NAME = "ml-lab-py"
+args = build_utils.parse_arguments()
 
-parser = argparse.ArgumentParser()
-
-args, unknown = parser.parse_known_args()
-if unknown:
-    print("Unknown arguments "+str(unknown))
-
-# Wrapper to print out command
-def call(command):
-    print("Executing: "+command)
-    return subprocess.call(command, shell=True)
-
-call("python setup.py develop")
-
-# pip uninstall . && pip install --ignore-installed --no-cache -U -e .
+if args[build_utils.FLAG_MAKE]:
+    completed_process = build_utils.run("python setup.py develop")
+    if completed_process.returncode > 0:
+        build_utils.log(f"Error in building component {COMPONENT_NAME}")

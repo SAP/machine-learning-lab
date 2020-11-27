@@ -2,27 +2,26 @@ package org.mltooling.core.api.format;
 
 import org.mltooling.core.api.format.parser.JsonFormatParser;
 
-
 public class ErrorMessageFormat extends UnifiedFormat {
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
+  // ================ Members ============================================= //
 
-    // ================ Constructors & Main ================================= //
-    public ErrorMessageFormat(int statusCode, String message) {
-        setErrorStatus(message, statusCode);
-    }
+  // ================ Constructors & Main ================================= //
+  public ErrorMessageFormat(int statusCode, String message) {
+    setErrorStatus(message, statusCode);
+  }
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Private Methods ===================================== //
-    public static ErrorMessageFormat fromJson(String json) {
-        return JsonFormatParser.INSTANCE.fromJson(json, ErrorMessageFormat.class);
-    }
+  // ================ Private Methods ===================================== //
+  public static ErrorMessageFormat fromJson(String json) {
+    return JsonFormatParser.INSTANCE.fromJson(json, ErrorMessageFormat.class);
+  }
 
-    // ================ Getter & Setter ===================================== //
+  // ================ Getter & Setter ===================================== //
 
-    // ================ Builder Pattern ===================================== //
+  // ================ Builder Pattern ===================================== //
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }

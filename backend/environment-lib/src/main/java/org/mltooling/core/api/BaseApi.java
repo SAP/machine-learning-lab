@@ -2,24 +2,23 @@ package org.mltooling.core.api;
 
 import org.mltooling.core.api.utils.DefaultRequestParams;
 
-
 public interface BaseApi<T extends BaseApi> {
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
+  // ================ Members ============================================= //
 
-    // ================ Constructors & Main ================================= //
+  // ================ Constructors & Main ================================= //
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Public Methods ====================================== //
-    T setDefaultParams(DefaultRequestParams defaultRequestParams);
+  // ================ Public Methods ====================================== //
+  T setDefaultParams(DefaultRequestParams defaultRequestParams);
 
-    // ================ Private Methods ===================================== //
+  // ================ Private Methods ===================================== //
 
-    // ================ Getter & Setter ===================================== //
+  // ================ Getter & Setter ===================================== //
 
-    // ================ Builder Pattern ===================================== //
+  // ================ Builder Pattern ===================================== //
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }

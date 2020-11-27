@@ -1,62 +1,62 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { toast } from "react-toastify";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 // material-ui components
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import DeployIcon from "@material-ui/icons/Add";
-import TextField from "@material-ui/core/TextField";
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import DeployIcon from '@material-ui/icons/Add';
+import TextField from '@material-ui/core/TextField';
 
-import KeyValueDialog from "../../app/components/KeyValueDialog";
+import KeyValueDialog from '../../app/components/KeyValueDialog';
 
 // base components
-import * as ProcessToast from "../../../components/ProcessToast";
+import * as ProcessToast from '../../../components/ProcessToast';
 
 // controller
 import {
   projectsApi,
   getDefaultApiCallback,
   toastErrorMessage,
-  toastErrorType
-} from "../../../services/client/ml-lab-api";
-import * as ReduxUtils from "../../../services/handler/reduxUtils";
-import * as Parser from "../../../services/handler/parser";
-import { SERVICE_NAME_REGEX } from "../../../services/handler/constants";
+  toastErrorType,
+} from '../../../services/client/ml-lab-api';
+import * as ReduxUtils from '../../../services/handler/reduxUtils';
+import * as Parser from '../../../services/handler/parser';
+import { SERVICE_NAME_REGEX } from '../../../services/handler/constants';
 
 const WAIT_TIME = 3000;
 const WAIT_LIMIT = 100000;
 
-const styles = theme => ({
+const styles = (theme) => ({
   invalidInput: {
-    color: "#bd0000"
+    color: '#bd0000',
   },
   keyValueForm: {
-    padding: "10px 0px",
-    overflow: "auto",
-    maxHeight: "300px"
+    padding: '10px 0px',
+    overflow: 'auto',
+    maxHeight: '300px',
   },
   keyValueText: {
-    margin: "10px 10px 10px 0px"
+    margin: '10px 10px 10px 0px',
   },
   keyValueButton: {
-    minWidth: "35px",
-    padding: "8px 5px"
+    minWidth: '35px',
+    padding: '8px 5px',
   },
   button: {
     //margin: theme.spacing.unit,
     marginLeft: 0,
-    padding: "6px 16px"
+    padding: '6px 16px',
   },
   addParameterButton: {
     //margin: theme.spacing.unit,
     marginLeft: 0,
-    paddingLeft: "0px"
+    paddingLeft: '0px',
   },
   rightIcon: {
-    marginLeft: theme.spacing(1)
-  }
+    marginLeft: theme.spacing(1),
+  },
 });
 
 class DeployServiceControl extends Component {
@@ -64,7 +64,7 @@ class DeployServiceControl extends Component {
     super(props);
     this.state = {
       open: false,
-      deploying: []
+      deploying: [],
     };
 
     this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -77,9 +77,9 @@ class DeployServiceControl extends Component {
     this.setState({ open: true });
   }
 
-  handleRequestClose = function() {
+  handleRequestClose = function () {
     this.setState({
-      open: false
+      open: false,
     });
   }.bind(this);
 
@@ -89,10 +89,10 @@ class DeployServiceControl extends Component {
     var deploying = this.state.deploying;
     deploying.push(imageName);
     this.setState({
-      deploying: deploying
+      deploying: deploying,
     });
 
-    var toastID = ProcessToast.showProcessToast("Service will be created...");
+    var toastID = ProcessToast.showProcessToast('Service will be created...');
 
     var configuration = {};
     for (var i = 0; i < keyValuePairs.length; i++) {
@@ -110,7 +110,7 @@ class DeployServiceControl extends Component {
             var deployServiceName = result.data.name;
 
             setTimeout(
-              function() {
+              function () {
                 if (this.state.deploying.includes(imageName)) {
                   this.checkDeployingStatus(
                     0,
@@ -129,7 +129,7 @@ class DeployServiceControl extends Component {
 
           toast.dismiss(toastID);
           let message = errorBody.message || error;
-          toastErrorType("Deploy Service: ", message);
+          toastErrorType('Deploy Service: ', message);
         }
       )
     );
@@ -154,13 +154,13 @@ class DeployServiceControl extends Component {
               this.spliceDeployingArray(imageName);
 
               toast.dismiss(toastID);
-              toastErrorMessage("Deploy service: ", {
-                message: "Timeout"
+              toastErrorMessage('Deploy service: ', {
+                message: 'Timeout',
               });
             } else {
               // check for creation status again after the defined waiting time
               setTimeout(
-                function() {
+                function () {
                   this.checkDeployingStatus(
                     waited_for_ms + WAIT_TIME,
                     deployServiceName,
@@ -176,7 +176,7 @@ class DeployServiceControl extends Component {
             // dismiss progress toast and show confirmation
             toast.dismiss(toastID);
             toast.success(
-              "Service " + Parser.truncate(imageName, 40) + " deployed."
+              'Service ' + Parser.truncate(imageName, 40) + ' deployed.'
             );
             this.props.onServiceDeploy();
 
@@ -187,7 +187,7 @@ class DeployServiceControl extends Component {
           this.spliceDeployingArray(imageName);
 
           toast.dismiss(toastID);
-          toastErrorMessage("Deploy Service: ", error);
+          toastErrorMessage('Deploy Service: ', error);
         }
       )
     );
@@ -202,7 +202,7 @@ class DeployServiceControl extends Component {
     }
 
     this.setState({
-      deploying: deploying
+      deploying: deploying,
     });
   }
 
@@ -223,8 +223,8 @@ class DeployServiceControl extends Component {
           open={this.state.open}
           title="Deploy project service"
           contentText={
-            "Deploy a new service to the selected project based on the specific Docker image." +
-            " Please make sure that the image is a compatible ML Lab service."
+            'Deploy a new service to the selected project based on the specific Docker image.' +
+            ' Please make sure that the image is a compatible ML Lab service.'
           }
           primaryActionBtnLabel="Deploy"
           handleRequestClose={this.handleRequestClose}
@@ -241,23 +241,23 @@ class DeployServiceControl extends Component {
 DeployServiceControl.propTypes = {
   classes: PropTypes.object.isRequired,
   onServiceDeploy: PropTypes.func.isRequired,
-  currentProject: PropTypes.string.isRequired
+  currentProject: PropTypes.string.isRequired,
 };
 
 class NameFieldDialogExtension extends React.Component {
   state = {
-    serviceName: "",
-    isInvalidInput: false
+    serviceName: '',
+    isInvalidInput: false,
   };
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     const newServiceName = e.target.value;
     const isInvalidInput = !SERVICE_NAME_REGEX.test(newServiceName);
 
     this.setState(
       {
         serviceName: newServiceName,
-        isInvalidInput: isInvalidInput
+        isInvalidInput: isInvalidInput,
       },
       () => {
         this.props.onAction({ ...this.state });
@@ -275,14 +275,14 @@ class NameFieldDialogExtension extends React.Component {
         value={this.state.serviceName}
         name="serviceName"
         autoComplete="on"
-        onChange={e => this.handleInputChange(e)}
+        onChange={(e) => this.handleInputChange(e)}
         fullWidth
         InputProps={{
           classes: {
             input: this.state.isInvalidInput
               ? this.props.classes.invalidInput
-              : null
-          }
+              : null,
+          },
         }}
       />
     );

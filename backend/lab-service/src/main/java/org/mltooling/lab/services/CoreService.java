@@ -3,91 +3,90 @@ package org.mltooling.lab.services;
 import org.mltooling.core.utils.StringUtils;
 import org.mltooling.lab.LabConfig;
 
-
 public enum CoreService {
-    LAB_BACKEND("backend", LabConfig.BACKEND_SERVICE_IMAGE, 8091),
-    UNIFIED_MODEL_SERVICE("model-service", LabConfig.MODEL_SERVICE_IMAGE, 8091),
-    WORKSPACE("workspace", LabConfig.WORKSPACE_IMAGE, 8091),
-    MINIO("minio", LabConfig.MINIO_IMAGE, 9000),
-    MONGO("mongo", LabConfig.MONGO_IMAGE, 27017),
-    PORTAINER("service-admin", LabConfig.PORTAINER_IMAGE, 9000),
-    NFS("nfs-server", LabConfig.NFS_SERVER_IMAGE, 2049),
-    UNKNOWN("unknown", ""); //Fallback configuration
+  LAB_BACKEND("backend", LabConfig.BACKEND_SERVICE_IMAGE, 8091),
+  UNIFIED_MODEL_SERVICE("model-service", LabConfig.MODEL_SERVICE_IMAGE, 8091),
+  WORKSPACE("workspace", LabConfig.WORKSPACE_IMAGE, 8091),
+  MINIO("minio", LabConfig.MINIO_IMAGE, 9000),
+  MONGO("mongo", LabConfig.MONGO_IMAGE, 27017),
+  PORTAINER("service-admin", LabConfig.PORTAINER_IMAGE, 9000),
+  NFS("nfs-server", LabConfig.NFS_SERVER_IMAGE, 2049),
+  UNKNOWN("unknown", ""); // Fallback configuration
 
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
-    String name;
-    String image;
-    Integer connectionPort;
+  // ================ Members ============================================= //
+  String name;
+  String image;
+  Integer connectionPort;
 
-    // ================ Constructors & Main ================================= //
+  // ================ Constructors & Main ================================= //
 
-    CoreService(String name, String image) {
-        this(name, image, AbstractServiceManager.DEFAULT_CONNECTION_PORT);
+  CoreService(String name, String image) {
+    this(name, image, AbstractServiceManager.DEFAULT_CONNECTION_PORT);
+  }
+
+  CoreService(String name, String image, Integer connectionPort) {
+    this.name = name;
+    this.image = image;
+    this.connectionPort = connectionPort;
+  }
+
+  // ================ Methods for/from SuperClass / Interfaces ============ //
+  @Override
+  public String toString() {
+    return getName();
+  }
+
+  // ================ Public Methods ====================================== //
+  public static CoreService from(String name) {
+    if (StringUtils.isNullOrEmpty(name)) {
+      return UNKNOWN;
     }
 
-    CoreService(String name, String image, Integer connectionPort) {
-        this.name = name;
-        this.image = image;
-        this.connectionPort = connectionPort;
+    for (CoreService service : CoreService.values()) {
+      if (name.equalsIgnoreCase(service.getName())) {
+        return service;
+      }
+      if (name.toLowerCase().contains(service.getImage().toLowerCase())) {
+        return service;
+      }
     }
+    return UNKNOWN;
+  }
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
-    @Override
-    public String toString() {
-        return getName();
-    }
+  public boolean isUnknown() {
+    return this.equals(UNKNOWN);
+  }
 
-    // ================ Public Methods ====================================== //
-    public static CoreService from(String name) {
-        if (StringUtils.isNullOrEmpty(name)) {
-            return UNKNOWN;
-        }
+  // ================ Private Methods ===================================== //
 
-        for (CoreService service : CoreService.values()) {
-            if (name.equalsIgnoreCase(service.getName())) {
-                return service;
-            }
-            if (name.toLowerCase().contains(service.getImage().toLowerCase())) {
-                return service;
-            }
-        }
-        return UNKNOWN;
-    }
+  // ================ Getter & Setter ===================================== //
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public boolean isUnknown() {
-        return this.equals(UNKNOWN);
-    }
+  public String getName() {
+    return name;
+  }
 
-    // ================ Private Methods ===================================== //
+  public String getImage() {
+    return image;
+  }
 
-    // ================ Getter & Setter ===================================== //
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setImage(String image) {
+    this.image = image;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public Integer getConnectionPort() {
+    return connectionPort;
+  }
 
-    public String getImage() {
-        return image;
-    }
+  public void setConnectionPort(Integer connectionPort) {
+    this.connectionPort = connectionPort;
+  }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
+  // ================ Builder Pattern ===================================== //
 
-    public Integer getConnectionPort() {
-        return connectionPort;
-    }
-
-    public void setConnectionPort(Integer connectionPort) {
-        this.connectionPort = connectionPort;
-    }
-
-    // ================ Builder Pattern ===================================== //
-
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }

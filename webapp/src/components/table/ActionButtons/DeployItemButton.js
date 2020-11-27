@@ -1,32 +1,32 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { toast } from "react-toastify";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 // material-ui components
-import Icon from "@material-ui/core/Icon";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 //base components
-import * as ProcessToast from "../../../components/ProcessToast";
-import CustomDialog from "../../../components/CustomDialog";
-import KeyValueList from "../../../scenes/app/components/KeyValueList";
+import * as ProcessToast from '../../../components/ProcessToast';
+import CustomDialog from '../../../components/CustomDialog';
+import KeyValueList from '../../../scenes/app/components/KeyValueList';
 
-import * as ReduxUtils from "../../../services/handler/reduxUtils";
+import * as ReduxUtils from '../../../services/handler/reduxUtils';
 import {
   projectsApi,
   administrationApi,
   getDefaultApiCallback,
-  toastErrorMessage
-} from "../../../services/client/ml-lab-api";
-import * as Constants from "../../../services/handler/constants";
+  toastErrorMessage,
+} from '../../../services/client/ml-lab-api';
+import * as Constants from '../../../services/handler/constants';
 
 const WAIT_TIME = 3000;
 const WAIT_LIMIT = 30000;
-const DEFAULT_DEPLOYMENT_INFRASTRUCTURE = "mllab";
+const DEFAULT_DEPLOYMENT_INFRASTRUCTURE = 'mllab';
 
 /**
  * Component that is used in the model view to deploy a model to a model-deployment infrastructure
@@ -39,9 +39,9 @@ class DeployItemButton extends Component {
     this.state = {
       deploying: [],
       open: false,
-      selectedModel: "",
+      selectedModel: '',
       deploymentInfrastructure: DEFAULT_DEPLOYMENT_INFRASTRUCTURE,
-      keyValuePairs: []
+      keyValuePairs: [],
     };
 
     this.handleDeployButtonClick = this.handleDeployButtonClick.bind(this);
@@ -59,10 +59,10 @@ class DeployItemButton extends Component {
     deploying.push(item.key);
 
     this.setState({
-      deploying: deploying
+      deploying: deploying,
     });
 
-    var toastID = ProcessToast.showProcessToast("Model will be deployed...");
+    var toastID = ProcessToast.showProcessToast('Model will be deployed...');
 
     // remap the keyValuePairs array as it also includes and index field
     var configuration = this.state.keyValuePairs.length > 0 ? {} : undefined;
@@ -81,7 +81,7 @@ class DeployItemButton extends Component {
 
           // check deploying status
           setTimeout(
-            function() {
+            function () {
               if (this.state.deploying.includes(item.key)) {
                 this.checkDeployingStatus(0, item, deployFileName, toastID);
               }
@@ -92,7 +92,7 @@ class DeployItemButton extends Component {
         ({ error }) => {
           this.spliceDeployingArray(item);
           toast.dismiss(toastID);
-          toastErrorMessage("Deploy Model: ", error);
+          toastErrorMessage('Deploy Model: ', error);
         }
       )
     );
@@ -132,13 +132,13 @@ class DeployItemButton extends Component {
               //remove item from deploying array
               this.spliceDeployingArray(item);
               toast.dismiss(toastID);
-              toastErrorMessage("Deploy Model: ", {
-                message: "Timeout"
+              toastErrorMessage('Deploy Model: ', {
+                message: 'Timeout',
               });
             } else {
               // check for creation status again after the defined waiting time
               setTimeout(
-                function() {
+                function () {
                   this.checkDeployingStatus(
                     waited_for_ms + WAIT_TIME,
                     item,
@@ -153,7 +153,7 @@ class DeployItemButton extends Component {
             // file successfully deployed
             // dismiss progress toast and show confirmation
             toast.dismiss(toastID);
-            toast.success("Model deployed.");
+            toast.success('Model deployed.');
 
             // remove item from deploying array
             this.spliceDeployingArray(item);
@@ -162,7 +162,7 @@ class DeployItemButton extends Component {
         ({ error }) => {
           this.spliceDeployingArray(item);
           toast.dismiss(toastID);
-          toastErrorMessage("Deploy Model: ", error);
+          toastErrorMessage('Deploy Model: ', error);
         }
       )
     );
@@ -177,8 +177,8 @@ class DeployItemButton extends Component {
   }
 
   render() {
-    const title = "Deploy Model";
-    const contentText = "Select the landscape you want to deploy the model on:";
+    const title = 'Deploy Model';
+    const contentText = 'Select the landscape you want to deploy the model on:';
     const CustomComponent = (
       <div>
         <Select
@@ -188,7 +188,7 @@ class DeployItemButton extends Component {
           <MenuItem value="mllab">ML Lab Infrastructure</MenuItem>
         </Select>
         <KeyValueList
-          onKeyValuePairChange={keyValuePairs =>
+          onKeyValuePairChange={(keyValuePairs) =>
             this.setState({ keyValuePairs })
           }
         />
@@ -199,7 +199,7 @@ class DeployItemButton extends Component {
       <Tooltip title="Deploy" placement="bottom">
         <span>
           <IconButton
-            onClick={e => this.handleDeployButtonClick(this.props.item)}
+            onClick={(e) => this.handleDeployButtonClick(this.props.item)}
           >
             <Icon>play_arrow</Icon>
           </IconButton>
@@ -209,7 +209,7 @@ class DeployItemButton extends Component {
             contentText={contentText}
             cancelBtnDisabled={false}
             primaryActionBtnDisabled={false}
-            primaryActionBtnLabel={"Deploy"}
+            primaryActionBtnLabel={'Deploy'}
             handleRequestClose={this.handleRequestClose}
             handlePrimaryAction={this.deploy}
             CustomComponent={CustomComponent}
@@ -222,7 +222,7 @@ class DeployItemButton extends Component {
 
 DeployItemButton.propTypes = {
   item: PropTypes.object.isRequired,
-  currentProject: PropTypes.string.isRequired
+  currentProject: PropTypes.string.isRequired,
 };
 
 export default connect(ReduxUtils.mapStateToProps)(DeployItemButton);

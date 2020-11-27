@@ -1,109 +1,76 @@
+import os
+import shutil
 
-import os, sys, re
-import subprocess
-import argparse
+from universal_build import build_utils
+from universal_build.helpers import build_docker
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--maven', help="only maven build", action='store_true')
-parser.add_argument('--docker', help="only docker build", action='store_true')
-parser.add_argument('--name', help='name of docker container', default='lab-service')
-parser.add_argument('--version', help='version of build (MAJOR.MINOR.PATCH-TAG)')
-parser.add_argument('--notests', help="deactivate integration tests", action='store_true')
-parser.add_argument('--deploy', help="deploy docker container to remote", action='store_true')
+COMPONENT_NAME = "lab-service"
 
-REMOTE_IMAGE_PREFIX = "mltooling/"
+args = build_utils.parse_arguments()
 
-args, unknown = parser.parse_known_args()
-if unknown:
-    print("Unknown arguments "+str(unknown))
+if args[build_utils.FLAG_MAKE]:
+    completed_process = build_utils.run("mvn package")
+    if completed_process.returncode > 0:
+        build_utils.log("Failed to compile project")
+        build_utils.exit_process(1)
 
-# Wrapper to print out command
-def call(command):
-    print("Executing: "+command)
-    return subprocess.call(command, shell=True)
+    version_build_arg = " --build-arg service_version=" + args[build_utils.FLAG_VERSION]
+    completed_process = build_docker.build_docker_image(
+        COMPONENT_NAME, args[build_utils.FLAG_VERSION], version_build_arg
+    )
+    if completed_process.returncode > 0:
+        build_utils.exit_process(completed_process.returncode)
 
-# get service name
-service_name = args.name
-if not service_name:
-    # get service name by folder name
-    service_name = os.path.basename(os.path.dirname(os.path.realpath(__file__)))
+if args[build_utils.FLAG_TEST]:
+    build_utils.log("Run docker tests")
+    completed_process = build_utils.run("mvn verify")
+    if completed_process.returncode > 0:
+        build_utils.log(f"Tests failed in local mode for component {COMPONENT_NAME}")
+        build_utils.exit_process(1)
 
-# get version
-if args.deploy and not args.version:
-    print("Please provide a version for deployment (--version=MAJOR.MINOR.PATCH-TAG)")
-    sys.exit()
-elif args.deploy:
-    # for deployment, use version as it is provided
-    args.version = str(args.version)
-elif not args.version:
-    # for not deployment builds, no version provided, make sure it is a SNAPSHOT build
-    # read project build version from backend pom.xml
-    with open('pom.xml', 'r') as pom_file:
-        data=pom_file.read().replace('\n', '')
-        current_version = re.search('<version>(.+?)</version>', data).group(1)
+    if shutil.which("kind") is not None and build_utils.run("kind get clusters").stderr == '':
+        kind_cluster_name = os.getenv("kind_cluster_name", "kind")
+        build_utils.log("Run Kubernetes tests")
+        build_utils.run(
+            f"kind --name {kind_cluster_name} load docker-image lab-service:{args[build_utils.FLAG_VERSION]}",
+            exit_on_error=True,
+        )
+        build_utils.run(
+            f"kind --name {kind_cluster_name} load docker-image simple-demo-service:{args[build_utils.FLAG_VERSION]}",
+            exit_on_error=True,
+        )
+        build_utils.run(
+            f"kind --name {kind_cluster_name} load docker-image simple-demo-job:{args[build_utils.FLAG_VERSION]}",
+            exit_on_error=True,
+        )
 
-    if current_version:
-        current_version = current_version.strip()
-        if "SNAPSHOT" not in current_version:
-            args.version =  current_version+"-SNAPSHOT"
-        else:
-            # do not change the version, since it already has the right version
-            change_version = False
-            args.version = str(current_version)
+        lab_service_port = build_utils.run(
+            f"docker inspect {kind_cluster_name}-control-plane | jq -r '.[0].NetworkSettings.Ports[\"30002/tcp\"][0].HostPort'",
+            exit_on_error=True
+        ).stdout.strip()
+
+        completed_process = build_utils.run(
+            f"SERVICES_RUNTIME=k8s \
+            KUBE_CONFIG_PATH=kube-config \
+            LAB_DATA_ROOT=/workspace/data \
+            SERVICE_VERSION={args[build_utils.FLAG_VERSION]} \
+            LAB_SERVICE_PORT={lab_service_port} \
+            LAB_KUBERNETES_NAMESPACE=ml-test \
+            IS_KIND_CLUSTER=True \
+            mvn verify"
+        )
+        if completed_process.returncode > 0:
+            build_utils.log(
+                f"Tests failed in Kubernetes mode for component {COMPONENT_NAME}"
+            )
+            build_utils.exit_process(1)
     else:
-        print("Failed to detect the current version")
-else:
-    args.version = str(args.version)
-    if "SNAPSHOT" not in args.version:
-        # for not deployment builds, add snapshot tag
-        args.version += "-SNAPSHOT"
+        build_utils.log("Skipping Kubernetes tests because kind is not installed.")
 
-# maven build
-if args.maven or (not args.maven and not args.docker):
-    # Compile to generate newest swagger docs
-    failed = call("mvn clean compile")
-
-    if failed:
-        print("Failed to compile project")
-        sys.exit()
-
-    # Package or Deploy project
-    failed = 0
-    if args.deploy:
-        if args.notests:
-            failed = call("mvn clean package -Dskiptests=true -DskipITs")
-        else:
-            failed = call("mvn clean package")
-    else:
-        failed = call("mvn clean package -Dskiptests=true -DskipITs")
-
-    if failed:
-        print("Failed to build project")
-        sys.exit()
-
-# docker build
-if args.docker or (not args.maven and not args.docker):
-
-    version_build_arg = " --build-arg service_version=" + str(args.version)
-
-    # call("docker rm -f "+service_name)
-    versioned_image = service_name+":"+str(args.version)
-    latest_image = service_name+":latest"
-    failed = call("docker build -t "+versioned_image+" -t "+latest_image+" " + version_build_arg + " ./")
-
-    if failed:
-        print("Failed to build container")
-        sys.exit()
-
-    remote_versioned_image = REMOTE_IMAGE_PREFIX + versioned_image
-    call("docker tag " + versioned_image + " " + remote_versioned_image)
-
-    remote_latest_image = REMOTE_IMAGE_PREFIX + latest_image
-    call("docker tag " + latest_image + " " + remote_latest_image)
-
-    if args.deploy:
-        call("docker push " + remote_versioned_image)
-
-        if "SNAPSHOT" not in args.version:
-            # do not push SNAPSHOT builds as latest version
-            call("docker push " + remote_latest_image)
+# Only allow releasing from sub componenents when force flag is set as an extra precaution step
+if args[build_utils.FLAG_RELEASE] and args[build_utils.FLAG_FORCE]:
+    build_docker.release_docker_image(
+        COMPONENT_NAME,
+        args[build_utils.FLAG_VERSION],
+        args[build_docker.FLAG_DOCKER_IMAGE_PREFIX],
+    )

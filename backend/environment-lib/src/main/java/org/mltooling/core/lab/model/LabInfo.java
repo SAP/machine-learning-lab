@@ -2,92 +2,91 @@ package org.mltooling.core.lab.model;
 
 import java.util.Map;
 
-
 public class LabInfo {
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
-    private String version;
-    private String runtime;
-    private String namespace;
-    private Integer projectsCount;
-    private Boolean isHealthy;
-    private String termsOfService;
-    private Map<String, String> coreServiceInfo;
+  // ================ Members ============================================= //
+  private String version;
+  private String runtime;
+  private String namespace;
+  private Integer projectsCount;
+  private Boolean isHealthy;
+  private String termsOfService;
+  private Map<String, String> coreServiceInfo;
 
-    // ================ Constructors & Main ================================= //
+  // ================ Constructors & Main ================================= //
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Public Methods ====================================== //
+  // ================ Public Methods ====================================== //
 
-    // ================ Private Methods ===================================== //
+  // ================ Private Methods ===================================== //
 
-    // ================ Getter & Setter ===================================== //
-    public String getVersion() {
-        return version;
-    }
+  // ================ Getter & Setter ===================================== //
+  public String getVersion() {
+    return version;
+  }
 
-    public LabInfo setVersion(String version) {
-        this.version = version;
-        return this;
-    }
+  public LabInfo setVersion(String version) {
+    this.version = version;
+    return this;
+  }
 
-    public String getRuntime() {
-        return runtime;
-    }
+  public String getRuntime() {
+    return runtime;
+  }
 
-    public LabInfo setRuntime(String runtime) {
-        this.runtime = runtime;
-        return this;
-    }
+  public LabInfo setRuntime(String runtime) {
+    this.runtime = runtime;
+    return this;
+  }
 
-    public String getNamespace() {
-        return namespace;
-    }
+  public String getNamespace() {
+    return namespace;
+  }
 
-    public LabInfo setNamespace(String namespace) {
-        this.namespace = namespace;
-        return this;
-    }
+  public LabInfo setNamespace(String namespace) {
+    this.namespace = namespace;
+    return this;
+  }
 
-    public Integer getProjectsCount() {
-        return projectsCount;
-    }
+  public Integer getProjectsCount() {
+    return projectsCount;
+  }
 
-    public LabInfo setProjectsCount(Integer projectsCount) {
-        this.projectsCount = projectsCount;
-        return this;
-    }
+  public LabInfo setProjectsCount(Integer projectsCount) {
+    this.projectsCount = projectsCount;
+    return this;
+  }
 
-    public Map<String, String> getCoreServiceInfo() {
-        return coreServiceInfo;
-    }
+  public Map<String, String> getCoreServiceInfo() {
+    return coreServiceInfo;
+  }
 
-    public LabInfo setCoreServiceInfo(Map<String, String> coreServiceInfo) {
-        this.coreServiceInfo = coreServiceInfo;
-        return this;
-    }
+  public LabInfo setCoreServiceInfo(Map<String, String> coreServiceInfo) {
+    this.coreServiceInfo = coreServiceInfo;
+    return this;
+  }
 
-    public Boolean getHealthy() {
-        return isHealthy;
-    }
+  public Boolean getHealthy() {
+    return isHealthy;
+  }
 
-    public LabInfo setHealthy(Boolean healthy) {
-        isHealthy = healthy;
-        return this;
-    }
+  public LabInfo setHealthy(Boolean healthy) {
+    isHealthy = healthy;
+    return this;
+  }
 
-    public String getTermsOfService() {
-        return termsOfService;
-    }
+  public String getTermsOfService() {
+    return termsOfService;
+  }
 
-    public LabInfo setTermsOfService(String termsOfService) {
-        this.termsOfService = termsOfService;
-        return this;
-    }
+  public LabInfo setTermsOfService(String termsOfService) {
+    this.termsOfService = termsOfService;
+    return this;
+  }
 
-    // ================ Builder Pattern ===================================== //
+  // ================ Builder Pattern ===================================== //
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }

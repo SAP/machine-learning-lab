@@ -1,20 +1,20 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import * as redux from "redux";
-import { Provider } from "react-redux";
-import { HashRouter } from "react-router-dom";
-import { CookiesProvider } from "react-cookie";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import * as redux from 'redux';
+import { Provider } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
-import "./css/App.css";
-import App from "./scenes/app/App";
+import './css/App.css';
+import App from './scenes/app/App';
 
-import * as ReduxUtils from "./services/handler/reduxUtils";
+import * as ReduxUtils from './services/handler/reduxUtils';
 
-import "typeface-roboto";
+import 'typeface-roboto';
 
-import registerServiceWorker from "./registerServiceWorker";
+import registerServiceWorker from './registerServiceWorker';
 
 // replace with next major version of material-ui (https://material-ui.com/style/typography/):
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
@@ -50,36 +50,36 @@ const theme = createMuiTheme({
   overrides: {
     MuiTypography: {
       body1: {
-        fontSize: "0.875rem",
-      }
+        fontSize: '0.875rem',
+      },
     },
     MuiTableRow: {
       root: {
-         fontFamily: "Roboto",
-         fontSize: "0.875rem"
-      }
+        fontFamily: 'Roboto',
+        fontSize: '0.875rem',
+      },
     },
     MuiTableCell: {
       root: {
-        padding: "16px 24px 16px 24px",
-        fontSize: "0.75rem"
-      }
-    }
-  }
+        padding: '16px 24px 16px 24px',
+        fontSize: '0.75rem',
+      },
+    },
+  },
 });
 
 ReactDOM.render(
   <Provider store={store}>
     <CookiesProvider>
       <HashRouter>
-      <ThemeProvider theme={theme}>
-        <App />
+        <ThemeProvider theme={theme}>
+          <App />
         </ThemeProvider>
       </HashRouter>
     </CookiesProvider>
   </Provider>,
 
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 // export default store;

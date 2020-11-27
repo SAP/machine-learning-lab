@@ -2,41 +2,39 @@ package org.mltooling.core.api.format;
 
 import org.mltooling.core.api.format.parser.JsonFormatParser;
 
-
 public class StatusMessageFormat extends UnifiedFormat {
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
+  // ================ Members ============================================= //
 
-    // ================ Constructors & Main ================================= //
-    public StatusMessageFormat() {
-    }
+  // ================ Constructors & Main ================================= //
+  public StatusMessageFormat() {}
 
-    public StatusMessageFormat(String message) {
-        getMetadata().setMessage(message);
-    }
+  public StatusMessageFormat(String message) {
+    getMetadata().setMessage(message);
+  }
 
-    public StatusMessageFormat(int statusCode) {
-        this.setStatus(statusCode);
-    }
+  public StatusMessageFormat(int statusCode) {
+    this.setStatus(statusCode);
+  }
 
-    public StatusMessageFormat(String message, int statusCode) {
-        this.setStatus(statusCode);
-        getMetadata().setMessage(message);
-    }
+  public StatusMessageFormat(String message, int statusCode) {
+    this.setStatus(statusCode);
+    getMetadata().setMessage(message);
+  }
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Private Methods ===================================== //
-    public static StatusMessageFormat fromJson(String json) {
-        return JsonFormatParser.INSTANCE.fromJson(json, StatusMessageFormat.class);
-    }
+  // ================ Private Methods ===================================== //
+  public static StatusMessageFormat fromJson(String json) {
+    return JsonFormatParser.INSTANCE.fromJson(json, StatusMessageFormat.class);
+  }
 
-    // ================ Public Methods ====================================== //
+  // ================ Public Methods ====================================== //
 
-    // ================ Getter & Setter ===================================== //
+  // ================ Getter & Setter ===================================== //
 
-    // ================ Builder Pattern ===================================== //
+  // ================ Builder Pattern ===================================== //
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }

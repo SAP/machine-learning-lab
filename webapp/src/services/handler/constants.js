@@ -2,39 +2,42 @@ const ENDPOINTS = {
   // when started via npm, the environment variable REACT_APP_LAB_ENDPOINT is set in the package.json. This is for debugging when you just make changes in the web page.
   labApi:
     process.env.REACT_APP_LAB_ENDPOINT === undefined
-      ? "/api"
+      ? '/api'
       : process.env.REACT_APP_LAB_ENDPOINT,
   newLabApi:
     process.env.REACT_APP_LAB_ENDPOINT === undefined
-      ? (document.location.origin.toString() + document.location.pathname.toString()).replace("/app/", "/") //""
-      : process.env.REACT_APP_LAB_ENDPOINT.replace("/api", "")
+      ? (
+          document.location.origin.toString() +
+          document.location.pathname.toString()
+        ).replace('/app/', '/') //""
+      : process.env.REACT_APP_LAB_ENDPOINT.replace('/api', ''),
 };
 
 const SERVICES = {
   research: {
-    name: "research-workspace",
-    url: ENDPOINTS.newLabApi + "workspace"
+    name: 'research-workspace',
+    url: ENDPOINTS.newLabApi + 'workspace',
   },
   userWorkspace: {
-    name: "user-workspace",
-    url: ENDPOINTS.newLabApi + "workspace/id/{user}"
+    name: 'user-workspace',
+    url: ENDPOINTS.newLabApi + 'workspace/id/{user}',
   },
   serviceAdmin: {
-    name: "service-admin",
-    url: ENDPOINTS.newLabApi + "service-admin"
+    name: 'service-admin',
+    url: ENDPOINTS.newLabApi + 'service-admin',
   },
   monitoringDashboard: {
-    name: "monitoring-dashboard",
-    url: ENDPOINTS.newLabApi + "netdata"
+    name: 'monitoring-dashboard',
+    url: ENDPOINTS.newLabApi + 'netdata',
   },
   documentation: {
-    name: "documentation",
-    url: ENDPOINTS.newLabApi + "docs/"
+    name: 'documentation',
+    url: ENDPOINTS.newLabApi + 'docs/',
   },
   apiExplorer: {
-    name: "api-explorer",
-    url: ENDPOINTS.newLabApi + "api-docs/"
-  }
+    name: 'api-explorer',
+    url: ENDPOINTS.newLabApi + 'api-docs/',
+  },
 };
 
 /**
@@ -42,431 +45,431 @@ const SERVICES = {
  */
 const NAVBAR_ITEMS = [
   {
-    ICON: "home",
-    NAME: "Home",
-    PATH: "/",
+    ICON: 'home',
+    NAME: 'Home',
+    PATH: '/',
     NEW_TAB_OPTION: false,
-    NEW_TAB_LINK: "",
+    NEW_TAB_LINK: '',
     PROJECT_SPECIFIC: false,
-    TYPE: "link"
+    TYPE: 'link',
   },
   {
-    ICON: "code",
-    NAME: "Workspace",
-    PATH: "/workspace",
+    ICON: 'code',
+    NAME: 'Workspace',
+    PATH: '/workspace',
     NEW_TAB_OPTION: false,
-    NEW_TAB_LINK: "", //SERVICES.research
+    NEW_TAB_LINK: '', //SERVICES.research
     PROJECT_SPECIFIC: false,
-    TYPE: "link"
+    TYPE: 'link',
   },
   {
-    ICON: "developer_board",
-    NAME: "Admin",
-    PATH: "/management",
+    ICON: 'developer_board',
+    NAME: 'Admin',
+    PATH: '/management',
     NEW_TAB_OPTION: false,
-    NEW_TAB_LINK: "",
+    NEW_TAB_LINK: '',
     PROJECT_SPECIFIC: false,
-    TYPE: "link",
-    REQUIRE_ADMIN: true
+    TYPE: 'link',
+    REQUIRE_ADMIN: true,
   },
   {
-    ICON: "settings_applications",
-    NAME: "Service Admin",
-    PATH: "/admin",
+    ICON: 'settings_applications',
+    NAME: 'Service Admin',
+    PATH: '/admin',
     NEW_TAB_OPTION: true,
     NEW_TAB_LINK: SERVICES.serviceAdmin,
     PROJECT_SPECIFIC: false,
-    TYPE: "link",
-    REQUIRE_ADMIN: true
+    TYPE: 'link',
+    REQUIRE_ADMIN: true,
   },
   {
-    TYPE: "divider",
-    NAME: "project-specific-divider"
+    TYPE: 'divider',
+    NAME: 'project-specific-divider',
   },
   {
-    ICON: "folder",
-    NAME: "Datasets",
-    PATH: "/datasets",
+    ICON: 'folder',
+    NAME: 'Datasets',
+    PATH: '/datasets',
     NEW_TAB_OPTION: false,
-    NEW_TAB_LINK: "",
+    NEW_TAB_LINK: '',
     PROJECT_SPECIFIC: false,
-    TYPE: "link"
+    TYPE: 'link',
   },
   {
-    ICON: "equalizer",
-    NAME: "Experiments",
-    PATH: "/experiments",
+    ICON: 'equalizer',
+    NAME: 'Experiments',
+    PATH: '/experiments',
     NEW_TAB_OPTION: false,
-    NEW_TAB_LINK: "",
+    NEW_TAB_LINK: '',
     PROJECT_SPECIFIC: true,
-    TYPE: "link"
+    TYPE: 'link',
   },
   {
-    ICON: "layers",
-    NAME: "Models",
-    PATH: "/models",
+    ICON: 'layers',
+    NAME: 'Models',
+    PATH: '/models',
     NEW_TAB_OPTION: false,
-    NEW_TAB_LINK: "",
+    NEW_TAB_LINK: '',
     PROJECT_SPECIFIC: false,
-    TYPE: "link"
+    TYPE: 'link',
   },
   {
-    ICON: "apps",
-    NAME: "Services",
-    PATH: "/services",
+    ICON: 'apps',
+    NAME: 'Services',
+    PATH: '/services',
     NEW_TAB_OPTION: false,
-    NEW_TAB_LINK: "",
+    NEW_TAB_LINK: '',
     PROJECT_SPECIFIC: false,
-    TYPE: "link"
+    TYPE: 'link',
   },
   {
-    ICON: "next_week",
-    NAME: "Jobs",
-    PATH: "/jobs",
+    ICON: 'next_week',
+    NAME: 'Jobs',
+    PATH: '/jobs',
     NEW_TAB_OPTION: false,
-    NEW_TAB_LINK: "",
+    NEW_TAB_LINK: '',
     PROJECT_SPECIFIC: false,
-    TYPE: "link"
-  }
+    TYPE: 'link',
+  },
 ];
 
 const WIDGET_ITEMS_EXPERIMENTS = [
   {
-    COLOR: "cyan",
-    ICON: "autorenew",
-    NAME: "Running",
-    KEY: "running",
-    VALUE: "",
-    FORMAT: "running",
-    PATH: null
+    COLOR: 'cyan',
+    ICON: 'autorenew',
+    NAME: 'Running',
+    KEY: 'running',
+    VALUE: '',
+    FORMAT: 'running',
+    PATH: null,
   },
   {
-    COLOR: "light-green",
-    ICON: "check",
-    NAME: "Succeeded",
-    VALUE: "",
-    KEY: "completed",
-    FORMAT: "numb",
-    PATH: null
+    COLOR: 'light-green',
+    ICON: 'check',
+    NAME: 'Succeeded',
+    VALUE: '',
+    KEY: 'completed',
+    FORMAT: 'numb',
+    PATH: null,
   },
   {
-    COLOR: "pink",
-    ICON: "error",
-    NAME: "Failed",
-    VALUE: "",
-    KEY: "failed",
-    FORMAT: "failed",
-    PATH: null
+    COLOR: 'pink',
+    ICON: 'error',
+    NAME: 'Failed',
+    VALUE: '',
+    KEY: 'failed',
+    FORMAT: 'failed',
+    PATH: null,
   },
   {
-    COLOR: "green",
-    ICON: "build",
-    NAME: "Last run",
-    VALUE: "",
-    KEY: "lastRun",
-    FORMAT: "date",
-    PATH: null
-  }
+    COLOR: 'green',
+    ICON: 'build',
+    NAME: 'Last run',
+    VALUE: '',
+    KEY: 'lastRun',
+    FORMAT: 'date',
+    PATH: null,
+  },
 ];
 
 const WIDGET_ITEMS_DASHBOARD = [
   {
-    COLOR: "light-green",
-    ICON: "folder",
-    NAME: "Datasets",
-    VALUE: "",
-    KEY: "datasetsCount",
-    FORMAT: "numb",
-    PATH: "/datasets"
+    COLOR: 'light-green',
+    ICON: 'folder',
+    NAME: 'Datasets',
+    VALUE: '',
+    KEY: 'datasetsCount',
+    FORMAT: 'numb',
+    PATH: '/datasets',
   },
   {
-    COLOR: "cyan",
-    ICON: "layers",
-    NAME: "Models",
-    VALUE: "",
-    KEY: "modelsCount",
-    FORMAT: "numb",
-    PATH: "/models"
+    COLOR: 'cyan',
+    ICON: 'layers',
+    NAME: 'Models',
+    VALUE: '',
+    KEY: 'modelsCount',
+    FORMAT: 'numb',
+    PATH: '/models',
   },
   {
-    COLOR: "pink",
-    ICON: "equalizer",
-    NAME: "Experiments",
-    VALUE: "",
-    KEY: "experimentsCount",
-    FORMAT: "numb",
-    PATH: "/experiments"
+    COLOR: 'pink',
+    ICON: 'equalizer',
+    NAME: 'Experiments',
+    VALUE: '',
+    KEY: 'experimentsCount',
+    FORMAT: 'numb',
+    PATH: '/experiments',
   },
   {
-    COLOR: "orange",
-    ICON: "apps",
-    NAME: "Services",
-    VALUE: "",
-    KEY: "servicesCount",
-    FORMAT: "numb",
-    PATH: "/services"
-  }
+    COLOR: 'orange',
+    ICON: 'apps',
+    NAME: 'Services',
+    VALUE: '',
+    KEY: 'servicesCount',
+    FORMAT: 'numb',
+    PATH: '/services',
+  },
 ];
 
 const WIDGET_ITEMS_DATASETS = [
   {
-    COLOR: "pink",
-    ICON: "list",
-    NAME: "Datasets",
-    VALUE: "",
-    KEY: "filesCount",
-    FORMAT: "numb",
-    PATH: null
+    COLOR: 'pink',
+    ICON: 'list',
+    NAME: 'Datasets',
+    VALUE: '',
+    KEY: 'filesCount',
+    FORMAT: 'numb',
+    PATH: null,
   },
   {
-    COLOR: "cyan",
-    ICON: "cloud",
-    NAME: "Total size",
-    VALUE: "",
-    KEY: "filesTotalSize",
-    FORMAT: "size",
-    PATH: null
+    COLOR: 'cyan',
+    ICON: 'cloud',
+    NAME: 'Total size',
+    VALUE: '',
+    KEY: 'filesTotalSize',
+    FORMAT: 'size',
+    PATH: null,
   },
   {
-    COLOR: "light-green",
-    ICON: "build",
-    NAME: "Last modified",
-    VALUE: "",
-    KEY: "lastModified",
-    FORMAT: "date",
-    PATH: null
-  }
+    COLOR: 'light-green',
+    ICON: 'build',
+    NAME: 'Last modified',
+    VALUE: '',
+    KEY: 'lastModified',
+    FORMAT: 'date',
+    PATH: null,
+  },
 ];
 
 const WIDGET_ITEMS_MODELS = [
   {
-    COLOR: "pink",
-    ICON: "list",
-    NAME: "Models",
-    VALUE: "",
-    KEY: "filesCount",
-    FORMAT: "numb",
-    PATH: null
+    COLOR: 'pink',
+    ICON: 'list',
+    NAME: 'Models',
+    VALUE: '',
+    KEY: 'filesCount',
+    FORMAT: 'numb',
+    PATH: null,
   },
   {
-    COLOR: "cyan",
-    ICON: "cloud",
-    NAME: "Total size",
-    VALUE: "",
-    KEY: "filesTotalSize",
-    FORMAT: "size",
-    PATH: null
+    COLOR: 'cyan',
+    ICON: 'cloud',
+    NAME: 'Total size',
+    VALUE: '',
+    KEY: 'filesTotalSize',
+    FORMAT: 'size',
+    PATH: null,
   },
   {
-    COLOR: "light-green",
-    ICON: "build",
-    NAME: "Last modified",
-    VALUE: "",
-    KEY: "lastModified",
-    FORMAT: "date",
-    PATH: null
-  }
+    COLOR: 'light-green',
+    ICON: 'build',
+    NAME: 'Last modified',
+    VALUE: '',
+    KEY: 'lastModified',
+    FORMAT: 'date',
+    PATH: null,
+  },
 ];
 
 const WIDGET_ITEMS_JOBS = [
   {
-    COLOR: "cyan",
-    ICON: "loop",
-    NAME: "Running",
-    VALUE: "",
-    KEY: "running",
-    FORMAT: "numb",
-    PATH: null
+    COLOR: 'cyan',
+    ICON: 'loop',
+    NAME: 'Running',
+    VALUE: '',
+    KEY: 'running',
+    FORMAT: 'numb',
+    PATH: null,
   },
   {
-    COLOR: "light-green",
-    ICON: "done",
-    NAME: "Succeeded",
-    VALUE: "",
-    KEY: "succeeded",
-    FORMAT: "numb",
-    PATH: null
+    COLOR: 'light-green',
+    ICON: 'done',
+    NAME: 'Succeeded',
+    VALUE: '',
+    KEY: 'succeeded',
+    FORMAT: 'numb',
+    PATH: null,
   },
   {
-    COLOR: "pink",
-    ICON: "error",
-    NAME: "Failed",
-    VALUE: "",
-    KEY: "failed",
-    FORMAT: "numb",
-    PATH: null
-  }
+    COLOR: 'pink',
+    ICON: 'error',
+    NAME: 'Failed',
+    VALUE: '',
+    KEY: 'failed',
+    FORMAT: 'numb',
+    PATH: null,
+  },
 ];
 
 const DATASET_TABLE_COLUMNS = [
   {
-    id: "name",
+    id: 'name',
     numeric: false,
-    label: "Dataset",
-    type: "truncate",
-    disablePadding: true
+    label: 'Dataset',
+    type: 'truncate',
+    disablePadding: true,
   },
   {
-    id: "modifiedAt",
+    id: 'modifiedAt',
     numeric: false,
-    label: "Last modified",
-    type: "date",
-    disablePadding: true
+    label: 'Last modified',
+    type: 'date',
+    disablePadding: true,
   },
   {
-    id: "modifiedBy",
+    id: 'modifiedBy',
     numeric: false,
-    label: "Modified by",
-    type: "truncate",
-    disablePadding: true
+    label: 'Modified by',
+    type: 'truncate',
+    disablePadding: true,
   },
   {
-    id: "version",
+    id: 'version',
     numeric: false,
-    label: "Version",
-    type: "default",
-    disablePadding: true
+    label: 'Version',
+    type: 'default',
+    disablePadding: true,
   },
   {
-    id: "size",
+    id: 'size',
     numeric: false,
-    label: "Size",
-    type: "size",
-    disablePadding: true
-  }
+    label: 'Size',
+    type: 'size',
+    disablePadding: true,
+  },
 ];
 
 const MODEL_TABLE_COLUMNS = [
   {
-    id: "name",
+    id: 'name',
     numeric: false,
-    label: "Model",
-    type: "truncate",
-    disablePadding: true
+    label: 'Model',
+    type: 'truncate',
+    disablePadding: true,
   },
   {
-    id: "version",
+    id: 'version',
     numeric: false,
-    label: "Version",
-    type: "default",
-    disablePadding: true
+    label: 'Version',
+    type: 'default',
+    disablePadding: true,
   },
   {
-    id: "modifiedBy",
+    id: 'modifiedBy',
     numeric: false,
-    label: "Modified by",
-    type: "truncate",
-    disablePadding: true
+    label: 'Modified by',
+    type: 'truncate',
+    disablePadding: true,
   },
   {
-    id: "size",
+    id: 'size',
     numeric: false,
-    label: "Size",
-    type: "size",
-    disablePadding: true
+    label: 'Size',
+    type: 'size',
+    disablePadding: true,
   },
   {
-    id: "modifiedAt",
+    id: 'modifiedAt',
     numeric: false,
-    label: "Last modified",
-    type: "date",
-    disablePadding: true
-  }
+    label: 'Last modified',
+    type: 'date',
+    disablePadding: true,
+  },
 ];
 
 const JOB_TABLE_COLUMNS = [
   {
-    id: "name",
+    id: 'name',
     numeric: false,
-    label: "Job",
-    type: "truncate",
-    disablePadding: true
+    label: 'Job',
+    type: 'truncate',
+    disablePadding: true,
   },
   {
-    id: "status",
+    id: 'status',
     numeric: false,
-    label: "Status",
-    type: "default",
-    disablePadding: true
+    label: 'Status',
+    type: 'default',
+    disablePadding: true,
   },
   {
-    id: "startedAt",
+    id: 'startedAt',
     numeric: false,
-    label: "Started at",
-    type: "date",
-    disablePadding: true
+    label: 'Started at',
+    type: 'date',
+    disablePadding: true,
   },
   {
-    id: "finishedAt",
+    id: 'finishedAt',
     numeric: false,
-    label: "Finished at",
-    type: "date",
-    disablePadding: true
-  }
+    label: 'Finished at',
+    type: 'date',
+    disablePadding: true,
+  },
 ];
 
 const JOB_SCHEDULED_TABLE_COLUMNS = [
   {
-    id: "jobName",
+    id: 'jobName',
     numeric: false,
-    label: "Name",
-    type: "truncate",
-    disablePadding: true
+    label: 'Name',
+    type: 'truncate',
+    disablePadding: true,
   },
   {
-    id: "dockerImage",
+    id: 'dockerImage',
     numeric: false,
-    label: "Image",
-    type: "truncate",
-    disablePadding: true
+    label: 'Image',
+    type: 'truncate',
+    disablePadding: true,
   },
   {
-    id: "schedule",
+    id: 'schedule',
     numeric: false,
-    label: "Schedule",
-    type: "truncate",
-    disablePadding: true
+    label: 'Schedule',
+    type: 'truncate',
+    disablePadding: true,
   },
   {
-    id: "lastExecution",
+    id: 'lastExecution',
     numeric: false,
-    label: "Last executed",
-    type: "date",
-    disablePadding: true
+    label: 'Last executed',
+    type: 'date',
+    disablePadding: true,
   },
   {
-    id: "addedAt",
+    id: 'addedAt',
     numeric: false,
-    label: "Added at",
-    type: "date",
-    disablePadding: true
-  }
+    label: 'Added at',
+    type: 'date',
+    disablePadding: true,
+  },
 ];
 
 const COOKIES = {
-  project: "project",
+  project: 'project',
   options: {
-    path: "/"
+    path: '/',
   },
-  firstTimeLogin: "first_time_login"
+  firstTimeLogin: 'first_time_login',
 };
 
 const LOADING_TOAST_OPTIONS = {
   autoClose: false,
   hideProgressBar: true,
-  position: "bottom-center",
+  position: 'bottom-center',
   pauseOnHover: false,
   closeButton: false,
-  closeOnClick: false
+  closeOnClick: false,
 };
 
 const SERVICE_NAME_REGEX = new RegExp(
-  "^([a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9])?$"
+  '^([a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9])?$'
 );
-const ENV_NAME_REGEX = new RegExp("^([a-zA-Z_]{1,}[a-zA-Z0-9_]{0,})?$");
+const ENV_NAME_REGEX = new RegExp('^([a-zA-Z_]{1,}[a-zA-Z0-9_]{0,})?$');
 
-const GITHUB_LINK = "https://github.com"; // TODO: change
-const ABOUT_FILE = "./about.txt";
+const GITHUB_LINK = 'https://github.com'; // TODO: change
+const ABOUT_FILE = './about.txt';
 
 export {
   NAVBAR_ITEMS,
@@ -486,5 +489,5 @@ export {
   SERVICE_NAME_REGEX,
   ENV_NAME_REGEX,
   GITHUB_LINK,
-  ABOUT_FILE
+  ABOUT_FILE,
 };

@@ -50,7 +50,7 @@ The following rule governs documentation contributions:
 
 * Commits should be as small as possible while ensuring that each commit is correct independently (i.e., each commit should compile and pass tests).
 
-* Test your changes as thoroughly as possible before you commit them. Preferably, automate your test by unit/integration tests. If tested manually, provide information about the test scope in the PR description (e.g. “Test passed: Upgrade version from 0.42 to 0.42.23.”).
+* Test your changes as thoroughly as possible before you commit them. Preferably, automate your test by unit/integration tests. If tested manually, provide information about the test scope in the PR description (e.g. “Test passed: Upgrade version from 0.42 to 0.42.23.”). Check the [README.md Test Section](./README.md#Test) for more about how to run the tests.
 
 * Create _Work In Progress [WIP]_ pull requests only if you need clarification or an explicit review before you can continue your work item.
 
@@ -61,6 +61,10 @@ The following rule governs documentation contributions:
   * Amend the affected commit(s) and force push onto your branch.
   * Set respective comments in your GitHub review to resolved.
   * Create a general PR comment to notify the reviewers that your amendments are ready for another round of review.
+
+### Review Pull Request
+
+If you review a PR and code was changed, please make sure that the project can be built and the tests are successful. Check the [README.md Test Section](./README.md#Test) for more about how to run the tests.
 
 ## Issues and Planning
 

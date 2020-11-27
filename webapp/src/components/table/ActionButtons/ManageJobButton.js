@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import Icon from "@material-ui/core/Icon";
-import IconButton from "@material-ui/core/IconButton";
-import PropTypes from "prop-types";
-import Tooltip from "@material-ui/core/Tooltip";
+import React, { Component } from 'react';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import PropTypes from 'prop-types';
+import Tooltip from '@material-ui/core/Tooltip';
 
 class ManageJobButton extends Component {
   render() {
@@ -17,7 +17,7 @@ class ManageJobButton extends Component {
 }
 
 ManageJobButton.propTypes = {
-  url: PropTypes.string.isRequired
+  url: PropTypes.string.isRequired,
 };
 
 export default ManageJobButton;

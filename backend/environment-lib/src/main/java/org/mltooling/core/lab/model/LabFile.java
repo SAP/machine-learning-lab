@@ -1,161 +1,161 @@
 package org.mltooling.core.lab.model;
 
 import io.swagger.annotations.ApiModelProperty;
-
 import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 
-
 public class LabFile {
 
-    // ================ Constants =========================================== //
-    public static final String META_MODIFIED_BY = "modified-by";
-    public static final String META_PROJECT = "project";
-    public static final String META_CONTENT_TYPE = "content-type";
-    public static final String META_EXPERIMENT = "experiment";
+  // ================ Constants =========================================== //
+  public static final String META_MODIFIED_BY = "modified-by";
+  public static final String META_PROJECT = "project";
+  public static final String META_CONTENT_TYPE = "content-type";
+  public static final String META_EXPERIMENT = "experiment";
 
-    // ================ Members ============================================= //
-    private String name;
-    private String key;
-    private String modifiedBy;
-    @ApiModelProperty(dataType = "java.lang.Long")
-    private Date modifiedAt;
-    private Long size;
-    private String hash;
-    private Integer version;
-    private String contentType;
-    private String dataType;
-    private String description;
-    private HashMap<String, String> metadata;
+  // ================ Members ============================================= //
+  private String name;
+  private String key;
+  private String modifiedBy;
 
-    @ApiModelProperty(hidden = true)
-    private transient InputStream fileStream;
+  @ApiModelProperty(dataType = "java.lang.Long")
+  private Date modifiedAt;
 
-    // ================ Constructors & Main ================================= //
-    public LabFile() {}
+  private Long size;
+  private String hash;
+  private Integer version;
+  private String contentType;
+  private String dataType;
+  private String description;
+  private HashMap<String, String> metadata;
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+  @ApiModelProperty(hidden = true)
+  private transient InputStream fileStream;
 
-    // ================ Public Methods ====================================== //
+  // ================ Constructors & Main ================================= //
+  public LabFile() {}
 
-    // ================ Private Methods ===================================== //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Getter & Setter ===================================== //
-    public String getName() {
-        return name;
-    }
+  // ================ Public Methods ====================================== //
 
-    public LabFile setName(String name) {
-        this.name = name;
-        return this;
-    }
+  // ================ Private Methods ===================================== //
 
-    public String getKey() {
-        return key;
-    }
+  // ================ Getter & Setter ===================================== //
+  public String getName() {
+    return name;
+  }
 
-    public LabFile setKey(String key) {
-        this.key = key;
-        return this;
-    }
+  public LabFile setName(String name) {
+    this.name = name;
+    return this;
+  }
 
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
+  public String getKey() {
+    return key;
+  }
 
-    public LabFile setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
-        return this;
-    }
+  public LabFile setKey(String key) {
+    this.key = key;
+    return this;
+  }
 
-    public Date getModifiedAt() {
-        return modifiedAt;
-    }
+  public String getModifiedBy() {
+    return modifiedBy;
+  }
 
-    public LabFile setModifiedAt(Date modifiedAt) {
-        this.modifiedAt = modifiedAt;
-        return this;
-    }
+  public LabFile setModifiedBy(String modifiedBy) {
+    this.modifiedBy = modifiedBy;
+    return this;
+  }
 
-    public long getSize() {
-        return size;
-    }
+  public Date getModifiedAt() {
+    return modifiedAt;
+  }
 
-    public LabFile setSize(Long size) {
-        this.size = size;
-        return this;
-    }
+  public LabFile setModifiedAt(Date modifiedAt) {
+    this.modifiedAt = modifiedAt;
+    return this;
+  }
 
-    public Integer getVersion() {
-        return version;
-    }
+  public long getSize() {
+    return size;
+  }
 
-    public LabFile setVersion(Integer version) {
-        this.version = version;
-        return this;
-    }
+  public LabFile setSize(Long size) {
+    this.size = size;
+    return this;
+  }
 
-    public String getContentType() {
-        return contentType;
-    }
+  public Integer getVersion() {
+    return version;
+  }
 
-    public LabFile setContentType(String contentType) {
-        this.contentType = contentType;
-        return this;
-    }
+  public LabFile setVersion(Integer version) {
+    this.version = version;
+    return this;
+  }
 
-    public String toString() {
-        return name + (version != null ? " (v" + version + ")" : "");
-    }
+  public String getContentType() {
+    return contentType;
+  }
 
-    @ApiModelProperty(dataType = "java.lang.String")
-    public LabFileDataType getDataType() {
-        return LabFileDataType.from(dataType);
-    }
+  public LabFile setContentType(String contentType) {
+    this.contentType = contentType;
+    return this;
+  }
 
-    public LabFile setDataType(LabFileDataType type) {
-        this.dataType = type.getName();
-        return this;
-    }
+  public String toString() {
+    return name + (version != null ? " (v" + version + ")" : "");
+  }
 
-    public HashMap<String, String> getMetadata() {
-        return metadata;
-    }
+  @ApiModelProperty(dataType = "java.lang.String")
+  public LabFileDataType getDataType() {
+    return LabFileDataType.from(dataType);
+  }
 
-    public LabFile setMetadata(HashMap<String, String> metadata) {
-        this.metadata = metadata;
-        return this;
-    }
+  public LabFile setDataType(LabFileDataType type) {
+    this.dataType = type.getName();
+    return this;
+  }
 
-    public InputStream getFileStream() {
-        return fileStream;
-    }
+  public HashMap<String, String> getMetadata() {
+    return metadata;
+  }
 
-    public LabFile setFileStream(InputStream fileStream) {
-        this.fileStream = fileStream;
-        return this;
-    }
+  public LabFile setMetadata(HashMap<String, String> metadata) {
+    this.metadata = metadata;
+    return this;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public InputStream getFileStream() {
+    return fileStream;
+  }
 
-    public LabFile setDescription(String description) {
-        this.description = description;
-        return this;
-    }
+  public LabFile setFileStream(InputStream fileStream) {
+    this.fileStream = fileStream;
+    return this;
+  }
 
-    public String getHash() {
-        return hash;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public LabFile setHash(String hash) {
-        this.hash = hash;
-        return this;
-    }
+  public LabFile setDescription(String description) {
+    this.description = description;
+    return this;
+  }
 
-    // ================ Builder Pattern ===================================== //
+  public String getHash() {
+    return hash;
+  }
 
-    // ================ Inner & Anonymous Classes =========================== //
+  public LabFile setHash(String hash) {
+    this.hash = hash;
+    return this;
+  }
+
+  // ================ Builder Pattern ===================================== //
+
+  // ================ Inner & Anonymous Classes =========================== //
 }

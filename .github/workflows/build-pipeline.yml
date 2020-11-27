@@ -14,7 +14,7 @@ env:
   BUILD_ARGS: ${{ secrets.BUILD_ARGS }}
   WORKING_DIRECTORY: ${{ secrets.WORKING_DIRECTORY }}
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true # TODO: only needed until act supports the new way
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,6 +28,14 @@ jobs:
         run: echo "::set-env name=WORKING_DIRECTORY::${{ github.event.inputs.working_directory }}"
         # new syntax: run: echo "WORKING_DIRECTORY=${{ github.event.inputs.working_directory }}" >> "$GITHUB_ENV"
       - uses: actions/checkout@v2
+      - name: Cache local Maven repository
+        id: cache-local-maven-repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: set-host-ip
         run: echo "::set-env name=_HOST_IP::$(hostname -I | cut -d ' ' -f 1)"
       - name: run-build-scripts

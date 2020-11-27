@@ -1,70 +1,70 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import { connect } from "react-redux";
-import { withCookies } from "react-cookie";
-import { withStyles } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
-import { toast } from "react-toastify";
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import { withCookies } from 'react-cookie';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 //base components
-import Widgets from "../../components/Widgets";
-import BlockHeader from "../../components/BlockHeader";
-import BlockSpacing from "../../components/BlockSpacing";
-import CustomDialog from "../../components/CustomDialog";
-import * as ProcessToast from "../../components/ProcessToast";
+import Widgets from '../../components/Widgets';
+import BlockHeader from '../../components/BlockHeader';
+import BlockSpacing from '../../components/BlockSpacing';
+import CustomDialog from '../../components/CustomDialog';
+import * as ProcessToast from '../../components/ProcessToast';
 
 //scene components
-import ProjectCards from "./components/ProjectCards";
-import Card from "@material-ui/core/Card";
-import CreateProjectControl from "./components/CreateProjectControl";
-import ManageProjectDialog from "./components/ManageProjectDialog";
+import ProjectCards from './components/ProjectCards';
+import Card from '@material-ui/core/Card';
+import CreateProjectControl from './components/CreateProjectControl';
+import ManageProjectDialog from './components/ManageProjectDialog';
 
 //controller
-import * as Constants from "../../services/handler/constants";
-import * as ReduxUtils from "../../services/handler/reduxUtils";
+import * as Constants from '../../services/handler/constants';
+import * as ReduxUtils from '../../services/handler/reduxUtils';
 import {
   projectsApi,
   administrationApi,
   getDefaultApiCallback,
   toastErrorMessage,
-  toastInfo
-} from "../../services/client/ml-lab-api";
-import * as Parser from "../../services/handler/parser";
+  toastInfo,
+} from '../../services/client/ml-lab-api';
+import * as Parser from '../../services/handler/parser';
 
-const styles = theme => ({
+const styles = (theme) => ({
   dialog: {
-    minWidth: 550
+    minWidth: 550,
   },
   card: {
     minWidth: 275,
-    marginTop: 30
+    marginTop: 30,
   },
   allprojectTitle: {
-    marginTop: 30
+    marginTop: 30,
   },
   progress: {
-    margin: "auto"
+    margin: 'auto',
   },
   toast: {
-    textAlign: "center"
-  }
+    textAlign: 'center',
+  },
 });
 
 const ORIGINAL_DIALOG = {
   isOpen: false,
-  title: "",
-  contentText: "",
+  title: '',
+  contentText: '',
   action: null,
   customComponent: null,
-  primaryActionBtnLabel: "",
+  primaryActionBtnLabel: '',
   hideCancelButton: false,
   width: 500,
   overwriteButton: false,
   isApiTokenDialog: false,
-  showCreateProjectDialog: false
+  showCreateProjectDialog: false,
 };
 
 class Dashboard extends Component {
@@ -74,7 +74,7 @@ class Dashboard extends Component {
       widgetdata: Constants.WIDGET_ITEMS_DASHBOARD,
       projectCardsData: [],
       dialog: { ...ORIGINAL_DIALOG },
-      deleteProject: ""
+      deleteProject: '',
     };
 
     this.onOpenDeleteDialog = this.onOpenDeleteDialog.bind(this);
@@ -88,7 +88,7 @@ class Dashboard extends Component {
   }
 
   updateData(props) {
-    if (props.statusCode === "startApp" || props.statusCode === "noProjects") {
+    if (props.statusCode === 'startApp' || props.statusCode === 'noProjects') {
       return;
     }
 
@@ -99,7 +99,7 @@ class Dashboard extends Component {
       getDefaultApiCallback(({ result }) => {
         let stats = result.data.statistics;
         if (!stats) return;
-        widgetdata.forEach(function(element) {
+        widgetdata.forEach(function (element) {
           element.VALUE = Parser.SetVariableFormat(
             stats[element.KEY],
             element.FORMAT
@@ -119,8 +119,8 @@ class Dashboard extends Component {
     // Note: If a new user registers and is added to a project before first login, the dialogs won't be shown.
     // if(nextProps.statusCode === 'noProjects' && this.props.component === "Navbar" && nextProps.location.pathname !== "/login"){
     if (
-      props.statusCode === "noProjects" &&
-      props.location.pathname !== "/login"
+      props.statusCode === 'noProjects' &&
+      props.location.pathname !== '/login'
     ) {
       // set a cookie which indicates whether the User logged in for the first time. Can be used to show tutorials etc.
       this.props.cookies.set(
@@ -130,15 +130,18 @@ class Dashboard extends Component {
       );
 
       administrationApi.getLabInfo(
-        {}, 
+        {},
         getDefaultApiCallback(
           ({ result }) => {
-            if (result.data.termsOfService && result.data.termsOfService !== "") {
+            if (
+              result.data.termsOfService &&
+              result.data.termsOfService !== ''
+            ) {
               //TODO: refactor: duplicate code in onGetApiToken
               let TextField = (
                 <Typography
                   variant="body1"
-                  style={{ wordBreak: "break-all", fontWeight: "initial" }}
+                  style={{ wordBreak: 'break-all', fontWeight: 'initial' }}
                 >
                   {result.data.termsOfService}
                 </Typography>
@@ -148,22 +151,22 @@ class Dashboard extends Component {
                 dialog: {
                   ...ORIGINAL_DIALOG,
                   isOpen: true,
-                  title: "Terms of Service",
+                  title: 'Terms of Service',
                   customComponent: TextField,
                   hideCancelButton: true,
-                  primaryActionBtnLabel: "Accept"
-                }
+                  primaryActionBtnLabel: 'Accept',
+                },
               });
             }
-            this.setState({showCreateProjectDialog: true});
+            this.setState({ showCreateProjectDialog: true });
           },
           ({ error }) => {
-            this.setState({showCreateProjectDialog: true});
+            this.setState({ showCreateProjectDialog: true });
           }
         )
       );
     } else {
-      this.setState({showCreateProjectDialog: false});
+      this.setState({ showCreateProjectDialog: false });
     }
   }
 
@@ -175,7 +178,7 @@ class Dashboard extends Component {
           this.setState({ projectCardsData: result.data });
         },
         ({ error }) => {
-          toastErrorMessage("Load all Projects: ", error);
+          toastErrorMessage('Load all Projects: ', error);
         }
       )
     );
@@ -185,13 +188,13 @@ class Dashboard extends Component {
     const { cookies } = this.props;
     cookies.set(Constants.COOKIES.project, project, Constants.COOKIES.options);
     this.props.onInpChange({
-      target: { value: project, projectId: projectId }
+      target: { value: project, projectId: projectId },
     });
   }
 
   onDeleteProject() {
     this.handleRequestClose();
-    var toastId = ProcessToast.showProcessToast("Project will be deleted...");
+    var toastId = ProcessToast.showProcessToast('Project will be deleted...');
 
     var deleteProject = this.state.deleteProject;
 
@@ -199,7 +202,7 @@ class Dashboard extends Component {
       deleteProject,
       {},
       getDefaultApiCallback(() => {
-        const projectCardsData = this.state.projectCardsData.filter(function(
+        const projectCardsData = this.state.projectCardsData.filter(function (
           el
         ) {
           return el.name !== deleteProject;
@@ -210,10 +213,10 @@ class Dashboard extends Component {
           deleteProject === this.props.currentProject ? true : false;
 
         toast.dismiss(toastId);
-        toast.success("Project " + deleteProject + " deleted.");
+        toast.success('Project ' + deleteProject + ' deleted.');
 
         this.setState({
-          projectCardsData
+          projectCardsData,
         });
 
         if (noProject) {
@@ -225,7 +228,7 @@ class Dashboard extends Component {
         }
 
         this.setState({
-          deleteProject: ""
+          deleteProject: '',
         });
       })
     );
@@ -249,16 +252,16 @@ class Dashboard extends Component {
             dialog: {
               ...ORIGINAL_DIALOG,
               isOpen: true,
-              title: "Manage Members",
+              title: 'Manage Members',
               // primaryActionBtnLabel: "Ok",
               // action: this.handleRequestClose,
               overwriteButton: true,
               hideCancelButton: true,
-              customComponent: manageProjectDialog
-            }
+              customComponent: manageProjectDialog,
+            },
           });
         },
-        ({ error }) => toastErrorMessage("Load project: ", error)
+        ({ error }) => toastErrorMessage('Load project: ', error)
       )
     );
   }
@@ -272,8 +275,8 @@ class Dashboard extends Component {
         let TextField = (
           <Typography
             variant="body1"
-            style={{ wordBreak: "break-all", fontWeight: "initial" }}
-            ref={node => (this.apiTokenField = node)}
+            style={{ wordBreak: 'break-all', fontWeight: 'initial' }}
+            ref={(node) => (this.apiTokenField = node)}
           >
             {result.data}
           </Typography>
@@ -283,13 +286,13 @@ class Dashboard extends Component {
           dialog: {
             ...ORIGINAL_DIALOG,
             isOpen: true,
-            title: "Project API Token",
+            title: 'Project API Token',
             customComponent: TextField,
             hideCancelButton: true,
             isApiTokenDialog: true,
-            primaryActionBtnLabel: "Ok"
+            primaryActionBtnLabel: 'Ok',
           },
-          apiToken: result.data
+          apiToken: result.data,
         });
       })
     );
@@ -300,28 +303,30 @@ class Dashboard extends Component {
       dialog: {
         ...ORIGINAL_DIALOG,
         isOpen: true,
-        title: "Delete Project",
+        title: 'Delete Project',
         contentText:
-          "Do you really want to delete the project " +
+          'Do you really want to delete the project ' +
           this.state.deleteProject +
-          "?",
-        primaryActionBtnLabel: "Delete",
+          '?',
+        primaryActionBtnLabel: 'Delete',
         overwriteButton: false,
-        action: this.onDeleteProject
+        action: this.onDeleteProject,
       },
-      deleteProject: project
+      deleteProject: project,
     });
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.currentProject !== this.props.currentProject
-      || prevProps.statusCode !== this.props.statusCode 
-      || prevProps.location.pathname === "/login") {
+    if (
+      prevProps.currentProject !== this.props.currentProject ||
+      prevProps.statusCode !== this.props.statusCode ||
+      prevProps.location.pathname === '/login'
+    ) {
       this.updateData(this.props);
       this.isFirstTimeUser(this.props);
     }
   }
-  
+
   componentDidMount() {
     this.updateData(this.props);
     this.isFirstTimeUser(this.props);
@@ -331,25 +336,24 @@ class Dashboard extends Component {
     this.setState({
       dialog: {
         ...ORIGINAL_DIALOG,
-        isOpen: false
+        isOpen: false,
       },
-      deleteProject: ""
+      deleteProject: '',
     });
   }
 
-  handleCopyKey = text => {
+  handleCopyKey = (text) => {
     const apiTokenTextField = ReactDOM.findDOMNode(this.apiTokenField);
     Parser.setClipboardText(text, apiTokenTextField);
-    toastInfo("Copied to Clipboard");
+    toastInfo('Copied to Clipboard');
   };
-
 
   render() {
     //CustomDialog
     const copyButton = this.state.dialog.isApiTokenDialog ? (
       <Button
         color="primary"
-        onClick={e => this.handleCopyKey(this.state.apiToken)}
+        onClick={(e) => this.handleCopyKey(this.state.apiToken)}
       >
         Copy
       </Button>
@@ -360,8 +364,8 @@ class Dashboard extends Component {
     const cancelBtnDisabled = false;
     const primaryActionBtnDisabled = false;
     return (
-      <div style={{ width: "100%" }}>
-        <BlockHeader name={this.props.currentProject + " Project"} />
+      <div style={{ width: '100%' }}>
+        <BlockHeader name={this.props.currentProject + ' Project'} />
         <Widgets data={this.state.widgetdata} />
         <BlockSpacing />
         <BlockHeader name="My Projects" />
@@ -375,9 +379,12 @@ class Dashboard extends Component {
         />
         <Card
           className={this.props.classes.CreateProjectDialog}
-          style={{ display: "inline-block", marginTop: "20px" }}
+          style={{ display: 'inline-block', marginTop: '20px' }}
         >
-          <CreateProjectControl component="Dashboard" open={this.state.showCreateProjectDialog} />
+          <CreateProjectControl
+            component="Dashboard"
+            open={this.state.showCreateProjectDialog}
+          />
         </Card>
         <CustomDialog
           classes={styles.dialog}
@@ -396,7 +403,7 @@ class Dashboard extends Component {
           }
           CustomComponent={this.state.dialog.customComponent}
           overwriteButton={this.state.dialog.overwriteButton}
-          dialogContentStyle={{ overflow: "visible" }}
+          dialogContentStyle={{ overflow: 'visible' }}
           moreButtons={[copyButton]}
         />
       </div>
@@ -408,7 +415,7 @@ Dashboard.propTypes = {
   onNoProjectsAvailable: PropTypes.func.isRequired,
   onInpChange: PropTypes.func.isRequired,
   statusCode: PropTypes.string.isRequired,
-  currentProject: PropTypes.string.isRequired
+  currentProject: PropTypes.string.isRequired,
 };
 
 export default withCookies(

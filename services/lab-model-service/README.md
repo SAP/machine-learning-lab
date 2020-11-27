@@ -71,7 +71,7 @@ You can find more ways of configuration about [docker run](https://docs.docker.c
 Execute this command in the project root folder to build the docker container:
 
 ```bash
-python build.py --version={MAJOR.MINOR.PATCH-TAG}
+python build.py --make --version {MAJOR.MINOR.PATCH-TAG}
 ```
 
 The version has to be provided. The version format should follow the [Semantic Versioning](https://semver.org/) standard (MAJOR.MINOR.PATCH). For additional script options:
@@ -85,7 +85,7 @@ python build.py --help
 Execute this command in the project root folder to push the container to the configured docker registry:
 
 ```bash
-python build.py --deploy --version={MAJOR.MINOR.PATCH-TAG}
+python build.py --release --version {MAJOR.MINOR.PATCH-TAG} --docker-image-prefix {PREFIX}
 ```
 
 The version has to be provided. The version format should follow the [Semantic Versioning](https://semver.org/) standard (MAJOR.MINOR.PATCH). For additional script options:

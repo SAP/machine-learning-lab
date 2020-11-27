@@ -2,28 +2,27 @@ package org.mltooling.core.service.auth;
 
 import java.util.Base64;
 
-
 public class SingleUserAuthFilter extends SingleTokenAuthFilter {
 
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
+  // ================ Members ============================================= //
 
-    // ================ Constructors & Main ================================= //
+  // ================ Constructors & Main ================================= //
 
-    public SingleUserAuthFilter(String user, String password) {
-        super(Base64.getEncoder().encodeToString((user + ":" + password).getBytes()));
-    }
+  public SingleUserAuthFilter(String user, String password) {
+    super(Base64.getEncoder().encodeToString((user + ":" + password).getBytes()));
+  }
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Public Methods ====================================== //
+  // ================ Public Methods ====================================== //
 
-    // ================ Private Methods ===================================== //
+  // ================ Private Methods ===================================== //
 
-    // ================ Getter & Setter ===================================== //
+  // ================ Getter & Setter ===================================== //
 
-    // ================ Builder Pattern ===================================== //
+  // ================ Builder Pattern ===================================== //
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }

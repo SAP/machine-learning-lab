@@ -1,21 +1,21 @@
-import React from "react";
-import PropTypes from "prop-types";
-import IconButton from "@material-ui/core/IconButton";
-import Icon from "@material-ui/core/Icon";
-import Tooltip from "@material-ui/core/Tooltip";
-import { toast } from "react-toastify";
+import React from 'react';
+import PropTypes from 'prop-types';
+import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
+import Tooltip from '@material-ui/core/Tooltip';
+import { toast } from 'react-toastify';
 
-import CustomDialog from "../../../components/CustomDialog";
+import CustomDialog from '../../../components/CustomDialog';
 import {
   projectsApi,
   getDefaultApiCallback,
-  toastErrorMessage
-} from "../../../services/client/ml-lab-api";
-import * as ProcessToast from "../../../components/ProcessToast";
+  toastErrorMessage,
+} from '../../../services/client/ml-lab-api';
+import * as ProcessToast from '../../../components/ProcessToast';
 
 class DeleteServiceButton extends React.Component {
   state = {
-    open: false
+    open: false,
   };
 
   handleClickOpen = () => {
@@ -28,7 +28,7 @@ class DeleteServiceButton extends React.Component {
 
   deleteService = () => {
     let { project, serviceName, onServiceDeleted } = this.props;
-    let toastId = ProcessToast.showProcessToast("Service will be deleted...");
+    let toastId = ProcessToast.showProcessToast('Service will be deleted...');
 
     projectsApi.deleteService(
       project,
@@ -37,12 +37,12 @@ class DeleteServiceButton extends React.Component {
       getDefaultApiCallback(
         () => {
           toast.dismiss(toastId);
-          toast.success("Service " + serviceName + " deleted.");
+          toast.success('Service ' + serviceName + ' deleted.');
           onServiceDeleted();
         },
         ({ error }) => {
           toast.dismiss(toastId);
-          toastErrorMessage("Error when deleting service : ", error);
+          toastErrorMessage('Error when deleting service : ', error);
         }
       )
     );
@@ -50,8 +50,8 @@ class DeleteServiceButton extends React.Component {
   };
 
   render() {
-    const title = "Do you really want to delete the service?";
-    const primaryActionBtnLabel = "Yes";
+    const title = 'Do you really want to delete the service?';
+    const primaryActionBtnLabel = 'Yes';
 
     return (
       <div>
@@ -64,7 +64,7 @@ class DeleteServiceButton extends React.Component {
         <CustomDialog
           open={this.state.open}
           title={title}
-          contentText={""}
+          contentText={''}
           hideCancelBtn={false}
           primaryActionBtnDisabled={false}
           primaryActionBtnLabel={primaryActionBtnLabel}
@@ -79,7 +79,7 @@ class DeleteServiceButton extends React.Component {
 DeleteServiceButton.propTypes = {
   project: PropTypes.string.isRequired,
   serviceName: PropTypes.string.isRequired,
-  onServiceDeleted: PropTypes.func
+  onServiceDeleted: PropTypes.func,
 };
 
 export default DeleteServiceButton;

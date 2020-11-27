@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import IconButton from "@material-ui/core/IconButton";
-import Icon from "@material-ui/core/Icon";
-import ReactJson from "react-json-view";
-import Tooltip from "@material-ui/core/Tooltip";
+import React, { Component } from 'react';
+import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
+import ReactJson from 'react-json-view';
+import Tooltip from '@material-ui/core/Tooltip';
 
-import CustomDialog from "../../../components/CustomDialog";
+import CustomDialog from '../../../components/CustomDialog';
 
 class DisplayJsonButton extends Component {
   state = {
-    open: false
+    open: false,
   };
 
   handleClickOpen = () => {
@@ -20,11 +20,11 @@ class DisplayJsonButton extends Component {
   };
 
   render() {
-    const title = "View JSON for " + this.props.projName;
-    const contentText = "";
+    const title = 'View JSON for ' + this.props.projName;
+    const contentText = '';
     const hideCancelBtn = true;
     const primaryActionBtnDisabled = false;
-    const primaryActionBtnLabel = "Close";
+    const primaryActionBtnLabel = 'Close';
     const customComponent = <ReactJson src={this.props.jsonObj} />;
 
     return (

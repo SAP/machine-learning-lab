@@ -1,5 +1,5 @@
 //TODO: Just for demo reasons.. (quick&dirty) this is not a "React-way" to do stuff...
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class RealTimeChart extends Component {
   constructor(props) {
@@ -8,7 +8,7 @@ class RealTimeChart extends Component {
     this.data = [];
     this.totalPoints = 110;
     this.updateInterval = 320;
-    this.realtime = "on";
+    this.realtime = 'on';
   }
 
   getRandomData() {
@@ -40,34 +40,34 @@ class RealTimeChart extends Component {
     var opt = {
       series: {
         shadowSize: 0,
-        color: "rgb(0, 188, 212)"
+        color: 'rgb(0, 188, 212)',
       },
       grid: {
-        borderColor: "#f3f3f3",
+        borderColor: '#f3f3f3',
         borderWidth: 1,
-        tickColor: "#f3f3f3"
+        tickColor: '#f3f3f3',
       },
       lines: {
-        fill: true
+        fill: true,
       },
       yaxis: {
         min: 0,
-        max: 100
+        max: 100,
       },
       xaxis: {
         min: 0,
-        max: 100
-      }
+        max: 100,
+      },
     };
 
-    var plot = $.plot("#real_time_chart", [this.getRandomData()], opt);
+    var plot = $.plot('#real_time_chart', [this.getRandomData()], opt);
 
     function updateRealTime() {
       plot.setData([this.getRandomData()]);
       plot.draw();
 
       var timeout;
-      if (this.realtime === "on") {
+      if (this.realtime === 'on') {
         timeout = setTimeout(updateRealTime.bind(this), this.updateInterval);
       } else {
         clearTimeout(timeout);
@@ -84,8 +84,8 @@ class RealTimeChart extends Component {
 
   render() {
     const styles = {
-      width: "100%",
-      height: "275px"
+      width: '100%',
+      height: '275px',
     };
     return (
       <div

@@ -3,35 +3,33 @@ package org.mltooling.core.utils;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-
 public final class LogUtils {
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
+  // ================ Members ============================================= //
 
-    // ================ Constructors & Main ================================= //
-    private LogUtils() {
+  // ================ Constructors & Main ================================= //
+  private LogUtils() {}
+
+  // ================ Methods for/from SuperClass / Interfaces ============ //
+
+  // ================ Public Methods ====================================== //
+  public static String getStackTrace(Throwable t) {
+    if (t == null) {
+      return "";
     }
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    t.printStackTrace(pw);
+    return sw.toString();
+  }
 
-    // ================ Public Methods ====================================== //
-    public static String getStackTrace(Throwable t) {
-        if (t == null) {
-            return "";
-        }
+  // ================ Private Methods ===================================== //
 
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        t.printStackTrace(pw);
-        return sw.toString();
-    }
+  // ================ Getter & Setter ===================================== //
 
-    // ================ Private Methods ===================================== //
+  // ================ Builder Pattern ===================================== //
 
-    // ================ Getter & Setter ===================================== //
-
-    // ================ Builder Pattern ===================================== //
-
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }

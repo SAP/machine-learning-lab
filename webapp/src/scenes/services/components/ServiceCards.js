@@ -1,73 +1,73 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 // material-ui components
-import { withStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 
 //scene components
-import DeployServiceControl from "./DeployServiceControl";
-import DisplayJsonButton from "./DisplayJsonButton";
-import AccessButton from "./AccessButton";
-import LogsButton from "../../../components/table/ActionButtons/LogsButton";
-import DisplayCommandButton from "./DisplayCommandButton";
+import DeployServiceControl from './DeployServiceControl';
+import DisplayJsonButton from './DisplayJsonButton';
+import AccessButton from './AccessButton';
+import LogsButton from '../../../components/table/ActionButtons/LogsButton';
+import DisplayCommandButton from './DisplayCommandButton';
 
 //controller
-import * as Parser from "../../../services/handler/parser";
-import * as ReduxUtils from "../../../services/handler/reduxUtils";
-import DeleteServiceButton from "./DeleteServiceButton";
+import * as Parser from '../../../services/handler/parser';
+import * as ReduxUtils from '../../../services/handler/reduxUtils';
+import DeleteServiceButton from './DeleteServiceButton';
 
-const styles = theme => ({
+const styles = (theme) => ({
   card: {
     minWidth: 0,
-    display: "flex",
-    height: "100%"
+    display: 'flex',
+    height: '100%',
   },
   content: {
-    flex: "1 0 auto"
+    flex: '1 0 auto',
   },
   details: {
-    display: "flex",
-    flexDirection: "column",
-    width: "calc(100% - 100px)"
+    display: 'flex',
+    flexDirection: 'column',
+    width: 'calc(100% - 100px)',
   },
   pos: {
     marginBottom: 12,
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
   serviceImage: {
     width: 80,
     height: 80,
     marginTop: theme.spacing(2),
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   controls: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     paddingLeft: theme.spacing(1),
-    paddingBottom: theme.spacing(1)
+    paddingBottom: theme.spacing(1),
   },
   DeployServiceDialog: {
-    marginTop: "20px",
-    display: "inline-block"
-  }
+    marginTop: '20px',
+    display: 'inline-block',
+  },
 });
 
 class ServiceCard extends Component {
   getIconFromName(type) {
-      return "./service_default.png";
+    return './service_default.png';
   }
 
   getServiceName(currentProject, serviceName) {
-    var regex = new RegExp(currentProject + "-", "g");
-    var newServiceName = serviceName.replace(regex, "");
+    var regex = new RegExp(currentProject + '-', 'g');
+    var newServiceName = serviceName.replace(regex, '');
     var serviceNameTruncated = Parser.truncate(newServiceName, 50);
 
     return serviceNameTruncated;
@@ -82,7 +82,7 @@ class ServiceCard extends Component {
           <div className={classes.details}>
             <CardContent className={classes.content}>
               <Typography
-                style={{ overflow: "auto", fontSize: "1.0rem" }}
+                style={{ overflow: 'auto', fontSize: '1.0rem' }}
                 variant="h5"
                 component="h2"
               >
@@ -93,7 +93,7 @@ class ServiceCard extends Component {
               </Typography>
 
               <Typography variant="subtitle2" className={classes.pos}>
-                {Parser.SetVariableFormat(this.props.modifiedAt, "date")}
+                {Parser.SetVariableFormat(this.props.modifiedAt, 'date')}
               </Typography>
             </CardContent>
             <CardActions className={classes.controls}>
@@ -148,10 +148,11 @@ class ServiceCards extends Component {
     const colSize = 12 / data.length <= 3 ? 3 : 4;
 
     const oServiceCards = data
-      .sort((a, b) =>
-        a.modifiedAt > b.modifiedAt ? -1 : b.modifiedAt > a.modifiedAt ? 1 : 0 // show newest services first
+      .sort(
+        (a, b) =>
+          a.modifiedAt > b.modifiedAt ? -1 : b.modifiedAt > a.modifiedAt ? 1 : 0 // show newest services first
       )
-      .map(item => (
+      .map((item) => (
         <ServiceCard
           colSize={colSize}
           currentProject={this.props.currentProject}
@@ -164,11 +165,11 @@ class ServiceCards extends Component {
           id={item.id}
           endpoint={item.host}
           accessLink={
-            "/projects/" +
+            '/projects/' +
             this.props.currentProject +
-            "/services/" +
+            '/services/' +
             item.dockerName +
-            "/8091/webui"
+            '/8091/webui'
           }
           exposedPorts={item.exposedPorts}
           portainerLink={item.adminLink}
@@ -196,7 +197,7 @@ ServiceCards.propTypes = {
   currentProjectId: PropTypes.string.isRequired, // from redux
   data: PropTypes.array.isRequired,
   onServiceDeploy: PropTypes.func.isRequired,
-  onServiceDeleted: PropTypes.func.isRequired
+  onServiceDeleted: PropTypes.func.isRequired,
 };
 
 export default connect(ReduxUtils.mapStateToProps)(

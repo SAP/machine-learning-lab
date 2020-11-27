@@ -1,56 +1,56 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { toast } from "react-toastify";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 // material-ui components
-import { withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableFooter from "@material-ui/core/TableFooter";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
+import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
 
 // table components
-import EnhancedTableHead from "./EnhancedTableHead";
-import EnhancedTableToolbar from "./EnhancedTableToolbar";
+import EnhancedTableHead from './EnhancedTableHead';
+import EnhancedTableToolbar from './EnhancedTableToolbar';
 
 //controller
-import * as Parser from "../../services/handler/parser";
+import * as Parser from '../../services/handler/parser';
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
   },
   table: {},
   tableWrapper: {
-    overflowX: "auto"
+    overflowX: 'auto',
   },
   tableCellDense: {
-    paddingRight: "5px"
+    paddingRight: '5px',
   },
   toClipboard: {
-    display: "none"
-  }
+    display: 'none',
+  },
 });
 
 //TODO: withStyles
 const searchStyle = {
   opacity: 0,
-  color: "#777777",
-  transitionDuration: "0.6s",
-  transitionProperty: "opacity",
+  color: '#777777',
+  transitionDuration: '0.6s',
+  transitionProperty: 'opacity',
   border: 0,
   outline: 0,
   fontSize: 16,
-  width: "100%",
+  width: '100%',
   textIndent: 3,
-  cursor: "text"
+  cursor: 'text',
 };
 
-const ORDER_ASC = "asc";
-const ORDER_DESC = "desc";
+const ORDER_ASC = 'asc';
+const ORDER_DESC = 'desc';
 
 class TableComponent extends React.Component {
   constructor(props, context) {
@@ -64,7 +64,7 @@ class TableComponent extends React.Component {
       page: 0,
       rowsPerPage: 10,
       searchStyle: searchStyle,
-      isDataReloaded: false
+      isDataReloaded: false,
     };
 
     this.toggleFilter = this.toggleFilter.bind(this);
@@ -74,7 +74,7 @@ class TableComponent extends React.Component {
   componentDidUpdate(prevProps) {
     if (
       this.props.data.length !== prevProps.data.length ||
-       this.state.isDataReloaded
+      this.state.isDataReloaded
     ) {
       // call this for ordering the table on initial load
       let data = this.sort(
@@ -85,7 +85,7 @@ class TableComponent extends React.Component {
       this.setState({
         data: data,
         origData: data,
-        isDataReloaded: false
+        isDataReloaded: false,
       });
     }
   }
@@ -124,7 +124,7 @@ class TableComponent extends React.Component {
 
     let regex;
     try {
-      regex = new RegExp(word, "i");
+      regex = new RegExp(word, 'i');
     } catch (err) {
       // here a SyntaxError can be thrown when 'word' is not a valid Regex
       regex = null;
@@ -133,13 +133,13 @@ class TableComponent extends React.Component {
     if (word.length < 1 || regex === null) return data;
 
     const res = [];
-    const keys = key.split("|"); //TODO: why split?
+    const keys = key.split('|'); //TODO: why split?
 
-    data.forEach(item => {
+    data.forEach((item) => {
       for (let i = 0; i < keys.length; i += 1) {
         var str =
-          keys[i] === "modifiedAt"
-            ? Parser.SetVariableFormat(String(item[keys[i]]), "date")
+          keys[i] === 'modifiedAt'
+            ? Parser.SetVariableFormat(String(item[keys[i]]), 'date')
             : String(item[keys[i]]);
         if (str.match(regex)) {
           res.push(item);
@@ -155,20 +155,20 @@ class TableComponent extends React.Component {
     this.setState({ page });
   };
 
-  handleChangeRowsPerPage = event => {
+  handleChangeRowsPerPage = (event) => {
     this.setState({ rowsPerPage: event.target.value });
   };
 
-  toggleFilter = event => {
+  toggleFilter = (event) => {
     this.tablehead.onFilter();
   };
 
-  onCellClick = itemKey => {
+  onCellClick = (itemKey) => {
     Parser.setClipboardText(itemKey);
     if (toast.isActive(this.toastId)) {
       toast.dismiss(this.toastId);
     }
-    this.toastId = toast.info("Copied to Clipboard");
+    this.toastId = toast.info('Copied to Clipboard');
   };
 
   reload = () => {
@@ -182,7 +182,7 @@ class TableComponent extends React.Component {
       columns,
       title,
       primaryActionBtn,
-      enableCellClick
+      enableCellClick,
     } = this.props;
     const { data, order, orderBy, rowsPerPage, page } = this.state;
     return (
@@ -195,7 +195,7 @@ class TableComponent extends React.Component {
         <div className={classes.tableWrapper}>
           <Table className={classes.table}>
             <EnhancedTableHead
-              onRef={ref => (this.tablehead = ref)}
+              onRef={(ref) => (this.tablehead = ref)}
               order={order}
               orderBy={orderBy}
               onRequestSort={this.handleRequestSort}
@@ -206,12 +206,12 @@ class TableComponent extends React.Component {
             <TableBody>
               {data
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(item => {
+                .map((item) => {
                   const key =
-                    item.name + "_" + Date.now() + "_" + Math.random();
+                    item.name + '_' + Date.now() + '_' + Math.random();
                   return (
                     <TableRow key={key} hover tabIndex={-1}>
-                      {columns.map(column => {
+                      {columns.map((column) => {
                         return (
                           <TableCell
                             onClick={
@@ -224,8 +224,8 @@ class TableComponent extends React.Component {
                                 ? classes.tableCellDense
                                 : null
                             }
-                            key={key + "_" + column.id}
-                            align={(column.numeric) ? "right" : "inherit"}
+                            key={key + '_' + column.id}
+                            align={column.numeric ? 'right' : 'inherit'}
                           >
                             {Parser.SetVariableFormat(
                               item[column.id],
@@ -235,12 +235,16 @@ class TableComponent extends React.Component {
                         );
                       })}
 
-                      <TableCell key={item.name + "_actions"}>
-                        <div style={{ whiteSpace: "nowrap" }}>
-                          {this.props.actionButtons.map((actionButton, index) => {
-                            // clone element so we can add a key element (needed for React map elements)
-                            return React.cloneElement(actionButton(item), {key: index});
-                          })}
+                      <TableCell key={item.name + '_actions'}>
+                        <div style={{ whiteSpace: 'nowrap' }}>
+                          {this.props.actionButtons.map(
+                            (actionButton, index) => {
+                              // clone element so we can add a key element (needed for React map elements)
+                              return React.cloneElement(actionButton(item), {
+                                key: index,
+                              });
+                            }
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
@@ -274,7 +278,7 @@ TableComponent.propTypes = {
   data: PropTypes.array,
   actionButtons: PropTypes.array.isRequired,
   onReload: PropTypes.func.isRequired,
-  enableCellClick: PropTypes.bool.isRequired
+  enableCellClick: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles)(TableComponent);

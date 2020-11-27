@@ -2,65 +2,65 @@ package org.mltooling.core.lab.model;
 
 import io.swagger.annotations.ApiModelProperty;
 
-
 public class LabProjectConfig {
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
+  // ================ Members ============================================= //
 
-    private String name;
-    private String description;
-    private String visibility;
-    @ApiModelProperty(hidden = true)
-    private String creator;
+  private String name;
+  private String description;
+  private String visibility;
 
-    // ================ Constructors & Main ================================= //
+  @ApiModelProperty(hidden = true)
+  private String creator;
 
-    public LabProjectConfig(String name) {
-        this.name = name;
-    }
+  // ================ Constructors & Main ================================= //
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+  public LabProjectConfig(String name) {
+    this.name = name;
+  }
 
-    // ================ Public Methods ====================================== //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Private Methods ===================================== //
+  // ================ Public Methods ====================================== //
 
-    // ================ Getter & Setter ===================================== //
-    public String getName() {
-        return name;
-    }
+  // ================ Private Methods ===================================== //
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  // ================ Getter & Setter ===================================== //
+  public String getName() {
+    return name;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public String getCreator() {
-        return creator;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
+  public String getCreator() {
+    return creator;
+  }
 
-    @ApiModelProperty(dataType = "java.lang.String")
-    public LabProjectVisibility getVisibility() {
-        return LabProjectVisibility.from(visibility);
-    }
+  public void setCreator(String creator) {
+    this.creator = creator;
+  }
 
-    public void setVisibility(String visibility) {
-        this.visibility = visibility;
-    }
+  @ApiModelProperty(dataType = "java.lang.String")
+  public LabProjectVisibility getVisibility() {
+    return LabProjectVisibility.from(visibility);
+  }
 
-    // ================ Builder Pattern ===================================== //
+  public void setVisibility(String visibility) {
+    this.visibility = visibility;
+  }
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Builder Pattern ===================================== //
+
+  // ================ Inner & Anonymous Classes =========================== //
 }

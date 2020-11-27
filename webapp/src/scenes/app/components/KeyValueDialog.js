@@ -1,30 +1,32 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import CustomDialog from "../../../components/CustomDialog";
-import KeyValueList from "./KeyValueList";
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import CustomDialog from '../../../components/CustomDialog';
+import KeyValueList from './KeyValueList';
 
-const styles = theme => ({
+const styles = (theme) => ({
   invalidInput: {
-    color: "#bd0000"
-  }
+    color: '#bd0000',
+  },
 });
 
-const LOCAL_STORAGE_IMAGE_NAMES = "imageNames";
-let localStoredImageNames = localStorage.getItem(LOCAL_STORAGE_IMAGE_NAMES) || "[]";
+const LOCAL_STORAGE_IMAGE_NAMES = 'imageNames';
+let localStoredImageNames =
+  localStorage.getItem(LOCAL_STORAGE_IMAGE_NAMES) || '[]';
 localStoredImageNames = JSON.parse(localStoredImageNames);
 
-const LOCAL_STORAGE_IMAGE_CONFIGS = "imageConfigs";
-let localStoredImageConfigs = localStorage.getItem(LOCAL_STORAGE_IMAGE_CONFIGS) || "{}";
+const LOCAL_STORAGE_IMAGE_CONFIGS = 'imageConfigs';
+let localStoredImageConfigs =
+  localStorage.getItem(LOCAL_STORAGE_IMAGE_CONFIGS) || '{}';
 localStoredImageConfigs = JSON.parse(localStoredImageConfigs);
 
 const initialState = {
-  imageName: "",
+  imageName: '',
   keyValuePairs: [],
   additionalDialogComponentInput: {},
-  isKeyInvalid: false
+  isKeyInvalid: false,
 };
 
 class KeyValueDialog extends Component {
@@ -34,29 +36,27 @@ class KeyValueDialog extends Component {
     this.state = initialState;
   }
 
-  handleImageInputChange = function(value) {
-    
-
+  handleImageInputChange = function (value) {
     this.setState({
-      imageName: value
+      imageName: value,
       //...storedState
     });
   }.bind(this);
 
-  handleAdditionalDialogComponentInput = function(componentInput) {
+  handleAdditionalDialogComponentInput = function (componentInput) {
     this.setState({
-      additionalDialogComponentInput: componentInput
+      additionalDialogComponentInput: componentInput,
     });
   }.bind(this);
 
-  renderAdditionalDialogComponent = function(e) {
+  renderAdditionalDialogComponent = function (e) {
     if (this.props.additionalDialogComponent) {
       const AdditionalDialogComponent = this.props.additionalDialogComponent;
       const additionalDialogComponentProps =
         this.props.additionalDialogComponentProps || {};
       return (
         <AdditionalDialogComponent
-          onAction={componentInput =>
+          onAction={(componentInput) =>
             this.handleAdditionalDialogComponentInput(componentInput)
           }
           {...additionalDialogComponentProps}
@@ -70,39 +70,39 @@ class KeyValueDialog extends Component {
   renderInputFields() {
     const { classes } = this.props;
 
-    const isInvalidInput = new RegExp("[^a-zA-Z0-9-_:/.]").test(
+    const isInvalidInput = new RegExp('[^a-zA-Z0-9-_:/.]').test(
       this.state.imageName
     );
 
     return (
       <div>
-          <TextField
-            // autoFocus // commented because if additionalDialogComponent is rendered, this is annoying
-            margin="dense"
-            // id={tfId}
-            label="Image Name"
-            type="text"
-            onChange={e => this.handleImageInputChange(e.target.value)}
-            onBlur={e => {
-                let storedState = {};
-                if (this.state.imageName in localStoredImageConfigs) {
-                  storedState = localStoredImageConfigs[this.state.imageName];
-                }
-                this.setState({...storedState});
-            }}
-            fullWidth
-            name="imageName"
-            autoComplete="on"
-            value={this.state.imageName}
-            InputProps={{
-              classes: {
-                input: isInvalidInput ? classes.invalidInput : null
-              }
-            }}
-          />
+        <TextField
+          // autoFocus // commented because if additionalDialogComponent is rendered, this is annoying
+          margin="dense"
+          // id={tfId}
+          label="Image Name"
+          type="text"
+          onChange={(e) => this.handleImageInputChange(e.target.value)}
+          onBlur={(e) => {
+            let storedState = {};
+            if (this.state.imageName in localStoredImageConfigs) {
+              storedState = localStoredImageConfigs[this.state.imageName];
+            }
+            this.setState({ ...storedState });
+          }}
+          fullWidth
+          name="imageName"
+          autoComplete="on"
+          value={this.state.imageName}
+          InputProps={{
+            classes: {
+              input: isInvalidInput ? classes.invalidInput : null,
+            },
+          }}
+        />
         {this.renderAdditionalDialogComponent()}
         <KeyValueList
-          initialKeyValuePairs = {this.state.keyValuePairs}
+          initialKeyValuePairs={this.state.keyValuePairs}
           onKeyValuePairChange={(keyValuePairs, isInvalidKeys) => {
             // set flag if even just one key is invalid
             let isKeyInvalid = false;
@@ -129,12 +129,12 @@ class KeyValueDialog extends Component {
       imageName,
       keyValuePairs,
       additionalDialogComponentInput,
-      isKeyInvalid
+      isKeyInvalid,
     } = this.state;
 
     const primaryActionBtnDisabled =
       imageName.length === 0 ||
-      new RegExp("[^a-zA-Z0-9-_:/.]").test(this.state.imageName) ||
+      new RegExp('[^a-zA-Z0-9-_:/.]').test(this.state.imageName) ||
       (additionalDialogComponentInput.isInvalidInput === undefined
         ? false
         : additionalDialogComponentInput.isInvalidInput) ||
@@ -152,16 +152,28 @@ class KeyValueDialog extends Component {
           handleRequestClose={this.props.handleRequestClose}
           handlePrimaryAction={() => {
             // add input to local storage so that a user can re-enter them easily
-            localStorage.setItem(LOCAL_STORAGE_IMAGE_NAMES, JSON.stringify(Array.from(new Set([...localStoredImageNames, imageName]))));
+            localStorage.setItem(
+              LOCAL_STORAGE_IMAGE_NAMES,
+              JSON.stringify(
+                Array.from(new Set([...localStoredImageNames, imageName]))
+              )
+            );
 
-            localStoredImageConfigs[imageName] = {"keyValuePairs": keyValuePairs, "additionalDialogComponentInput": this.state.additionalDialogComponentInput};
-            localStorage.setItem(LOCAL_STORAGE_IMAGE_CONFIGS, JSON.stringify(localStoredImageConfigs));
+            localStoredImageConfigs[imageName] = {
+              keyValuePairs: keyValuePairs,
+              additionalDialogComponentInput: this.state
+                .additionalDialogComponentInput,
+            };
+            localStorage.setItem(
+              LOCAL_STORAGE_IMAGE_CONFIGS,
+              JSON.stringify(localStoredImageConfigs)
+            );
 
             this.props.handlePrimaryAction(
               imageName,
               keyValuePairs,
               this.state.additionalDialogComponentInput
-            )
+            );
           }}
           CustomComponent={this.renderInputFields()}
         />
@@ -183,7 +195,7 @@ KeyValueDialog.propTypes = {
   handlePrimaryAction: PropTypes.func.isRequired,
   handleRequestClose: PropTypes.func.isRequired,
   additionalDialogComponent: PropTypes.object, // a Component class reference (not instance!) to the component that should be additionally rendered in the dialog. Should accept an 'onAction' property
-  additionalDialogComponentProps: PropTypes.object
+  additionalDialogComponentProps: PropTypes.object,
 };
 
 export default withStyles(styles)(KeyValueDialog);

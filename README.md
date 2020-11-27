@@ -55,10 +55,11 @@ docker run --rm \
 # See note below.
 docker pull docker.pkg.github.com/sap/machine-learning-lab/lab-model-service:0.1.0
 docker pull docker.pkg.github.com/sap/machine-learning-lab/ml-workspace-lab:0.1.0
-
 ```
 
 *Note: We deployed the current version to the GitHub package repository which requires the image environment variables to be set; that might change in the future. Even to pull public images, you need to login to GitHub package registry as described [here](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages#authenticating-to-github-packages).*
+
+*Local Build: If you built the ML Lab locally, you can omit the `*_IMAGE` env variables and don't have to pull the images! In that case, `lab-service:latest` is used. See the [Build Section](#build) for details how to build the code.*
 
 Voilà, that was easy! Now, Docker will pull the required Docker images to your machine.
 After the installation is finished, visit http://localhost:8080 and login with `admin:admin` (please change the admin password from the user menu).
@@ -88,17 +89,25 @@ Please refer to [our documentatation](https://sap.github.io/machine-learning-lab
 
 ## Development
 
-### Requirements
+> **Requirements**:
+> - To build locally: Java >= 8, Python >= 3.6, Npm >= 6.4, Maven, [Docker](https://docs.docker.com/get-docker/)
+> - To build in containerized environment: [Docker](https://docs.docker.com/get-docker/) and [Act](https://github.com/nektos/act#installation) are required to be installed on your machine to execute the containerized build process._
 
-- Java >= 8, Python >= 3.6, Npm >= 6.4, Maven, Docker
+To simplify the process of building this project from scratch, we provide build-scripts that run all necessary steps (build, check, test, and release). There is also an easy way to do so in a containerized environment (see the [workflows](./.github/workflows/) for details).
 
 ### Build
 
 Execute this command in the project root folder to build this project and the respective docker container:
 
 ```bash
-python build.py
+python build.py --make
+
+# Containerized via act
+# The `-b` flag binds the current directory to the act container and the build artifacts appear on your host machine.
+act -b -j build -s BUILD_ARGS="--make"
 ```
+
+> When the `BUILD_ARGS` secret is omitted for act, the [default flags](./.github/actions/build-environment/entrypoint.sh#L8) are used.
 
 This script compiles the project, assembles the various JAR artifacts (executable service, client, sources) and builds a docker container with the assembled executable jar. For additional script options:
 
@@ -106,12 +115,27 @@ This script compiles the project, assembles the various JAR artifacts (executabl
 python build.py --help
 ```
 
+### Test
+
+Running the tests from the repository root execute the [backend tests](./backend/lab-service/src/test/java/org/mltooling/lab) as well as the [webapp](./webapp) tests (all `*.test.js` files).
+
+```bash
+python build.py --test
+
+# Containerized via act
+act -b -j build -s BUILD_ARGS="--test"
+```
+
+> Before running the tests the project has to be built. You can additionally add the `--make` flag to first build and then test.
+
+The project can be built and tested on *GitHub Actions* by using the [build-pipeline](./actions?query=workflow%3Abuild-pipeline), click on *Run workflow* and pass `--make --test --force --version 0.0.0 --skip-path services/lab-workspace --skip-path services/lab-model-service --skip-path services/simple-workspace-service` to the *Arguments passed to build script.* input. With this input, the project is built and tested; since the Workspace image is really big and not needed for the tests, it is skipped.
+
 ### Deploy
 
 Execute this command in the project root folder to push all docker containers to the configured docker registry:
 
 ```bash
-python build.py --deploy --version={MAJOR.MINOR.PATCH-TAG}
+python build.py --release --version={MAJOR.MINOR.PATCH-TAG}
 ```
 
 For deployment, the version has to be provided. The version format should follow the [Semantic Versioning](https://semver.org/) standard (MAJOR.MINOR.PATCH). For additional script options:

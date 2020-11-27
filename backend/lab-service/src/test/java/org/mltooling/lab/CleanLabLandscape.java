@@ -2,25 +2,24 @@ package org.mltooling.lab;
 
 import org.mltooling.lab.services.managers.DockerServiceManager;
 
-
 public class CleanLabLandscape {
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
+  // ================ Members ============================================= //
 
-    // ================ Constructors & Main ================================= //
+  // ================ Constructors & Main ================================= //
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
-    public static void main(String[] args) throws Exception {
-        DockerServiceManager.cleanUpLab(true);
-    }
-    // ================ Public Methods ====================================== //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
+  public static void main(String[] args) throws Exception {
+    DockerServiceManager.cleanUpLab(true);
+  }
+  // ================ Public Methods ====================================== //
 
-    // ================ Private Methods ===================================== //
+  // ================ Private Methods ===================================== //
 
-    // ================ Getter & Setter ===================================== //
+  // ================ Getter & Setter ===================================== //
 
-    // ================ Builder Pattern ===================================== //
+  // ================ Builder Pattern ===================================== //
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }

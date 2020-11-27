@@ -1,55 +1,55 @@
 package org.mltooling.core.api.format.metadata;
 
 public class UnifiedErrorMessage {
-    // ================ Constants =========================================== //
+  // ================ Constants =========================================== //
 
-    // ================ Members ============================================= //
-    private Integer code;
-    private String type;
-    private String message;
-    private String description;
+  // ================ Members ============================================= //
+  private Integer code;
+  private String type;
+  private String message;
+  private String description;
 
-    // ================ Constructors & Main ================================= //
+  // ================ Constructors & Main ================================= //
 
-    // ================ Methods for/from SuperClass / Interfaces ============ //
+  // ================ Methods for/from SuperClass / Interfaces ============ //
 
-    // ================ Public Methods ====================================== //
+  // ================ Public Methods ====================================== //
 
-    // ================ Private Methods ===================================== //
+  // ================ Private Methods ===================================== //
 
-    // ================ Getter & Setter ===================================== //
-    public Integer getCode() {
-        return code;
-    }
+  // ================ Getter & Setter ===================================== //
+  public Integer getCode() {
+    return code;
+  }
 
-    public void setCode(Integer code) {
-        this.code = code;
-    }
+  public void setCode(Integer code) {
+    this.code = code;
+  }
 
-    public String getType() {
-        return type;
-    }
+  public String getType() {
+    return type;
+  }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+  public void setType(String type) {
+    this.type = type;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public String getMessage() {
+    return message;
+  }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    // ================ Builder Pattern ===================================== //
+  public void setDescription(String description) {
+    this.description = description;
+  }
+  // ================ Builder Pattern ===================================== //
 
-    // ================ Inner & Anonymous Classes =========================== //
+  // ================ Inner & Anonymous Classes =========================== //
 }

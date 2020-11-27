@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // material-ui components
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
-const styles = theme => ({
+const styles = (theme) => ({
   invalidInput: {
-    color: "#bd0000"
-  }
+    color: '#bd0000',
+  },
 });
 
 class MemberDialog extends Component {
@@ -39,7 +39,7 @@ class MemberDialog extends Component {
       cancelBtnDisabled,
       primaryActionBtnDisabled,
       primaryActionBtnLabel,
-      CustomComponent
+      CustomComponent,
     } = this.props;
 
     return (
@@ -51,14 +51,16 @@ class MemberDialog extends Component {
       >
         <DialogTitle> {title} </DialogTitle>
         <DialogContent style={this.props.dialogContentStyle}>
-          <DialogContentText style={this.props.dialogContentTextStyle}>{contentText}</DialogContentText>
+          <DialogContentText style={this.props.dialogContentTextStyle}>
+            {contentText}
+          </DialogContentText>
           {CustomComponent ? CustomComponent : null}
         </DialogContent>
         <DialogActions>
           {!this.props.moreButtons
             ? false
             : this.props.moreButtons
-                .filter(button => button !== false)
+                .filter((button) => button !== false)
                 .map((Button, index) => {
                   return <span key={index}>{Button}</span>;
                 })}
@@ -99,7 +101,7 @@ MemberDialog.propTypes = {
   handlePrimaryAction: PropTypes.func.isRequired,
   moreButtons: PropTypes.array,
   dialogContentStyle: PropTypes.object,
-  dialogContentTextStyle: PropTypes.object
+  dialogContentTextStyle: PropTypes.object,
 };
 
 export default withStyles(styles)(MemberDialog);

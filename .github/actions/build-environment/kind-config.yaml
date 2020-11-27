@@ -1,0 +1,24 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  apiServerAddress: "0.0.0.0"
+nodes:
+  - role: control-plane
+    image:
+      kindest/node:v1.14.10@sha256:ce4355398a704fca68006f8a29f37aafb49f8fc2f64ede3ccd0d9198da910146
+    extraPortMappings:
+    - containerPort: 30002
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "role=master"
+  # - role: worker
+  #   image: kindest/node:v1.14.10@sha256:ce4355398a704fca68006f8a29f37aafb49f8fc2f64ede3ccd0d9198da910146
+  #   kubeadmConfigPatches:
+  #     - |
+  #       kind: JoinConfiguration
+  #       nodeRegistration:
+  #         kubeletExtraArgs:
+  #           node-labels: "role=master"

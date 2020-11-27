@@ -1,38 +1,38 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { withCookies, Cookies } from "react-cookie";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withCookies, Cookies } from 'react-cookie';
+import PropTypes from 'prop-types';
 
 // material-ui components
-import { withStyles } from "@material-ui/core/styles";
-import Input from "@material-ui/core/Input";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import { withStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 //controller
 import {
   projectsApi,
   getDefaultApiCallback,
-  toastErrorMessage
-} from "../../../services/client/ml-lab-api";
-import * as ReduxUtils from "../../../services/handler/reduxUtils";
-import * as Constants from "../../../services/handler/constants";
+  toastErrorMessage,
+} from '../../../services/client/ml-lab-api';
+import * as ReduxUtils from '../../../services/handler/reduxUtils';
+import * as Constants from '../../../services/handler/constants';
 
-const styles = theme => ({
+const styles = (theme) => ({
   container: {
-    display: "flex",
-    flexWrap: "wrap",
-    color: "white"
+    display: 'flex',
+    flexWrap: 'wrap',
+    color: 'white',
   },
   formControl: {
     margin: theme.spacing(1),
     marginRight: 24,
-    minWidth: 120
+    minWidth: 120,
   },
   select: {
-    color: "white"
-  }
+    color: 'white',
+  },
 });
 
 class ProjectSelector extends Component {
@@ -40,7 +40,7 @@ class ProjectSelector extends Component {
     super(props);
     this.state = {
       projects: [],
-      nameToProjectIdMapping: {}
+      nameToProjectIdMapping: {},
     };
 
     if (this.props.isAuthenticated) {
@@ -72,11 +72,11 @@ class ProjectSelector extends Component {
               Constants.COOKIES.project,
               Constants.COOKIES.options
             );
-            
+
             this.setState(
               {
                 projects: projects.sort(),
-                nameToProjectIdMapping: nameToProjectIdMapping
+                nameToProjectIdMapping: nameToProjectIdMapping,
               },
               () => {
                 // does the project list contain the project that was stored in a cookie?
@@ -85,8 +85,8 @@ class ProjectSelector extends Component {
                   this.props.onInpChange({
                     target: {
                       value: cookieProject,
-                      projectId: nameToProjectIdMapping[cookieProject]
-                    }
+                      projectId: nameToProjectIdMapping[cookieProject],
+                    },
                   });
                 } else {
                   // select first project of the list
@@ -98,8 +98,8 @@ class ProjectSelector extends Component {
                   this.props.onInpChange({
                     target: {
                       value: projects[0],
-                      projectId: nameToProjectIdMapping[this.state.projects[0]]
-                    }
+                      projectId: nameToProjectIdMapping[this.state.projects[0]],
+                    },
                   });
                 }
               }
@@ -108,13 +108,13 @@ class ProjectSelector extends Component {
         },
         ({ error, httpResponse }) =>
           !httpResponse.isAuthError
-            ? toastErrorMessage("Load Projects: ", error)
+            ? toastErrorMessage('Load Projects: ', error)
             : false
       )
     );
   }
 
-  changeProject = e => {
+  changeProject = (e) => {
     const project = e.target.value;
     const { cookies } = this.props;
     cookies.set(Constants.COOKIES.project, project, Constants.COOKIES.options);
@@ -122,14 +122,18 @@ class ProjectSelector extends Component {
     this.props.onInpChange({
       target: {
         value: project,
-        projectId: this.state.nameToProjectIdMapping[project]
-      }
+        projectId: this.state.nameToProjectIdMapping[project],
+      },
     });
   };
 
   componentDidUpdate(prevProps) {
-    if (this.props.statusCode !== "noProjects" && this.props.isAuthenticated
-      && (this.props.currentProject !== prevProps.currentProject || (this.props.currentProject === ""))) {
+    if (
+      this.props.statusCode !== 'noProjects' &&
+      this.props.isAuthenticated &&
+      (this.props.currentProject !== prevProps.currentProject ||
+        this.props.currentProject === '')
+    ) {
       // && ((this.props.statusCode === "projectSelected") || (this.props.statusCode === "projectDeleted"))
       // || (prevProps.location && prevProps.location.pathname === "/login")) {
       // const { cookies } = this.props;
@@ -154,7 +158,7 @@ class ProjectSelector extends Component {
     const { classes } = this.props;
     const oProjectElements = this.state.projects
       .sort()
-      .map(project => this.getOptionElement(project));
+      .map((project) => this.getOptionElement(project));
     const inputForm = <Input id="select-project" />;
 
     return (
@@ -186,7 +190,7 @@ ProjectSelector.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   onInpChange: PropTypes.func.isRequired, // coming from redux
   onNoProjectsAvailable: PropTypes.func.isRequired,
-  onCreateProject: PropTypes.func
+  onCreateProject: PropTypes.func,
 };
 
 export default withCookies(

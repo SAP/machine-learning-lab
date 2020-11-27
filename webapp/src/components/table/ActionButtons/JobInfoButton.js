@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import Icon from "@material-ui/core/Icon";
-import IconButton from "@material-ui/core/IconButton";
-import PropTypes from "prop-types";
-import ReactJson from "react-json-view";
-import Tooltip from "@material-ui/core/Tooltip";
+import React, { Component } from 'react';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import PropTypes from 'prop-types';
+import ReactJson from 'react-json-view';
+import Tooltip from '@material-ui/core/Tooltip';
 
-import CustomDialog from "../../CustomDialog";
+import CustomDialog from '../../CustomDialog';
 
 class InfoButton extends Component {
   state = {
-    open: false
+    open: false,
   };
 
   handleClickOpen = () => {
@@ -21,15 +21,15 @@ class InfoButton extends Component {
   };
 
   render() {
-    const title = "View JSON for job";
-    const contentText = "";
+    const title = 'View JSON for job';
+    const contentText = '';
     const hideCancelBtn = true;
     const primaryActionBtnDisabled = false;
-    const primaryActionBtnLabel = "Close";
+    const primaryActionBtnLabel = 'Close';
     const customComponent = <ReactJson src={this.props.jsonObj} />;
 
     return (
-      <div style={{ display: "inline" }}>
+      <div style={{ display: 'inline' }}>
         <Tooltip title="Info" placement="bottom">
           <IconButton onClick={this.handleClickOpen}>
             <Icon>info</Icon>
@@ -53,7 +53,7 @@ class InfoButton extends Component {
 }
 
 InfoButton.propTypes = {
-  jsonObj: PropTypes.object.isRequired
+  jsonObj: PropTypes.object.isRequired,
 };
 
 export default InfoButton;

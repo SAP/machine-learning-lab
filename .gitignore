@@ -1,6 +1,7 @@
 # Service Artifacts
 **/node_modules/
 archive/
+services/lab-workspace/docker-res/duplicated-resources/
 
 # Platform Artifacts
 environment/
