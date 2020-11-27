@@ -101,7 +101,7 @@ class App extends React.Component {
       this.refreshTimer = null;
       this.setState({ isAuthenticationChecked: false });
     }
-    if (this.superagent) {
+    if (this.superagent && this.superagent.req) {
       this.superagent.req.abort();
     }
   }
