@@ -973,6 +973,7 @@ public class DockerServiceManager extends AbstractServiceManager {
         .setDockerImage(containerImage)
         .setAdminLink(SERVICE_ADMIN_BASE_URL + "/#/containers/" + container.id())
         .setConfiguration(envVariables)
+        .setLabels(containerLabels)
         .setStartedAt(startedAt)
         .setFinishedAt(finishedAt)
         .setExitCode(exitCode)
