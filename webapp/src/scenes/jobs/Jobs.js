@@ -209,8 +209,8 @@ class Jobs extends Component {
           <TableComponent
             orderBy="_id"
             actionButtons={[
-              'info',
-              { key: 'deleteBtn', callback: this.deleteScheduledJob },
+              (item) => <JobInfoButton jsonObj={item} />,
+              (item) => <DeleteItemButton item={item} onItemDelete={this.deleteScheduledJob} />,
             ]}
             title="Scheduled Jobs"
             data={this.state.scheduledJobsTableData}
