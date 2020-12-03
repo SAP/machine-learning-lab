@@ -100,6 +100,9 @@ To simplify the process of building this project from scratch, we provide build-
 Execute this command in the project root folder to build this project and the respective docker container:
 
 ```bash
+# Install dependency
+pip install universal-build
+
 python build.py --make
 
 # Containerized via act
