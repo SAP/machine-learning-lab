@@ -52,7 +52,7 @@ export const COLUMNS = {
     'input',
     'output',
   ],
-  BLACKLIST: ['dependencies'],
+  BLOCKLIST: ['dependencies'],
   OUTPUTFILES: [
     'input',
     'output',
