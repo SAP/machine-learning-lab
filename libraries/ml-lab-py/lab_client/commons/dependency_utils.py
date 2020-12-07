@@ -420,7 +420,7 @@ def iterate_all_python_files(base_path):
 def iterate_sys_modules():
     items = list(sys.modules.items())
     for modname, mod in items:
-        if modname not in MODULE_BLACKLIST and mod is not None:
+        if modname not in MODULE_BLOCKLIST and mod is not None:
             yield modname, mod
 
 
