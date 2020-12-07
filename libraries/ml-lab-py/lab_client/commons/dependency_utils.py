@@ -14,6 +14,7 @@ import pkg_resources
 
 MB = 1048576
 MODULE_BLOCKLIST = set(sys.builtin_module_names)
+
 # sadly many builtins are missing from the above, so we list them manually:
 MODULE_BLOCKLIST |= {
     None, '__future__', '_abcoll', '_bootlocale', '_bsddb', '_bz2',
