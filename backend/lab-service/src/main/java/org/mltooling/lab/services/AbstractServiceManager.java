@@ -192,6 +192,18 @@ public abstract class AbstractServiceManager {
                   + sslEnabled);
         }
 
+        String hostRootSslMount =
+            backendService.getConfiguration().get(LabConfig.ENV_NAME_HOST_ROOT_SSL_MOUNT_PATH);
+        if ((StringUtils.isNullOrEmpty(hostRootSslMount)
+                && !StringUtils.isNullOrEmpty(LabConfig.HOST_ROOT_SSL_MOUNT_PATH))
+            || (!StringUtils.isNullOrEmpty(hostRootSslMount)
+                && !hostRootSslMount.equals(LabConfig.HOST_ROOT_SSL_MOUNT_PATH))) {
+          throw new Exception(
+              LabConfig.ENV_NAME_HOST_ROOT_SSL_MOUNT_PATH
+                  + " should be the same value as the one of the current Lab instance: "
+                  + hostRootSslMount);
+        }
+
         String hostRootMount =
             backendService.getConfiguration().get(LabConfig.ENV_NAME_HOST_ROOT_DATA_MOUNT_PATH);
         if ((StringUtils.isNullOrEmpty(hostRootMount)

@@ -64,6 +64,11 @@ The container can be configured with following environment variables (`--env`):
         <td>false</td>
     </tr>
     <tr>
+        <td>LAB_SSL_ROOT</td>
+        <td>The path on the host system to the folder containing a custom ssl certificate. The folder must contain a cert.crt and cert.key file. This folder is mounted into the ML Lab container, so to renew the certificate it must be replaced on the host system and the ML Lab container has to be restarted. If the <i>LAB_SSL_ROOT</i> variable is not set, ML Lab will look for a volume named lab_ssl. If no such named volume exists, a self signed certificate will be generated. The <i>LAB_SSL_ROOT</i> variable is only valid for docker local mode as secretes are used on Kubernetes.
+        <td>(optional)</td>
+    </tr>
+    <tr>
         <td>LAB_NAMESPACE</td>
         <td>The namespace used for the ML Lab installation. At the moment, we suggest to not change this value.</td>
         <td>lab</td>
@@ -166,21 +171,21 @@ To start  ML Lab in a single-host (local) deployment execute:
 docker run --rm --env LAB_PORT=8091 -v /var/run/docker.sock:/var/run/docker.sock --env LAB_ACTION=install lab-service:latest
 ```
 
-After the installation is finished (after several minutes depending on intranet speed), visit `http://<HOSTIP>:8091` and login with `admin:admin`.
+After the installation is finished (after several minutes depending on internet speed), visit `http://<HOSTIP>:8091` and login with `admin:admin`.
 
 **Enable SSL**
 
-For SSL setup, create the certificates and mount them into the container's directory at `/resources/ssl` (`-v /workspace/ssl:/resources/ssl:ro`) and start with `--env SERVICE_SSL_ENABLED=true`:
-
+For SSL setup, create the certificate (files must be called cert.crt and cert.key) and specify their path on the host machine via the `LAB_SSL_ROOT` environment variable. Additionally you need to set `SERVICE_SSL_ENABLED` to true:
 ``` bash
 docker run --rm --env LAB_PORT=8091 \
     --env SERVICE_SSL_ENABLED=true \
+    --env LAB_SSL_ROOT=/workspace/ssl \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /workspace/ssl:/resources/ssl:ro \
     lab-service:latest
 ```
 
-If you don't provide certificates, a self-signed certificate is generated and used. Be aware that applications such as your browser might not trust the certificate.
+Alternatively, instead of specifying `LAB_SSL_ROOT`, the certificate can be provided in a docker volume named `lab_ssl`.
+If you don't provide a custom certificate, a self-signed certificate is generated and used. Be aware that applications such as your browser might not trust the certificate.
 
 ### Install with Kubernetes Mode (Own Cluster)
 
@@ -250,7 +255,7 @@ In the Managed Cluster scenario, the biggest difference is that you don't have t
 In this setup mode, ML Lab accesses the cluster via its ServiceAccount permissions and *not* via a mounted kube-config.
 
 !!! warn "Costs"
-    As volumes are created automatically on the infrastructure based on the Kubernetes persistent volume claims, make sure to have an eye on your costs and set the size for the volume via the respective environment variables accordingly. Even when deleting the Kuberentes PersistentVolume and PersistentVolumeClaim resources, the actual volumes might still exist on the cloud provider and have to be deleted manually. 
+    As volumes are created automatically on the infrastructure based on the Kubernetes persistent volume claims, make sure to have an eye on your costs and set the size for the volume via the respective environment variables accordingly. Even when deleting the Kuberentes PersistentVolume and PersistentVolumeClaim resources, the actual volumes might still exist on the cloud provider and have to be deleted manually.  
 
 ## After Installation
 

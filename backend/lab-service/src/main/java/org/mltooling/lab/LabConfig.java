@@ -100,6 +100,11 @@ public class LabConfig {
   public static final boolean SERVICE_SSL_ENABLED =
       SystemUtils.getEnvVar(ENV_NAME_SSL_ENABLED, "false").equalsIgnoreCase("true");
 
+  // Folder on host where ssl certificate is stored
+  public static final String ENV_NAME_HOST_ROOT_SSL_MOUNT_PATH = "LAB_SSL_ROOT";
+  public static final String HOST_ROOT_SSL_MOUNT_PATH =
+      SystemUtils.getEnvVar(ENV_NAME_HOST_ROOT_SSL_MOUNT_PATH);
+
   // jwt secret for authentication layer
   // if env name is changed, also change it in Nginx!
   public static final String ENV_NAME_JWT_SECRET = "JWT_SECRET";
@@ -244,6 +249,10 @@ public class LabConfig {
     envVariables.put(LabConfig.ENV_NAME_PORTAINER_IMAGE, PORTAINER_IMAGE);
     envVariables.put(LabConfig.ENV_NAME_MODEL_SERVICE_IMAGE, MODEL_SERVICE_IMAGE);
     envVariables.put(LabConfig.ENV_NAME_BACKEND_SERVICE_IMAGE, BACKEND_SERVICE_IMAGE);
+
+    if (HOST_ROOT_SSL_MOUNT_PATH != null) {
+      envVariables.put(LabConfig.ENV_NAME_HOST_ROOT_SSL_MOUNT_PATH, HOST_ROOT_SSL_MOUNT_PATH);
+    }
 
     if (HOST_ROOT_DATA_MOUNT_PATH != null) {
       envVariables.put(LabConfig.ENV_NAME_HOST_ROOT_DATA_MOUNT_PATH, HOST_ROOT_DATA_MOUNT_PATH);
