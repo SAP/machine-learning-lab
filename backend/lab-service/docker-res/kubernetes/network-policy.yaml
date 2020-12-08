@@ -1,4 +1,4 @@
-# First, forbide all communication between pods. Then whitelist specific communication from / to the Lab pod
+# First, forbide all communication between pods. Then allowlist specific communication from / to the Lab pod
 
 ## restrict the communication of all pods
 kind: NetworkPolicy

@@ -13,9 +13,9 @@ import sys
 import pkg_resources
 
 MB = 1048576
-MODULE_BLACKLIST = set(sys.builtin_module_names)
+MODULE_BLOCKLIST = set(sys.builtin_module_names)
 # sadly many builtins are missing from the above, so we list them manually:
-MODULE_BLACKLIST |= {
+MODULE_BLOCKLIST |= {
     None, '__future__', '_abcoll', '_bootlocale', '_bsddb', '_bz2',
     '_codecs_cn', '_codecs_hk', '_codecs_iso2022', '_codecs_jp', '_codecs_kr',
     '_codecs_tw', '_collections_abc', '_compat_pickle', '_compression',
@@ -386,7 +386,7 @@ def get_main_file(globs):
 
 
 def iterate_imported_modules(globs):
-    checked_modules = set(MODULE_BLACKLIST)
+    checked_modules = set(MODULE_BLOCKLIST)
     for glob in globs.values():
         if isinstance(glob, module):
             mod_path = glob.__name__
@@ -420,7 +420,7 @@ def iterate_all_python_files(base_path):
 def iterate_sys_modules():
     items = list(sys.modules.items())
     for modname, mod in items:
-        if modname not in MODULE_BLACKLIST and mod is not None:
+        if modname not in MODULE_BLOCKLIST and mod is not None:
             yield modname, mod
 
 
