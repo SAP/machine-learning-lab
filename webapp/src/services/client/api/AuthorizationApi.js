@@ -12,6 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
+import BooleanResponse from '../model/BooleanResponse';
 import LabUserResponse from '../model/LabUserResponse';
 import ListOfLabUsersResponse from '../model/ListOfLabUsersResponse';
 import StatusMessageFormat from '../model/StatusMessageFormat';
@@ -502,13 +503,14 @@ export default class AuthorizationApi {
    * Callback function to receive the result of the oidcEnabled operation.
    * @callback module:api/AuthorizationApi~oidcEnabledCallback
    * @param {String} error Error message, if any.
-   * @param data This operation does not return a value.
+   * @param {module:model/BooleanResponse} data The data returned by the service call.
    * @param {String} response The complete HTTP response.
    */
 
   /**
    * Check if external OIDC authentication is enabled
    * @param {module:api/AuthorizationApi~oidcEnabledCallback} callback The callback function, accepting three arguments: error, data, response
+   * data is of type: {@link module:model/BooleanResponse}
    */
   oidcEnabled(callback) {
     let postBody = null;
@@ -520,8 +522,8 @@ export default class AuthorizationApi {
 
     let authNames = [];
     let contentTypes = [];
-    let accepts = [];
-    let returnType = null;
+    let accepts = ['application/json'];
+    let returnType = BooleanResponse;
 
     return this.apiClient.callApi(
       '/api/auth/oidc/enabled',

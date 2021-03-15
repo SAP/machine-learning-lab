@@ -140,7 +140,7 @@ public class LabAuthEndpoint extends AbstractApiEndpoint<LabAuthEndpoint> {
 
   @GET
   @Path(LabAuthApi.METHOD_OIDC_GET_ENABLED)
-  @ApiOperation(value = "Check if external OIDC authentication is enabled")
+  @ApiOperation(value = "Check if external OIDC authentication is enabled", response = BooleanResponse.class)
   @Produces(MediaType.APPLICATION_JSON)
   @Pac4JSecurity(ignore = true)
   public Response oidcEnabled() {
@@ -226,7 +226,7 @@ public class LabAuthEndpoint extends AbstractApiEndpoint<LabAuthEndpoint> {
     email = StringUtils.shorten(email, 40);
     /* TODO: This is a fix to remove '.' characters in the username. In SAP email addresses this is the only character
      *       that is not allowed. A more generic solution is required that handles all possible email addresses. */
-    email = email.replace("-", "--").replace(".", "-");
+    email = email.replace("-", "--").replace(".", "-").replace("@", "-");
 
     // Get user profile for username
     MongoProfile profile;
@@ -631,6 +631,11 @@ public class LabAuthEndpoint extends AbstractApiEndpoint<LabAuthEndpoint> {
   private static class StringResponse extends SingleValueFormat<String> {
 
     public String data;
+  }
+
+  private static class BooleanResponse extends SingleValueFormat<Boolean> {
+
+    public Boolean data;
   }
 
   private static class LabUserResponse extends SingleValueFormat<LabUser> {
