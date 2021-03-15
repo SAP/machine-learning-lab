@@ -506,9 +506,11 @@ public class AuthorizationManager {
       throws Exception {
 
     if (!isValidUserName(userName)) {
+      userName = (!StringUtils.isNullOrEmpty(userName)) ? userName : "<empty>";
       throw new Exception(
-          "The user name is not valid. It may only contain letters, digits, spaces, and the"
-              + " minus-character.");
+          "The user name "
+              + userName
+              + " is not valid. It may only contain letters, digits and the minus-character.");
     }
 
     String userId = processNameToId(userName);
@@ -584,10 +586,7 @@ public class AuthorizationManager {
     // Note: long-term api tokens don't have access to ADMIN annotated methods, as the permission
     // itself is not in the JWT token and must be looked up in the DB, which doesn't happen with the
     // 'RequireAnyPermissionAuthorizer'. If this should change, a custom authorizer must be written.
-    config.addAuthorizer(
-        AUTHORIZER_ADMIN,
-        new AdminAuthorizer()); // new
-                                // RequireAnyPermissionAuthorizer(CORE_PERMISSIONS.ADMIN.getName()));
+    config.addAuthorizer(AUTHORIZER_ADMIN, new AdminAuthorizer());
     config.addAuthorizer(AUTHORIZER_PROJECT, new ProjectAuthorizer());
     config.addAuthorizer(AUTHORIZER_USER, new UserAuthorizer());
     config.addAuthorizer(AUTHORIZER_IS_AUTHENTICATED, new CustomIsAuthenticatedAuthorizer());
@@ -674,8 +673,7 @@ public class AuthorizationManager {
       throw new Exception(
           "The user name "
               + user
-              + " is not valid. It may only contain letters, digits, spaces, and the"
-              + " minus-character.");
+              + " is not valid. It may only contain letters, digits and the minus-character.");
     }
 
     String userId = processNameToId(user);

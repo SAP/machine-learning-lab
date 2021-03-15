@@ -47,6 +47,22 @@ public class LabConfig {
   public static final boolean ALLOW_SELF_REGISTRATIONS =
       SystemUtils.getEnvVar(ENV_NAME_ALLOW_SELF_REGISTRATIONS, "true").equalsIgnoreCase("true");
 
+  // URL where client will be redirected to when using external OIDC login
+  private static final String ENV_NAME_EXTERNAL_OIDC_AUTH_URL = "LAB_EXTERNAL_OIDC_AUTH_URL";
+  public static final String EXTERNAL_OIDC_AUTH_URL = SystemUtils.getEnvVar(ENV_NAME_EXTERNAL_OIDC_AUTH_URL);
+
+  // URL where ML Lab can exchange the authentication code received in the callback with a JWT token
+  private static final String ENV_NAME_EXTERNAL_OIDC_TOKEN_URL = "LAB_EXTERNAL_OIDC_TOKEN_URL";
+  public static final String EXTERNAL_OIDC_TOKEN_URL = SystemUtils.getEnvVar(ENV_NAME_EXTERNAL_OIDC_TOKEN_URL);
+
+  // Client id used for the external OIDC login
+  private static final String ENV_NAME_EXTERNAL_OIDC_CLIENT_ID = "LAB_EXTERNAL_OIDC_CLIENT_ID";
+  public static final String EXTERNAL_OIDC_CLIENT_ID = SystemUtils.getEnvVar(ENV_NAME_EXTERNAL_OIDC_CLIENT_ID);
+
+  // Client secret used for the external OIDC login
+  private static final String ENV_NAME_EXTERNAL_OIDC_CLIENT_SECRET = "LAB_EXTERNAL_OIDC_CLIENT_SECRET";
+  public static final String EXTERNAL_OIDC_CLIENT_SECRET = SystemUtils.getEnvVar(ENV_NAME_EXTERNAL_OIDC_CLIENT_SECRET);
+
   // Lab Action
   public static final String ENV_NAME_LAB_ACTION = "LAB_ACTION";
   public static final LabAction LAB_ACTION =
@@ -221,6 +237,19 @@ public class LabConfig {
         LabConfig.ENV_NAME_ALLOW_SELF_REGISTRATIONS,
         String.valueOf(LabConfig.ALLOW_SELF_REGISTRATIONS));
     envVariables.put(LabConfig.ENV_NAME_LAB_ACTION, LAB_ACTION.getName());
+
+    if(LabConfig.EXTERNAL_OIDC_AUTH_URL != null){
+      envVariables.put(LabConfig.ENV_NAME_EXTERNAL_OIDC_AUTH_URL, LabConfig.EXTERNAL_OIDC_AUTH_URL);
+    }
+    if(LabConfig.EXTERNAL_OIDC_TOKEN_URL != null){
+      envVariables.put(LabConfig.ENV_NAME_EXTERNAL_OIDC_TOKEN_URL, LabConfig.EXTERNAL_OIDC_TOKEN_URL);
+    }
+    if(LabConfig.EXTERNAL_OIDC_CLIENT_ID != null){
+      envVariables.put(LabConfig.ENV_NAME_EXTERNAL_OIDC_CLIENT_ID, LabConfig.EXTERNAL_OIDC_CLIENT_ID);
+    }
+    if(LabConfig.EXTERNAL_OIDC_CLIENT_SECRET != null){
+      envVariables.put(LabConfig.ENV_NAME_EXTERNAL_OIDC_CLIENT_SECRET, LabConfig.EXTERNAL_OIDC_CLIENT_SECRET);
+    }
 
     envVariables.put(LabConfig.ENV_NAME_S3_ENDPOINT, ENV_S3_ENDPOINT);
     envVariables.put(LabConfig.ENV_NAME_S3_ACCESS_KEY, ENV_S3_ACCESS_KEY);
