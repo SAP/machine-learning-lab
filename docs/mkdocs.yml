@@ -15,7 +15,7 @@ theme:
   language: 'en'
   # favicon: 'images/favicon.ico'
 
-# Extensions: 
+# Extensions:
 markdown_extensions:
   - admonition
   - footnotes
@@ -59,6 +59,7 @@ nav:
     - Uninstall ML Lab: administration/uninstall-lab.md
     - Manage Services: administration/manage-services.md
     - Backup Data: administration/backup-data.md
+    - External OIDC Authentication: administration/external-oidc-authentication.md
   - Architecture:
     - ML Lifecycle: architecture/machine-learning-lifecycle.md
     - ML Lab Architecture: architecture/architecture.md

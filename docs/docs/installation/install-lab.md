@@ -115,7 +115,7 @@ The container can be configured with following environment variables (`--env`):
     </tr>
     <tr>
         <td>ALLOW_SELF_REGISTRATIONS</td>
-        <td>If true, ML Lab will allow user self registrations via register dialog.</td>
+        <td>If true, ML Lab will allow user self registrations via register dialog or automatically create users if external OIDC authentication is enabled.</td>
         <td>true</td>
     </tr>
     <tr>
@@ -154,6 +154,26 @@ The container can be configured with following environment variables (`--env`):
             The registry prefix from where the images <i>lab-service</i> and <i>lab-model-service</i> are loaded. If you, for example, deploy it in Azure you might not have access to the internal Artifactory registry. Make sure to push the images to the defined registry. If you don't use the one-click model-deployment feature, you don't have to push the <i>lab-model-service</i> image.
         </td>
         <td>Default DockerHub registry</td>
+    </tr>
+    <tr>
+        <td>LAB_EXTERNAL_OIDC_AUTH_URL</td>
+        <td>The authorization endpoint used for external OIDC authentication. The client will be redirected to this page to authenticate with the external authentication provider. For detailed information see: <a href="../../administration/external-oidc-authentication">External OIDC Authentication</a></td>
+        <td>(optional)</td>
+    </tr>
+    <tr>
+        <td>LAB_EXTERNAL_OIDC_TOKEN_URL</td>
+        <td>The token endpoint used for external OIDC authentication. It will be used by the backend to obtain the OIDC identity token in exchange for an authorization code. For detailed information see: <a href="../../administration/external-oidc-authentication">External OIDC Authentication</a></td>
+        <td>(optional)</td>
+    </tr>
+    <tr>
+        <td>LAB_EXTERNAL_OIDC_CLIENT_ID</td>
+        <td>The OAuth 2.0 client identifier used for external OIDC authentication. For detailed information see: <a href="../../administration/external-oidc-authentication">External OIDC Authentication</a></td>
+        <td>(optional)</td>
+    </tr>
+    <tr>
+        <td>LAB_EXTERNAL_OIDC_CLIENT_SECRET</td>
+        <td>The OAuth 2.0 client secret used for external OIDC authentication. For detailed information see: <a href="../../administration/external-oidc-authentication">External OIDC Authentication</a></td>
+        <td>(optional)</td>
     </tr>
 </table>
 
