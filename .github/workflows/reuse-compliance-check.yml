@@ -1,8 +1,5 @@
 name: reuse-compliance-check
-
-on:
-  workflow_dispatch:
-  
+on: workflow_dispatch
 
 jobs:
   reuse-check:
