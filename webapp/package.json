@@ -69,8 +69,9 @@
     "test": "react-scripts test a --watchAll=false",
     "test-interactive": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "lint": "npm run lint:js",
-    "lint:js": "eslint --ext js,jsx",
+    "lint": "npm run lint:js ; npm run lint:css",
+    "lint:js": "eslint --ext js,jsx src/",
+    "lint:css": "stylelint 'src/**/*.css'",
     "prettier": "prettier --config .prettierrc --write"
   },
   "eslintConfig": {
