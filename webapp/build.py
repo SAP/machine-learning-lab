@@ -14,7 +14,6 @@ build_utils.run("npm install")
 if args[build_utils.FLAG_CHECK]:
     build_utils.log("Run linters:")
     build_utils.run("npm run lint:js", exit_on_error=True)
-    build_utils.run("npm run lint:css", exit_on_error=True)
     build_utils.log("No linter problems")
 
 if args[build_utils.FLAG_MAKE]:
