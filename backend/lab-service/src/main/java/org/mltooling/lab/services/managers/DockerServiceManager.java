@@ -344,23 +344,32 @@ public class DockerServiceManager extends AbstractServiceManager {
   @Override
   public DockerDeploymentConfig createLabService() {
     DockerDeploymentConfig deploymentConfig = super.createLabService();
+    // Try to mount custom ssl certificate if ssl is enabled
     try {
-      if (LabConfig.SERVICE_SSL_ENABLED
-          && client
-                  .listVolumes(DockerClient.ListVolumesParam.filter(FILTER_NAME, SSL_VOLUME_NAME))
-                  .volumes()
-                  .size()
-              == 1) {
-        // TODO only add volume if container exists? Needs better solution!
-        // add ssl volume to backend service if ssl is enabled and if the ssl-volume was manually
-        // populated with certificates.
-        // if the volume does not exist, do not mount it as the :ro part would prevent the ML Lab
-        // container to auto-generate certificates.
-        String sslResourcesPath = SystemUtils.getEnvVar("_SSL_RESOURCES_PATH", "/resources/ssl");
-        deploymentConfig.addMount(
-            DockerDeploymentConfig.BIND_MOUNT_TYPE,
-            SSL_VOLUME_NAME + ":" + sslResourcesPath + ":ro");
-        // TODO: add SSL support for Swarm
+      if (LabConfig.SERVICE_SSL_ENABLED) {
+        // If a host path for the ssl certificate is given, mount that path into the container
+        if (LabConfig.HOST_ROOT_SSL_MOUNT_PATH != null) {
+          String sslResourcesPath = SystemUtils.getEnvVar("_SSL_RESOURCES_PATH", "/resources/ssl");
+          deploymentConfig.addMount(
+              DockerDeploymentConfig.BIND_MOUNT_TYPE,
+              LabConfig.HOST_ROOT_SSL_MOUNT_PATH + ":" + sslResourcesPath + ":ro");
+        }
+        // If ssl host path was not provided, check if a named volume for the ssl certificate exists
+        else if (client
+                .listVolumes(DockerClient.ListVolumesParam.filter(FILTER_NAME, SSL_VOLUME_NAME))
+                .volumes()
+                .size()
+            == 1) {
+          // TODO only add volume if container exists? Needs better solution!
+          // add ssl volume to backend service if ssl is enabled and if the ssl-volume was manually
+          // populated with certificates.
+          // if the volume does not exist, do not mount it as the :ro part would prevent the ML Lab
+          // container to auto-generate certificates.
+          String sslResourcesPath = SystemUtils.getEnvVar("_SSL_RESOURCES_PATH", "/resources/ssl");
+          deploymentConfig.addMount(
+              DockerDeploymentConfig.BIND_MOUNT_TYPE,
+              SSL_VOLUME_NAME + ":" + sslResourcesPath + ":ro");
+        }
       }
     } catch (DockerException | InterruptedException e) {
       log.error(String.format("Checking the ssl volume %s failed", SSL_VOLUME_NAME));
@@ -1013,10 +1022,10 @@ public class DockerServiceManager extends AbstractServiceManager {
 
     boolean healthy = isHealthy(container);
     /* TODO Do not check port since this will not work during install
-       if (healthy && connectionPort != null) {
-        // if healthy, also check if main port is accessible
-        healthy = ServiceUtils.serverListening(containerName, connectionPort);
-    }
+        if (healthy && connectionPort != null) {
+          // if healthy, also check if main port is accessible
+          healthy = ServiceUtils.serverListening(containerName, connectionPort);
+        }
      */
 
     LabService mlService =
