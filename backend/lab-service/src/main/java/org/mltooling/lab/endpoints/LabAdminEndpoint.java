@@ -10,6 +10,7 @@ import org.mltooling.core.api.format.SingleValueFormat;
 import org.mltooling.core.api.format.StatusMessageFormat;
 import org.mltooling.core.api.format.ValueListFormat;
 import org.mltooling.core.lab.LabAdminApi;
+import org.mltooling.core.lab.LabApi;
 import org.mltooling.core.lab.model.*;
 import org.mltooling.core.service.params.DefaultHeaderFields;
 import org.mltooling.core.service.utils.AbstractApiEndpoint;
@@ -161,7 +162,7 @@ public class LabAdminEndpoint extends AbstractApiEndpoint<LabAdminEndpoint> {
   @ApiOperation(
       value =
           "Resets a workspace. Removes the container (keeps all persisted data) and starts a new"
-              + " one.",
+              + " one.  When specified an image, it is used this image instead",
       response = LabServiceResponse.class)
   @Produces(MediaType.APPLICATION_JSON)
   @Pac4JSecurity(
@@ -172,6 +173,8 @@ public class LabAdminEndpoint extends AbstractApiEndpoint<LabAdminEndpoint> {
       authorizers = AuthorizationManager.AUTHORIZER_IS_AUTHENTICATED)
   public Response resetWorkspace(
       @QueryParam(LabAdminApi.PARAM_WORKSPACE_ID) String id,
+      @ApiParam(value = "Image Name", required = false) @QueryParam(LabApi.PARAM_DOCKER_IMAGE)
+        String image,
       @Pac4JProfile MongoProfile commonProfile,
       @BeanParam DefaultHeaderFields defaultHeaders) {
     adminApiHandler.setAuthProfile(commonProfile);
