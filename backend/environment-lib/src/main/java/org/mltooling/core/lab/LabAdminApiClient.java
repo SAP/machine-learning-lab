@@ -45,7 +45,7 @@ public class LabAdminApiClient extends AbstractApiClient<LabAdminApiClient> impl
   }
 
   @Override
-  public StatusMessageFormat checkWorkspace(String workspaceId) {
+  public SingleValueFormat checkWorkspace(String workspaceId) {
     return executeRequest(
         Unirest.get(getEndpointUrl() + METHOD_CHECK_WORKSPACE)
             .getHttpRequest()

@@ -38,7 +38,7 @@ public interface LabAdminApi {
   // ================ Methods ============================================= //
   // TODO why config with Object??
 
-  StatusMessageFormat checkWorkspace(String workspaceId);
+  SingleValueFormat checkWorkspace(String workspaceId);
 
   SingleValueFormat resetWorkspace(String workspaceId);
 

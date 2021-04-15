@@ -59,7 +59,7 @@ public class LabAdminEndpoint extends AbstractApiEndpoint<LabAdminEndpoint> {
       value =
           "Checks whether a workspace container for the passed id already exists. If not, a new"
               + " one is created & started.",
-      response = StatusMessageFormat.class)
+      response = LabServiceResponse.class)
   @Produces(MediaType.APPLICATION_JSON)
   @Pac4JSecurity(ignore = true)
   public Response checkWorkspace(
