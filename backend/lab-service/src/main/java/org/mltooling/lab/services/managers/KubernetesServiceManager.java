@@ -580,8 +580,8 @@ public class KubernetesServiceManager extends AbstractServiceManager {
   }
 
   @Override
-  public DockerDeploymentConfig createWorkspaceService(String user) throws Exception {
-    DockerDeploymentConfig workspaceDeployment = super.createWorkspaceService(user);
+  public DockerDeploymentConfig createWorkspaceService(String user, String imageName) throws Exception {
+    DockerDeploymentConfig workspaceDeployment = super.createWorkspaceService(user, imageName);
 
     if (!LabConfig.IS_MANAGED_KUBERNETES_CLUSTER) {
       // connect NFS container

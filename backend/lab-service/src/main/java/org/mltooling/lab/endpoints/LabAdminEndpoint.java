@@ -17,6 +17,7 @@ import org.mltooling.core.service.utils.AbstractApiEndpoint;
 import org.mltooling.core.service.utils.UnifiedResponseFactory;
 import org.mltooling.lab.api.LabAdminApiHandler;
 import org.mltooling.lab.authorization.AuthorizationManager;
+import org.mltooling.lab.services.CoreService;
 import org.pac4j.jax.rs.annotations.Pac4JProfile;
 import org.pac4j.jax.rs.annotations.Pac4JSecurity;
 import org.pac4j.mongo.profile.MongoProfile;
@@ -178,7 +179,7 @@ public class LabAdminEndpoint extends AbstractApiEndpoint<LabAdminEndpoint> {
       @Pac4JProfile MongoProfile commonProfile,
       @BeanParam DefaultHeaderFields defaultHeaders) {
     adminApiHandler.setAuthProfile(commonProfile);
-    return UnifiedResponseFactory.getResponse(adminApiHandler.resetWorkspace(id));
+    return UnifiedResponseFactory.getResponse(adminApiHandler.resetWorkspace(id, image));
   }
 
   @GET
