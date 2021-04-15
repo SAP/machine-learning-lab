@@ -245,6 +245,7 @@ public class LabAdminApiHandler extends AbstractApiHandler<LabAdminApiHandler>
       response.setSuccessfulStatus();
       //TODO differentiate between users that are running the default one and the other one.
       response.addMetadata("needsUpdate", false);
+      response.addMetadata("image", workspaceService.getDockerImage());
 //      response.addMetadata(
 //          "needsUpdate",
 //          !CoreService.WORKSPACE.getImage().equalsIgnoreCase(workspaceService.getDockerImage()));
