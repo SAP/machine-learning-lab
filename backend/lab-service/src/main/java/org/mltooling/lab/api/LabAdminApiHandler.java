@@ -232,6 +232,22 @@ public class LabAdminApiHandler extends AbstractApiHandler<LabAdminApiHandler>
         response.setErrorStatus("The workspace id parameter is empty.", HttpStatus.SC_BAD_REQUEST);
         return prepareResponse(response);
       }
+      user = AuthorizationManager.resolveUserName(user);
+
+      if (this.authProfile == null || user == null) {
+        response.setErrorStatus(
+          "Not authorized to check workspace: " + user, HttpStatus.SC_UNAUTHORIZED);
+        return prepareResponse(response);
+      }
+
+      if (!this.authProfile.getId().equalsIgnoreCase(user)
+        && !componentManager.getAuthManager().isAdmin(this.authProfile)) {
+        response.setErrorStatus(
+          "User " + this.authProfile.getId() + " is not allowed to check workspace: " + user,
+          HttpStatus.SC_UNAUTHORIZED);
+        return prepareResponse(response);
+      }
+
       log.debug("Checking workspace of " +  user);
       LabService workspaceService = componentManager.getServiceManger().checkWorkspace(user);
       if (workspaceService == null || !workspaceService.getIsHealthy()) {

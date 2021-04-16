@@ -50,7 +50,7 @@ public class LabAdminApiClient extends AbstractApiClient<LabAdminApiClient> impl
         Unirest.get(getEndpointUrl() + METHOD_CHECK_WORKSPACE)
             .getHttpRequest()
             .queryString(PARAM_WORKSPACE_ID, workspaceId),
-        new TypeToken<StatusMessageFormat>() {}.getType());
+        new TypeToken<SingleValueFormat>() {}.getType());
   }
 
   @Override

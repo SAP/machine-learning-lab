@@ -61,11 +61,17 @@ public class LabAdminEndpoint extends AbstractApiEndpoint<LabAdminEndpoint> {
               + " one is created & started.",
       response = LabServiceResponse.class)
   @Produces(MediaType.APPLICATION_JSON)
-  @Pac4JSecurity(ignore = true)
+  @Pac4JSecurity(
+    clients = {
+      AuthorizationManager.PAC4J_CLIENT_COOKIE,
+      AuthorizationManager.PAC4J_CLIENT_HEADER
+    },
+    authorizers = AuthorizationManager.AUTHORIZER_IS_AUTHENTICATED)
   public Response checkWorkspace(
       @QueryParam(LabAdminApi.PARAM_WORKSPACE_ID) String id,
+      @Pac4JProfile MongoProfile commonProfile,
       @BeanParam DefaultHeaderFields defaultHeaders) {
-    // TODO should this method be secured?
+    adminApiHandler.setAuthProfile(commonProfile);
     return UnifiedResponseFactory.getResponse(adminApiHandler.checkWorkspace(id));
   }
 
