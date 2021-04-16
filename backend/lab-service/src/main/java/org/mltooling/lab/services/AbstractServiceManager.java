@@ -332,12 +332,12 @@ public abstract class AbstractServiceManager {
     // remove workspace without volumes
     String previousUsedImage = shutdownWorkspace(user);
 
-    if (previousUsedImage == null){
+    if (previousUsedImage == null) {
       previousUsedImage = CoreService.WORKSPACE.getImage();
       log.info("Unable to retrieve previous used image for user: " + user);
     }
 
-    if (imageName == null){
+    if (imageName == null) {
       imageName = previousUsedImage;
       log.debug("No image provided, using previously used image: " + imageName);
     }
@@ -424,8 +424,9 @@ public abstract class AbstractServiceManager {
   }
 
   /** Create a workspace service for a given user. */
-  public DockerDeploymentConfig createWorkspaceService(String user, @Nullable String imageName) throws Exception {
-    if (imageName == null){
+  public DockerDeploymentConfig createWorkspaceService(String user, @Nullable String imageName)
+      throws Exception {
+    if (imageName == null) {
       imageName = CoreService.WORKSPACE.getImage();
       log.debug("No image was specified. Using default workspace image");
     }

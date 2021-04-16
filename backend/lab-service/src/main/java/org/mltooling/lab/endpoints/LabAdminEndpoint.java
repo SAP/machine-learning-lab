@@ -62,11 +62,11 @@ public class LabAdminEndpoint extends AbstractApiEndpoint<LabAdminEndpoint> {
       response = LabServiceResponse.class)
   @Produces(MediaType.APPLICATION_JSON)
   @Pac4JSecurity(
-    clients = {
-      AuthorizationManager.PAC4J_CLIENT_COOKIE,
-      AuthorizationManager.PAC4J_CLIENT_HEADER
-    },
-    authorizers = AuthorizationManager.AUTHORIZER_IS_AUTHENTICATED)
+      clients = {
+        AuthorizationManager.PAC4J_CLIENT_COOKIE,
+        AuthorizationManager.PAC4J_CLIENT_HEADER
+      },
+      authorizers = AuthorizationManager.AUTHORIZER_IS_AUTHENTICATED)
   public Response checkWorkspace(
       @QueryParam(LabAdminApi.PARAM_WORKSPACE_ID) String id,
       @Pac4JProfile MongoProfile commonProfile,
@@ -181,7 +181,7 @@ public class LabAdminEndpoint extends AbstractApiEndpoint<LabAdminEndpoint> {
   public Response resetWorkspace(
       @QueryParam(LabAdminApi.PARAM_WORKSPACE_ID) String id,
       @ApiParam(value = "Image Name", required = false) @QueryParam(LabApi.PARAM_DOCKER_IMAGE)
-        String image,
+          String image,
       @Pac4JProfile MongoProfile commonProfile,
       @BeanParam DefaultHeaderFields defaultHeaders) {
     adminApiHandler.setAuthProfile(commonProfile);

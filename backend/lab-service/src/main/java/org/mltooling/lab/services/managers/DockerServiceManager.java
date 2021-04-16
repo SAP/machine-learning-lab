@@ -395,7 +395,8 @@ public class DockerServiceManager extends AbstractServiceManager {
   }
 
   @Override
-  public DockerDeploymentConfig createWorkspaceService(String user, String imageName) throws Exception {
+  public DockerDeploymentConfig createWorkspaceService(String user, String imageName)
+      throws Exception {
     DockerDeploymentConfig workspaceDeployment = super.createWorkspaceService(user, imageName);
 
     if (!StringUtils.isNullOrEmpty(LabConfig.HOST_ROOT_WORKSPACE_DATA_MOUNT_PATH)) {
