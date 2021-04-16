@@ -4,8 +4,11 @@ import com.google.api.client.http.HttpStatusCodes;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.io.IOException;
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import org.mltooling.core.api.format.SingleValueFormat;
@@ -104,6 +107,14 @@ public class LabAuthEndpoint extends AbstractApiEndpoint<LabAuthEndpoint> {
           "Self registration is not allowed. Please ask an administrator for an account.");
     }
 
+    SingleValueFormat<Boolean> oidcEnabled = authApiHandler.isOidcEnabled();
+    if (oidcEnabled.getData()) {
+      // do not allow self registrations if external OIDC authentication is enabled
+      return UnifiedResponseFactory.getErrorResponse(
+          Response.Status.UNAUTHORIZED,
+          "External OIDC authentication (SSO) is enabled which means self registration via the API is only allowed for admins.");
+    }
+
     return UnifiedResponseFactory.getResponse(authApiHandler.createUser(user, password));
   }
 
@@ -125,6 +136,125 @@ public class LabAuthEndpoint extends AbstractApiEndpoint<LabAuthEndpoint> {
       @BeanParam DefaultHeaderFields defaultHeaders) {
 
     return UnifiedResponseFactory.getResponse(authApiHandler.deactivateUsers(users));
+  }
+
+  @GET
+  @Path(LabAuthApi.METHOD_OIDC_GET_ENABLED)
+  @ApiOperation(value = "Check if external OIDC authentication is enabled", response = BooleanResponse.class)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Pac4JSecurity(ignore = true)
+  public Response oidcEnabled() {
+    return UnifiedResponseFactory.getResponse(authApiHandler.isOidcEnabled());
+  }
+
+  @GET
+  @Path(LabAuthApi.METHOD_OIDC_LOGIN)
+  @ApiOperation(
+      value =
+          "Redirects the client to the configured external OIDC endpoint with the correct callback url.",
+      code = 303)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Pac4JSecurity(ignore = true)
+  public Response oidcLogin(@Context HttpHeaders headers) {
+    // Fail if external OIDC authentication is not configured
+    SingleValueFormat<Boolean> oidcEnabled = authApiHandler.isOidcEnabled();
+    if (!oidcEnabled.getData()) {
+      return UnifiedResponseFactory.getErrorResponse(
+          Response.Status.FORBIDDEN, oidcEnabled.getMetadata().getMessage());
+    }
+
+    // Get 'Host' header to figure out the full path of the ML Lab API
+    String host = headers.getHeaderString("Host");
+    if (StringUtils.isNullOrEmpty(host)) {
+      return UnifiedResponseFactory.getErrorResponse(
+          Response.Status.BAD_REQUEST, "Host http header is not set");
+    }
+    // Build the redirect URI
+    URI loginRedirectUri = authApiHandler.getOidcLoginURI(host);
+
+    // Return 303 redirect
+    return Response.seeOther(loginRedirectUri).build();
+  }
+
+  @GET
+  @Path(LabAuthApi.METHOD_OIDC_CALLBACK)
+  @ApiOperation(
+      value =
+          "Callback which will be called with the authentication code by the external OIDC provider. "
+              + "The code is used to retrieve the user's e-mail, then the login is performed and the client is redirected to the main page.",
+      code = 303,
+      response = StringResponse.class)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Pac4JSecurity(ignore = true)
+  public Response oidcLoginCallback(
+      @ApiParam(value = "OIDC authentication code", required = true) @QueryParam("code")
+          String code,
+      @Context HttpHeaders headers) {
+    // Fail if code parameter was not passed
+    if (StringUtils.isNullOrEmpty(code)) {
+      log.warn("Code query parameter is missing.");
+      return UnifiedResponseFactory.getErrorResponse(
+          Response.Status.UNAUTHORIZED, "Code query parameter is missing.");
+    }
+    // Fail if external OIDC authentication is not configured
+    SingleValueFormat<Boolean> oidcEnabled = authApiHandler.isOidcEnabled();
+    if (!oidcEnabled.getData()) {
+      return UnifiedResponseFactory.getErrorResponse(
+          Response.Status.FORBIDDEN, oidcEnabled.getMetadata().getMessage());
+    }
+
+    String host = headers.getHeaderString("Host");
+    if (host == null) {
+      return UnifiedResponseFactory.getErrorResponse(
+          Response.Status.BAD_REQUEST, "Host http header is not set");
+    }
+
+    final Map<String, Object> oidcTokenContent;
+    try {
+      oidcTokenContent = authApiHandler.getOidcTokenContent(code, host);
+    } catch (IOException e) {
+      return UnifiedResponseFactory.getErrorResponse(Response.Status.UNAUTHORIZED, e.getMessage());
+    }
+
+    if (!oidcTokenContent.containsKey("email")) {
+      String errorMessage = "Received OIDC token does not contain the required 'email' field!";
+      return UnifiedResponseFactory.getErrorResponse(Response.Status.UNAUTHORIZED, errorMessage);
+    }
+    // E-Mail address is used to generate the username
+    String email = (String)oidcTokenContent.get("email");
+    // Max length for usernames is 40 characters
+    email = StringUtils.shorten(email, 40);
+    /* TODO: This is a fix to remove '.' characters in the username. In SAP email addresses this is the only character
+     *       that is not allowed. A more generic solution is required that handles all possible email addresses. */
+    email = email.replace("-", "--").replace(".", "-").replace("@", "-");
+
+    // Get user profile for username
+    MongoProfile profile;
+    try {
+      profile = ComponentManager.INSTANCE.getAuthManager().getUser(email);
+      if (profile == null) {
+        if (!LabConfig.ALLOW_SELF_REGISTRATIONS) {
+          // do not allow self registrations
+          return UnifiedResponseFactory.getErrorResponse(
+              Response.Status.UNAUTHORIZED,
+              String.format(
+                  "Account for user '%s' was not found and self registration is not allowed. Please ask an administrator for an account.",
+                  email));
+        }
+        final String pass = AuthorizationManager.generateSecureRandomString();
+        profile = ComponentManager.INSTANCE.getAuthManager().createUser(email, pass);
+      }
+    } catch (Exception e) {
+      return UnifiedResponseFactory.getErrorResponse(
+          Response.Status.UNAUTHORIZED, "Error getting profile: " + e.getMessage());
+    }
+
+    Response response = loginUser(profile, null);
+    // Redirect back to ML Lab web frontend with token set in cookie
+    return Response.fromResponse(response)
+        .status(Response.Status.SEE_OTHER)
+        .location(URI.create("/app/"))
+        .build();
   }
 
   /**
@@ -501,6 +631,11 @@ public class LabAuthEndpoint extends AbstractApiEndpoint<LabAuthEndpoint> {
   private static class StringResponse extends SingleValueFormat<String> {
 
     public String data;
+  }
+
+  private static class BooleanResponse extends SingleValueFormat<Boolean> {
+
+    public Boolean data;
   }
 
   private static class LabUserResponse extends SingleValueFormat<LabUser> {

@@ -12,6 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
+import BooleanResponse from '../model/BooleanResponse';
 import LabUserResponse from '../model/LabUserResponse';
 import ListOfLabUsersResponse from '../model/ListOfLabUsersResponse';
 import StatusMessageFormat from '../model/StatusMessageFormat';
@@ -485,6 +486,130 @@ export default class AuthorizationApi {
 
     return this.apiClient.callApi(
       '/api/auth/logout',
+      'GET',
+      pathParams,
+      queryParams,
+      headerParams,
+      formParams,
+      postBody,
+      authNames,
+      contentTypes,
+      accepts,
+      returnType,
+      callback
+    );
+  }
+  /**
+   * Callback function to receive the result of the oidcEnabled operation.
+   * @callback module:api/AuthorizationApi~oidcEnabledCallback
+   * @param {String} error Error message, if any.
+   * @param {module:model/BooleanResponse} data The data returned by the service call.
+   * @param {String} response The complete HTTP response.
+   */
+
+  /**
+   * Check if external OIDC authentication is enabled
+   * @param {module:api/AuthorizationApi~oidcEnabledCallback} callback The callback function, accepting three arguments: error, data, response
+   * data is of type: {@link module:model/BooleanResponse}
+   */
+  oidcEnabled(callback) {
+    let postBody = null;
+
+    let pathParams = {};
+    let queryParams = {};
+    let headerParams = {};
+    let formParams = {};
+
+    let authNames = [];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = BooleanResponse;
+
+    return this.apiClient.callApi(
+      '/api/auth/oidc/enabled',
+      'GET',
+      pathParams,
+      queryParams,
+      headerParams,
+      formParams,
+      postBody,
+      authNames,
+      contentTypes,
+      accepts,
+      returnType,
+      callback
+    );
+  }
+  /**
+   * Callback function to receive the result of the oidcLogin operation.
+   * @callback module:api/AuthorizationApi~oidcLoginCallback
+   * @param {String} error Error message, if any.
+   * @param data This operation does not return a value.
+   * @param {String} response The complete HTTP response.
+   */
+
+  /**
+   * Redirects the client to the configured external OIDC endpoint with the correct callback url.
+   * @param {module:api/AuthorizationApi~oidcLoginCallback} callback The callback function, accepting three arguments: error, data, response
+   */
+  oidcLogin(callback) {
+    let postBody = null;
+
+    let pathParams = {};
+    let queryParams = {};
+    let headerParams = {};
+    let formParams = {};
+
+    let authNames = [];
+    let contentTypes = [];
+    let accepts = [];
+    let returnType = null;
+
+    return this.apiClient.callApi(
+      '/api/auth/oidc/login',
+      'GET',
+      pathParams,
+      queryParams,
+      headerParams,
+      formParams,
+      postBody,
+      authNames,
+      contentTypes,
+      accepts,
+      returnType,
+      callback
+    );
+  }
+  /**
+   * Callback function to receive the result of the oidcLoginCallback operation.
+   * @callback module:api/AuthorizationApi~oidcLoginCallbackCallback
+   * @param {String} error Error message, if any.
+   * @param {module:model/StringResponse} data The data returned by the service call.
+   * @param {String} response The complete HTTP response.
+   */
+
+  /**
+   * Callback which will be called with the authentication code by the external OIDC provider. The code is used to retrieve the user&#x27;s e-mail, then the login is performed and the client is redirected to the main page.
+   * @param {module:api/AuthorizationApi~oidcLoginCallbackCallback} callback The callback function, accepting three arguments: error, data, response
+   * data is of type: {@link module:model/StringResponse}
+   */
+  oidcLoginCallback(code, callback) {
+    let postBody = null;
+
+    let pathParams = {};
+    let queryParams = {
+      code: code,
+    };
+    let headerParams = {};
+    let formParams = {};
+
+    let authNames = [];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = StringResponse;
+
+    return this.apiClient.callApi(
+      '/api/auth/oidc/callback',
       'GET',
       pathParams,
       queryParams,

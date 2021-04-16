@@ -88,6 +88,13 @@ public class LabAuthApiClient extends AbstractApiClient<LabAuthApiClient> implem
   }
 
   @Override
+  public SingleValueFormat<Boolean> isOidcEnabled() {
+    return executeRequest(
+        Unirest.get(getEndpointUrl() + METHOD_OIDC_GET_ENABLED).getHttpRequest(),
+        new TypeToken<SingleValueFormat<Boolean>>() {}.getType());
+  }
+
+  @Override
   public SingleValueFormat<String> refreshToken() {
     return executeRequest(
         Unirest.get(getEndpointUrl() + METHOD_REFRESH_TOKEN).getHttpRequest(),

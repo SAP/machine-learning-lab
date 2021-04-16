@@ -1,7 +1,16 @@
 package org.mltooling.lab.api;
 
+import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Nullable;
 import org.apache.http.HttpStatus;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -9,10 +18,12 @@ import org.mltooling.core.api.format.SingleValueFormat;
 import org.mltooling.core.api.format.StatusMessageFormat;
 import org.mltooling.core.api.format.UnifiedFormat;
 import org.mltooling.core.api.format.ValueListFormat;
+import org.mltooling.core.api.format.parser.JsonFormatParser;
 import org.mltooling.core.api.handler.AbstractApiHandler;
 import org.mltooling.core.lab.LabAuthApi;
 import org.mltooling.core.lab.model.LabEvent;
 import org.mltooling.core.lab.model.LabUser;
+import org.mltooling.core.utils.CryptoUtils;
 import org.mltooling.core.utils.ListUtils;
 import org.mltooling.core.utils.StringUtils;
 import org.mltooling.core.utils.structures.PropertyContainer;
@@ -151,6 +162,97 @@ public class LabAuthApiHandler extends AbstractApiHandler<LabAuthApiHandler> imp
   public SingleValueFormat<String> logoutUser() {
     // basic authentication is done by endpoint
     throw new NotImplementedException();
+  }
+
+  @Override
+  public SingleValueFormat<Boolean> isOidcEnabled() {
+    String message = null;
+    if (LabConfig.EXTERNAL_OIDC_AUTH_URL == null) {
+      message = "External OIDC authentication is disabled: LAB_EXTERNAL_OIDC_AUTH_URL is not set.";
+    }
+    if (LabConfig.EXTERNAL_OIDC_TOKEN_URL == null) {
+      message = "External OIDC authentication is disabled: LAB_EXTERNAL_OIDC_TOKEN_URL is not set.";
+    }
+    if (LabConfig.EXTERNAL_OIDC_CLIENT_ID == null) {
+      message = "External OIDC authentication is disabled: LAB_EXTERNAL_OIDC_CLIENT_ID is not set.";
+    }
+    if (LabConfig.EXTERNAL_OIDC_CLIENT_SECRET == null) {
+      message = "External OIDC authentication is disabled: LAB_EXTERNAL_OIDC_CLIENT_SECRET is not set.";
+    }
+    boolean isEnabled = message == null;
+    if (isEnabled) {
+      message = "External OIDC authentication is enabled.";
+    }
+    SingleValueFormat<Boolean> result = new SingleValueFormat<>(isEnabled);
+    result.getMetadata().setMessage(message);
+    return result;
+  }
+
+  public URI getOidcLoginURI(String host) {
+    // Request the email of the user to use it for the username
+    final String OAUTH2_SCOPE = "openid email";
+
+    /* Build callback URL which the client will be redirected to after successful authentication
+    with the external OIDC provider. Use the "Host" header to figure out the complete URL at which
+    this ML LAB API is deployed. */
+    String scheme = LabConfig.SERVICE_SSL_ENABLED ? "https" : "http";
+    String redirect_uri =
+        scheme + "://" + host + LabAuthApi.ENDPOINT_PATH + LabAuthApi.METHOD_OIDC_CALLBACK;
+
+    // Build the external OIDC url that the client will be redirected to
+    String uri =
+        Unirest.get(LabConfig.EXTERNAL_OIDC_AUTH_URL)
+            .queryString("response_type", "code")
+            .queryString("client_id", LabConfig.EXTERNAL_OIDC_CLIENT_ID)
+            .queryString("scope", OAUTH2_SCOPE)
+            .queryString("redirect_uri", redirect_uri)
+            .getUrl();
+    return URI.create(uri);
+  }
+
+  public Map<String, Object> getOidcTokenContent(String code, String host) throws IOException {
+    // Redirect uri needs to be the same as the one used for the request to get the auth code
+    String scheme = LabConfig.SERVICE_SSL_ENABLED ? "https" : "http";
+    String redirect_uri =
+        scheme + "://" + host + LabAuthApi.ENDPOINT_PATH + LabAuthApi.METHOD_OIDC_CALLBACK;
+
+    // Use the auth code to get the OIDC token from the configured external endpoint
+    HttpResponse<String> tokenResponse;
+    try {
+      tokenResponse =
+          Unirest.post(LabConfig.EXTERNAL_OIDC_TOKEN_URL)
+              .basicAuth(LabConfig.EXTERNAL_OIDC_CLIENT_ID, LabConfig.EXTERNAL_OIDC_CLIENT_SECRET)
+              .field("grant_type", "authorization_code")
+              .field("code", code)
+              .field("redirect_uri", redirect_uri)
+              .asString();
+      if (tokenResponse.getStatus() != 200) {
+        throw new IOException("Error while requesting OIDC token: " + tokenResponse.getBody());
+      }
+    } catch (UnirestException e) {
+      throw new IOException("Error while requesting OIDC token: " + e.getMessage());
+    }
+
+    String tokenResponseBody = tokenResponse.getBody();
+    Type stringMapType = new TypeToken<Map<String, String>>() {}.getType();
+    JsonFormatParser jsonParser = JsonFormatParser.INSTANCE;
+    Map<String, String> tokenResponseMap;
+    try {
+      tokenResponseMap = jsonParser.fromJson(tokenResponseBody, stringMapType);
+    } catch (JsonParseException e){
+      throw new IOException("Received invalid token response body: " + tokenResponseBody, e);
+    }
+    String idToken = tokenResponseMap.get("id_token");
+    // The JWT token consists of 3 parts (header, content, signature) which are separated by a '.'
+    // We only need the content part which needs to be decoded from base64
+    String idTokenContent = new String(CryptoUtils.decode(idToken.split("\\.")[1]));
+    // Parse json content of token and return it as a Map
+    try{
+      Type stringToObjectMapType = new TypeToken<Map<String, Object>>() {}.getType();
+      return jsonParser.fromJson(idTokenContent, stringToObjectMapType);
+    } catch (JsonParseException e){
+      throw new IOException("Unable to parse id token content: " + idTokenContent, e);
+    }
   }
 
   @Override

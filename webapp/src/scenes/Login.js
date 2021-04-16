@@ -19,6 +19,7 @@ import { parseJwtToken } from '../services/handler/utils';
 //TODO: add 'Pending Authentication State' so Login can be hidden when authentication /refreshLogin request is made.
 
 const steps = {
+  checkOidc: 'checkOidc',
   login: 'login',
   register: 'register',
 };
@@ -37,8 +38,34 @@ class Login extends Component {
       user: '',
       pass: '',
       repeatedPass: '',
-      step: steps.login,
+      step: steps.checkOidc,
+      oidcEnabled: false
     };
+    this.checkOidc()
+  }
+
+  checkOidc = () => {
+    authorizationApi.oidcEnabled(
+      getDefaultApiCallback(
+        ({ result }) => {
+          let oidcIsEnabled = result.data;
+          this.setState({
+            oidcEnabled: oidcIsEnabled,
+            step: steps.login
+          })
+        },
+        ({ httpResponse }) => {
+          let errorMessage = '';
+          try {
+            errorMessage = httpResponse.body.errors.message;
+          } catch (err) {
+            // do nothing
+          }
+          console.error("Error checking oidc: " + errorMessage)
+          this.setState({ step: steps.login });
+        }
+      )
+    );
   }
 
   loginUser = (base64Credentials) => {
@@ -127,20 +154,24 @@ class Login extends Component {
   };
 
   render() {
+    // In case we are still checking whether external OIDC authentication is enabled, a simple loading text is displayed
+    if (this.state.step == steps.checkOidc) {
+      return <div style={{
+        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+        fontSize: '16px',
+        color: 'gray',
+        margin: 'auto',
+        marginTop: '48px',
+      }}>
+        Redirecting to login...
+      </div>
+    }
+
+    // Change some variables when we are in register step and OIDC is disabled
     let buttonText = 'Login';
     let repeatPasswordField = null;
-    let additionalLoginComponent =
-      this.state.step === steps.register ? (
-        false
-      ) : (
-        <Typography
-          style={{ marginTop: '2px', fontSize: '12px', color: 'gray' }}
-        >
-          Login or
-        </Typography>
-      );
     let stepChangeText = 'Register here!';
-    if (this.state.step === steps.register) {
+    if (!this.state.oidcEnabled && this.state.step === steps.register) {
       buttonText = 'Register';
       repeatPasswordField = (
         <div>
@@ -156,16 +187,106 @@ class Login extends Component {
       );
       stepChangeText = 'Go back to login';
     }
+
+    let additionalLoginComponent = null;
+    if (this.state.oidcEnabled) {
+      // If OIDC is enabled, we show the extra external login button
+      additionalLoginComponent = (
+        <div>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+            margin: "10px 0px"
+          }}>
+            <div style={{ width: '50px', height: '10px', borderBottom: '1px solid rgb(199, 208, 217)' }}></div>
+            <span>or use</span>
+            <div style={{ width: '50px', height: '10px', borderBottom: '1px solid rgb(199, 208, 217)' }}></div>
+          </div>
+          <Button
+            variant="text"
+            color="primary"
+            onClick={(event) => window.location.href = '/api/auth/oidc/login'}
+            style={{
+              paddingLeft: '0px',
+              justifyContent: 'start',
+              marginTop: '4px',
+            }}
+          > External Login
+          </Button>
+          {/* <div style={{
+          margin: '0 auto',
+          marginTop: '48px',
+          padding: '20px',
+          fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+          backgroundColor: "#fff",
+          border: "1px solid #d7dee1",
+          borderRadius: "5px"
+        }}>
+          <h2 style={{
+            textAlign: 'center',
+          }}>
+            Login
+          </h2>
+          <p style={{
+            fontSize: '14px',
+            textAlign: 'center'
+          }}>
+            This ML Lab instance is configured to use an external authentication provider.
+          </p>
+          <Button
+            variant="text"
+            color="primary"
+            onClick={(event) => window.location.href = '/api/auth/oidc/login'}
+            style={{
+              marginTop: '20px',
+              textAlign: 'center'
+            }}
+          >
+            Login with external provider
+          </Button>
+        </div> */}
+        </div>);
+    } else {
+      // If OIDC is disabled, we show the "Register here" or "Back to login" button depending on the step
+      additionalLoginComponent = (
+        <div>
+          {this.state.step === steps.register ? (
+          false
+          ) : (
+          <Typography
+            style={{ marginTop: '2px', fontSize: '12px', color: 'gray' }}
+          >
+            Login or
+          </Typography>
+        )}
+          <div
+            style={{
+              fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+              fontSize: '12px',
+              color: 'gray',
+              cursor: 'pointer',
+              textDecoration: 'underline',
+            }}
+            onClick={() => this.handleStepChange()}
+          >
+            {stepChangeText}
+          </div>
+        </div>);
+    }
     const ENTER_KEY = 13;
+    if (this.state.step == steps.showOidc) {
+    }
     return (
       <div
-        style={{ margin: 'auto', marginTop: '48px' }}
+        style={{ margin: '48px auto auto;', marginTop: '48px' }}
         onKeyPress={(e) =>
           e.charCode === ENTER_KEY ? this.handleClick() : false
         }
       >
         <div>
           <TextField
+            style={{ width: '175px'}}
             name="user"
             label="User"
             margin="normal"
@@ -175,6 +296,7 @@ class Login extends Component {
         </div>
         <div>
           <TextField
+            style={{ width: '175px'}}
             name="pass"
             label="Password"
             type="password"
@@ -184,32 +306,21 @@ class Login extends Component {
           />
         </div>
         {repeatPasswordField}
-        <Button
-          variant="text"
-          color="primary"
-          onClick={(event) => this.handleClick(event)}
-          style={{
-            paddingLeft: '0px',
-            justifyContent: 'start',
-            marginTop: '4px',
-          }}
-        >
-          {buttonText}
-        </Button>
-        {additionalLoginComponent}
-        <div
-          style={{
-            fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-            fontSize: '12px',
-            color: 'gray',
-            cursor: 'pointer',
-            textDecoration: 'underline',
-          }}
-          onClick={() => this.handleStepChange()}
-        >
-          {stepChangeText}
+        <div>
+
+          <Button
+            variant="text"
+            color="primary"
+            onClick={(event) => this.handleClick(event)}
+            style={{
+              paddingLeft: '0px',
+              justifyContent: 'start',
+              marginTop: '4px',
+            }}
+          >{buttonText}</Button>
         </div>
-      </div>
+        { additionalLoginComponent }
+      </div >
     );
   }
 }

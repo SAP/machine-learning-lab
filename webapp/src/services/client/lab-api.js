@@ -13,6 +13,7 @@
 
 import ApiClient from './ApiClient';
 import Body from './model/Body';
+import BooleanResponse from './model/BooleanResponse';
 import ExperimentResources from './model/ExperimentResources';
 import GitInfo from './model/GitInfo';
 import HostInfo from './model/HostInfo';
@@ -96,6 +97,11 @@ export {
    * @property {module:model/Body}
    */
   Body,
+  /**
+   * The BooleanResponse model constructor.
+   * @property {module:model/BooleanResponse}
+   */
+  BooleanResponse,
   /**
    * The ExperimentResources model constructor.
    * @property {module:model/ExperimentResources}

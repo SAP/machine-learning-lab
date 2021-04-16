@@ -38,6 +38,10 @@ public interface LabAuthApi {
   String METHOD_LOGOUT = "/logout";
   String METHOD_REFRESH_TOKEN = "/refresh";
 
+  String METHOD_OIDC_GET_ENABLED = "/oidc/enabled";
+  String METHOD_OIDC_LOGIN = "/oidc/login";
+  String METHOD_OIDC_CALLBACK = "/oidc/callback";
+
   // ================ Methods ============================================= //
 
   SingleValueFormat<LabUser> createAdminUser(String user, String password, String jwtSecret);
@@ -48,6 +52,8 @@ public interface LabAuthApi {
       String user, String password); // -> returns short-term application token
 
   SingleValueFormat<String> logoutUser();
+
+  SingleValueFormat<Boolean> isOidcEnabled(); // -> returns true if OIDC  is enabled
 
   SingleValueFormat<String> refreshToken(); // -> returns short-term application token
 
