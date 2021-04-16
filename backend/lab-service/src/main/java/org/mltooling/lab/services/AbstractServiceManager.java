@@ -334,12 +334,12 @@ public abstract class AbstractServiceManager {
 
     if (previousUsedImage == null){
       previousUsedImage = CoreService.WORKSPACE.getImage();
-      log.info("Unable to retrieve previous used image");
+      log.info("Unable to retrieve previous used image for user: " + user);
     }
 
     if (imageName == null){
       imageName = previousUsedImage;
-      log.info("Not image given, used previous used image: " + imageName);
+      log.debug("No image provided, using previously used image: " + imageName);
     }
 
     Thread.sleep(2000);
@@ -427,10 +427,9 @@ public abstract class AbstractServiceManager {
   public DockerDeploymentConfig createWorkspaceService(String user, @Nullable String imageName) throws Exception {
     if (imageName == null){
       imageName = CoreService.WORKSPACE.getImage();
-      log.info("No image was specified. Using default workspace image");
+      log.debug("No image was specified. Using default workspace image");
     }
     String dockerName = getWorkspaceName(user);
-    log.info("Create Workspace Service, imagename: " + imageName);
     String jupyterBaseUrl = "workspace/id/" + user + "/";
     if (!StringUtils.isNullOrEmpty(LabConfig.LAB_BASE_URL)) {
       jupyterBaseUrl = LabConfig.LAB_BASE_URL + "/" + jupyterBaseUrl;

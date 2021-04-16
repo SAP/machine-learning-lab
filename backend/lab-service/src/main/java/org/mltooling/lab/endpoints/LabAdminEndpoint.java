@@ -163,7 +163,7 @@ public class LabAdminEndpoint extends AbstractApiEndpoint<LabAdminEndpoint> {
   @ApiOperation(
       value =
           "Resets a workspace. Removes the container (keeps all persisted data) and starts a new"
-              + " one.  When specified an image, it is used this image instead",
+              + " one.  If an image is specified, it will be used instead of the default image.",
       response = LabServiceResponse.class)
   @Produces(MediaType.APPLICATION_JSON)
   @Pac4JSecurity(

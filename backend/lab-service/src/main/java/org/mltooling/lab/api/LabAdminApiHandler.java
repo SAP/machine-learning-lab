@@ -169,7 +169,6 @@ public class LabAdminApiHandler extends AbstractApiHandler<LabAdminApiHandler>
    *     {WORKSPACE_SERVICE_PREFIX}
    */
   public SingleValueFormat<LabService> resetWorkspace(String user){
-    // TODO: Check which image was used by the user beforehand and reuse it by default
     return resetWorkspace(user, null);
   }
 
