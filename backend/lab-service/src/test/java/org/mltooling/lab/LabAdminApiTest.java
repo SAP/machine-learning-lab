@@ -51,7 +51,6 @@ public class LabAdminApiTest {
   private static final String NEW_WORKSPACE_IMAGE = "new-workspace:latest";
   private static final String DEFAULT_WORKSPACE_IMAGE = CoreService.WORKSPACE.getImage();
 
-
   // ================ Members ============================================= //
   @Rule public final LocalDockerLauncher dockerLauncher;
   @Rule public final TemporaryFolder tempFolder = new TemporaryFolder();
@@ -66,17 +65,20 @@ public class LabAdminApiTest {
   //         .set(LabConfig.ENV_NAME_LAB_NAMESPACE, "lab-test")
   //         .set(LabConfig.ENV_NAME_K8S_NAMESPACE, "ml-test");
   private final String DEFAULT_HOST = SystemUtils.getEnvVar("SERVICE_HOST", "localhost");
-  // by default use a port > 30000 so that it also works in Kubernetes mode (Kubernetes service ports must
+  // by default use a port > 30000 so that it also works in Kubernetes mode (Kubernetes service
+  // ports must
   // by default be >30000)
   // private static final int LAB_PORT =
-  //   StringUtils.isNullOrEmpty(SystemUtils.getEnvVar(LabConfig.ENV_NAME_LAB_PORT)) ? 30002 : Integer.parseInt(SystemUtils.getEnvVar(LabConfig.ENV_NAME_LAB_PORT));
-  private final int LAB_PORT = StringUtils.isNullOrEmpty(LabConfig.LAB_PORT) ? 30002 : Integer.parseInt(LabConfig.LAB_PORT);
+  //   StringUtils.isNullOrEmpty(SystemUtils.getEnvVar(LabConfig.ENV_NAME_LAB_PORT)) ? 30002 :
+  // Integer.parseInt(SystemUtils.getEnvVar(LabConfig.ENV_NAME_LAB_PORT));
+  private final int LAB_PORT =
+      StringUtils.isNullOrEmpty(LabConfig.LAB_PORT) ? 30002 : Integer.parseInt(LabConfig.LAB_PORT);
   private final int LAB_SERVICE_PORT =
-    Integer.parseInt(SystemUtils.getEnvVar("LAB_SERVICE_PORT", "" + this.LAB_PORT));
+      Integer.parseInt(SystemUtils.getEnvVar("LAB_SERVICE_PORT", "" + this.LAB_PORT));
   private final int DEFAULT_PROJECT_SERVICES_SIZE = 0; // no more initial project services
 
   private final Boolean IS_KIND_CLUSTER =
-    Boolean.parseBoolean(SystemUtils.getEnvVar("IS_KIND_CLUSTER", "False"));
+      Boolean.parseBoolean(SystemUtils.getEnvVar("IS_KIND_CLUSTER", "False"));
 
   private LabApi labApi;
   private LabAuthApi authorizationApi;
@@ -107,16 +109,19 @@ public class LabAdminApiTest {
       envVars.put(LabConfig.ENV_NAME_SERVICES_MEMORY_LIMIT, "2");
       envVars.put(LabConfig.ENV_NAME_K8S_NAMESPACE, LabConfig.K8S_NAMESPACE);
       envVars.put(
-        LabConfig.ENV_NAME_HOST_ROOT_DATA_MOUNT_PATH, LabConfig.HOST_ROOT_DATA_MOUNT_PATH);
+          LabConfig.ENV_NAME_HOST_ROOT_DATA_MOUNT_PATH, LabConfig.HOST_ROOT_DATA_MOUNT_PATH);
       this.dockerLauncher =
-        new LocalDockerLauncher(DEFAULT_HOST, LAB_SERVICE_PORT, LAB_PORT, envVars, dockerImage, true);
+          new LocalDockerLauncher(
+              DEFAULT_HOST, LAB_SERVICE_PORT, LAB_PORT, envVars, dockerImage, true);
     } else {
       Map<String, String> envVars = new HashMap<>();
-      // Have to explicitly pass the workspace image as the backend image could be built with a different
+      // Have to explicitly pass the workspace image as the backend image could be built with a
+      // different
       // SERVICE_VERSION, which makes the workspace tests fail
       envVars.put(LabConfig.ENV_NAME_WORKSPACE_IMAGE, LabConfig.WORKSPACE_IMAGE);
       this.dockerLauncher =
-        new LocalDockerLauncher(DEFAULT_HOST, LAB_SERVICE_PORT, LAB_PORT, envVars, dockerImage, false);
+          new LocalDockerLauncher(
+              DEFAULT_HOST, LAB_SERVICE_PORT, LAB_PORT, envVars, dockerImage, false);
     }
 
     Thread.sleep(SLEEP * 3);
@@ -139,11 +144,11 @@ public class LabAdminApiTest {
 
     log.info("Admin Token: " + adminApiToken);
     labApi = new LabApiClient(serviceUrl, adminApiToken);
-    labAdminApiAdminUser =  new LabAdminApiClient(serviceUrl, adminApiToken);
+    labAdminApiAdminUser = new LabAdminApiClient(serviceUrl, adminApiToken);
 
     testProject1 = "test-" + System.currentTimeMillis();
     SingleValueFormat<LabProject> response =
-      labApi.createProject(new LabProjectConfig(testProject1));
+        labApi.createProject(new LabProjectConfig(testProject1));
 
     resetUnirest();
     Assume.assumeThat(response.getMetadata("status"), not(500));
@@ -151,7 +156,7 @@ public class LabAdminApiTest {
     // Add test user to project
     userAppToken = authApi.addUserToProject(TEST_USER_ID, testProject1).getData();
     userApiToken = authApi.createApiToken(TEST_USER_ID).getData();
-    labAdminApiNonAdminUser =  new LabAdminApiClient(serviceUrl, userApiToken);
+    labAdminApiNonAdminUser = new LabAdminApiClient(serviceUrl, userApiToken);
 
     log.info("User Api Token: " + userApiToken);
 
@@ -159,7 +164,7 @@ public class LabAdminApiTest {
     response = labApi.createProject(new LabProjectConfig(testProject2));
     Assume.assumeThat(response.getMetadata("status"), not(500));
 
-    try{
+    try {
       this.dockerLauncher.tagDockerImage(LabConfig.WORKSPACE_IMAGE, NEW_WORKSPACE_IMAGE);
     } catch (Throwable throwable) {
       throwable.printStackTrace();
@@ -211,123 +216,113 @@ public class LabAdminApiTest {
   public void testWorkspaceHandling() throws Exception {
     log.info("Checking creation of default workspaces");
     // Admin should be able to check it's  own workspace
-    SingleValueFormat<LabService>  response =  labAdminApiAdminUser.checkWorkspace(ADMIN_USER);
+    SingleValueFormat<LabService> response = labAdminApiAdminUser.checkWorkspace(ADMIN_USER);
     assertThat(response.getStatus(), is(equalTo(200)));
     assertThat(response.getData().getDockerImage(), is(equalTo(DEFAULT_WORKSPACE_IMAGE)));
     // A  user should be able to check  it's own workspace
-    SingleValueFormat<LabService>  responseTestUser =  labAdminApiNonAdminUser.checkWorkspace(TEST_USER_ID);
+    SingleValueFormat<LabService> responseTestUser =
+        labAdminApiNonAdminUser.checkWorkspace(TEST_USER_ID);
     assertThat(responseTestUser.getStatus(), is(equalTo(200)));
     assertThat(responseTestUser.getData().getDockerImage(), is(equalTo(DEFAULT_WORKSPACE_IMAGE)));
     // Admin should be able to check another user's workspace
-    response =  labAdminApiAdminUser.checkWorkspace(TEST_USER_ID);
+    response = labAdminApiAdminUser.checkWorkspace(TEST_USER_ID);
     assertThat(response.getStatus(), is(equalTo(200)));
     assertThat(response.getData().getDockerImage(), is(equalTo(DEFAULT_WORKSPACE_IMAGE)));
     // A  user shouldn't be able to check another user workspace
-    responseTestUser =  labAdminApiNonAdminUser.checkWorkspace(ADMIN_USER);
+    responseTestUser = labAdminApiNonAdminUser.checkWorkspace(ADMIN_USER);
     assertThat(responseTestUser.getStatus(), is(equalTo(401)));
 
     log.info("Checking creation of custom workspaces");
     // A  user should be able to create a custom workspace for himself
-    responseTestUser =  labAdminApiNonAdminUser.resetWorkspace(TEST_USER_ID, NEW_WORKSPACE_IMAGE);
+    responseTestUser = labAdminApiNonAdminUser.resetWorkspace(TEST_USER_ID, NEW_WORKSPACE_IMAGE);
     assertThat(responseTestUser.getStatus(), is(equalTo(200)));
     assertThat(responseTestUser.getData().getDockerImage(), is(equalTo(NEW_WORKSPACE_IMAGE)));
     // Checking the workspace shouldn't change the image
-    responseTestUser =  labAdminApiNonAdminUser.checkWorkspace(TEST_USER_ID);
+    responseTestUser = labAdminApiNonAdminUser.checkWorkspace(TEST_USER_ID);
     assertThat(responseTestUser.getStatus(), is(equalTo(200)));
     assertThat(responseTestUser.getData().getDockerImage(), is(equalTo(NEW_WORKSPACE_IMAGE)));
-    // Resetting the workspace without specifying an image should spawn back the previously used image
-    responseTestUser =  labAdminApiNonAdminUser.resetWorkspace(TEST_USER_ID, null);
+    // Resetting the workspace without specifying an image should spawn back the previously used
+    // image
+    responseTestUser = labAdminApiNonAdminUser.resetWorkspace(TEST_USER_ID, null);
     assertThat(responseTestUser.getStatus(), is(equalTo(200)));
     assertThat(responseTestUser.getData().getDockerImage(), is(equalTo(NEW_WORKSPACE_IMAGE)));
-    responseTestUser =  labAdminApiNonAdminUser.checkWorkspace(TEST_USER_ID);
+    responseTestUser = labAdminApiNonAdminUser.checkWorkspace(TEST_USER_ID);
     assertThat(responseTestUser.getStatus(), is(equalTo(200)));
     assertThat(responseTestUser.getData().getDockerImage(), is(equalTo(NEW_WORKSPACE_IMAGE)));
 
     // A user shouldn't be able to  change the workspace of somebody else
-    responseTestUser =  labAdminApiNonAdminUser.resetWorkspace(ADMIN_USER, null);
+    responseTestUser = labAdminApiNonAdminUser.resetWorkspace(ADMIN_USER, null);
     assertThat(responseTestUser.getStatus(), is(equalTo(401)));
-    responseTestUser =  labAdminApiNonAdminUser.resetWorkspace(ADMIN_USER, NEW_WORKSPACE_IMAGE);
+    responseTestUser = labAdminApiNonAdminUser.resetWorkspace(ADMIN_USER, NEW_WORKSPACE_IMAGE);
     assertThat(responseTestUser.getStatus(), is(equalTo(401)));
-
 
     // Admin should be able to change the workspace of somebody else
-    response =  labAdminApiAdminUser.resetWorkspace(ADMIN_USER, NEW_WORKSPACE_IMAGE);
+    response = labAdminApiAdminUser.resetWorkspace(ADMIN_USER, NEW_WORKSPACE_IMAGE);
     assertThat(response.getStatus(), is(equalTo(200)));
     assertThat(response.getData().getDockerImage(), is(equalTo(NEW_WORKSPACE_IMAGE)));
-    response =  labAdminApiAdminUser.resetWorkspace(ADMIN_USER, DEFAULT_WORKSPACE_IMAGE);
+    response = labAdminApiAdminUser.resetWorkspace(ADMIN_USER, DEFAULT_WORKSPACE_IMAGE);
     assertThat(response.getStatus(), is(equalTo(200)));
     assertThat(response.getData().getDockerImage(), is(equalTo(DEFAULT_WORKSPACE_IMAGE)));
 
     // Test if workspace is reachable via URL
-    String urlAdminWorkspace =
-      this.serviceUrl
-        + "/workspace/id/"
-        + ADMIN_USER
-        + "/tree";
+    String urlAdminWorkspace = this.serviceUrl + "/workspace/id/" + ADMIN_USER + "/tree";
 
     // this call requires the Bearer token
     log.info("Requesting with admin token: " + urlAdminWorkspace);
     Integer status =
-      Unirest.get(urlAdminWorkspace)
-        .header(ApiUtils.AUTHORIZATION_HEADER, "Bearer " + adminAppToken)
-        .getHttpRequest()
-        .asString()
-        .getStatus();
+        Unirest.get(urlAdminWorkspace)
+            .header(ApiUtils.AUTHORIZATION_HEADER, "Bearer " + adminAppToken)
+            .getHttpRequest()
+            .asString()
+            .getStatus();
     assertThat(status, is(equalTo(200)));
     log.info("Requesting with user token: " + urlAdminWorkspace);
     status =
-      Unirest.get(urlAdminWorkspace)
-        .header(ApiUtils.AUTHORIZATION_HEADER, "Bearer " + userAppToken)
-        .getHttpRequest()
-        .asString()
-        .getStatus();
+        Unirest.get(urlAdminWorkspace)
+            .header(ApiUtils.AUTHORIZATION_HEADER, "Bearer " + userAppToken)
+            .getHttpRequest()
+            .asString()
+            .getStatus();
     assertThat(status, is(equalTo(401)));
 
-
     // Test if workspace is reachable via URL
-    String urlUserWorkspace =
-      this.serviceUrl
-        + "/workspace/id/"
-        + TEST_USER_ID
-        + "/tree";
+    String urlUserWorkspace = this.serviceUrl + "/workspace/id/" + TEST_USER_ID + "/tree";
 
     // this call requires the Bearer token
     log.info("Requesting with user Token: " + urlUserWorkspace);
     status =
-      Unirest.get(urlUserWorkspace)
-        .header(ApiUtils.AUTHORIZATION_HEADER, "Bearer " + userAppToken)
-        .getHttpRequest()
-        .asString()
-        .getStatus();
+        Unirest.get(urlUserWorkspace)
+            .header(ApiUtils.AUTHORIZATION_HEADER, "Bearer " + userAppToken)
+            .getHttpRequest()
+            .asString()
+            .getStatus();
     assertThat(status, is(equalTo(200)));
     // this call requires the Bearer token
     log.info("Requesting with admin Token: " + urlUserWorkspace);
     status =
-      Unirest.get(urlUserWorkspace)
-        .header(ApiUtils.AUTHORIZATION_HEADER, "Bearer " + adminAppToken)
-        .getHttpRequest()
-        .asString()
-        .getStatus();
+        Unirest.get(urlUserWorkspace)
+            .header(ApiUtils.AUTHORIZATION_HEADER, "Bearer " + adminAppToken)
+            .getHttpRequest()
+            .asString()
+            .getStatus();
     assertThat(status, is(equalTo(200)));
-
   }
-
 
   // ================ Private Methods ===================================== //
   private String getAdminToken(String serviceUrl) {
     // all API calls in this test will be made via this user / the user's token
     authorizationApi = new LabAuthApiClient(serviceUrl);
     authorizationApi.createAdminUser(
-      ADMIN_USER, ADMIN_PASSWORD, AuthorizationManager.DEFAULT_JWT_SECRET);
+        ADMIN_USER, ADMIN_PASSWORD, AuthorizationManager.DEFAULT_JWT_SECRET);
     return authorizationApi.loginUser(ADMIN_USER, ADMIN_PASSWORD).getData();
   }
 
   /**
    * This is somehow necessary, as Unirest will otherwise not accept '127.0.0.1' or 'localhost'
    * whereas it is the opposite of the {@link LabAdminApiTest#DEFAULT_HOST} value. Hence, if {@link
-   * LabAdminApiTest#DEFAULT_HOST} is set to '127.0.0.1', Unirest will return a forbidden response when
-   * making the endpoint call with the authToken (whereas it works when you manually set the host of
-   * the endpoint call to 'localhost') and vice-versa. I assume that Unirest, since it is a
+   * LabAdminApiTest#DEFAULT_HOST} is set to '127.0.0.1', Unirest will return a forbidden response
+   * when making the endpoint call with the authToken (whereas it works when you manually set the
+   * host of the endpoint call to 'localhost') and vice-versa. I assume that Unirest, since it is a
    * Singleton, makes some weird host-mapping or caching upon first request.
    *
    * @throws IOException
