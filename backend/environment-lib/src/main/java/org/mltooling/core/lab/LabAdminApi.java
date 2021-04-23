@@ -9,6 +9,8 @@ import org.mltooling.core.lab.model.LabEvent;
 import org.mltooling.core.lab.model.LabInfo;
 import org.mltooling.core.lab.model.LabProjectsStatistics;
 import org.mltooling.core.lab.model.LabUser;
+import org.mltooling.core.lab.model.LabService;
+
 
 public interface LabAdminApi {
 
@@ -22,6 +24,7 @@ public interface LabAdminApi {
   String PARAM_IS_ANONYMOUS = "anonymous";
   String PARAM_DRY_RUN = "dryrun";
   String PARAM_DAYS_THRESHOLD = "threshold";
+  String PARAM_DOCKER_IMAGE = "image";
 
   String METHOD_CHECK_WORKSPACE = "/workspace/check";
   String METHOD_RESET_WORKSPACE = "/workspace/reset";
@@ -38,9 +41,9 @@ public interface LabAdminApi {
   // ================ Methods ============================================= //
   // TODO why config with Object??
 
-  SingleValueFormat checkWorkspace(String workspaceId);
+  SingleValueFormat<LabService> checkWorkspace(String workspaceId);
 
-  SingleValueFormat resetWorkspace(String workspaceId);
+  SingleValueFormat resetWorkspace(String workspaceId, @Nullable String imageName);
 
   StatusMessageFormat resetAllWorkspaces();
 

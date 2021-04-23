@@ -180,7 +180,7 @@ public class LabAdminEndpoint extends AbstractApiEndpoint<LabAdminEndpoint> {
       authorizers = AuthorizationManager.AUTHORIZER_IS_AUTHENTICATED)
   public Response resetWorkspace(
       @QueryParam(LabAdminApi.PARAM_WORKSPACE_ID) String id,
-      @ApiParam(value = "Image Name", required = false) @QueryParam(LabApi.PARAM_DOCKER_IMAGE)
+      @ApiParam(value = "Image Name", required = false) @QueryParam(LabAdminApi.PARAM_DOCKER_IMAGE)
           String image,
       @Pac4JProfile MongoProfile commonProfile,
       @BeanParam DefaultHeaderFields defaultHeaders) {

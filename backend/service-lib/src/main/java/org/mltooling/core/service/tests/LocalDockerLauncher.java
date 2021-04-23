@@ -108,6 +108,10 @@ public class LocalDockerLauncher extends ExternalResource {
     return "http://" + this.serviceHost + ":" + this.servicePort;
   }
 
+  public void tagDockerImage(String dockerImage, String newTag) throws Throwable {
+    String dockerCommand = getDockerPath() +" tag " + dockerImage + " " + newTag;
+    executeCommand(dockerCommand);
+  }
   // ================ Private Methods ===================================== //
 
   private static String getDockerPath() {

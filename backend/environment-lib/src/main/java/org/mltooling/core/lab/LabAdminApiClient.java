@@ -45,12 +45,12 @@ public class LabAdminApiClient extends AbstractApiClient<LabAdminApiClient> impl
   }
 
   @Override
-  public SingleValueFormat checkWorkspace(String workspaceId) {
+  public SingleValueFormat<LabService> checkWorkspace(String workspaceId) {
     return executeRequest(
         Unirest.get(getEndpointUrl() + METHOD_CHECK_WORKSPACE)
             .getHttpRequest()
             .queryString(PARAM_WORKSPACE_ID, workspaceId),
-        new TypeToken<SingleValueFormat>() {}.getType());
+        new TypeToken<SingleValueFormat<LabService>>() {}.getType());
   }
 
   @Override
@@ -86,12 +86,16 @@ public class LabAdminApiClient extends AbstractApiClient<LabAdminApiClient> impl
   }
 
   @Override
-  public SingleValueFormat<LabService> resetWorkspace(String workspaceId) {
-    return executeRequest(
-        Unirest.get(getEndpointUrl() + METHOD_RESET_WORKSPACE)
-            .getHttpRequest()
-            .queryString(PARAM_WORKSPACE_ID, workspaceId),
-        new TypeToken<SingleValueFormat<LabService>>() {}.getType());
+  public SingleValueFormat<LabService> resetWorkspace(String workspaceId, @Nullable String imageName) {
+    HttpRequest request = Unirest.get(getEndpointUrl() + METHOD_RESET_WORKSPACE)
+      .getHttpRequest()
+      .queryString(PARAM_WORKSPACE_ID, workspaceId);
+
+    if (imageName != null) {
+      request = request.queryString(PARAM_DOCKER_IMAGE, imageName);
+    }
+
+    return executeRequest(request, new TypeToken<SingleValueFormat<LabService>>() {}.getType());
   }
 
   @Override
