@@ -26,7 +26,7 @@ ENV LC_ALL="en_US.UTF-8" \
     DEBIAN_FRONTEND="noninteractive"
 
 # Install basics
-RUN apt-get update && \ 
+RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
                         wget \
@@ -52,7 +52,7 @@ RUN apt-get update && \
 ENV DATA_ENVIRONMENT="/data" \
     _NGINX_CONFIG_PATH="/etc/nginx/nginx.conf" \
     _RESOURCES_PATH="/resources" \
-    _SSL_RESOURCES_PATH="/resources/ssl" 
+    _SSL_RESOURCES_PATH="/resources/ssl"
 
 RUN \
     mkdir -p $_RESOURCES_PATH && \
@@ -144,7 +144,7 @@ RUN \
     chmod -R a+rwx $_RESOURCES_PATH && \
     # Cleanup
     clean-layer.sh
-    
+
 RUN \
     mkdir $_RESOURCES_PATH/nginx_plugins && \
     mkdir $_RESOURCES_PATH/nginx && \
@@ -185,9 +185,9 @@ RUN \
 # https://gist.github.com/smoser/3e9430c51e23e0c0d16c359a2ca668ae
 # https://www.tecmint.com/restrict-ssh-user-to-directory-using-chrooted-jail/
 # http://www.ab-weblog.com/en/creating-a-restricted-ssh-user-for-ssh-tunneling-only/
-RUN useradd -d /home/limited-user -m -s /bin/true --gid nogroup --skel /dev/null --create-home limited-user && \ 
-    #chmod 755 /home/limited-user && \ 
-    #chmod g+rwx /home/limited-user && \ 
+RUN useradd -d /home/limited-user -m -s /bin/true --gid nogroup --skel /dev/null --create-home limited-user && \
+    #chmod 755 /home/limited-user && \
+    #chmod g+rwx /home/limited-user && \
     echo 'PATH=""' >> /home/limited-user/.profile && \
     echo 'limited-user:limited' |chpasswd && \
     chmod 555 /home/limited-user/ && \
@@ -249,6 +249,9 @@ ENV SERVICE_VERSION=$service_version \
 #COPY docker-res/ssh/* /root/.ssh/
 COPY docker-res/nginx.conf "$_NGINX_CONFIG_PATH"
 COPY target/service.jar "$_RESOURCES_PATH/service.jar"
+
+# Copy TOS file
+ADD docker-res/terms-of-service.txt "$_RESOURCES_PATH/tos/terms-of-service.txt"
 
 # TODO only required for kubernetes mode
 # For Kubernetes: Copy k8s yaml files into ML Lab container which define how other services are started

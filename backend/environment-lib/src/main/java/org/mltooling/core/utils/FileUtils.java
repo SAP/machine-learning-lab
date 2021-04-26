@@ -154,12 +154,9 @@ public final class FileUtils {
   }
 
   public static String fileToString(File file) throws IOException {
-    BufferedReader reader = null;
-    try {
-      reader =
-          new BufferedReader(
-              new InputStreamReader(new FileInputStream(file), StringUtils.UTF_8_CHARSET));
-      String line = null;
+    try (BufferedReader reader = new BufferedReader(
+      new InputStreamReader(new FileInputStream(file), StringUtils.UTF_8_CHARSET))) {
+      String line;
       StringBuilder stringBuilder = new StringBuilder();
       while ((line = reader.readLine()) != null) {
         stringBuilder.append(line);
@@ -167,14 +164,6 @@ public final class FileUtils {
       }
 
       return stringBuilder.toString();
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } finally {
-      if (reader != null) {
-        reader.close();
-      }
-
-      return "";
     }
   }
 
