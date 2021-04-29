@@ -15,6 +15,7 @@ import {
   getDefaultApiCallback,
 } from '../services/client/ml-lab-api';
 import { parseJwtToken } from '../services/handler/utils';
+import TermsOfServiceDialog from './app/components/TermsOfServiceDialog';
 
 //TODO: add 'Pending Authentication State' so Login can be hidden when authentication /refreshLogin request is made.
 
@@ -284,6 +285,7 @@ class Login extends Component {
           e.charCode === ENTER_KEY ? this.handleClick() : false
         }
       >
+        <TermsOfServiceDialog/>
         <div>
           <TextField
             style={{ width: '175px'}}
