@@ -21,6 +21,7 @@ import ProjectCards from './components/ProjectCards';
 import Card from '@material-ui/core/Card';
 import CreateProjectControl from './components/CreateProjectControl';
 import ManageProjectDialog from './components/ManageProjectDialog';
+import WorkspaceCard from './components/WorkspaceCard'
 
 //controller
 import * as Constants from '../../services/handler/constants';
@@ -358,13 +359,15 @@ class Dashboard extends Component {
         Copy
       </Button>
     ) : (
-      false
-    );
+        false
+      );
 
     const cancelBtnDisabled = false;
     const primaryActionBtnDisabled = false;
     return (
       <div style={{ width: '100%' }}>
+        <BlockHeader name={'Workspace'} />
+        <WorkspaceCard />
         <BlockHeader name={this.props.currentProject + ' Project'} />
         <Widgets data={this.state.widgetdata} />
         <BlockSpacing />
