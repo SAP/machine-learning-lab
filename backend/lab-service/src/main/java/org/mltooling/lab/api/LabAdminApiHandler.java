@@ -61,7 +61,8 @@ public class LabAdminApiHandler extends AbstractApiHandler<LabAdminApiHandler>
       // reset all workspaces
       for (String user : componentManager.getAuthManager().getProfileIds()) {
         try {
-          LabService workspaceService = componentManager.getServiceManger().resetWorkspace(user);
+          LabService workspaceService =
+              componentManager.getServiceManger().resetWorkspace(user, null);
           if (workspaceService == null || !workspaceService.getIsHealthy()) {
             log.warn("Could not check workspace service availability for " + user);
           }
@@ -168,6 +169,11 @@ public class LabAdminApiHandler extends AbstractApiHandler<LabAdminApiHandler>
    *     {WORKSPACE_SERVICE_PREFIX}
    */
   public SingleValueFormat<LabService> resetWorkspace(String user) {
+    return resetWorkspace(user, null);
+  }
+
+  public SingleValueFormat<LabService> resetWorkspace(String user, @Nullable String imageName) {
+
     SingleValueFormat<LabService> response = new SingleValueFormat<>();
 
     try {
@@ -193,7 +199,8 @@ public class LabAdminApiHandler extends AbstractApiHandler<LabAdminApiHandler>
         return prepareResponse(response);
       }
 
-      LabService workspaceService = componentManager.getServiceManger().resetWorkspace(user);
+      LabService workspaceService =
+          componentManager.getServiceManger().resetWorkspace(user, imageName);
       if (workspaceService == null || !workspaceService.getIsHealthy()) {
         log.error("Could not check service availability.");
         response.setErrorStatus(
@@ -219,15 +226,30 @@ public class LabAdminApiHandler extends AbstractApiHandler<LabAdminApiHandler>
    * @return
    */
   @Override
-  public StatusMessageFormat checkWorkspace(String user) {
-    StatusMessageFormat response = new StatusMessageFormat();
-
+  public SingleValueFormat<LabService> checkWorkspace(String user) {
+    SingleValueFormat<LabService> response = new SingleValueFormat<>();
     try {
       if (StringUtils.isNullOrEmpty(user)) {
         response.setErrorStatus("The workspace id parameter is empty.", HttpStatus.SC_BAD_REQUEST);
         return prepareResponse(response);
       }
+      user = AuthorizationManager.resolveUserName(user);
 
+      if (this.authProfile == null || user == null) {
+        response.setErrorStatus(
+            "Not authorized to check workspace: " + user, HttpStatus.SC_UNAUTHORIZED);
+        return prepareResponse(response);
+      }
+
+      if (!this.authProfile.getId().equalsIgnoreCase(user)
+          && !componentManager.getAuthManager().isAdmin(this.authProfile)) {
+        response.setErrorStatus(
+            "User " + this.authProfile.getId() + " is not allowed to check workspace: " + user,
+            HttpStatus.SC_UNAUTHORIZED);
+        return prepareResponse(response);
+      }
+
+      log.debug("Checking workspace of " + user);
       LabService workspaceService = componentManager.getServiceManger().checkWorkspace(user);
       if (workspaceService == null || !workspaceService.getIsHealthy()) {
         log.warn("Could not check service availability for user: " + user);
@@ -237,9 +259,13 @@ public class LabAdminApiHandler extends AbstractApiHandler<LabAdminApiHandler>
       }
 
       response.setSuccessfulStatus();
-      response.addMetadata(
-          "needsUpdate",
-          !CoreService.WORKSPACE.getImage().equalsIgnoreCase(workspaceService.getDockerImage()));
+      response.setData(workspaceService);
+      // TODO differentiate between users that are running the default one and the other one.
+      response.addMetadata("needsUpdate", false);
+      //      response.addMetadata(
+      //          "needsUpdate",
+      //
+      // !CoreService.WORKSPACE.getImage().equalsIgnoreCase(workspaceService.getDockerImage()));
       return prepareResponse(response);
     } catch (Exception e) {
       log.debug(e.getMessage(), e);

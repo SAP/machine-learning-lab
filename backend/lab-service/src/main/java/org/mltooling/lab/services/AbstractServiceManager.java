@@ -10,6 +10,8 @@ import com.spotify.docker.client.messages.ImageInfo;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
+import javax.validation.constraints.Null;
+
 import org.mltooling.core.lab.model.LabJob;
 import org.mltooling.core.lab.model.LabService;
 import org.mltooling.core.utils.CryptoUtils;
@@ -268,7 +270,10 @@ public abstract class AbstractServiceManager {
 
   /** Check if workspace container for user already exists and, if not, creates a new one. */
   public LabService checkWorkspace(String user) throws Exception {
+    return checkWorkspace(user, null);
+  }
 
+  public LabService checkWorkspace(String user, @Nullable String imageName) throws Exception {
     user = AuthorizationManager.resolveUserName(user);
 
     if (ComponentManager.INSTANCE.getAuthManager().getUser(user) == null) {
@@ -289,22 +294,22 @@ public abstract class AbstractServiceManager {
       return workspaceService;
     }
 
-    return deployService(createWorkspaceService(user));
+    return deployService(createWorkspaceService(user, imageName));
   }
 
-  public boolean shutdownWorkspace(String user) throws Exception {
+  public String shutdownWorkspace(String user) throws Exception {
     if (ComponentManager.INSTANCE.getAuthManager().getUser(user) == null) {
       throw new Exception("User " + user + " does not exist.");
     }
 
     String workspaceName = getWorkspaceName(user);
     LabService workspaceService = getService(workspaceName);
-
+    String dockerImage = workspaceService.getDockerImage();
     if (workspaceService == null) {
       throw new Exception("Could not find workspace for user: " + user);
     }
-
-    return deleteService(workspaceService.getDockerName(), false, null);
+    deleteService(workspaceService.getDockerName(), false, null);
+    return dockerImage;
   }
 
   public boolean deleteWorkspace(String user) throws Exception {
@@ -323,14 +328,24 @@ public abstract class AbstractServiceManager {
     return deleteService(workspaceService.getDockerName(), true, null);
   }
 
-  public LabService resetWorkspace(String user) throws Exception {
+  public LabService resetWorkspace(String user, String imageName) throws Exception {
     // remove workspace without volumes
-    shutdownWorkspace(user);
+    String previousUsedImage = shutdownWorkspace(user);
+
+    if (previousUsedImage == null) {
+      previousUsedImage = CoreService.WORKSPACE.getImage();
+      log.info("Unable to retrieve previous used image for user: " + user);
+    }
+
+    if (imageName == null) {
+      imageName = previousUsedImage;
+      log.debug("No image provided, using previously used image: " + imageName);
+    }
 
     Thread.sleep(2000);
 
     // start workspace again
-    return checkWorkspace(user);
+    return checkWorkspace(user, imageName);
   }
 
   /** Install Lab - this script is always called in local docker mode only */
@@ -409,9 +424,13 @@ public abstract class AbstractServiceManager {
   }
 
   /** Create a workspace service for a given user. */
-  public DockerDeploymentConfig createWorkspaceService(String user) throws Exception {
+  public DockerDeploymentConfig createWorkspaceService(String user, @Nullable String imageName)
+      throws Exception {
+    if (imageName == null) {
+      imageName = CoreService.WORKSPACE.getImage();
+      log.debug("No image was specified. Using default workspace image");
+    }
     String dockerName = getWorkspaceName(user);
-
     String jupyterBaseUrl = "workspace/id/" + user + "/";
     if (!StringUtils.isNullOrEmpty(LabConfig.LAB_BASE_URL)) {
       jupyterBaseUrl = LabConfig.LAB_BASE_URL + "/" + jupyterBaseUrl;
@@ -449,7 +468,7 @@ public abstract class AbstractServiceManager {
       envVars.put(LabConfig.ENV_NAME_NO_PROXY, LabConfig.ENV_NO_PROXY);
     }
 
-    String dockerImage = CoreService.WORKSPACE.getImage();
+    String dockerImage = imageName;
 
     final String volumePath = "/workspace";
     DockerDeploymentConfig workspaceConfig =

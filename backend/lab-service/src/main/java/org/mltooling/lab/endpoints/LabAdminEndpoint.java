@@ -10,12 +10,14 @@ import org.mltooling.core.api.format.SingleValueFormat;
 import org.mltooling.core.api.format.StatusMessageFormat;
 import org.mltooling.core.api.format.ValueListFormat;
 import org.mltooling.core.lab.LabAdminApi;
+import org.mltooling.core.lab.LabApi;
 import org.mltooling.core.lab.model.*;
 import org.mltooling.core.service.params.DefaultHeaderFields;
 import org.mltooling.core.service.utils.AbstractApiEndpoint;
 import org.mltooling.core.service.utils.UnifiedResponseFactory;
 import org.mltooling.lab.api.LabAdminApiHandler;
 import org.mltooling.lab.authorization.AuthorizationManager;
+import org.mltooling.lab.services.CoreService;
 import org.pac4j.jax.rs.annotations.Pac4JProfile;
 import org.pac4j.jax.rs.annotations.Pac4JSecurity;
 import org.pac4j.mongo.profile.MongoProfile;
@@ -57,13 +59,19 @@ public class LabAdminEndpoint extends AbstractApiEndpoint<LabAdminEndpoint> {
       value =
           "Checks whether a workspace container for the passed id already exists. If not, a new"
               + " one is created & started.",
-      response = StatusMessageFormat.class)
+      response = LabServiceResponse.class)
   @Produces(MediaType.APPLICATION_JSON)
-  @Pac4JSecurity(ignore = true)
+  @Pac4JSecurity(
+      clients = {
+        AuthorizationManager.PAC4J_CLIENT_COOKIE,
+        AuthorizationManager.PAC4J_CLIENT_HEADER
+      },
+      authorizers = AuthorizationManager.AUTHORIZER_IS_AUTHENTICATED)
   public Response checkWorkspace(
       @QueryParam(LabAdminApi.PARAM_WORKSPACE_ID) String id,
+      @Pac4JProfile MongoProfile commonProfile,
       @BeanParam DefaultHeaderFields defaultHeaders) {
-    // TODO should this method be secured?
+    adminApiHandler.setAuthProfile(commonProfile);
     return UnifiedResponseFactory.getResponse(adminApiHandler.checkWorkspace(id));
   }
 
@@ -161,7 +169,7 @@ public class LabAdminEndpoint extends AbstractApiEndpoint<LabAdminEndpoint> {
   @ApiOperation(
       value =
           "Resets a workspace. Removes the container (keeps all persisted data) and starts a new"
-              + " one.",
+              + " one.  If an image is specified, it will be used instead of the default image.",
       response = LabServiceResponse.class)
   @Produces(MediaType.APPLICATION_JSON)
   @Pac4JSecurity(
@@ -172,10 +180,12 @@ public class LabAdminEndpoint extends AbstractApiEndpoint<LabAdminEndpoint> {
       authorizers = AuthorizationManager.AUTHORIZER_IS_AUTHENTICATED)
   public Response resetWorkspace(
       @QueryParam(LabAdminApi.PARAM_WORKSPACE_ID) String id,
+      @ApiParam(value = "Image Name", required = false) @QueryParam(LabAdminApi.PARAM_DOCKER_IMAGE)
+          String image,
       @Pac4JProfile MongoProfile commonProfile,
       @BeanParam DefaultHeaderFields defaultHeaders) {
     adminApiHandler.setAuthProfile(commonProfile);
-    return UnifiedResponseFactory.getResponse(adminApiHandler.resetWorkspace(id));
+    return UnifiedResponseFactory.getResponse(adminApiHandler.resetWorkspace(id, image));
   }
 
   @GET
