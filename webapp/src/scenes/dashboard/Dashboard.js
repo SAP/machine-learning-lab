@@ -366,11 +366,14 @@ class Dashboard extends Component {
     const primaryActionBtnDisabled = false;
     return (
       <div style={{ width: '100%' }}>
-        <BlockHeader name={'Workspace'} />
-        <WorkspaceCard />
         <BlockHeader name={this.props.currentProject + ' Project'} />
         <Widgets data={this.state.widgetdata} />
         <BlockSpacing />
+
+        <BlockHeader name={'Workspace'} />
+        <WorkspaceCard />
+        <BlockSpacing />
+
         <BlockHeader name="My Projects" />
         <ProjectCards
           onDeleteProject={this.onOpenDeleteDialog}

@@ -95,21 +95,24 @@ function getIconFromName(type) {
 
 function WorkspaceCard(props) {
   const { classes } = props;
-
-  const [workspaceData, setWorkspaceData] = useState({
+  const defaultWorkspaceData = {
     name: 'Loading...',
     dockerImage: 'Loading image...',
     modifiedAt: '01-01-1970'
-  })
+  };
+
+  const [workspaceData, setWorkspaceData] = useState(defaultWorkspaceData);
 
   function checkWorkspace() {
     administrationApi.checkWorkspace(
       { id: props.user },
       getDefaultApiCallback(
-        ({ result }) => {
-          setWorkspaceData(result.data);
+        (httpResponse) => {
+          var data = httpResponse.httpResponse.body.data;
+          setWorkspaceData(data);
         },
         ({ error }) => {
+          setWorkspaceData(defaultWorkspaceData);
           toastErrorMessage('Load Workspace: ', error);
         }
       )
