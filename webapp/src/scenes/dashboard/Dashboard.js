@@ -128,43 +128,7 @@ class Dashboard extends Component {
         true,
         Constants.COOKIES.options
       );
-
-      administrationApi.getLabInfo(
-        {},
-        getDefaultApiCallback(
-          ({ result }) => {
-            if (
-              result.data.termsOfService &&
-              result.data.termsOfService !== ''
-            ) {
-              //TODO: refactor: duplicate code in onGetApiToken
-              let TextField = (
-                <Typography
-                  variant="body1"
-                  style={{ wordBreak: 'break-all', fontWeight: 'initial' }}
-                >
-                  {result.data.termsOfService}
-                </Typography>
-              );
-
-              this.setState({
-                dialog: {
-                  ...ORIGINAL_DIALOG,
-                  isOpen: true,
-                  title: 'Terms of Service',
-                  customComponent: TextField,
-                  hideCancelButton: true,
-                  primaryActionBtnLabel: 'Accept',
-                },
-              });
-            }
-            this.setState({ showCreateProjectDialog: true });
-          },
-          ({ error }) => {
-            this.setState({ showCreateProjectDialog: true });
-          }
-        )
-      );
+      this.setState({ showCreateProjectDialog: true });
     } else {
       this.setState({ showCreateProjectDialog: false });
     }
