@@ -60,6 +60,7 @@ class TermsOfServiceDialog extends Component {
       <CustomDialog
         open={this.state.open}
         title={"Terms of Service"}
+        maxWidth='md'
         contentText={renderedMarkdown}
         hideCancelBtn={true}
         primaryActionBtnDisabled={false}

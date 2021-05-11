@@ -40,12 +40,14 @@ class CustomDialog extends Component {
       primaryActionBtnDisabled,
       primaryActionBtnLabel,
       cancelBtnLabel,
+      maxWidth, // Possible values: 'lg' 'md' 'sm' 'xl' 'xs' false
       CustomComponent,
     } = this.props;
 
     return (
       <Dialog
         className="customdialog"
+        maxWidth={maxWidth ? maxWidth : 'sm'}
         open={this.props.open}
         onClose={this.props.handleRequestClose}
         onKeyPress={this.onKeyPress}
@@ -110,6 +112,7 @@ CustomDialog.propTypes = {
   moreButtons: PropTypes.array,
   dialogContentStyle: PropTypes.object,
   dialogContentTextStyle: PropTypes.object,
+  maxWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.bool])
 };
 
 export default withStyles(styles)(CustomDialog);
