@@ -181,6 +181,12 @@ The container can be configured with following environment variables (`--env`):
 
 If a proxy is required, you can pass the proxy configuration via the `http_proxy` and `no_proxy` environment variables. For example: `--env http_proxy=http://myproxy:1234`
 
+#### Terms of Services
+If the users of the ML Lab installation should be shown a "Terms of Service" popup before logging in, you can edit the file
+[backend/lab-service/docker-res/terms-of-service.txt](https://github.com/SAP/machine-learning-lab/blob/master/backend/lab-service/docker-res/terms-of-service.txt)
+and rebuild the lab-service docker image. Alternatively you can use the published lab-service image as a base image and add you own terms-of-service.txt in the /resources/tos directory.
+The file can contain markdown text to format the ToS popup. After changing the ToS text it will be shown to all users again.
+
 ### Install with Docker Local Mode
 
 *Note: The install commands here are currently based on the scenario where you built the Docker images locally yourself. For seeing how to use ready images, please check the Readme of the GitHub repository [here](https://github.com/SAP/machine-learning-lab#getting-started)*
