@@ -222,11 +222,13 @@ public class LabAuthEndpoint extends AbstractApiEndpoint<LabAuthEndpoint> {
     }
     // E-Mail address is used to generate the username
     String email = (String)oidcTokenContent.get("email");
-    // Max length for usernames is 40 characters
-    email = StringUtils.shorten(email, 40);
     /* TODO: This is a fix to remove '.' characters in the username. In SAP email addresses this is the only character
      *       that is not allowed. A more generic solution is required that handles all possible email addresses. */
     email = email.replace("-", "--").replace(".", "-").replace("@", "-");
+    // Max length for usernames is 25 characters
+    /* TODO: Shortening this to 25 characters could cause 2 emails to map to the same user (if the first 25 characters of the mail match)
+     *       Better solution would be the creation of a unique ID for each user based on the full email.*/
+    email = StringUtils.shorten(email, 25);
 
     // Get user profile for username
     MongoProfile profile;
