@@ -28,6 +28,10 @@ If you have questions about one of the issues, please comment on them, and one o
 
 We kindly ask you to follow the [Pull Request Checklist](#Pull-Request-Checklist) to ensure reviews can happen accordingly.
 
+## Developer Certificate of Origin (DCO)
+
+Due to legal reasons, contributors will be asked to accept a DCO when they create the first pull request to this project. This happens in an automated fashion during the submission process. SAP uses [the standard DCO text of the Linux Foundation](https://developercertificate.org/).
+
 ## Contributing Code
 
 You are welcome to contribute code in order to fix a bug or to implement a new feature.
