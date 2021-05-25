@@ -129,6 +129,18 @@ The container can be configured with following environment variables (`--env`):
         <td>(optional)</td>
     </tr>
     <tr>
+        <td>MODEL_SERVICE_IMAGE</td>
+        <td> Docker image used to spawn services that where created with the Unified Model.
+        </td>
+        <td>(optional)</td>
+    </tr>
+    <tr>
+        <td>BACKEND_SERVICE_IMAGE</td>
+        <td> Docker image that is used to spawn the backend container.
+        </td>
+        <td>(optional)</td>
+    </tr>
+    <tr>
         <td>LAB_MANAGED_KUBERNETES</td>
         <td>Specifies whether it is running on a managed Kubernetes cluster instance. For more information, please have a look at the Section about Kubernetes managed cluster setup.</td>
         <td>false</td>
@@ -147,13 +159,6 @@ The container can be configured with following environment variables (`--env`):
         <td>LAB_PVC_MONGO_STORAGE_LIMIT</td>
         <td>Only relevant for Kubernetes managed cluster setup. It defines the size of the volume created and mounted into the Mongo pod in GB. Mongo contains the data for experiments and users.</td>
         <td>5</td>
-    </tr>
-    <tr>
-        <td>LAB_IMAGE_REGISTRY</td>
-        <td>
-            The registry prefix from where the images <i>lab-service</i> and <i>lab-model-service</i> are loaded. If you, for example, deploy it in Azure you might not have access to the internal Artifactory registry. Make sure to push the images to the defined registry. If you don't use the one-click model-deployment feature, you don't have to push the <i>lab-model-service</i> image.
-        </td>
-        <td>Default DockerHub registry</td>
     </tr>
     <tr>
         <td>LAB_EXTERNAL_OIDC_AUTH_URL</td>
