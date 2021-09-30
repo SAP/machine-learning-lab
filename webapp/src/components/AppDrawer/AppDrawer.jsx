@@ -17,6 +17,7 @@ function AppDrawer(props) {
 
   const linkItems = [...APP_PAGES, ...additionalPages]
     .filter((item) => item.APP_DRAWER_ITEM && (isAdmin || !item.REQUIRE_ADMIN))
+    .sort((item1, item2) => item2.DISPLAY_PRIORITY - item1.DISPLAY_PRIORITY)
     .map((item) => <AppDrawerItem key={item.NAME} item={item} />);
 
   return (

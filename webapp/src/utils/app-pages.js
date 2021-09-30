@@ -23,11 +23,13 @@ export default [
     NEW_TAB_OPTION: false,
     TYPE: APP_DRAWER_ITEM_TYPES.link,
     COMPONENT: Projects,
+    DISPLAY_PRIORITY: 100,
   },
   {
     NAME: 'project-specific-divider',
     APP_DRAWER_ITEM: true,
     TYPE: APP_DRAWER_ITEM_TYPES.divider,
+    DISPLAY_PRIORITY: 90,
   },
   {
     ICON: 'folder',
@@ -37,6 +39,7 @@ export default [
     APP_DRAWER_ITEM: true,
     TYPE: APP_DRAWER_ITEM_TYPES.link,
     COMPONENT: Files,
+    DISPLAY_PRIORITY: 80,
   },
   {
     ICON: 'apps',
@@ -46,6 +49,7 @@ export default [
     APP_DRAWER_ITEM: true,
     TYPE: APP_DRAWER_ITEM_TYPES.link,
     COMPONENT: Services,
+    DISPLAY_PRIORITY: 70,
   },
   {
     ICON: 'next_week',
@@ -55,6 +59,7 @@ export default [
     APP_DRAWER_ITEM: true,
     TYPE: APP_DRAWER_ITEM_TYPES.link,
     COMPONENT: Jobs,
+    DISPLAY_PRIORITY: 60,
   },
   {
     NAME: 'login',
@@ -95,9 +100,13 @@ export default [
 
 export const mapExtensionToAppPage = (extension) => {
   return {
-    // TODO: make ICON dynamic
-    ICON: 'data_usage',
-    NAME: extension.parameters.CONTAXY_DEPLOYMENT_NAME,
+    ICON: extension.icon ? extension.icon : 'data_usage',
+    DISPLAY_PRIORITY: extension.metadata.display_priority
+      ? extension.metadata.display_priority
+      : 50,
+    NAME: extension.display_name
+      ? extension.display_name
+      : extension.parameters.CONTAXY_DEPLOYMENT_NAME,
     PATH: `/${extension.parameters.CONTAXY_DEPLOYMENT_NAME}`,
     REQUIRE_LOGIN: true,
     APP_DRAWER_ITEM: true,
