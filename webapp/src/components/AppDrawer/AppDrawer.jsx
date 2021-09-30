@@ -32,9 +32,10 @@ function AppDrawer(props) {
       <div className={`${className} drawerInner`}>
         <List>
           {linkItems}
+          {/* Uncomment when UI implementation of plugin installation is completed
           <AppDrawerItem
             item={{ TYPE: 'button', TOOLTIP: 'Add Plugin', NAME: 'Add Plugin' }}
-          />
+          /> */}
         </List>
       </div>
     </Drawer>

@@ -41,18 +41,18 @@ test('test that all link app drawer link items exist', async () => {
   );
 });
 
-test('add plugin dialog', async () => {
-  await waitFor(() => {
-    render(<App />);
-  });
-  const addPluginDialogButton = screen.getByText(/add plugin/i);
-  fireEvent.click(addPluginDialogButton);
-  const addPluginDialog = screen.getByRole('dialog');
-  expect(addPluginDialog).toBeInTheDocument();
-  expect(
-    addPluginDialog.getElementsByTagName('h2')[0].innerText === /add plugin/i
-  );
-});
+// test('add plugin dialog', async () => {
+//   await waitFor(() => {
+//     render(<App />);
+//   });
+//   const addPluginDialogButton = screen.getByText(/add plugin/i);
+//   fireEvent.click(addPluginDialogButton);
+//   const addPluginDialog = screen.getByRole('dialog');
+//   expect(addPluginDialog).toBeInTheDocument();
+//   expect(
+//     addPluginDialog.getElementsByTagName('h2')[0].innerText === /add plugin/i
+//   );
+// });
 
 test('tests global state', () => {
   const Component = () => {
