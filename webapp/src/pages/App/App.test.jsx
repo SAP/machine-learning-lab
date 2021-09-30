@@ -24,6 +24,8 @@ test('tests the usermenu and its entries', async () => {
   expect(screen.queryByText(/documentation/i)).toBeNull();
   fireEvent.click(screen.getByLabelText('usermenu'));
   expect(screen.getByText(/documentation/i)).toBeInTheDocument();
+  expect(screen.getByText(/Get User API token/i)).toBeInTheDocument();
+  expect(screen.getByText(/Get Project API token/i)).toBeInTheDocument();
   expect(screen.getByText(/api_explorer/i)).toBeInTheDocument();
   expect(screen.getByText(/api_tokens/i)).toBeInTheDocument();
 });

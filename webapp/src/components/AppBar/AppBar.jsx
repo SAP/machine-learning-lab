@@ -58,7 +58,11 @@ function AppBar(props) {
         </Typography>
         {isAuthenticated ? projectSelectorElement : false}
         {isAuthenticated ? userNameElement : false}
-        <UserMenu isAuthenticated={isAuthenticated} user={user} />
+        <UserMenu
+          isAuthenticated={isAuthenticated}
+          user={user}
+          activeProject={activeProject}
+        />
       </Toolbar>
     </MaterialUiAppBar>
   );
