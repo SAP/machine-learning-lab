@@ -1,0 +1,199 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contaxy
+  labels:
+    app: contaxy
+    ctxy.namespace: ctxy
+    ctxy.deploymentType: core-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: contaxy
+      ctxy.namespace: ctxy
+      ctxy.deploymentType: core-backend
+  template:
+    metadata:
+      labels:
+        app: contaxy
+        ctxy.namespace: ctxy
+        ctxy.deploymentType: core-backend
+    spec:
+      serviceAccountName: contaxy
+      containers:
+        - name: contaxy
+          image: test_deployment_contaxy:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: POSTGRES_CONNECTION_URI
+              value: postgresql://postgres:postgres@postgres:5432/postgres
+            - name: S3_ENDPOINT
+              value: s3:9000
+            - name: S3_ACCESS_KEY
+              value: minioadmin
+            - name: S3_SECRET_KEY
+              value: minioadmin
+            - name: BACKEND_CORS_ORIGIN
+              value: http://localhost:3000
+            - name: DEPLOYMENT_MANAGER
+              value: kubernetes
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+            requests:
+              cpu: 0m
+              memory: 0Gi
+        # add setup side-car container
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:13.2
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+            requests:
+              cpu: 0m
+              memory: 0Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgweb
+  labels:
+    app: pgweb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgweb
+  template:
+    metadata:
+      labels:
+        app: pgweb
+    spec:
+      containers:
+        - name: pgweb
+          image: sosedoff/pgweb
+          ports:
+            - containerPort: 8081
+          env:
+            - name: DATABASE_URL
+              value: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+          resources:
+            limits:
+              cpu: 500m
+              memory: 0.2Gi
+            requests:
+              cpu: 0m
+              memory: 0Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s3
+  labels:
+    app: s3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: s3
+  template:
+    metadata:
+      labels:
+        app: s3
+    spec:
+      containers:
+        - name: s3
+          image: minio/minio:RELEASE.2021-03-04T00-53-13Z
+          ports:
+            - containerPort: 9000
+          args: ["server", "/data{1...4}"]
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+            requests:
+              cpu: 0m
+              memory: 0Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contaxy-extension-workspace
+  labels:
+    app: contaxy-extension-workspace
+    ctxy.namespace: "ctxy"
+    ctxy.deploymentType: "extension"
+    ctxy.deploymentName: "contaxy-extension-workspace"
+    ctxy.projectName: "ctxy-global"
+  annotations:
+    ctxy.ui_extension_endpoint: "8080/projects/{env.projectId}/workspace"
+    ctxy.api_extension_endpoint: "8080/projects/{env.projectId}/workspace"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: contaxy-extension-workspace
+  template:
+    metadata:
+      labels:
+        app: contaxy-extension-workspace
+        ctxy.namespace: "ctxy"
+        ctxy.deploymentType: "extension"
+        ctxy.deploymentName: "contaxy-extension-workspace"
+        ctxy.projectName: "ctxy-global"
+      annotations:
+        ctxy.ui_extension_endpoint: "8080/projects/{env.projectId}/workspace"
+        ctxy.api_extension_endpoint: "8080/projects/{env.projectId}/workspace"
+    spec:
+      containers:
+        - name: contaxy-extension-workspace
+          image: contaxy-extension-workspace:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: CONTAXY_ENDPOINT
+              value: http://contaxy:8080/api
+            - name: CONTAXY_DEPLOYMENT_NAME
+              value: contaxy-extension-workspace
+          resources:
+            limits:
+              cpu: 500m
+              memory: 0.2Gi
+            requests:
+              cpu: 0m
+              memory: 10M

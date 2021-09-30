@@ -1,0 +1,12 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: machine-learning-lab
+Upstream-Contact: Lukas Masuch <lukas.masuch@sap.com>
+                  Benjamin Raethlein <benjamin.raethlein@sap.com>
+                  Erick David Santillan Perez <erick.david.santillan.perez@sap.com>
+                  Jan Kielmann <jan.kielmann@sap.com>
+Source: https://github.com/SAP/machine-learning-lab
+
+Files: *
+Copyright: SAP SE and machine-learning-lab contributors
+License: Apache-2.0
+

@@ -1,0 +1,3 @@
+window.ctxyExtensionFiles = {
+  PREFIX: "",
+};

@@ -1,0 +1,22 @@
+{
+  "add": "Add",
+  "api_explorer": "API Explorer",
+  "api_tokens": "API Tokens",
+  "change-language": "Switch to {{language}}",
+  "dataset": "Dataset",
+  "dataset_plural": "Datasets",
+  "deployment": "Deployment",
+  "documentation": "Documentation",
+  "download": "Download",
+  "edit-and-reload": "Edit {{file}} and save to reload.",
+  "file:": "File",
+  "file_plural": "Files",
+  "logout": "Logout",
+  "job": "Job",
+  "job_plural": "Jobs",
+  "new_tab": "New Tab",
+  "project": "Project",
+  "run": "Run",
+  "service": "Service",
+  "service_plural": "Services"
+}

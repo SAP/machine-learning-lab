@@ -1,0 +1,10 @@
+*
+!docker/
+!webapp
+!backend
+backend/.env
+webapp/node_modules
+**/.DS_Store
+**/Thumbs.db
+**/*.pyc
+.DS_Store
