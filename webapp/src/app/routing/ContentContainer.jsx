@@ -57,7 +57,8 @@ ContentContainer.defaultProps = {
 
 const StyledContentContainer = styled(ContentContainer)`
   &.root {
-    position: relative;
+    display: flex;
+    flex-direction: column;
     width: 100%;
   }
 `;
