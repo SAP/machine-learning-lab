@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-export const APP_NAME = 'Contaxy';
+export const APP_NAME = 'Machine Learning Lab';
 
 export const ENDPOINT =
   process.env.REACT_APP_ENDPOINT === undefined
