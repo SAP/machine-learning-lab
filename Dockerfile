@@ -29,14 +29,17 @@ ENV PYTHONPATH=/resources/app \
     IS_CONTAXY_CONTAINER=true \
     SYSTEM_NAMESPACE=pylab \
     _SSL_RESOURCES_PATH=/resources/ssl \
-    JWT_TOKEN_SECRET=please-change-this-secret
+    JWT_TOKEN_SECRET=please-change-this-secret \
+    WEB_CONCURRENCY="1"
 
 RUN \
     mkdir /resources \
     && mkdir ${_SSL_RESOURCES_PATH}
 
 # Install Contaxy
-RUN pip install contaxy==0.0.2
+#RUN pip install contaxy==0.0.2
+COPY ./contaxy/backend /resources/app/contaxy
+RUN pip install /resources/app/contaxy
 
 COPY ./docker/server/start.sh /resources/start.sh
 RUN chmod +x /resources/start.sh

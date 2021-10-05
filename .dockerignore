@@ -2,6 +2,7 @@
 !docker/
 !webapp
 !backend
+!contaxy
 backend/.env
 webapp/node_modules
 **/.DS_Store
