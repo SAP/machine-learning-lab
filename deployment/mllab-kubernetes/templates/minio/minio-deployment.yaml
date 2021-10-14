@@ -1,0 +1,80 @@
+{{- if .Values.integratedMinio.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "machine-learning-lab.fullname" . }}-minio
+  labels:
+    {{- include "machine-learning-lab.labels" . | nindent 4 }}
+    ctxy.deploymentType: "core"
+    ctxy.deploymentName: "minio"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "machine-learning-lab.selectorLabels" . | nindent 6 }}
+      ctxy.deploymentType: "core"
+      ctxy.deploymentName: "minio"
+  template:
+    metadata:
+      name: {{ include "machine-learning-lab.fullname" . }}-minio
+      {{- with .Values.integratedMinio.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "machine-learning-lab.selectorLabels" . | nindent 8 }}
+        ctxy.deploymentType: "core"
+        ctxy.deploymentName: "minio"
+    spec:
+      {{- with .Values.integratedMinio.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.integratedMinio.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.integratedMinio.image.repository }}:{{ .Values.integratedMinio.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.integratedMinio.image.pullPolicy }}
+          args: ["server", "/data/data{1...4}"]
+          securityContext:
+            {{- toYaml .Values.integratedMinio.containerSecurityContext | nindent 12 }}
+          env:
+            - name: MINIO_ROOT_USER
+              value: "{{ .Values.integratedMinio.username }}"
+            - name: MINIO_ROOT_PASSWORD
+              value: "{{ .Values.integratedMinio.password }}"
+          ports:
+            - name: http
+              containerPort: 9000
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.integratedMinio.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /data
+              name: minio-data
+      volumes:
+        - name: minio-data
+          persistentVolumeClaim:
+            claimName: {{ include "machine-learning-lab.fullname" . }}-minio-data
+      {{- with .Values.integratedMinio.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.integratedMinio.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.integratedMinio.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

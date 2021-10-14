@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "machine-learning-lab.fullname" . }}-backend
+  labels:
+    {{- include "machine-learning-lab.labels" . | nindent 4 }}
+    ctxy.deploymentType: "core-backend"
+    ctxy.deploymentName: "backend"
+spec:
+  type: {{ .Values.labBackend.service.type }}
+  ports:
+    - port: {{ .Values.labBackend.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "machine-learning-lab.selectorLabels" . | nindent 4 }}
+    ctxy.deploymentType: "core-backend"
+    ctxy.deploymentName: "backend"

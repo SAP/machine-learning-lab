@@ -1,0 +1,130 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "machine-learning-lab.fullname" . }}-backend
+  labels:
+    {{- include "machine-learning-lab.labels" . | nindent 4 }}
+    ctxy.deploymentType: "core-backend"
+    ctxy.deploymentName: "backend"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "machine-learning-lab.selectorLabels" . | nindent 6 }}
+      ctxy.deploymentType: "core-backend"
+      ctxy.deploymentName: "backend"
+  template:
+    metadata:
+      name: {{ include "machine-learning-lab.fullname" . }}-backend
+      {{- with .Values.labBackend.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "machine-learning-lab.selectorLabels" . | nindent 8 }}
+        ctxy.deploymentType: "core-backend"
+        ctxy.deploymentName: "backend"
+    spec:
+      {{- with .Values.labBackend.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "machine-learning-lab.fullname" . }}-backend
+      securityContext:
+        {{- toYaml .Values.labBackend.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.labBackend.containerSecurityContext | nindent 12 }}
+          image: "{{ .Values.labBackend.image.repository }}:{{ .Values.labBackend.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.labBackend.image.pullPolicy }}
+          env:
+            - name: JWT_TOKEN_SECRET
+              value: "{{ .Values.labConfig.jwtSecret }}"
+            - name: SYSTEM_NAMESPACE
+              value: lab
+            {{- if .Values.labConfig.externalOIDC.enabled }}
+            - name: OIDC_AUTH_ENABLED
+              value: "{{ .Values.labConfig.externalOIDC.enabled }}"
+            - name: CONTAXY_HOST
+              value: "{{ .Values.labConfig.externalOIDC.domain }}" 
+            - name: OIDC_AUTH_URL 
+              value: "{{ .Values.labConfig.externalOIDC.authUrl }}" 
+            - name: OIDC_TOKEN_URL 
+              value: "{{ .Values.labConfig.externalOIDC.tokenUrl }}" 
+            - name: OIDC_CLIENT_ID 
+              value: "{{ .Values.labConfig.externalOIDC.clientId }}" 
+            - name: OIDC_CLIENT_SECRET 
+              value: "{{ .Values.labConfig.externalOIDC.clientSecret }}" 
+            {{- end }}
+            - name: POSTGRES_CONNECTION_URI
+              value: "postgresql://{{ .Values.postgres.username }}:{{ .Values.postgres.password }}@{{ include "machine-learning-lab.fullname" . }}-postgres:{{ .Values.postgres.service.port }}/postgres"
+            {{- if and .Values.integratedMinio.enabled .Values.externalFileStorage.enabled }}
+            {{- fail "Cannot enable integrated Minio and external file storage at the same time!"}}
+            {{- end }}
+            {{- if .Values.integratedMinio.enabled }}
+            - name: S3_ENDPOINT
+              value: "{{ include "machine-learning-lab.fullname" . }}-minio:{{ .Values.integratedMinio.service.port }}"
+            - name: S3_ACCESS_KEY
+              value: "{{ .Values.integratedMinio.username }}"
+            - name: S3_SECRET_KEY
+              value: "{{ .Values.integratedMinio.password }}"
+            {{- else if .Values.externalFileStorage.enabled }}
+            - name: S3_ENDPOINT
+              value: "{{ .Values.externalFileStorage.url }}"
+            - name: S3_ACCESS_KEY
+              value: "{{ .Values.externalFileStorage.username }}"
+            - name: S3_SECRET_KEY
+              value: "{{ .Values.externalFileStorage.password }}"
+            {{- end }}
+            - name: CONTAXY_API_ENDPOINT
+              value: "http://{{ include "machine-learning-lab.fullname" . }}-backend:8080/api"
+            - name: USER_REGISTRATION_ENABLED
+              value: "{{ .Values.labConfig.allowSelfRegistration }}"
+            - name: DEPLOYMENT_MANAGER
+              value: kubernetes
+            - name: WEB_CONCURRENCY
+              value: "1"
+            # - name: SERVICE_SSL_ENABLED
+            #   value: "true"
+            # - name: _SSL_RESOURCES_PATH
+            #   value: "/ml-lab-certs"
+          # volumeMounts:
+          #   - mountPath: "/ml-lab-certs"
+          #     name: ssl-certs
+          #     readOnly: true
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.labBackend.resources | nindent 12 }}
+      # volumes:
+      #   - name: ssl-certs
+      #     secret:
+      #       secretName: ml-lab-tls-cert
+      #       items:
+      #       - key: tls.key
+      #         path: cert.key
+      #       - key: tls.crt
+      #         path: cert.crt
+      {{- with .Values.labBackend.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.labBackend.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.labBackend.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

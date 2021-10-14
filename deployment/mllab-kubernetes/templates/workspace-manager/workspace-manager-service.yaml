@@ -1,0 +1,23 @@
+{{- if .Values.workspaceManager.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: lab-p-contaxy-global-s-workspace-manager
+  labels:
+    {{- include "machine-learning-lab.labels" . | nindent 4 }}
+    ctxy.deploymentType: "extension"
+    ctxy.deploymentName: "lab-p-contaxy-global-s-workspace-manager"
+spec:
+  type: {{ .Values.workspaceManager.service.type }}
+  ports:
+    - port: {{ .Values.workspaceManager.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "machine-learning-lab.selectorLabels" . | nindent 4 }}
+    ctxy.namespace: "lab"
+    ctxy.deploymentType: "extension"
+    ctxy.deploymentName: "lab-p-contaxy-global-s-workspace-manager"
+    ctxy.projectName: "ctxy-global"
+{{- end }}
