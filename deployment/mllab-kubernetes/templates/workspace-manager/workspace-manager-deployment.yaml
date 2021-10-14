@@ -1,0 +1,95 @@
+{{- if .Values.workspaceManager.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab-p-contaxy-global-s-workspace-manager
+  labels:
+    {{- include "machine-learning-lab.labels" . | nindent 4 }}
+    ctxy.namespace: "lab"
+    ctxy.deploymentType: "extension"
+    ctxy.deploymentName: "lab-p-contaxy-global-s-workspace-manager"
+    ctxy.projectName: "ctxy-global" # Global extension available for everyone
+  annotations:
+    ctxy.displayName: "Workspaces"
+    ctxy.endpoints: "8080"
+    ctxy.ui_extension_endpoint: "8080/app#/users/{env.userId}/workspace"
+    ctxy.api_extension_endpoint: "8080/api"
+    ctxy.icon: "code"
+    display_priority: "95"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "machine-learning-lab.selectorLabels" . | nindent 6 }}
+      ctxy.namespace: "lab"
+      ctxy.deploymentType: "extension"
+      ctxy.deploymentName: "lab-p-contaxy-global-s-workspace-manager"
+      ctxy.projectName: "ctxy-global"
+  template:
+    metadata:
+      name: lab-p-contaxy-global-s-workspace-manager
+      {{- with .Values.workspaceManager.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "machine-learning-lab.selectorLabels" . | nindent 8 }}
+        ctxy.namespace: "lab"
+        ctxy.deploymentType: "extension"
+        ctxy.deploymentName: "lab-p-contaxy-global-s-workspace-manager"
+        ctxy.projectName: "ctxy-global"
+    spec:
+      {{- with .Values.workspaceManager.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.workspaceManager.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.workspaceManager.containerSecurityContext | nindent 12 }}
+          image: "{{ .Values.workspaceManager.image.repository }}:{{ .Values.workspaceManager.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.workspaceManager.image.pullPolicy }}
+          env:
+            - name: CONTAXY_API_ENDPOINT
+              value: "http://{{ include "machine-learning-lab.fullname" . }}-backend:8080/api"
+            - name: CONTAXY_DEPLOYMENT_NAME
+              value: "{{ include "machine-learning-lab.fullname" . }}-workspace-manager"
+            - name: CONTAXY_SERVICE_URL
+              value: /projects/ctxy-global/services/lab-p-contaxy-global-s-workspace-manager/access/{{ .Values.workspaceManager.service.port }}
+            - name: WORKSPACE_MAX_MEMORY_MB
+              value: "{{ .Values.workspaceManager.memoryLimit }}"
+            - name: WORKSPACE_MAX_CPUS
+              value: "{{ .Values.workspaceManager.cpuLimit }}"
+            - name: WORKSPACE_MAX_VOLUME_SIZE
+              value: "{{ .Values.workspaceManager.persistentVolumeSize }}"
+            - name: WORKSPACE_MAX_CONTAINER_SIZE
+              value: "{{ .Values.workspaceManager.maxContainerSize }}"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.workspaceManager.resources | nindent 12 }}
+      {{- with .Values.workspaceManager.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.workspaceManager.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.workspaceManager.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

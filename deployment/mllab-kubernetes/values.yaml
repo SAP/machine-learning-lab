@@ -1,0 +1,190 @@
+# Default values for machine-learning-lab.
+
+# General ML Lab configuration
+labConfig:
+  # Secret that is used for generating the JWT API token of ML Lab
+  # This must be kept secret and the value should not be pushed into version control
+  jwtSecret: "pleasechange-pleasechange-pleasechange-pleasechange"
+  # Prefix to add to the ML Lab API endpoints. Useful if ML Lab is served behind a reverse proxy on a subpath
+  baseUrlPrefix: ""
+  # Configure an external Open ID Connect (OIDC) provider for passwordless login
+  externalOIDC:
+    # Enable OIDC login (by default only username + password is possible)
+    enabled: false
+    # The domain under which the ML Lab deployment is externally accessible. This is required for the OIDC
+    # login to construct the callback URL.
+    # domain: "ml-lab.local"
+    domain: ""
+    # Client id used for requestion user information
+    clientId: "" # 
+    # Client secret used for requestion user information
+    clientSecret: ""
+    # URL of the OIDC provider that a user who wants to login should be redirected to
+    authUrl: ""
+    # URL of the OIDC provider that can be used to request a JWT token for a user
+    tokenUrl: ""
+  # If set to true, users can register themselves whith a new username and password or login directly via OIDC
+  # If set to false, an admin needs to create the user manually first (using the email for OIDC) 
+  allowSelfRegistration: true
+
+
+# Configuration of the ML Lab backend
+labBackend:
+  # Image used for the ml lab backend
+  image:
+    repository: "acrmlhlab.azurecr.io/ml-lab/py-machine-learning-lab"
+    tag: "0.0.2"
+    pullPolicy: IfNotPresent
+  # Resource requirements of the backend deployment
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 3Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
+  # Other Kubernetes pod configurations
+  nodeSelector: {}
+  tolerations: []
+  podAnnotations: {}
+  podSecurityContext: {}
+  containerSecurityContext: {}
+  imagePullSecrets: []
+  # Service configuration for the backend deployment
+  service:
+    type: ClusterIP
+    port: 8080
+  # Ingress configuration for external access to the backend
+  ingress:
+    enabled: false
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: "/"
+            pathType: Prefix
+
+# Configuration of the ML Lab Mongo DB
+postgres:
+  # Mongo DB image to use
+  image:
+    repository: "postgres"
+    tag: "13.2"
+    pullPolicy: IfNotPresent
+  # Resources required for the Postgres deployment
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 3Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
+  # Size of the persisten volume used for the DB data 
+  storageSize: "5Gi"
+  # Storage class to use for the volume
+  storageClassName: ""
+  # Service configuration for the postgres deployment
+  service:
+    type: ClusterIP
+    port: 5432
+  # Other Kubernetes pod configurations
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  podAnnotations: {}
+  podSecurityContext: {}
+  containerSecurityContext: {}
+  imagePullSecrets: []
+
+# Configuration of the integrated ML Lab Minio DB
+# If you want to use an external file storage, disable this component
+integratedMinio:
+  enabled: True
+  # Minio image to use
+  image:
+    repository: "minio/minio"
+    tag: "RELEASE.2021-03-04T00-53-13Z"
+    pullPolicy: IfNotPresent
+  # Resources required for the Minio deployment
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 3Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
+  # Size of the persisten volume used for the DB data 
+  storageSize: "5Gi"
+  # Storage class to use for the volume
+  storageClassName: ""
+  # Service configuration for the minio deployment
+  service:
+    type: ClusterIP
+    port: 9000
+  # Other Kubernetes pod configurations
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  podAnnotations: {}
+  podSecurityContext: {}
+  containerSecurityContext: {}
+  imagePullSecrets: []
+
+# Instead of the integrated Minio DB an external file storage (AWS S3, Azure Blobs) 
+externalFileStorage:
+  enabled: False
+  url: ""
+
+
+# Configuration of the workspace manager component
+workspaceManager:
+  # Set to false if you don't need the workspace manager component
+  enabled: True
+
+  ################################################################################
+  # Workspace Configuration
+  ################################################################################
+  # Maximum amount of memory (RAM) that can be used by a single workspace (in MB)
+  memoryLimit: 5000
+  # Maximum number of CPUs that can be used by a single workspace
+  cpuLimit: "1"
+  # Size of the volume mounted to the /workspace directory in the workspace (in MB)
+  persistentVolumeSize: 10000
+  # Maximum size of the container in MB (this includes all file that are not in the mounted /workspace folder)
+  maxContainerSize: 10000
+  # If this option is enabled, users can use ssh to access their workspace
+  sshEnabled: true   
+
+  ################################################################################
+  # Deployment Configuration
+  ################################################################################
+  image:
+    repository: "acrmlhlab.azurecr.io/ml-lab/components/lab-workspace-manager"
+    tag: "0.0.2"
+    pullPolicy: IfNotPresent
+  # Resources required
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 500Mi
+  # Service configuration
+  service:
+    type: ClusterIP
+    port: 8080
+  # Other Kubernetes pod configurations
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  podAnnotations: {}
+  podSecurityContext: {}
+  containerSecurityContext: {}
+  imagePullSecrets: []

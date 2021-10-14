@@ -1,0 +1,47 @@
+{{- if .Values.labBackend.ingress.enabled }}
+{{- $fullname := include "machine-learning-lab.fullname" . }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullname }}-backend
+  labels:
+    {{- include "machine-learning-lab.labels" . | nindent 4 }}
+    ctxy.deploymentType: "core-backend"
+    ctxy.deploymentName: "backend"
+  annotations:
+    {{- with .Values.labBackend.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- if $.Values.labBackend.ingress.tls }}
+    nginx.ingress.kubernetes.io/proxy-redirect-from: ~*http://(.*)$
+    nginx.ingress.kubernetes.io/proxy-redirect-to: https://$1
+    {{- end }}
+spec:
+  {{- if .Values.labBackend.ingress.tls }}
+  tls:
+    {{- range .Values.labBackend.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.labBackend.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- if .pathType }}
+            pathType: {{ .pathType }}
+            {{- end }}
+            backend:
+              service:
+                name: {{ $fullname }}-backend
+                port:
+                  number: {{ $.Values.labBackend.service.port }}
+          {{- end }}
+    {{- end }}
+{{- end }}

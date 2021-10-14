@@ -1,13 +1,7 @@
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: contaxy
-
----
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: contaxy
+  name: {{ include "machine-learning-lab.fullname" . }}-backend 
 rules:
   - apiGroups: [""]
     resources: ["pods", "persistentvolumeclaims"]
@@ -30,16 +24,3 @@ rules:
   - apiGroups: ["apps"]
     resources: ["deployments"]
     verbs: ["get", "watch", "list", "create", "delete", "update"]
-
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: contaxy
-subjects:
-  - kind: ServiceAccount
-    name: contaxy
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: contaxy
