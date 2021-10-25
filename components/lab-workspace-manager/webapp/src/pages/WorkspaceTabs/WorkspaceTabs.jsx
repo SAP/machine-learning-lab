@@ -64,7 +64,10 @@ function WorkspaceTabs() {
       >
         <ReactIframe
           key={workspace.display_name}
-          url={`${CONTAXY_ENDPOINT}/projects/${projectName}/services/${deploymentName}/access/8080b`}
+          url={`${CONTAXY_ENDPOINT.replace(
+            /\/api$/,
+            ''
+          )}/projects/${projectName}/services/${deploymentName}/access/8080b`}
           allowFullScreen
           className="iframe"
         />

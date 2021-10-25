@@ -1,20 +1,19 @@
 import os
 from typing import Generator
 
-from fastapi import Request, Depends
-
 from contaxy.api.dependencies import get_api_token
 from contaxy.clients import (
+    AuthClient,
+    DeploymentManagerClient,
     ExtensionClient,
+    FileClient,
+    JsonDocumentClient,
     ProjectClient,
     SystemClient,
-    JsonDocumentClient,
-    DeploymentManagerClient,
-    FileClient,
-    AuthClient,
 )
 from contaxy.clients.shared import BaseUrlSession
 from contaxy.managers.components import ComponentManager
+from fastapi import Depends, Request
 
 CONTAXY_API_ENDPOINT = os.getenv("CONTAXY_API_ENDPOINT", None)
 

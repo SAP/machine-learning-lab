@@ -1,11 +1,8 @@
 import os
 from typing import Any, Optional
 
-from fastapi import Depends, FastAPI, status, Query, Response
-from loguru import logger
-
 from contaxy.managers.components import ComponentManager
-from contaxy.schema import ServiceInput, Service
+from contaxy.schema import Service, ServiceInput
 from contaxy.schema.auth import USER_ID_PARAM
 from contaxy.schema.deployment import SERVICE_ID_PARAM
 from contaxy.schema.exceptions import (
@@ -14,7 +11,11 @@ from contaxy.schema.exceptions import (
     ResourceAlreadyExistsError,
 )
 from contaxy.utils import fastapi_utils
-from lab_workspace_manager.utils import get_component_manager, CONTAXY_API_ENDPOINT
+from fastapi import Depends, FastAPI, Query, Response, status
+from loguru import logger
+from starlette.middleware.cors import CORSMiddleware
+
+from lab_workspace_manager.utils import CONTAXY_API_ENDPOINT, get_component_manager
 
 SELF_ACCESS_URL = os.getenv("CONTAXY_SERVICE_URL", "")
 
@@ -23,19 +24,24 @@ SELF_DEPLOYMENT_NAME = os.getenv("CONTAXY_DEPLOYMENT_NAME", "")
 LABEL_EXTENSION_DEPLOYMENT_TYPE = "ctxy.workspaceExtension.deploymentType"
 
 WORKSPACE_MAX_MEMORY_MB = int(os.getenv("WORKSPACE_MAX_MEMORY_MB", "500"))
-
 WORKSPACE_MAX_CPUS = int(os.getenv("WORKSPACE_MAX_CPUS", "1"))
-
-print(
-    f"WORKSPACE_MAX_MEMORY_MB: {WORKSPACE_MAX_MEMORY_MB} WORKSPACE_MAX_CPUS:{WORKSPACE_MAX_CPUS}"
-)
+WORKSPACE_MAX_VOLUME_SIZE = int(os.getenv("WORKSPACE_MAX_VOLUME_SIZE", "5000"))
+WORKSPACE_MAX_CONTAINER_SIZE = int(os.getenv("WORKSPACE_MAX_CONTAINER_SIZE", "5000"))
 
 app = FastAPI()
 # Patch FastAPI to allow relative path resolution.
 fastapi_utils.patch_fastapi(app)
+# Allow CORS configuration
+if "BACKEND_CORS_ORIGINS" in os.environ:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=os.environ["BACKEND_CORS_ORIGINS"].split(","),
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
-
-def is_workspace(service: Service):
+def is_workspace(service: Service) -> bool:
     if service.metadata is None:
         return False
     return service.metadata.get(LABEL_EXTENSION_DEPLOYMENT_TYPE, "") == "workspace"
@@ -76,6 +82,8 @@ def create_workspace(
             "volume_path": "/workspace",
             "max_memory": WORKSPACE_MAX_MEMORY_MB,
             "max_cpus": WORKSPACE_MAX_CPUS,
+            "max_volume_size": WORKSPACE_MAX_VOLUME_SIZE,
+            "max_container_size": WORKSPACE_MAX_CONTAINER_SIZE,
         },
     )
 
@@ -163,4 +171,17 @@ if __name__ == "__main__":
 
     if not CONTAXY_API_ENDPOINT:
         raise RuntimeError("CONTAXY_API_ENDPOINT must be set")
-    uvicorn.run(app, host="localhost", port=8080, log_level="info", reload=True)
+    import logging
+
+    logging.getLogger("uvicorn").propagate = False
+    # Prevent duplicated logs
+    log_config = uvicorn.config.LOGGING_CONFIG
+    log_config["loggers"]["uvicorn"]["propagate"] = False
+    uvicorn.run(
+        "lab_workspace_manager.app:app",
+        host="localhost",
+        port=int(os.getenv("PORT", 8080)),
+        log_level="info",
+        reload=True,
+        log_config=log_config,
+    )

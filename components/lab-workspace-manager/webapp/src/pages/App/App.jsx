@@ -12,7 +12,7 @@ function App() {
         <Route path="/users/:userId/workspace">
           <WorkspaceTabs />
         </Route>
-        <Route path="*">Not Found</Route>
+        <Route path="*">Not Found. Visit /users/:userId/workspace</Route>
       </Switch>
       <div id="snackbar-container" />
     </div>

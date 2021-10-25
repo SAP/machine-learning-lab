@@ -2,10 +2,15 @@ from typing import List
 from unittest.mock import Mock
 
 import pytest
+from contaxy.schema import ClientValueError, Service, ServiceInput
 
-from lab_workspace_manager.app import create_workspace, LABEL_EXTENSION_DEPLOYMENT_TYPE, list_workspaces, get_workspace, \
-    delete_workspace
-from contaxy.schema import ServiceInput, ClientValueError, Service
+from lab_workspace_manager.app import (
+    LABEL_EXTENSION_DEPLOYMENT_TYPE,
+    create_workspace,
+    delete_workspace,
+    get_workspace,
+    list_workspaces,
+)
 
 
 def create_test_workspace_input(display_name: str) -> ServiceInput:
@@ -23,32 +28,31 @@ def create_test_workspace_input(display_name: str) -> ServiceInput:
 class ServiceManagerMock:
     def __init__(self):
         self._fake_services = [
-            Service(container_image="ws-image", id="my-workspace", metadata={
-                LABEL_EXTENSION_DEPLOYMENT_TYPE: "workspace"
-            }),
-            Service(container_image="service-image", id="my-service", metadata={
-                LABEL_EXTENSION_DEPLOYMENT_TYPE: "service"
-            }),
+            Service(
+                container_image="ws-image",
+                id="my-workspace",
+                metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "workspace"},
+            ),
+            Service(
+                container_image="service-image",
+                id="my-service",
+                metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "service"},
+            ),
             Service(container_image="service-image", id="my-service-2", metadata={}),
             Service(container_image="other-image", id="other-service"),
         ]
         self.delete_service = Mock()
 
-    def deploy_service(
-        self,
-        project_id: str,
-        service: ServiceInput
-    ) -> Service:
+    def deploy_service(self, project_id: str, service: ServiceInput) -> Service:
         return Service(**service.dict())
 
-    def list_services(
-        self,
-        project_id: str
-    ) -> List[Service]:
+    def list_services(self, project_id: str) -> List[Service]:
         return self._fake_services
 
     def get_service_metadata(self, project_id, service_id) -> Service:
-        return next((service for service in self._fake_services if service.id == service_id))
+        return next(
+            (service for service in self._fake_services if service.id == service_id)
+        )
 
 
 class ComponentManagerMock:
@@ -59,7 +63,7 @@ class ComponentManagerMock:
         return self._service_manager
 
 
-# @pytest.mark.unit
+@pytest.mark.unit
 class TestWorkspaceOperations:
     def test_create_workspace(self):
         workspace_input = create_test_workspace_input("my-workspace")
@@ -69,7 +73,9 @@ class TestWorkspaceOperations:
 
         assert workspace.container_image == workspace_input.container_image
         assert workspace_input.display_name in workspace.display_name
-        assert all([param in workspace.parameters for param in workspace_input.parameters])
+        assert all(
+            [param in workspace.parameters for param in workspace_input.parameters]
+        )
         assert workspace.metadata[LABEL_EXTENSION_DEPLOYMENT_TYPE] == "workspace"
         assert workspace.compute.volume_path == "/workspace"
 
@@ -116,4 +122,3 @@ class TestWorkspaceOperations:
 
         with pytest.raises(ClientValueError):
             delete_workspace("test-user-id", "my-service", False, component_manger)
-
