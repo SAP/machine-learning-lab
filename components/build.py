@@ -4,7 +4,7 @@ from pathlib import Path
 from universal_build import build_utils
 
 HERE = os.path.abspath(os.path.dirname(__file__))
-ml_lab_components = [f.name for f in Path('.').iterdir() if f.is_dir()]
+ml_lab_components = [f.name for f in Path('.').iterdir() if f.is_dir() and f.name != "template"]
 
 args = build_utils.parse_arguments()
 
