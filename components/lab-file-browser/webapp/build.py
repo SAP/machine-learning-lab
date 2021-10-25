@@ -25,5 +25,7 @@ if args.get(build_utils.FLAG_MAKE):
     build_utils.run(f"{env_prefix} yarn build", exit_on_error=True)
 
 if args.get(build_utils.FLAG_TEST):
-    build_utils.log("Test the webapp:")
-    build_utils.run("yarn test", exit_on_error=True)
+    # No tests at the moment
+    # build_utils.log("Test the webapp:")
+    # build_utils.run("yarn test", exit_on_error=True)
+    pass
