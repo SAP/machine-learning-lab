@@ -23,7 +23,7 @@ services:
       - S3_SECRET_KEY=minio-password-change-me
       - USER_REGISTRATION_ENABLED=True
       - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
-      - BACKEND_CORS_ORIGINS="localhost:3000"
+      - BACKEND_CORS_ORIGINS=http://localhost:3000
     depends_on:
       - postgres
       - s3
