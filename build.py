@@ -10,7 +10,7 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 LAB_COMPONENTS = "components"
 WEBAPP_COMPONENT = "webapp"
 
-PROJECT_NAME = "py-machine-learning-lab"
+PROJECT_NAME = "ml-lab-backend"
 
 
 def main(args: dict) -> None:

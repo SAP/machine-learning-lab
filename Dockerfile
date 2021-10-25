@@ -37,9 +37,10 @@ RUN \
     && mkdir ${_SSL_RESOURCES_PATH}
 
 # Install Contaxy
-#RUN pip install contaxy==0.0.2
-COPY ./contaxy/backend /resources/app/contaxy
-RUN pip install /resources/app/contaxy
+RUN pip install contaxy
+# Uncomment lines below if you want to install your local contaxy code (useful when developing contaxy features)
+# COPY ./contaxy/backend /resources/app/contaxy
+# RUN pip install /resources/app/contaxy
 
 COPY ./docker/server/start.sh /resources/start.sh
 RUN chmod +x /resources/start.sh

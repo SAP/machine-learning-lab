@@ -1,12 +1,15 @@
 services:
+  # The main ML Lab backend container that serves as entrypoint for all traffic
+  # Contains the contaxy server and hosts the ML Lab web app
   ml-lab-backend:
-    image: py-machine-learning-lab:latest
+    image: ml-lab-backend:latest
     ports:
       - "30010:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - JWT_TOKEN_SECRET=please-change-this-secret
+      - SYSTEM_NAMESPACE=pylab
 #      - SERVICE_SSL_ENABLED=true
       - CONTAXY_HOST=localhost:30010
 #      - OIDC_AUTH_ENABLED=True
@@ -19,7 +22,8 @@ services:
       - S3_ACCESS_KEY=minioadmin
       - S3_SECRET_KEY=minio-password-change-me
       - USER_REGISTRATION_ENABLED=True
-      - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8090
+      - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
+      - BACKEND_CORS_ORIGINS="localhost:3000"
     depends_on:
       - postgres
       - s3
@@ -29,23 +33,24 @@ services:
 #      - source: ssl_key
 #        target: /run/secrets/cert.key
 
+  # Initialization container that calls the /system/initialize endpoint and thereby creates the default admin user
   ml-lab-backend-setup:
     image: curlimages/curl:7.75.0
     entrypoint:
-      ["sh", "-c", "sleep 5 && curl ml-lab-backend:8080/system/initialize"]
+      ["sh", "-c", "sleep 10 && curl -v -X POST http://ml-lab-backend:8080/api/system/initialize"]
     restart: "no"
     depends_on:
       - ml-lab-backend
 
-
+  # Postgres database used by the contaxy server in the ML Lab backend
   postgres:
     image: postgres:13.2
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres-password-change-me
-    # ports:
-    #   - "127.0.0.1:30011:5432"
+    ports:
+      - "127.0.0.1:30011:5432"
     volumes:
       - lab-postgres-data:/var/lib/postgresql/data
 
@@ -62,24 +67,27 @@ services:
   #   depends_on:
   #     - postgres
 
+  # Minio object storage used by the contaxy server in the ML Lab backend
   s3:
     image: minio/minio:RELEASE.2021-03-04T00-53-13Z
     command: server /data/data{1...4}
-    # ports:
-    #     - "127.0.0.1:30013:9000"
+    ports:
+        - "127.0.0.1:30013:9000"
     environment:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minio-password-change-me
     volumes:
       - lab-s3-data:/data
 
-  # Start all ML Lab components:
+  # Start all ML Lab components. Each component is a contaxy extension.
+  # Due to the specified name and labels they will be automatically picked up by the ML Lab backend.
 
+  # Workspace manager that allows users to spawn their machine learning workspaces
   lab-workspace-manager:
     container_name: pylab-p-pylab-global-s-workspace-manager
     image: lab-workspace-manager:latest
     environment:
-      - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8090
+      - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
       - CONTAXY_DEPLOYMENT_NAME=pylab-p-pylab-global-s-workspace-manager
       - CONTAXY_SERVICE_URL=/projects/ctxy-global/services/pylab-p-pylab-global-s-workspace-manager/access/8080
       - WORKSPACE_MAX_MEMORY_MB=1024
@@ -107,7 +115,7 @@ services:
 volumes:
   lab-postgres-data:
     # External volumes need to be manually created with "docker volume create contaxy-postgres-data"
-    # This is done to prevent data loss on "docker-compose down"
+    # They prevent data loss on "docker-compose down"
 #    external: true
   lab-s3-data:
 #    external: true
