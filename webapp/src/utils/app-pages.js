@@ -1,3 +1,4 @@
+import { ENDPOINT } from './config';
 import Files from '../pages/Files/Files';
 import Iframe from '../pages/Iframe';
 import Jobs from '../pages/Jobs';
@@ -99,6 +100,7 @@ export default [
 ];
 
 export const mapExtensionToAppPage = (extension) => {
+  const backend = ENDPOINT.replace(/\/api$/, '');
   return {
     ICON: extension.icon ? extension.icon : 'data_usage',
     DISPLAY_PRIORITY: extension.metadata.display_priority
@@ -113,7 +115,7 @@ export const mapExtensionToAppPage = (extension) => {
     TYPE: APP_DRAWER_ITEM_TYPES.link,
     COMPONENT: Iframe,
     PROPS: {
-      url: extension.ui_extension_endpoint,
+      url: backend + extension.ui_extension_endpoint,
       projectSpecific: true,
     },
   };

@@ -56,6 +56,7 @@ function WorkspaceTabs() {
   const workspacePanels = workspaces.map((workspace, i) => {
     const projectName = workspace.metadata['ctxy.projectName'];
     const deploymentName = workspace.metadata['ctxy.deploymentName'];
+    const backend = CONTAXY_ENDPOINT.replace(/\/api$/, '')
     return (
       <TabPanel
         key={workspace.display_name}
@@ -64,10 +65,7 @@ function WorkspaceTabs() {
       >
         <ReactIframe
           key={workspace.display_name}
-          url={`${CONTAXY_ENDPOINT.replace(
-            /\/api$/,
-            ''
-          )}/projects/${projectName}/services/${deploymentName}/access/8080b`}
+          url={`${backend}/projects/${projectName}/services/${deploymentName}/access/8080b`}
           allowFullScreen
           className="iframe"
         />
