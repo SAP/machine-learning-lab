@@ -24,6 +24,7 @@ services:
       - USER_REGISTRATION_ENABLED=True
       - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
       - BACKEND_CORS_ORIGINS=http://localhost:3000
+      - DEBUG=False
     depends_on:
       - postgres
       - s3
@@ -84,7 +85,7 @@ services:
 
   # Workspace manager that allows users to spawn their machine learning workspaces
   lab-workspace-manager:
-    container_name: pylab-p-pylab-global-s-workspace-manager
+    container_name: pylab-p-pylab-ctxy-global-s-workspace-manager
     image: lab-workspace-manager:latest
     environment:
       - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api

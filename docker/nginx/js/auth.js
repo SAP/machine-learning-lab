@@ -41,7 +41,19 @@ function verifyAccess(r, apiToken, permission) {
   });
 }
 
+function isServiceIsInProject(r) {
+  var project_id = r.variables.project_id
+  var service_id = r.variables.service_id
+  var extract_project_id_regex = /-p-(?<project_id>[a-zA-Z0-9\-]+)-s-/g
+  var result = extract_project_id_regex.exec(service_id)
+  return result && "project_id" in result.groups
+         && result.groups["project_id"] == project_id
+}
+
 function guardServiceAccess(r) {
+  if(!isServiceIsInProject(r)){
+    r.return(401, "Requested service is not in specified project!");
+  }
   var apiToken = modifyToken(r.variables.cookie_ct_token);
   var sessionToken = modifyToken(r.variables.cookie_ct_session_token);
   var permission = r.variables.permission;
