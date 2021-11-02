@@ -13,7 +13,7 @@ FROM nginx:stable-alpine
 COPY --from=build /app/build /usr/share/nginx/html
 #Copy shell scripts
 COPY docker/ /resources/
-COPY .env /
+COPY default_env.txt /
 
 # Add bash
 RUN apk add --no-cache bash
