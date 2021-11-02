@@ -10,10 +10,6 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@uppy/core": "^1.16.2",
-    "@uppy/dashboard": "^1.17.1",
-    "@uppy/react": "^1.11.5",
-    "@uppy/xhr-upload": "^1.7.1",
     "i18next": "^19.8.3",
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.0.21",
@@ -62,7 +58,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-debug": "REACT_APP_ENDPOINT=http://127.0.0.1:8082 yarn start",
+    "start-debug": "REACT_APP_ENDPOINT=http://localhost:30010/api yarn start",
     "container": "run(){ docker build -t project-template-dev ../.github/actions/build-environment && echo 'Starting the container. That can take a moment...' && docker run -it --rm -p 3000:3000 -p 6006:6006 -v $(pwd):/workspace:delegated --entrypoint \"/bin/bash\" project-template-dev -c \"cd workspace/ && yarn $1\"; }; run",
     "build": "react-scripts build",
     "test": "react-scripts test a --watchAll=false",
@@ -88,6 +84,6 @@
     ]
   },
   "resolutions": {
-  "babel-loader": "8.1.0"
-}
+    "babel-loader": "8.1.0"
+  }
 }

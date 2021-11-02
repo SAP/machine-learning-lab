@@ -1,5 +1,4 @@
 import { ENDPOINT } from './config';
-import Files from '../pages/Files/Files';
 import Iframe from '../pages/Iframe';
 import Jobs from '../pages/Jobs';
 import Login from '../pages/Login';
@@ -31,16 +30,6 @@ export default [
     APP_DRAWER_ITEM: true,
     TYPE: APP_DRAWER_ITEM_TYPES.divider,
     DISPLAY_PRIORITY: 90,
-  },
-  {
-    ICON: 'folder',
-    NAME: 'Files',
-    PATH: '/files',
-    REQUIRE_LOGIN: true,
-    APP_DRAWER_ITEM: true,
-    TYPE: APP_DRAWER_ITEM_TYPES.link,
-    COMPONENT: Files,
-    DISPLAY_PRIORITY: 80,
   },
   {
     ICON: 'apps',

@@ -32,9 +32,10 @@ function App() {
     isAuthenticated,
     setOauthEnabled,
   } = GlobalStateContainer.useContainer();
-  const onDrawerClick = useCallback(() => setDrawerOpen(!isDrawerOpen), [
-    isDrawerOpen,
-  ]);
+  const onDrawerClick = useCallback(
+    () => setDrawerOpen(!isDrawerOpen),
+    [isDrawerOpen]
+  );
 
   useEffect(() => {
     // Check whether the user is logged in currently (the auth cookie - if existing - is sent to the endpoint which returns a user object when a valid token exists and an error otherwise)

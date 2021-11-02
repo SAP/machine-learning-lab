@@ -23,11 +23,8 @@ function Projects(props) {
   const { className } = props;
   const { t } = useTranslation();
   const showAppDialog = useShowAppDialog();
-  const {
-    activeProject,
-    projects,
-    loadProjects,
-  } = GlobalStateContainer.useContainer();
+  const { activeProject, projects, loadProjects } =
+    GlobalStateContainer.useContainer();
   const onProjectSelect = useProjectSelector();
 
   const onClickManageMembers = (project) => {

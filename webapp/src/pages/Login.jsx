@@ -15,10 +15,8 @@ import {
 import GlobalStateContainer from '../app/store';
 
 function Login(props) {
-  const {
-    setIsAuthenticated,
-    oauthEnabled,
-  } = GlobalStateContainer.useContainer();
+  const { setIsAuthenticated, oauthEnabled } =
+    GlobalStateContainer.useContainer();
   const { className } = props;
   const [isRegistration, setIsRegistration] = useState(false);
   const initialFormState = {
