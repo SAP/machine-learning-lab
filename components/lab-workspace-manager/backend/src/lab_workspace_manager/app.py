@@ -41,6 +41,7 @@ if "BACKEND_CORS_ORIGINS" in os.environ:
         allow_headers=["*"],
     )
 
+
 def is_workspace(service: Service) -> bool:
     if service.metadata is None:
         return False
