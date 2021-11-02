@@ -1,9 +1,9 @@
-import { ENDPOINT } from '../utils/config';
+import { CONTAXY_ENDPOINT } from '../utils/config';
 // eslint-disable import/prefer-default-export
 import * as Api from './contaxy-client';
 
-export const ENDPOINT_PROJECTS = `${ENDPOINT}/projects/{project_id}`;
-export const ENDPOINT_AUTH = `${ENDPOINT}/auth`;
+export const ENDPOINT_PROJECTS = `${CONTAXY_ENDPOINT}/projects/{project_id}`;
+export const ENDPOINT_AUTH = `${CONTAXY_ENDPOINT}/auth`;
 export const SELECTED_PROJECT_LOCAL_STORAGE_KEY = 'ctx_selected_project_id';
 
 export function getFileDownloadUrl(projectId, fileKey) {
@@ -30,7 +30,7 @@ export function getExternalLoginPageUrl() {
 }
 
 const apiClient = new Api.ApiClient();
-apiClient.basePath = ENDPOINT;
+apiClient.basePath = CONTAXY_ENDPOINT;
 apiClient.enableCookies = true;
 // the generated client includes an User-Agent header which is not allowed to set as it is controlled by the browser
 delete apiClient.defaultHeaders['User-Agent'];

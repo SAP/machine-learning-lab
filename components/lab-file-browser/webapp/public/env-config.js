@@ -1,3 +1,3 @@
-window.ctxyExtensionFiles = {
-  PREFIX: "",
+window.envLabFileBrowser = {
+  FOLDER: '',
 };

@@ -1,16 +1,13 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+// eslint-disable-next-line camelcase
+import { unstable_batchedUpdates } from 'react-dom';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import byteSize from 'byte-size';
 import styled from 'styled-components';
 
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 
 import moment from 'moment';
 
@@ -27,108 +24,107 @@ import WidgetsGrid from '../../components/WidgetsGrid';
 import showStandardSnackbar from '../../app/showStandardSnackbar';
 
 function Files(props) {
-  const { className } = props;
+  const { className, folder } = props;
+  const urlParams = new URLSearchParams(useLocation().search);
+  const projectId = urlParams.get('project') || '';
   const [data, setData] = useState([]);
   const [widgetData, setWidgetData] = useState({
     totalSize: '0',
     lastUpdated: '-',
   });
-  // const { API_URL } = window.docker_env;
-  // const { activeProject } = GlobalStateContainer.useContainer();
-  const activeProject = {
-    id: window.location.pathname.split('/')[2]
-      ? window.location.pathname.split('/')[2]
-      : '/',
-  };
-
-  const filesFolder = window.ctxyExtensionFiles.PREFIX;
-
   const [isUploadFileDialogOpen, setUploadFileDialogOpen] = useState(false);
-
   const componentIsMounted = useRef(true);
 
-  const reloadFiles = useCallback(
-    async (projectId) => {
-      if (!projectId) return;
-      const files = await filesApi.listFiles(projectId, {
-        prefix: filesFolder,
-      });
-      if (componentIsMounted.current) {
-        setData(files);
+  // Set component is mounted
+  useEffect(() => {
+    componentIsMounted.current = true;
+    return () => {
+      componentIsMounted.current = false;
+    };
+  }, []);
 
-        let totalSize = 0;
-        let lastUpdated = 0;
-        files.forEach((file) => {
-          totalSize += file.file_size;
-          lastUpdated =
-            new Date(file.updated_at) > new Date(lastUpdated)
-              ? file.updated_at
-              : lastUpdated;
-        });
+  const reloadFiles = useCallback(async () => {
+    const files = await filesApi.listFiles(projectId, {
+      prefix: folder,
+    });
+    if (componentIsMounted.current) {
+      let totalSize = 0;
+      let lastUpdated = 0;
+      files.forEach((file) => {
+        totalSize += file.file_size;
+        lastUpdated =
+          new Date(file.updated_at) > new Date(lastUpdated)
+            ? file.updated_at
+            : lastUpdated;
+      });
+      // Make sure state update only causes 1 rerender.
+      // TODO: Check if this is also possible with a restructering of the component
+      unstable_batchedUpdates(() => {
+        setData(files);
         setWidgetData({
-          totalSize: `${(totalSize / 1000 ** 3).toFixed(2)} GB`,
+          totalSize: byteSize(totalSize).toString(),
           lastUpdated:
             lastUpdated > 0
               ? moment(lastUpdated).startOf('minute').fromNow()
               : '-',
         });
-      }
-    },
-    [filesFolder]
-  );
+      });
+    }
+  }, [folder, projectId]);
 
+  // Make sure files are reloaded if project or folder changes
   useEffect(() => {
-    componentIsMounted.current = true;
-    // Will trigger inital loading during initial rendering
-    reloadFiles(activeProject.id);
-    // each useEffect can return a cleanup function
-    return () => {
-      componentIsMounted.current = false;
-    };
-  }, [activeProject.id, reloadFiles]);
+    reloadFiles();
+  }, [reloadFiles]);
 
   const onFileDelete = useCallback(
     async (rowData) => {
       try {
-        await filesApi.deleteFile(activeProject.id, rowData.key);
+        await filesApi.deleteFile(projectId, rowData.key);
         showStandardSnackbar(`Deleted file (${rowData.key})`);
-        reloadFiles(activeProject.id);
+        reloadFiles();
       } catch (err) {
         showStandardSnackbar(`Error in deleting file (${rowData.key})`);
       }
     },
-    [reloadFiles, activeProject.id]
+    [projectId, reloadFiles]
   );
 
   const onFileDownload = useCallback(
     (rowData) => {
       const a = document.createElement('a');
-      a.href = getFileDownloadUrl(activeProject.id, rowData.key);
+      a.href = getFileDownloadUrl(projectId, rowData.key);
       a.target = '_blank';
       a.download = rowData.name || 'download';
       a.click();
     },
-    [activeProject.id]
+    [projectId]
   );
 
-  const fileTable = useMemo(
-    () => (
-      <FilesTable
-        data={data}
-        onFileDownload={onFileDownload}
-        onFileDelete={onFileDelete}
-        onReload={() => reloadFiles(activeProject.id)}
-      />
-    ),
-    [activeProject.id, data, onFileDelete, reloadFiles, onFileDownload]
+  // const fileTable = useMemo(
+  //   () => (
+  //     <FilesTable
+  //       data={data}
+  //       onFileDownload={onFileDownload}
+  //       onFileDelete={onFileDelete}
+  //       onReload={reloadFiles}
+  //     />
+  //   ),
+  //   [data, onFileDelete, reloadFiles, onFileDownload]
+  // );
+  const fileTable = (
+    <FilesTable
+      title={folder.charAt(0).toUpperCase() + folder.slice(1).toLowerCase()}
+      data={data}
+      onFileDownload={onFileDownload}
+      onFileDelete={onFileDelete}
+      onReload={reloadFiles}
+    />
   );
 
   // TODO: add correct values to widget
   return (
     <div className="pages-native-component">
-      <Typography variant="h5" gutterBottom>
-        {filesFolder.toUpperCase()}
-      </Typography>
       <WidgetsGrid>
         <Widget name="Amount" icon="list" value={data.length} color="pink" />
         <Widget
@@ -154,11 +150,11 @@ function Files(props) {
       </Button>
       {fileTable}
       <UploadFilesDialog
-        endpoint={getFileUploadUrl(activeProject.id, '')}
+        endpoint={getFileUploadUrl(projectId, '')}
         open={isUploadFileDialogOpen}
         onClose={() => {
           setUploadFileDialogOpen(false);
-          reloadFiles(activeProject.id);
+          reloadFiles(projectId);
         }}
       />
     </div>
@@ -167,6 +163,8 @@ function Files(props) {
 
 Files.propTypes = {
   className: PropTypes.string,
+  // projectId: PropTypes.string.isRequired,
+  folder: PropTypes.string.isRequired,
 };
 
 Files.defaultProps = {

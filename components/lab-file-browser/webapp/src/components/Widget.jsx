@@ -106,4 +106,4 @@ const StyledWidget = styled(Widget)`
   }
 `;
 
-export default StyledWidget;
+export default React.memo(StyledWidget);

@@ -13,9 +13,7 @@ import XHRUpload from '@uppy/xhr-upload';
 
 import showStandardSnackbar from '../../app/showStandardSnackbar';
 
-const filesFolder = window.ctxyExtensionFiles.PREFIX
-  ? `${window.ctxyExtensionFiles.PREFIX}/`
-  : '';
+const filesFolder = window.envLabFileBrowser.FOLDER || '';
 
 const uppy = new Uppy({
   id: 'uppy',
@@ -27,7 +25,7 @@ const uppy = new Uppy({
     // and keeps the folder structure.
     const modifiedFile = {
       ...currentFile,
-      name: `${filesFolder}${currentFile.name}`,
+      name: `${filesFolder}/${currentFile.name}`,
     };
     return modifiedFile;
   },

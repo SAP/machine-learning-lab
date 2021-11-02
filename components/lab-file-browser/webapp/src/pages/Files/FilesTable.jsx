@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import MaterialTable from 'material-table';
+import byteSize from 'byte-size';
 import setClipboardText from '../../utils/clipboard';
 import showStandardSnackbar from '../../app/showStandardSnackbar';
 
@@ -15,6 +15,7 @@ const COLUMNS = [
     title: 'Name',
     numeric: false,
     align: 'center',
+    render: (row) => row.display_name.split('/').pop(),
   },
   {
     field: 'updated_at',
@@ -23,11 +24,12 @@ const COLUMNS = [
     type: 'date',
     align: 'center',
   },
-  {
-    field: 'updated_by',
-    title: 'Modified By',
-    align: 'center',
-  },
+  // TODO: Uncomment when updated_by field is pobulated
+  // {
+  //   field: 'updated_by',
+  //   title: 'Modified By',
+  //   align: 'center',
+  // },
   {
     field: 'version',
     title: 'Version',
@@ -37,15 +39,16 @@ const COLUMNS = [
     field: 'file_size',
     title: 'Size',
     align: 'center',
+    render: (row) => byteSize(row.file_size).toString(),
   },
 ];
 
 function FilesTable(props) {
-  const { t } = useTranslation();
-  const { className, data, onFileDelete, onFileDownload, onReload } = props;
+  const { className, title, data, onFileDelete, onFileDownload, onReload } =
+    props;
   return (
     <MaterialTable
-      title={t('file_plural')}
+      title={title || 'Files'}
       columns={COLUMNS}
       data={data}
       options={{
@@ -73,7 +76,7 @@ function FilesTable(props) {
           icon: 'autorenew',
           isFreeAction: true,
           onClick: onReload,
-          tooltip: t('reload'),
+          tooltip: 'Reload',
         },
         {
           icon: 'download',
@@ -82,7 +85,7 @@ function FilesTable(props) {
             showStandardSnackbar('Download file');
             onFileDownload(rowData);
           },
-          tooltip: `${t('download')} ${t('file')}`,
+          tooltip: 'Download File',
         },
         {
           icon: 'content_copy',
@@ -109,6 +112,7 @@ function FilesTable(props) {
 
 FilesTable.propTypes = {
   className: PropTypes.string,
+  title: PropTypes.string,
   data: PropTypes.arrayOf(Object),
   onFileDownload: PropTypes.func,
   onFileDelete: PropTypes.func,
@@ -117,19 +121,11 @@ FilesTable.propTypes = {
 
 FilesTable.defaultProps = {
   className: '',
-  data: [
-    {
-      name: 'Foobar',
-      modifiedAt: 'a month ago',
-      modifiedBy: 'admin',
-      version: 2,
-      size: '8.32 mb',
-      fileKey: 'datasets%2Fnews-categorized.csv.v1',
-    },
-  ],
+  title: '',
+  data: [],
   onFileDelete: () => {},
   onFileDownload: () => {},
   onReload: () => {},
 };
 
-export default FilesTable;
+export default React.memo(FilesTable);

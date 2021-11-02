@@ -9,11 +9,11 @@ And the body:
 ```json
 {
   "api_extension_endpoint": "",
-  "ui_extension_endpoint": "80/",
+  "ui_extension_endpoint": "80/#",
   "extension_type": "project-extension",
   "container_image": "ctxy-files-ui:latest",
   "parameters": {
-    "PREFIX": "datasets"
+    "FOLDER": "datasets"
   },
   "endpoints": [
     "80"
