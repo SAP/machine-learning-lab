@@ -14,6 +14,7 @@ import XHRUpload from '@uppy/xhr-upload';
 import showStandardSnackbar from '../../app/showStandardSnackbar';
 
 const filesFolder = window.envLabFileBrowser.FOLDER || '';
+const uploadMessage = window.envLabFileBrowser.UPLOAD_MESSAGE || '';
 
 const uppy = new Uppy({
   id: 'uppy',
@@ -55,6 +56,8 @@ function UploadFilesDialog(props) {
       showProgressDetails
       hideProgressAfterFinish={false}
       onRequestClose={onClose}
+      proudlyDisplayPoweredByUppy={false}
+      note={uploadMessage}
     />
   );
 }
