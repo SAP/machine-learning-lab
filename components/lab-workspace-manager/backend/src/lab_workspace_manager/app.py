@@ -67,16 +67,22 @@ def create_workspace(
         f"{service.display_name} and image {service.container_image}"
     )
 
+    # Use the user's project which has the same id as the user
+    project_id = user_id
+
     # TODO: Check which fields should be taken from the input (compute, endpoints, metadata, etc.)
     if service.parameters is None:
         service.parameters = {}
+    display_name = f"ws-{service.display_name}"
     workspace_service_config = ServiceInput(
         container_image=service.container_image,
-        display_name=f"ws-{service.display_name}",
+        display_name=display_name,
         endpoints=["8080b"],
         parameters={
             **service.parameters,
             "WORKSPACE_BASE_URL": "{env.CONTAXY_SERVICE_URL}",
+            "SSH_JUMPHOST_TARGET": "{env.CONTAXY_DEPLOYMENT_NAME}",
+            "SELF_ACCESS_TOKEN": "{env.CONTAXY_API_TOKEN}",
         },
         metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "workspace"},
         compute={
@@ -90,7 +96,7 @@ def create_workspace(
 
     try:
         workspace_service = component_manager.get_service_manager().deploy_service(
-            project_id=user_id, service=workspace_service_config
+            project_id=project_id, service=workspace_service_config
         )
         logger.info(
             f"Successfully created workspace service with name "
