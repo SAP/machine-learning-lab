@@ -38,6 +38,7 @@ function App() {
   );
 
   useEffect(() => {
+    if (isAuthenticated && user) return;
     // Check whether the user is logged in currently (the auth cookie - if existing - is sent to the endpoint which returns a user object when a valid token exists and an error otherwise)
     usersApi
       .getMyUser()
@@ -49,7 +50,7 @@ function App() {
         setUser(null);
         setIsAuthenticated(false);
       });
-  }, [isAuthenticated, setUser, setIsAuthenticated]);
+  }, [user, isAuthenticated, setUser, setIsAuthenticated]);
 
   useEffect(() => {
     if (!user) return;
@@ -94,15 +95,16 @@ function App() {
       .catch(() => {
         setOauthEnabled(false);
       });
-  }, [isAuthenticated, setOauthEnabled]);
+  }, [setOauthEnabled]);
 
+  // TODO: Load project specific extensions
   useEffect(() => {
-    if (!activeProject.id) return;
+    if (!isAuthenticated) return;
     extensionsApi
-      .listExtensions(activeProject.id)
+      .listExtensions('global')
       .then((res) => setProjectExtensions(res))
       .catch(() => {});
-  }, [activeProject, setProjectExtensions, user]);
+  }, [isAuthenticated, setProjectExtensions]);
 
   useEffect(() => {
     setAdditionalAppDrawerItems(
