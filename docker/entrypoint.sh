@@ -29,25 +29,28 @@ find /etc/nginx/ -name "*.conf" -exec  sed -s -i "s@\${SERVICE_SUFFIX}@${service
 find /etc/nginx/ -name "*.conf" -exec  sed -s -i "s/\${RESOLVER}/${resolver}/g" {} +
 
 # Configure SSL variables in nginx
-# When SSL is enabled, the Stream port is used as the entry port and for the main port ssl is enabled (the stream port forwards https to the ssl-enabled main port and ssh traffic to the OpenSSH server). In this case, switch the ports so that the user does not have to consider this.
-main_port=8080
-stream_port=8081
-main_port_ssl=$main_port
 if [[ "${SERVICE_SSL_ENABLED,,}" == true ]]; then
-    temp=$stream_port
-    stream_port=$main_port
-    main_port_ssl="$temp ssl"
-    main_port=$temp
-
     sed -i "s|# ssl_certificate \${SSL_CERTIFICATE_PATH}| ssl_certificate ${_SSL_RESOURCES_PATH}/cert.crt;|g" /etc/nginx/nginx.conf;
     sed -i "s|# ssl_certificate_key \${SSL_CERTIFICATE_KEY_PATH}| ssl_certificate_key ${_SSL_RESOURCES_PATH}/cert.key;|g" /etc/nginx/nginx.conf;
 fi
-sed -i "s/\${MAIN_PORT_SSL}/$main_port_ssl/g" /etc/nginx/nginx.conf;
-sed -i "s/\${MAIN_PORT}/$main_port/g" /etc/nginx/nginx.conf;
-sed -i "s/\${STREAM_PORT}/$stream_port/g" /etc/nginx/nginx.conf;
+
+# Configure ssh server
+sed -i "s@{SSH_TARGET_LABELS}@${SSH_TARGET_LABELS}@g" /etc/ssh/authorize.sh
+sed -i "s@{SSH_PERMIT_TARGET_HOST}@${SSH_PERMIT_TARGET_HOST}@g" /etc/ssh/authorize.sh
+sed -i "s@{SSH_TARGET_KEY_PATH}@${SSH_TARGET_KEY_PATH}@g" /etc/ssh/authorize.sh
+sed -i "s@{SSH_TARGET_PUBLICKEY_API_PORT}@${SSH_TARGET_PUBLICKEY_API_PORT}@g" /etc/ssh/authorize.sh
+# Execute script to collect workspace keys if action is serve
+#nohup python /etc/ssh/update_authorized_keys.py full&>/dev/null &
+python /etc/ssh/update_authorized_keys.py full
 
 # Start nginx
 nginx -c /etc/nginx/nginx.conf
+
+# Start the ssh server
+nohup env -i /usr/local/sbin/sshd -D -e -f /etc/ssh/sshd_config &>/var/log/ssh.log &
+
+# Start the sslh server
+/usr/sbin/sslh-select --background -p 0.0.0.0:8080 --ssh 127.0.0.1:22 --http 127.0.0.1:8081 --ssl 127.0.0.1:8081
 
 # Set the gunicorn / fastAPI port
 export PORT=8090
