@@ -54,7 +54,11 @@ function guardServiceAccess(r) {
   if(!isServiceIsInProject(r)){
     r.return(401, "Requested service is not in specified project!");
   }
-  var apiToken = modifyToken(r.variables.cookie_ct_token);
+  if (r.headersIn['Authorization']) {
+    var apiToken = modifyToken(r.headersIn['Authorization'])
+  } else {
+    var apiToken = modifyToken(r.variables.cookie_ct_token);
+  }
   var sessionToken = modifyToken(r.variables.cookie_ct_session_token);
   var permission = r.variables.permission;
   if (!apiToken && !sessionToken) r.return(403, "No auth cookie set");
