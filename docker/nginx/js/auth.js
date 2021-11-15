@@ -23,7 +23,7 @@ function verifyAccess(r, apiToken, permission) {
           reject(false);
           return;
         }
-
+        var servicePath = permission.substr(0, permission.lastIndexOf('#'));
         var generated_session_token = jwt.generate(
           process.env.JWT_TOKEN_SECRET,
           undefined,
@@ -32,10 +32,11 @@ function verifyAccess(r, apiToken, permission) {
         );
         r.headersOut[
           "Set-Cookie"
-        ] = `ct_session_token=${generated_session_token}; HttpOnly; Path=/; Max-Age=${validInSeconds}`;
+        ] = `ct_session_token=${generated_session_token}; HttpOnly; Path=/${servicePath}; Max-Age=${validInSeconds}`;
         resolve(true);
       })
       .catch((e) => {
+        r.error("NGINX: Error in verifyAccess. Details: " + e.message)
         reject(false);
       });
   });
