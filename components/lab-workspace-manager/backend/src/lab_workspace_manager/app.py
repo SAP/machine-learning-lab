@@ -83,6 +83,7 @@ def create_workspace(
             "WORKSPACE_BASE_URL": "{env.CONTAXY_SERVICE_URL}",
             "SSH_JUMPHOST_TARGET": "{env.CONTAXY_DEPLOYMENT_NAME}",
             "SELF_ACCESS_TOKEN": "{env.CONTAXY_API_TOKEN}",
+            "LAB_API_ENDPOINT": "{env.CONTAXY_API_ENDPOINT}",
         },
         metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "workspace"},
         compute={
