@@ -9,6 +9,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 
 import { DEFAULT_WORKSPACE_IMAGE } from '../utils/config';
@@ -19,7 +21,7 @@ const SERVICE_NAME_REGEX = new RegExp(
 );
 
 function CreateWorkspaceDialog(props) {
-  const { className, onClose, onCreate } = props;
+  const { className, onClose, onCreate, workspaceImages } = props;
 
   const [workspaceInput, setDeploymentInput] = useState({
     workspaceImage: DEFAULT_WORKSPACE_IMAGE,
@@ -36,6 +38,51 @@ function CreateWorkspaceDialog(props) {
     workspaceInput.workspaceName
   );
 
+  let workspaceImageInput;
+  if (workspaceImages.length === 0) {
+    workspaceImageInput = (
+      <TextField
+        required
+        label="Workspace Image"
+        type="text"
+        name="workspaceImage"
+        value={workspaceInput.workspaceImage}
+        onChange={onChange}
+        onBlur={() => {}} // TODO: add here the "caching" logic handling
+        autoComplete="on"
+        error={isContainerImageInvalid}
+        helperText={isContainerImageInvalid ? 'Image Name is not valid' : null}
+        fullWidth
+        margin="dense"
+      />
+    );
+  } else {
+    if (
+      workspaceInput.workspaceImage !== '' &&
+      !workspaceImages.includes(workspaceInput.workspaceImage)
+    ) {
+      setDeploymentInput({ ...workspaceInput, workspaceImage: '' });
+    }
+    workspaceImageInput = (
+      <Select
+        required
+        label="Workspace Image"
+        id="demo-simple-select"
+        name="workspaceImage"
+        value={workspaceInput.workspaceImage}
+        onChange={onChange}
+        fullWidth
+        margin="dense"
+      >
+        {workspaceImages.map((image) => (
+          <MenuItem key={image} value={image}>
+            {image}
+          </MenuItem>
+        ))}
+      </Select>
+    );
+  }
+
   return (
     <Dialog open className={className}>
       <DialogTitle>Create New Workspace</DialogTitle>
@@ -48,22 +95,7 @@ function CreateWorkspaceDialog(props) {
           </a>
           )
         </DialogContentText>
-        <TextField
-          required
-          label="Workspace Image"
-          type="text"
-          name="workspaceImage"
-          value={workspaceInput.workspaceImage}
-          onChange={onChange}
-          onBlur={() => {}} // TODO: add here the "caching" logic handling
-          autoComplete="on"
-          error={isContainerImageInvalid}
-          helperText={
-            isContainerImageInvalid ? 'Image Name is not valid' : null
-          }
-          fullWidth
-          margin="dense"
-        />
+        {workspaceImageInput}
         <TextField
           required
           label="Workspace Name"
@@ -103,10 +135,12 @@ CreateWorkspaceDialog.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onCreate: PropTypes.func.isRequired,
+  workspaceImages: PropTypes.arrayOf(PropTypes.string),
 };
 
 CreateWorkspaceDialog.defaultProps = {
   className: '',
+  workspaceImages: [],
 };
 
 const StyledCreateWorkspaceDialog = styled(CreateWorkspaceDialog)`

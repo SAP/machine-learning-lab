@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import superagent from 'superagent';
 
 import './WorkspaceOverview.css';
-import { EXTENSION_ENDPOINT } from '../../utils/config';
+import { CONTAXY_ENDPOINT, EXTENSION_ENDPOINT } from '../../utils/config';
 import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
 import CreateWorkspaceDialog from '../CreateWorkspaceDialog';
 import WorkspaceCard from '../WorkspaceCard';
@@ -38,10 +38,43 @@ function WorkspaceOverview(props) {
     [reloadWorkspaces, userId]
   );
 
+  // Load list of allowed workspace images
+  const [workspaceImages, setWorkspaceImages] = useState([]);
+  useEffect(() => {
+    async function fetchAllowedImages() {
+      try {
+        const res = await superagent
+          .get(`${CONTAXY_ENDPOINT}/system/allowed-images`)
+          .withCredentials();
+        if (Array.isArray(res.body)) {
+          setWorkspaceImages(
+            res.body
+              // Only show images that have the 'is-workspace' metadata tag set
+              .filter(
+                (allowedImage) =>
+                  allowedImage.metadata['is-workspace'] === 'true'
+              )
+              // Create full image identifier from image name and tag
+              .flatMap((allowedImage) => {
+                return allowedImage.image_tags.map((allowedTag) => {
+                  if (allowedTag === '*' || allowedTag === 'latest') {
+                    return allowedImage.image_name;
+                  }
+                  return `${allowedImage.image_name}:${allowedTag}`;
+                });
+              })
+          );
+        }
+      } catch (err) {
+        showStandardSnackbar('Failed to fetch workspace image list!');
+      }
+    }
+    fetchAllowedImages();
+  }, []);
   const showAppDialog = useShowAppDialog();
-
   const showCreateWorkspaceDialog = useCallback(() => {
     showAppDialog(CreateWorkspaceDialog, {
+      workspaceImages,
       onCreate: async ({ workspaceImage, workspaceName }, onClose) => {
         try {
           await superagent
@@ -66,7 +99,7 @@ function WorkspaceOverview(props) {
         onClose();
       },
     });
-  }, [userId, reloadWorkspaces, showAppDialog]);
+  }, [workspaceImages, userId, reloadWorkspaces, showAppDialog]);
 
   // const showModifyWorkspaceDialog = useCallback(() => {
   //   showAppDialog(ModifyWorkspaceDialog, {
