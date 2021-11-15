@@ -109,7 +109,7 @@ const StyledProjectCard = styled(ProjectCard)`
     flex: 1;
     max-width: 400px;
     max-height: 100px;
-    overflow: scroll;
+    overflow: hide;
   }
 
   &.cardTitle_projectId {
