@@ -31,15 +31,6 @@ function Projects(props) {
     showAppDialog(ManageProjectDialog, { project });
   };
 
-  const onApiTokenClick = async (project) => {
-    const projectScope = getProjectPermissionId(project);
-    const apiTokens = await authApi.listApiTokens();
-    showAppDialog(ApiTokenDialog, {
-      creationScope: projectScope,
-      tokens: apiTokens,
-    });
-  };
-
   const onAddProject = () => {
     showAppDialog(AddProjectDialog, {
       onAdd: async ({ id, name, description }, onClose) => {
@@ -78,7 +69,6 @@ function Projects(props) {
         key={project.id}
         project={project}
         isHighlighted={project.id === activeProject.id}
-        onApiTokenClick={onApiTokenClick}
         onClickManageMembers={onClickManageMembers}
         onDeleteProject={onDeleteProject}
         onSelect={onProjectSelect}

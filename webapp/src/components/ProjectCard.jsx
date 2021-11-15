@@ -17,7 +17,6 @@ import * as Jdenticon from 'jdenticon';
 function ProjectCard(props) {
   const {
     className,
-    onApiTokenClick,
     onClickManageMembers,
     onDeleteProject,
     onSelect,
@@ -74,7 +73,6 @@ function ProjectCard(props) {
             <Button onClick={() => onClickManageMembers(project)}>
               MEMBERS
             </Button>
-            <Button onClick={() => onApiTokenClick(project)}>TOKEN</Button>
             <Button onClick={() => onDeleteProject(project)}>DELETE</Button>
           </CardActions>
         </Card>
@@ -86,7 +84,6 @@ function ProjectCard(props) {
 ProjectCard.propTypes = {
   className: PropTypes.string,
   isHighlighted: PropTypes.bool,
-  onApiTokenClick: PropTypes.func.isRequired,
   onClickManageMembers: PropTypes.func.isRequired,
   onDeleteProject: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
