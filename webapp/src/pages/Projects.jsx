@@ -7,11 +7,11 @@ import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
-import { authApi, projectsApi } from '../services/contaxy-api';
-import { getProjectPermissionId, useProjectSelector } from '../utils/app-utils';
+import { projectsApi } from '../services/contaxy-api';
+import { useProjectSelector } from '../utils/app-utils';
 import { useShowAppDialog } from '../app/AppDialogServiceProvider';
 import AddProjectDialog from '../components/Dialogs/AddProjectDialog';
-import ApiTokenDialog from '../components/Dialogs/ApiTokenDialog';
+import ConfirmDeleteDialog from '../components/Dialogs/ConfirmDeleteDialog';
 import GlobalStateContainer from '../app/store';
 import ManageProjectDialog from '../components/Dialogs/ManageProjectDialog';
 import ProjectCard from '../components/ProjectCard';
@@ -51,16 +51,23 @@ function Projects(props) {
     });
   };
 
-  const onDeleteProject = async (project) => {
-    try {
-      await projectsApi.deleteProject(project.id);
-      showStandardSnackbar(`Delete project '${project.id}'`);
-      loadProjects();
-    } catch (err) {
-      showStandardSnackbar(
-        `Could not delete project '${project.id}'. ${err.body.message}.`
-      );
-    }
+  const onDeleteProject = (project) => {
+    showAppDialog(ConfirmDeleteDialog, {
+      dialogTitle: 'Delete Project',
+      dialogText: `Do you really want to delete the project ${project.display_name}?`,
+      onDelete: async (onClose) => {
+        try {
+          await projectsApi.deleteProject(project.id);
+          showStandardSnackbar(`Deleted project ${project.id}`);
+          loadProjects();
+        } catch (err) {
+          showStandardSnackbar(
+            `Could not delete project ${project.id}! ${err.body.message}.`
+          );
+        }
+        onClose();
+      },
+    });
   };
 
   const projectElements = projects.map((project) => {
