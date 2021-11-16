@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useCallback, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -27,6 +29,7 @@ function CreateWorkspaceDialog(props) {
     workspaceImage: DEFAULT_WORKSPACE_IMAGE,
     workspaceName: '',
   });
+  const [creationStarted, setCreationStarted] = useState(false);
 
   const onChange = (e) =>
     setDeploymentInput({ ...workspaceInput, [e.target.name]: e.target.value });
@@ -75,13 +78,16 @@ function CreateWorkspaceDialog(props) {
         margin="dense"
       >
         {workspaceImages.map((image) => (
-          <MenuItem key={image} value={image}>
-            {image}
-          </MenuItem>
+          <MenuItem value={image}>{image}</MenuItem>
         ))}
       </Select>
     );
   }
+
+  const handleCreateClick = () => {
+    setCreationStarted(true);
+    onCreate(workspaceInput, onClose);
+  };
 
   return (
     <Dialog open className={className}>
@@ -116,16 +122,18 @@ function CreateWorkspaceDialog(props) {
         </Button>
         <Button
           disabled={
+            creationStarted ||
             isContainerImageInvalid ||
             isWorkspaceNameInvalid ||
             !workspaceInput.workspaceImage ||
             !workspaceInput.workspaceName
           }
-          onClick={() => onCreate(workspaceInput, onClose)}
+          onClick={handleCreateClick}
           color="primary"
         >
           CREATE
         </Button>
+        {creationStarted ? <CircularProgress size="25px" /> : null}
       </DialogActions>
     </Dialog>
   );
