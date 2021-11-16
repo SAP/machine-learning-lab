@@ -101,7 +101,7 @@ function App() {
   useEffect(() => {
     if (!isAuthenticated) return;
     extensionsApi
-      .listExtensions('global')
+      .listExtensions('ctxy-global')
       .then((res) => setProjectExtensions(res))
       .catch(() => {});
   }, [isAuthenticated, setProjectExtensions]);
