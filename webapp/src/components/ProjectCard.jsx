@@ -70,10 +70,16 @@ function ProjectCard(props) {
           </CardContent>
           <CardActions>
             <Button onClick={() => onSelect(project)}>SELECT</Button>
-            <Button onClick={() => onClickManageMembers(project)}>
-              MEMBERS
-            </Button>
-            <Button onClick={() => onDeleteProject(project)}>DELETE</Button>
+            {!project.technical_project
+              ? [
+                  <Button onClick={() => onClickManageMembers(project)}>
+                    MEMBERS
+                  </Button>,
+                  <Button onClick={() => onDeleteProject(project)}>
+                    DELETE
+                  </Button>,
+                ]
+              : null}
           </CardActions>
         </Card>
       </Grid>
