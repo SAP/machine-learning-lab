@@ -8,34 +8,43 @@ import superagent from 'superagent';
 import './WorkspaceOverview.css';
 import { CONTAXY_ENDPOINT, EXTENSION_ENDPOINT } from '../../utils/config';
 import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
+import ConfirmDeleteDialog from '../ConfirmDeleteDialog';
 import CreateWorkspaceDialog from '../CreateWorkspaceDialog';
 import WorkspaceCard from '../WorkspaceCard';
 import showStandardSnackbar from '../../app/showStandardSnackbar';
 
 function WorkspaceOverview(props) {
   const { userId, workspaces, reloadWorkspaces, accessWorkspace } = props;
+  const showAppDialog = useShowAppDialog();
 
   const deleteWorkspace = useCallback(
-    async (workspace) => {
-      try {
-        await superagent
-          .delete(
-            `${EXTENSION_ENDPOINT}/users/${userId}/workspace/${workspace.id}`
-          )
-          .withCredentials();
-        showStandardSnackbar(
-          `Successfully deleted workspace ${workspace.display_name}.`
-        );
-      } catch (err) {
-        let message = err.response?.body?.detail;
-        if (typeof message === 'undefined') {
-          message = 'Unknown error.';
-        }
-        showStandardSnackbar(`Failed to delete workspace! ${message}`);
-      }
-      reloadWorkspaces();
+    (workspace) => {
+      showAppDialog(ConfirmDeleteDialog, {
+        dialogTitle: 'Delete Workspace',
+        dialogText: `Do you really want to delete the workspace ${workspace.display_name}?`,
+        onDelete: async (onClose) => {
+          try {
+            await superagent
+              .delete(
+                `${EXTENSION_ENDPOINT}/users/${userId}/workspace/${workspace.id}`
+              )
+              .withCredentials();
+            showStandardSnackbar(
+              `Successfully deleted workspace ${workspace.display_name}.`
+            );
+          } catch (err) {
+            let message = err.response?.body?.detail;
+            if (typeof message === 'undefined') {
+              message = 'Unknown error.';
+            }
+            showStandardSnackbar(`Failed to delete workspace! ${message}`);
+          }
+          reloadWorkspaces();
+          onClose();
+        },
+      });
     },
-    [reloadWorkspaces, userId]
+    [showAppDialog, reloadWorkspaces, userId]
   );
 
   // Load list of allowed workspace images
@@ -71,7 +80,6 @@ function WorkspaceOverview(props) {
     }
     fetchAllowedImages();
   }, []);
-  const showAppDialog = useShowAppDialog();
   const showCreateWorkspaceDialog = useCallback(() => {
     showAppDialog(CreateWorkspaceDialog, {
       workspaceImages,
