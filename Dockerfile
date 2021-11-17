@@ -100,6 +100,11 @@ RUN chmod +x /resources/start.sh
 COPY ./docker/entrypoint.sh /resources/entrypoint.sh
 RUN chmod +x /resources/entrypoint.sh
 
+
+COPY ./docker/default_env.txt /resources/default_env.txt
+COPY ./docker/create_env-config-js.sh /resources/create_env-config-js.sh
+RUN chmod +x /resources/create_env-config-js.sh
+
 COPY ./docker/server/gunicorn_conf.py /gunicorn_conf.py
 
 COPY docker/nginx /etc/nginx

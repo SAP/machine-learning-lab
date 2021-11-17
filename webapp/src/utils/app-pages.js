@@ -1,4 +1,5 @@
 import { ENDPOINT } from './config';
+import Files from '../pages/Files';
 import Iframe from '../pages/Iframe';
 import Jobs from '../pages/Jobs';
 import Login from '../pages/Login';
@@ -32,6 +33,34 @@ export default [
     DISPLAY_PRIORITY: 90,
   },
   {
+    ICON: 'folder',
+    NAME: 'Datasets',
+    PATH: '/datasets',
+    REQUIRE_LOGIN: true,
+    APP_DRAWER_ITEM: true,
+    TYPE: APP_DRAWER_ITEM_TYPES.link,
+    COMPONENT: Files,
+    PROPS: {
+      folder: 'datasets',
+      uploadNote: window.env && window.env.UPLOAD_NOTE,
+    },
+    DISPLAY_PRIORITY: 70,
+  },
+  {
+    ICON: 'layers',
+    NAME: 'Models',
+    PATH: '/models',
+    REQUIRE_LOGIN: true,
+    APP_DRAWER_ITEM: true,
+    TYPE: APP_DRAWER_ITEM_TYPES.link,
+    COMPONENT: Files,
+    PROPS: {
+      folder: 'models',
+      uploadNote: window.env && window.env.UPLOAD_NOTE,
+    },
+    DISPLAY_PRIORITY: 70,
+  },
+  {
     ICON: 'apps',
     NAME: 'Services',
     PATH: '/services',
@@ -39,7 +68,7 @@ export default [
     APP_DRAWER_ITEM: true,
     TYPE: APP_DRAWER_ITEM_TYPES.link,
     COMPONENT: Services,
-    DISPLAY_PRIORITY: 70,
+    DISPLAY_PRIORITY: 50,
   },
   {
     ICON: 'next_week',
@@ -49,7 +78,7 @@ export default [
     APP_DRAWER_ITEM: true,
     TYPE: APP_DRAWER_ITEM_TYPES.link,
     COMPONENT: Jobs,
-    DISPLAY_PRIORITY: 60,
+    DISPLAY_PRIORITY: 40,
   },
   {
     NAME: 'login',

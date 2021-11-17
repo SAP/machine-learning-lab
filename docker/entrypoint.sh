@@ -43,6 +43,10 @@ sed -i "s@{SSH_TARGET_PUBLICKEY_API_PORT}@${SSH_TARGET_PUBLICKEY_API_PORT}@g" /e
 #nohup python /etc/ssh/update_authorized_keys.py full&>/dev/null &
 python /etc/ssh/update_authorized_keys.py full
 
+# Create env-config.js which is loaded by the webapp
+# It stores makes environment variables defined in default_env.txt available to the webapp
+/resources/create_env-config-js.sh
+
 # Start nginx
 nginx -c /etc/nginx/nginx.conf
 
