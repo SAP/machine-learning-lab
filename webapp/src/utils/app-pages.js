@@ -5,6 +5,7 @@ import Jobs from '../pages/Jobs';
 import Login from '../pages/Login';
 import Projects from '../pages/Projects';
 import Services from '../pages/Services';
+import UserManagement from '../pages/UserManagement/UserManagement';
 
 export const APP_DRAWER_ITEM_TYPES = {
   divider: 'divider',
@@ -79,6 +80,24 @@ export default [
     TYPE: APP_DRAWER_ITEM_TYPES.link,
     COMPONENT: Jobs,
     DISPLAY_PRIORITY: 40,
+  },
+  {
+    NAME: 'admin-specific-divider',
+    APP_DRAWER_ITEM: true,
+    REQUIRE_ADMIN: true,
+    TYPE: APP_DRAWER_ITEM_TYPES.divider,
+    DISPLAY_PRIORITY: 30,
+  },
+  {
+    ICON: 'people',
+    NAME: 'User Management',
+    PATH: '/user-management',
+    REQUIRE_LOGIN: true,
+    REQUIRE_ADMIN: true,
+    APP_DRAWER_ITEM: true,
+    TYPE: APP_DRAWER_ITEM_TYPES.link,
+    COMPONENT: UserManagement,
+    DISPLAY_PRIORITY: 20,
   },
   {
     NAME: 'login',
