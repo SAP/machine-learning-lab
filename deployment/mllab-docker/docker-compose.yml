@@ -105,56 +105,6 @@ services:
       ctxy.ui_extension_endpoint: "8080/app#/users/{env.userId}/workspace"
       ctxy.api_extension_endpoint: "8080/api"
       display_priority: 95
-    depends_on:
-      - ml-lab-backend
-
-  # File browser for datasets
-  lab-dataset-file-browser:
-    container_name: pylab-p-ctxy-global-s-dataset-file-browser
-    image: lab-file-browser:latest
-    environment:
-      - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
-      - CONTAXY_DEPLOYMENT_NAME=pylab-p-ctxy-global-s-dataset-file-browser
-      - CONTAXY_SERVICE_URL=/projects/ctxy-global/services/pylab-p-ctxy-global-s-dataset-file-browser/access/8080
-      - FOLDER=datasets
-    labels:
-      ctxy.deploymentType: "extension"
-      ctxy.deploymentName: "pylab-p-ctxy-global-s-dataset-file-browser"
-      ctxy.displayName: "Datasets"
-      ctxy.endpoints: "80"
-      ctxy.namespace: "pylab"
-      ctxy.projectName: "ctxy-global"
-      ctxy.extensionType: "global-extension"
-      ctxy.icon: "folder"
-      ctxy.ui_extension_endpoint: "80/#"
-      ctxy.api_extension_endpoint: ""
-      display_priority: 80
-    depends_on:
-      - ml-lab-backend
-
-  # File browser for models
-  lab-model-file-browser:
-    container_name: pylab-p-ctxy-global-s-model-file-browser
-    image: lab-file-browser:latest
-    environment:
-      - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
-      - CONTAXY_DEPLOYMENT_NAME=pylab-p-ctxy-global-s-model-file-browser
-      - CONTAXY_SERVICE_URL=/projects/ctxy-global/services/pylab-p-ctxy-global-s-model-file-browser/access/8080
-      - FOLDER=models
-    labels:
-      ctxy.deploymentType: "extension"
-      ctxy.deploymentName: "pylab-p-ctxy-global-s-model-file-browser"
-      ctxy.displayName: "Models"
-      ctxy.endpoints: "80"
-      ctxy.namespace: "pylab"
-      ctxy.projectName: "ctxy-global"
-      ctxy.extensionType: "global-extension"
-      ctxy.icon: "layers"
-      ctxy.ui_extension_endpoint: "80/#"
-      ctxy.api_extension_endpoint: ""
-      display_priority: 80
-    depends_on:
-      - ml-lab-backend
 
 #secrets:
 #  ssl_cert:
@@ -164,7 +114,6 @@ services:
 volumes:
   lab-postgres-data:
     # External volumes need to be manually created with "docker volume create contaxy-postgres-data"
-    # They prevent data loss on "docker-compose down"
 #    external: true
   lab-s3-data:
 #    external: true
