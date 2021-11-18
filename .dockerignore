@@ -2,9 +2,13 @@
 !docker/
 !webapp
 !backend
-!contaxy
-backend/.env
+**/.env
 webapp/node_modules
+
+!contaxy/backend/src/contaxy
+!contaxy/backend/setup.py
+!contaxy/backend/README.md
+
 **/.DS_Store
 **/Thumbs.db
 **/*.pyc
