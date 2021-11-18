@@ -95,8 +95,8 @@ function UserMenu(props) {
   const privateElements = (
     <div>
       <MenuItem onClick={onMyUserClick}>Me</MenuItem>
-      <MenuItem onClick={onUserTokenClick}>Get User API token</MenuItem>
-      <MenuItem onClick={onProjectTokenClick}>Get Project API token</MenuItem>
+      <MenuItem onClick={onUserTokenClick}>Get User API Token</MenuItem>
+      <MenuItem onClick={onProjectTokenClick}>Get Project API Token</MenuItem>
       <MenuItem onClick={onApiTokenClick}>{t('api_tokens')}</MenuItem>
       <MenuItem onClick={onLogoutClick}>{t('logout')}</MenuItem>
       <Divider />
