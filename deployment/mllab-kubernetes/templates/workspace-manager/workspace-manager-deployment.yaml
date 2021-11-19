@@ -2,12 +2,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lab-p-contaxy-global-s-workspace-manager
+  name: lab-p-ctxy-global-s-workspace-manager
   labels:
     {{- include "machine-learning-lab.labels" . | nindent 4 }}
     ctxy.namespace: "lab"
     ctxy.deploymentType: "extension"
-    ctxy.deploymentName: "lab-p-contaxy-global-s-workspace-manager"
+    ctxy.deploymentName: "lab-p-ctxy-global-s-workspace-manager"
     ctxy.projectName: "ctxy-global" # Global extension available for everyone
   annotations:
     ctxy.displayName: "Workspaces"
@@ -23,11 +23,11 @@ spec:
       {{- include "machine-learning-lab.selectorLabels" . | nindent 6 }}
       ctxy.namespace: "lab"
       ctxy.deploymentType: "extension"
-      ctxy.deploymentName: "lab-p-contaxy-global-s-workspace-manager"
+      ctxy.deploymentName: "lab-p-ctxy-global-s-workspace-manager"
       ctxy.projectName: "ctxy-global"
   template:
     metadata:
-      name: lab-p-contaxy-global-s-workspace-manager
+      name: lab-p-ctxy-global-s-workspace-manager
       {{- with .Values.workspaceManager.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
@@ -36,7 +36,7 @@ spec:
         {{- include "machine-learning-lab.selectorLabels" . | nindent 8 }}
         ctxy.namespace: "lab"
         ctxy.deploymentType: "extension"
-        ctxy.deploymentName: "lab-p-contaxy-global-s-workspace-manager"
+        ctxy.deploymentName: "lab-p-ctxy-global-s-workspace-manager"
         ctxy.projectName: "ctxy-global"
     spec:
       {{- with .Values.workspaceManager.imagePullSecrets }}
@@ -55,9 +55,9 @@ spec:
             - name: CONTAXY_API_ENDPOINT
               value: "http://{{ include "machine-learning-lab.fullname" . }}-backend:8080/api"
             - name: CONTAXY_DEPLOYMENT_NAME
-              value: "{{ include "machine-learning-lab.fullname" . }}-workspace-manager"
+              value: "lab-p-ctxy-global-s-workspace-manager"
             - name: CONTAXY_SERVICE_URL
-              value: /projects/ctxy-global/services/lab-p-contaxy-global-s-workspace-manager/access/{{ .Values.workspaceManager.service.port }}
+              value: /projects/ctxy-global/services/lab-p-ctxy-global-s-workspace-manager/access/{{ .Values.workspaceManager.service.port }}
             - name: WORKSPACE_MAX_MEMORY_MB
               value: "{{ .Values.workspaceManager.memoryLimit }}"
             - name: WORKSPACE_MAX_CPUS
