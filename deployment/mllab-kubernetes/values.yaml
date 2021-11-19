@@ -32,8 +32,8 @@ labConfig:
 labBackend:
   # Image used for the ml lab backend
   image:
-    repository: "acrmlhlab.azurecr.io/ml-lab/py-machine-learning-lab"
-    tag: "0.0.2"
+    repository: "jnkielmann/py-ml-lab"
+    tag: "0.0.4"
     pullPolicy: IfNotPresent
   # Resource requirements of the backend deployment
   resources:
@@ -165,8 +165,8 @@ workspaceManager:
   # Deployment Configuration
   ################################################################################
   image:
-    repository: "acrmlhlab.azurecr.io/ml-lab/components/lab-workspace-manager"
-    tag: "0.0.2"
+    repository: "jnkielmann/lab-workspace-manager"
+    tag: "0.0.4"
     pullPolicy: IfNotPresent
   # Resources required
   resources:
