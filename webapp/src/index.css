@@ -12,11 +12,6 @@ code {
     monospace;
 }
 
-.test {
-  top: '4px';
-  background-color: '#4f';
-}
-
 .pages-native-component {
   padding: 24px;
 }
