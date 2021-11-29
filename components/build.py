@@ -10,4 +10,5 @@ args = build_utils.parse_arguments()
 
 build_utils.log("Building all ML Lab components")
 for component in ml_lab_components:
-    build_utils.build(component, args)
+    if (Path(component) / 'build.py').exists():
+        build_utils.build(component, args)
