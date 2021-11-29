@@ -81,7 +81,7 @@ ENV PYTHONPATH=/resources/app \
     _SSL_RESOURCES_PATH=/resources/ssl \
     JWT_TOKEN_SECRET=please-change-this-secret \
     WEB_CONCURRENCY="1" \
-    SSH_TARGET_LABELS="ctxy.workspaceExtension.deploymentType=workspace" \
+    SSH_TARGET_LABELS="ctxy.deploymentType=service" \
     SSH_TARGET_PUBLICKEY_API_PORT="8080" \
     SSH_PERMIT_TARGET_HOST="*" \
     SSH_TARGET_KEY_PATH="~/.ssh/id_ed25519.pub"
