@@ -3,6 +3,7 @@ import React, { useReducer, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
 import TextField from '@material-ui/core/TextField';
 import showStandardSnackbar from '../../app/showStandardSnackbar';
 
@@ -11,17 +12,20 @@ import {
   getExternalLoginPageUrl,
   usersApi,
 } from '../../services/contaxy-api';
+import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
+import ContentDialog from '../../components/Dialogs/ContentDialog';
 import GlobalStateContainer from '../../app/store';
 
 import './Login.css';
 import mlLabBannerImage from '../../assets/images/ml-lab-banner.png';
 
+const { TOS_TEXT } = window.env;
+
 function Login(props) {
-  // eslint-disable-next-line prefer-const
-  let { setIsAuthenticated, oauthEnabled } =
+  const { setIsAuthenticated, oauthEnabled } =
     GlobalStateContainer.useContainer();
-  oauthEnabled = true;
   const { className } = props;
+  const showAppDialog = useShowAppDialog();
   const [isRegistration, setIsRegistration] = useState(false);
   const initialFormState = {
     username: '',
@@ -79,6 +83,25 @@ function Login(props) {
     const { name, value } = event.target;
     setFormInput({ [name]: value });
   };
+
+  let tosLink = null;
+  if (TOS_TEXT) {
+    tosLink = (
+      // eslint-disable-next-line jsx-a11y/anchor-is-valid
+      <Link
+        component="button"
+        type="button"
+        onClick={() => {
+          showAppDialog(ContentDialog, {
+            content: TOS_TEXT,
+            title: 'ML Lab Terms of Service',
+          });
+        }}
+      >
+        By logging in to ML Lab, you agree to the Terms of Service
+      </Link>
+    );
+  }
   return (
     <div className="outer-container">
       <div className="login-container">
@@ -138,7 +161,7 @@ function Login(props) {
                 color="primary"
                 className={className}
               >
-                Single Sign On
+                Single Sign-On
               </Button>
             )}
             <OrSeparator />
@@ -150,6 +173,7 @@ function Login(props) {
               {!isRegistration && 'Register'}
               {isRegistration && 'Back to Login'}
             </Button>
+            {tosLink}
           </form>
         </div>
       </div>

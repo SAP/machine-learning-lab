@@ -15,7 +15,7 @@ export const APP_DRAWER_ITEM_TYPES = {
 /**
  * The icons are from https://material.io/tools/icons/?style=baseline and embeded via material-ui/icons.
  */
-export default [
+const pages = [
   {
     ICON: 'home',
     NAME: 'Home',
@@ -61,26 +61,7 @@ export default [
     },
     DISPLAY_PRIORITY: 70,
   },
-  {
-    ICON: 'apps',
-    NAME: 'Services',
-    PATH: '/services',
-    REQUIRE_LOGIN: true,
-    APP_DRAWER_ITEM: true,
-    TYPE: APP_DRAWER_ITEM_TYPES.link,
-    COMPONENT: Services,
-    DISPLAY_PRIORITY: 50,
-  },
-  {
-    ICON: 'next_week',
-    NAME: 'Jobs',
-    PATH: '/jobs',
-    REQUIRE_LOGIN: true,
-    APP_DRAWER_ITEM: true,
-    TYPE: APP_DRAWER_ITEM_TYPES.link,
-    COMPONENT: Jobs,
-    DISPLAY_PRIORITY: 40,
-  },
+
   {
     NAME: 'admin-specific-divider',
     APP_DRAWER_ITEM: true,
@@ -136,6 +117,30 @@ export default [
   // },
 ];
 
+if (!window.env.HIDE_DEPLOYMENTS) {
+  pages.push({
+    ICON: 'apps',
+    NAME: 'Services',
+    PATH: '/services',
+    REQUIRE_LOGIN: true,
+    APP_DRAWER_ITEM: true,
+    TYPE: APP_DRAWER_ITEM_TYPES.link,
+    COMPONENT: Services,
+    DISPLAY_PRIORITY: 50,
+  });
+  pages.push({
+    ICON: 'next_week',
+    NAME: 'Jobs',
+    PATH: '/jobs',
+    REQUIRE_LOGIN: true,
+    APP_DRAWER_ITEM: true,
+    TYPE: APP_DRAWER_ITEM_TYPES.link,
+    COMPONENT: Jobs,
+    DISPLAY_PRIORITY: 40,
+  });
+}
+
+export default pages;
 export const mapExtensionToAppPage = (extension) => {
   const backend = ENDPOINT.replace(/\/api$/, '');
   return {

@@ -15,7 +15,9 @@ function ContentDialog(props) {
   const { content, jsonContent, onClose, title } = props;
 
   const contentElement = content ? (
-    <DialogContentText>{content}</DialogContentText>
+    <DialogContentText style={{ whiteSpace: 'pre-line' }}>
+      {content}
+    </DialogContentText>
   ) : (
     <ReactJson src={jsonContent} />
   );
