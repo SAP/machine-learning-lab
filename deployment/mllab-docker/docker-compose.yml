@@ -3,6 +3,7 @@ services:
   # Contains the contaxy server and hosts the ML Lab web app
   ml-lab-backend:
     image: ml-lab-backend:latest
+    container_name: ml-lab-backend
     ports:
       - "30010:8080"
     volumes:
