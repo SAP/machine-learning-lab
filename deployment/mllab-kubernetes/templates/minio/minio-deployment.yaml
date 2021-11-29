@@ -1,4 +1,4 @@
-{{- if .Values.integratedMinio.enabled }}
+{{- if .Values.integratedMinioStorage.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       name: {{ include "machine-learning-lab.fullname" . }}-minio
-      {{- with .Values.integratedMinio.podAnnotations }}
+      {{- with .Values.integratedMinioStorage.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -26,24 +26,24 @@ spec:
         ctxy.deploymentType: "core"
         ctxy.deploymentName: "minio"
     spec:
-      {{- with .Values.integratedMinio.imagePullSecrets }}
+      {{- with .Values.integratedMinioStorage.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       securityContext:
-        {{- toYaml .Values.integratedMinio.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.integratedMinioStorage.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.integratedMinio.image.repository }}:{{ .Values.integratedMinio.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.integratedMinio.image.pullPolicy }}
+          image: "{{ .Values.integratedMinioStorage.image.repository }}:{{ .Values.integratedMinioStorage.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.integratedMinioStorage.image.pullPolicy }}
           args: ["server", "/data/data{1...4}"]
           securityContext:
-            {{- toYaml .Values.integratedMinio.containerSecurityContext | nindent 12 }}
+            {{- toYaml .Values.integratedMinioStorage.containerSecurityContext | nindent 12 }}
           env:
             - name: MINIO_ROOT_USER
-              value: "{{ .Values.integratedMinio.username }}"
+              value: "{{ .Values.integratedMinioStorage.username }}"
             - name: MINIO_ROOT_PASSWORD
-              value: "{{ .Values.integratedMinio.password }}"
+              value: "{{ .Values.integratedMinioStorage.password }}"
           ports:
             - name: http
               containerPort: 9000
@@ -57,7 +57,7 @@ spec:
           #     path: /
           #     port: http
           resources:
-            {{- toYaml .Values.integratedMinio.resources | nindent 12 }}
+            {{- toYaml .Values.integratedMinioStorage.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /data
               name: minio-data
@@ -65,15 +65,15 @@ spec:
         - name: minio-data
           persistentVolumeClaim:
             claimName: {{ include "machine-learning-lab.fullname" . }}-minio-data
-      {{- with .Values.integratedMinio.nodeSelector }}
+      {{- with .Values.integratedMinioStorage.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.integratedMinio.affinity }}
+      {{- with .Values.integratedMinioStorage.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.integratedMinio.tolerations }}
+      {{- with .Values.integratedMinioStorage.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

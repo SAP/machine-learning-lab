@@ -16,7 +16,7 @@ labConfig:
     # domain: "ml-lab.local"
     domain: ""
     # Client id used for requestion user information
-    clientId: "" # 
+    clientId: "" #
     # Client secret used for requestion user information
     clientSecret: ""
     # URL of the OIDC provider that a user who wants to login should be redirected to
@@ -24,8 +24,19 @@ labConfig:
     # URL of the OIDC provider that can be used to request a JWT token for a user
     tokenUrl: ""
   # If set to true, users can register themselves whith a new username and password or login directly via OIDC
-  # If set to false, an admin needs to create the user manually first (using the email for OIDC) 
+  # If set to false, an admin needs to create the user manually first (using the email for OIDC)
   allowSelfRegistration: true
+  # Terms of service text shown to the user on the login page
+  tosText: ""
+  # Text that is shown in the upload dialog. Can be used to remind the user if specific (confidential) files must not be uploaded.
+  uploadNote: ""
+  # Hide deployment ui (services and jobs)
+  hideDeployments: false
+  # Enable debug mode of ML Lab
+  debug: false
+  # Number of gunicorn server processes used for the backend
+  numServerProcesses: 3
+
 
 
 # Configuration of the ML Lab backend
@@ -54,6 +65,7 @@ labBackend:
   service:
     type: ClusterIP
     port: 8080
+    sshPort: 22
   # Ingress configuration for external access to the backend
   ingress:
     enabled: false
@@ -85,7 +97,7 @@ postgres:
     requests:
       cpu: 100m
       memory: 1Gi
-  # Size of the persisten volume used for the DB data 
+  # Size of the persisten volume used for the DB data
   storageSize: "5Gi"
   # Storage class to use for the volume
   storageClassName: ""
@@ -104,7 +116,7 @@ postgres:
 
 # Configuration of the integrated ML Lab Minio DB
 # If you want to use an external file storage, disable this component
-integratedMinio:
+integratedMinioStorage:
   enabled: True
   # Minio image to use
   image:
@@ -119,7 +131,7 @@ integratedMinio:
     requests:
       cpu: 100m
       memory: 1Gi
-  # Size of the persisten volume used for the DB data 
+  # Size of the persisten volume used for the DB data
   storageSize: "5Gi"
   # Storage class to use for the volume
   storageClassName: ""
@@ -136,10 +148,15 @@ integratedMinio:
   containerSecurityContext: {}
   imagePullSecrets: []
 
-# Instead of the integrated Minio DB an external file storage (AWS S3, Azure Blobs) 
-externalFileStorage:
+# Instead of the integrated Minio DB an external S3 file storage can be
+externalS3Storage:
   enabled: False
   url: ""
+
+# Instead of the integrated Minio DB an external Azure blob storage
+externalAzureBlobStorage:
+  enabled: False
+  connectionString: ""
 
 
 # Configuration of the workspace manager component
@@ -159,7 +176,7 @@ workspaceManager:
   # Maximum size of the container in MB (this includes all file that are not in the mounted /workspace folder)
   maxContainerSize: 10000
   # If this option is enabled, users can use ssh to access their workspace
-  sshEnabled: true   
+  sshEnabled: true
 
   ################################################################################
   # Deployment Configuration

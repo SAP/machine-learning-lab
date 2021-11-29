@@ -1,3 +1,4 @@
+{{- if .Values.integratedMinioStorage.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -8,9 +9,10 @@ metadata:
     ctxy.deploymentName: "minio"
 spec:
   accessModes: [ "ReadWriteOnce" ]
-  {{- if .Values.integratedMinio.storageClassName }}
-  storageClassName: {{ .Values.integratedMinio.storageClassName }}
+  {{- if .Values.integratedMinioStorage.storageClassName }}
+  storageClassName: {{ .Values.integratedMinioStorage.storageClassName }}
   {{- end }}
   resources:
     requests:
-      storage: {{ .Values.integratedMinio.storageSize }}
+      storage: {{ .Values.integratedMinioStorage.storageSize }}
+{{- end }}

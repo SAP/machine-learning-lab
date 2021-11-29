@@ -12,10 +12,11 @@ metadata:
     {{- with .Values.labBackend.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-    {{- if $.Values.labBackend.ingress.tls }}
-    nginx.ingress.kubernetes.io/proxy-redirect-from: ~*http://(.*)$
-    nginx.ingress.kubernetes.io/proxy-redirect-to: https://$1
-    {{- end }}
+    nginx.ingress.kubernetes.io/proxy-body-size: 100G
+#    {{- if $.Values.labBackend.ingress.tls }}
+#    nginx.ingress.kubernetes.io/proxy-redirect-from: ~*http://(.*)$
+#    nginx.ingress.kubernetes.io/proxy-redirect-to: https://$1
+#    {{- end }}
 spec:
   {{- if .Values.labBackend.ingress.tls }}
   tls:

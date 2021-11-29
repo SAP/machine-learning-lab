@@ -13,6 +13,10 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    - port: {{ .Values.labBackend.service.sshPort }}
+      targetPort: ssh
+      protocol: TCP
+      name: ssh
   selector:
     {{- include "machine-learning-lab.selectorLabels" . | nindent 4 }}
     ctxy.deploymentType: "core-backend"

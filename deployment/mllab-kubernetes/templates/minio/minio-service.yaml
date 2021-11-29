@@ -1,4 +1,4 @@
-{{- if .Values.integratedMinio.enabled }}
+{{- if .Values.integratedMinioStorage.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,9 +8,9 @@ metadata:
     ctxy.deploymentType: "core"
     ctxy.deploymentName: "minio"
 spec:
-  type: {{ .Values.integratedMinio.service.type }}
+  type: {{ .Values.integratedMinioStorage.service.type }}
   ports:
-    - port: {{ .Values.integratedMinio.service.port }}
+    - port: {{ .Values.integratedMinioStorage.service.port }}
       targetPort: http
       protocol: TCP
       name: http
