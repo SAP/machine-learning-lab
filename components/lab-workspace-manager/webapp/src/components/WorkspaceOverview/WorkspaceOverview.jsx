@@ -29,6 +29,7 @@ function WorkspaceOverview(props) {
                 `${EXTENSION_ENDPOINT}/users/${userId}/workspace/${workspace.id}`
               )
               .withCredentials();
+            await new Promise((r) => setTimeout(r, 3000));
             showStandardSnackbar(
               `Successfully deleted workspace ${workspace.display_name}.`
             );
@@ -92,7 +93,7 @@ function WorkspaceOverview(props) {
               display_name: workspaceName,
               container_image: workspaceImage,
             });
-          await new Promise((r) => setTimeout(r, 5000));
+          await new Promise((r) => setTimeout(r, 3000));
           showStandardSnackbar(
             `Successfully created workspace ${workspaceName} with image ${workspaceImage}.`
           );

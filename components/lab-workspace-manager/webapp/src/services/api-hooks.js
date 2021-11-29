@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import superagent from 'superagent';
 
 import { EXTENSION_ENDPOINT } from '../utils/config';
@@ -9,6 +9,7 @@ function useApiHook(apiCall, condition) {
 
   const [data, setData] = useState([]);
   const [reloadRequested, setReloadRequested] = useState(new Date().getTime());
+  const requestRunning = useRef(false);
 
   const requestReload = useCallback(() => {
     setReloadRequested(new Date().getTime());
@@ -18,8 +19,10 @@ function useApiHook(apiCall, condition) {
     let isCanceled = false;
 
     const load = async () => {
+      if (requestRunning.current) return;
       if (!sanitizedCondition) return;
       try {
+        requestRunning.current = true;
         const result = await apiCall();
         if (isCanceled) {
           return;
@@ -28,6 +31,7 @@ function useApiHook(apiCall, condition) {
       } catch (err) {
         // ignore
       }
+      requestRunning.current = false;
     };
 
     load();
@@ -52,6 +56,16 @@ export function useWorkspaces(userId) {
     }
   }, [userId]);
 
-  const [data, reload] = useApiHook(apiCall, userId);
-  return [data, reload];
+  const [workspaces, reload] = useApiHook(apiCall, userId);
+
+  // Reload workspaces every 5 seconds if not all of them are running
+  useEffect(() => {
+    if (workspaces.filter((ws) => ws.status !== 'running').length > 0) {
+      setTimeout(() => {
+        reload();
+      }, 5000);
+    }
+  }, [workspaces, reload]);
+
+  return [workspaces, reload];
 }

@@ -45,8 +45,11 @@ function WorkspaceCard(props) {
             )}
             {workspaceService.compute.max_memory && (
               <Typography>
-                Memory: {workspaceService.compute.max_memory} MB
+                Memory: {workspaceService.compute.max_memory} GB
               </Typography>
+            )}
+            {workspaceService.status && (
+              <Typography>Status: {workspaceService.status}</Typography>
             )}
           </CardContent>
           <CardActions>

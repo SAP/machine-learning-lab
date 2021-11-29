@@ -63,12 +63,16 @@ function WorkspaceTabs() {
         selectedTabIndex={selectedTab}
         myTabIndex={i + 1}
       >
-        <ReactIframe
-          key={workspace.display_name}
-          url={`${backend}/projects/${projectName}/services/${deploymentName}/access/8080b`}
-          allowFullScreen
-          className="iframe"
-        />
+        {workspace.status === 'running' ? (
+          <ReactIframe
+            key={workspace.display_name}
+            url={`${backend}/projects/${projectName}/services/${deploymentName}/access/8080b`}
+            allowFullScreen
+            className="iframe"
+          />
+        ) : (
+          <div>Workspace is loading...</div>
+        )}
       </TabPanel>
     );
   });
