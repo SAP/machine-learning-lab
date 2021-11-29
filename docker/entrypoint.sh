@@ -35,6 +35,8 @@ if [[ "${SERVICE_SSL_ENABLED,,}" == true ]]; then
 fi
 
 # Configure ssh server
+sed -i "s@{KUBERNETES_SERVICE_HOST}@${KUBERNETES_SERVICE_HOST}@g" /etc/ssh/authorize.sh
+sed -i "s@{KUBERNETES_SERVICE_PORT}@${KUBERNETES_SERVICE_PORT}@g" /etc/ssh/authorize.sh
 sed -i "s@{SSH_TARGET_LABELS}@${SSH_TARGET_LABELS}@g" /etc/ssh/authorize.sh
 sed -i "s@{SSH_PERMIT_TARGET_HOST}@${SSH_PERMIT_TARGET_HOST}@g" /etc/ssh/authorize.sh
 sed -i "s@{SSH_TARGET_KEY_PATH}@${SSH_TARGET_KEY_PATH}@g" /etc/ssh/authorize.sh

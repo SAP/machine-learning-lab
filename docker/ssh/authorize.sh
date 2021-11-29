@@ -4,6 +4,8 @@
 # Must be replaced during container startup with the value of the environment variable.
 # This script is run in an SSH session and, thus, the environment variable does not exist
 #export LAB_NAMESPACE="{LAB_NAMESPACE}"
+export KUBERNETES_SERVICE_HOST="{KUBERNETES_SERVICE_HOST}"
+export KUBERNETES_SERVICE_PORT="{KUBERNETES_SERVICE_PORT}"
 export SSH_TARGET_LABELS="{SSH_TARGET_LABELS}"
 export SSH_PERMIT_TARGET_HOST="{SSH_PERMIT_TARGET_HOST}"
 export SSH_TARGET_KEY_PATH="{SSH_TARGET_KEY_PATH}"
