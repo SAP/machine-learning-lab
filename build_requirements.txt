@@ -1,3 +1,4 @@
+pipenv==2021.11.23
 universal_build
 urllib3
 twine
