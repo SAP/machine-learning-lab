@@ -32,7 +32,10 @@ function verifyAccess(r, apiToken, permission) {
         );
         r.headersOut[
           "Set-Cookie"
-        ] = `ct_session_token=${generated_session_token}; HttpOnly; Path=/${servicePath}; Max-Age=${validInSeconds}`;
+        ] = [
+          `ct_session_token=${generated_session_token}; HttpOnly; Path=/${servicePath}; Max-Age=${validInSeconds}`,
+          `ct_session_token=${generated_session_token}; HttpOnly; Path=/${servicePath}b; Max-Age=${validInSeconds}`
+        ]
         resolve(true);
       })
       .catch((e) => {
