@@ -54,7 +54,8 @@ setup(
     install_requires=[
         "fastapi",
         "loguru",
-        contaxy_package
+        "contaxy==0.0.4"
+        # contaxy_package
     ],
     # deprecated: dependency_links=dependency_links,
     extras_require={
@@ -90,11 +91,6 @@ setup(
         ],
     },
     include_package_data=True,
-    package_data={
-        # If there are data files included in your packages that need to be
-        # 'sample': ['package_data.dat'],
-        "contaxy.api.endpoints": ["templates/*"]
-    },
     classifiers=[
         # TODO: Update based on https://pypi.org/classifiers/
         "Development Status :: 4 - Beta",
