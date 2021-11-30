@@ -47,6 +47,9 @@ fi
 # Disable immediate stop so that the cleanup phase can run even if entrypoint-sh fails
 set +e
 
+# Install build requirements
+pip install -r "$GITHUB_WORKSPACE/build_requirements.txt"
+
 echo "Run original entrypoint"
 /bin/bash /entrypoint.sh "$@"
 exit_code=$?
