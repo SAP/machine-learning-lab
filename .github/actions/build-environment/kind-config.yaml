@@ -1,0 +1,12 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  apiServerAddress: "0.0.0.0"
+  # Disable default CNI so that NetworkPolicies work. Another network plugin has to be installed such as Calico!
+  disableDefaultCNI: true
+#  podSubnet: 192.168.0.0/16
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.14.10@sha256:ce4355398a704fca68006f8a29f37aafb49f8fc2f64ede3ccd0d9198da910146
+    extraPortMappings:
+      - containerPort: 30010
