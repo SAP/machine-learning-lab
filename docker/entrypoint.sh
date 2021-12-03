@@ -30,8 +30,9 @@ find /etc/nginx/ -name "*.conf" -exec  sed -s -i "s/\${RESOLVER}/${resolver}/g" 
 
 # Configure SSL variables in nginx
 if [[ "${SERVICE_SSL_ENABLED,,}" == true ]]; then
-    sed -i "s|# ssl_certificate \${SSL_CERTIFICATE_PATH}| ssl_certificate ${_SSL_RESOURCES_PATH}/cert.crt;|g" /etc/nginx/nginx.conf;
-    sed -i "s|# ssl_certificate_key \${SSL_CERTIFICATE_KEY_PATH}| ssl_certificate_key ${_SSL_RESOURCES_PATH}/cert.key;|g" /etc/nginx/nginx.conf;
+    sed -i "s|listen 8081;|listen 8081 ssl;|g" /etc/nginx/nginx.conf;
+    sed -i "s|# ssl_certificate \${SSL_CERTIFICATE_PATH};|ssl_certificate ${_SSL_RESOURCES_PATH}/cert.crt;|g" /etc/nginx/nginx.conf;
+    sed -i "s|# ssl_certificate_key \${SSL_CERTIFICATE_KEY_PATH};|ssl_certificate_key ${_SSL_RESOURCES_PATH}/cert.key;|g" /etc/nginx/nginx.conf;
 fi
 
 # Configure ssh server
