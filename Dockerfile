@@ -89,10 +89,13 @@ ENV PYTHONPATH=/resources/app \
 RUN mkdir ${_SSL_RESOURCES_PATH}
 
 # Install Contaxy
-RUN pip install contaxy==0.0.4
+# RUN pip install contaxy==0.0.4
 # Uncomment lines below if you want to install your local contaxy code (useful when developing contaxy features)
-# COPY ./contaxy/backend /resources/app/contaxy
-# RUN pip install /resources/app/contaxy
+# By only copying the setup.py first, only the dependencies are installed which leads to faster docker builds on code changes
+COPY ./contaxy/backend/setup.py /resources/app/contaxy/
+RUN pip install /resources/app/contaxy
+COPY ./contaxy/backend /resources/app/contaxy
+RUN pip install /resources/app/contaxy
 
 COPY ./docker/server/start.sh /resources/start.sh
 RUN chmod +x /resources/start.sh
@@ -111,6 +114,8 @@ COPY docker/nginx /etc/nginx
 COPY docker/setup-certs.sh /resources/setup-certs.sh
 RUN chmod +x /resources/setup-certs.sh
 COPY webapp/build /resources/webapp
+
+LABEL org.opencontainers.image.source https://github.com/SAP/machine-learning-lab
 
 ENTRYPOINT ["/bin/bash"]
 CMD ["/resources/entrypoint.sh"]

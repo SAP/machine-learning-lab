@@ -20,14 +20,19 @@ VERSION = None  # Only set version if you like to overwrite the version in _abou
 PWD = os.path.abspath(os.path.dirname(__file__))
 
 # Import the README and use it as the long-description.
-with open(os.path.join(PWD, "README.md"), encoding="utf-8") as f:
-    long_description = f.read()
+try:
+    with open(os.path.join(PWD, "README.md"), encoding="utf-8") as f:
+        long_description = f.read()
+except FileNotFoundError:
+    long_description = ""
 
 # Extract the version from the _about.py module.
 if not VERSION:
-    with open(os.path.join(PWD, "src", MAIN_PACKAGE, "_about.py")) as f:  # type: ignore
-        VERSION = re.findall(r"__version__\s*=\s*\"(.+)\"", f.read())[0]
-
+    try:
+        with open(os.path.join(PWD, "src", MAIN_PACKAGE, "_about.py")) as f:  # type: ignore
+            VERSION = re.findall(r"__version__\s*=\s*\"(.+)\"", f.read())[0]
+    except FileNotFoundError:
+        VERSION = "0.0.0"
 
 if "CTXY_PACKAGE_PATH" in os.environ:
     contaxy_path = os.environ["CTXY_PACKAGE_PATH"]
@@ -48,7 +53,7 @@ setup(
     url=URL,
     license=LICENSE,
     packages=find_packages(where="src", exclude=("tests", "test", "examples", "docs")),
-    package_dir={"": "src"},
+    package_dir={"": "src"} if os.path.exists("src") else {},
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     zip_safe=False,
     install_requires=[

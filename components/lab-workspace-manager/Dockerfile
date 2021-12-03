@@ -27,8 +27,12 @@ RUN pip install --no-cache-dir "uvicorn[standard]" gunicorn faker
 
 RUN mkdir /resources
 
-COPY backend/ /resources/app
 WORKDIR /resources/app/
+# First install only the dependencies by not copying the code
+COPY backend/setup.py /resources/app/
+RUN pip install .
+# Then install also the code. This speeds up build time when only the code changes
+COPY backend/ /resources/app
 RUN pip install .
 
 COPY ./docker/server/start.sh /resources/start.sh
@@ -45,6 +49,8 @@ COPY webapp/build /resources/webapp
 ENV PYTHONPATH=/resources/app \
     MODULE_NAME=lab_workspace_manager.app \
     WEB_CONCURRENCY="1"
+
+LABEL org.opencontainers.image.source https://github.com/SAP/machine-learning-lab
 
 ENTRYPOINT ["/bin/bash"]
 CMD ["/resources/entrypoint.sh"]
