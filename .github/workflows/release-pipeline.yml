@@ -73,7 +73,7 @@ jobs:
       - name: run-component-tests
         uses: ./.github/actions/build-environment
         with:
-          build_args: --test --force --test-marker=unit --test-marker=integration --version=${{ env.VERSION  }}
+          build_args: --test --force --test-marker=unit --version=${{ env.VERSION  }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - if: ${{ env.GITHUB_TOKEN != null && env.GITHUB_TOKEN != '' }}
