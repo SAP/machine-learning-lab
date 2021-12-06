@@ -10,7 +10,7 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 LAB_COMPONENTS = "components"
 WEBAPP_COMPONENT = "webapp"
 
-PROJECT_NAME = "ml-lab-backend"
+PROJECT_NAME = "lab-backend"
 
 
 def main(args: dict) -> None:
@@ -34,6 +34,13 @@ def main(args: dict) -> None:
     # TODO: Uncomment when dockerfile is finalized
     # if args.get(build_utils.FLAG_CHECK):
     # build_docker.lint_dockerfile(exit_on_error=True)
+
+    if args.get(build_utils.FLAG_RELEASE):
+        build_docker.release_docker_image(
+            PROJECT_NAME,
+            args[build_utils.FLAG_VERSION],
+            "ghcr.io/sap/machine-learning-lab",
+        )
 
 
 if __name__ == "__main__":

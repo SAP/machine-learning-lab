@@ -43,12 +43,17 @@ fi
 #               sleep 30
 #               done) & python -u build.py $INPUT_BUILD_ARGS $BUILD_SECRETS
 
+# Install build requirements
+pip install -r "$GITHUB_WORKSPACE/build_requirements.txt"
+
+# Login to docker registry if it was specified
+if [[ -n "$INPUT_CONTAINER_REGISTRY_URL" ]]; then
+  echo "$INPUT_CONTAINER_REGISTRY_PASSWORD" | docker login "$INPUT_CONTAINER_REGISTRY_URL" -u "$CONTAINER_REGISTRY_USERNAME" --password-stdin
+fi
+
 # Call the original build-environment entrypoint (doing so, the logic does not have to be copied)
 # Disable immediate stop so that the cleanup phase can run even if entrypoint-sh fails
 set +e
-
-# Install build requirements
-pip install -r "$GITHUB_WORKSPACE/build_requirements.txt"
 
 echo "Run original entrypoint"
 /bin/bash /entrypoint.sh "$@"
