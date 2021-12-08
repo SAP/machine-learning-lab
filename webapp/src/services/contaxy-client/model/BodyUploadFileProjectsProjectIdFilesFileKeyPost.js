@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from '../ApiClient';
+import ApiClient from "../ApiClient";
 
 /**
  * The BodyUploadFileProjectsProjectIdFilesFileKeyPost model module.
@@ -34,7 +34,7 @@ class BodyUploadFileProjectsProjectIdFilesFileKeyPost {
    * Only for internal use.
    */
   static initialize(obj, file) {
-    obj['file'] = file;
+    obj["file"] = file;
   }
 
   /**
@@ -48,8 +48,8 @@ class BodyUploadFileProjectsProjectIdFilesFileKeyPost {
     if (data) {
       obj = obj || new BodyUploadFileProjectsProjectIdFilesFileKeyPost();
 
-      if (data.hasOwnProperty('file')) {
-        obj['file'] = ApiClient.convertToType(data['file'], File);
+      if (data.hasOwnProperty("file")) {
+        obj["file"] = ApiClient.convertToType(data["file"], File);
       }
     }
     return obj;
@@ -59,6 +59,6 @@ class BodyUploadFileProjectsProjectIdFilesFileKeyPost {
 /**
  * @member {File} file
  */
-BodyUploadFileProjectsProjectIdFilesFileKeyPost.prototype['file'] = undefined;
+BodyUploadFileProjectsProjectIdFilesFileKeyPost.prototype["file"] = undefined;
 
 export default BodyUploadFileProjectsProjectIdFilesFileKeyPost;

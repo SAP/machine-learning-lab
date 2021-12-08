@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from '../ApiClient';
+import ApiClient from "../ApiClient";
 /**
  * Enum class SystemState.
  * @enum {}
@@ -22,19 +22,19 @@ export default class SystemState {
    * value: "starting"
    * @const
    */
-  starting = 'starting';
+  starting = "starting";
 
   /**
    * value: "initializing"
    * @const
    */
-  initializing = 'initializing';
+  initializing = "initializing";
 
   /**
    * value: "running"
    * @const
    */
-  running = 'running';
+  running = "running";
 
   /**
    * Returns a <code>SystemState</code> enum value from a Javascript object name.

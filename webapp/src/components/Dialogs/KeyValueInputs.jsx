@@ -1,21 +1,21 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import AddIcon from '@material-ui/icons/Add';
-import Button from '@material-ui/core/Button';
-import DelIcon from '@material-ui/icons/Delete';
-import TextField from '@material-ui/core/TextField';
+import AddIcon from "@material-ui/icons/Add";
+import Button from "@material-ui/core/Button";
+import DelIcon from "@material-ui/icons/Delete";
+import TextField from "@material-ui/core/TextField";
 
-const ENV_NAME_REGEX = new RegExp('^([a-zA-Z_]{1,}[a-zA-Z0-9_]{0,})?$');
+const ENV_NAME_REGEX = new RegExp("^([a-zA-Z_]{1,}[a-zA-Z0-9_]{0,})?$");
 
-const FIELD_KEY = 'Key';
-const FIELD_VALUE = 'Value';
+const FIELD_KEY = "Key";
+const FIELD_VALUE = "Value";
 
 function KeyValueInput(props) {
-  const [key, setKey] = useState('');
-  const [value, setValue] = useState('');
+  const [key, setKey] = useState("");
+  const [value, setValue] = useState("");
 
   const { className, index, onChange } = props;
 
@@ -41,7 +41,7 @@ function KeyValueInput(props) {
         value={key}
         onChange={handleKeyChange}
         error={isInvalid}
-        helperText={isInvalid ? 'Key format is not valid' : null}
+        helperText={isInvalid ? "Key format is not valid" : null}
       />
 
       <TextField
@@ -63,7 +63,7 @@ KeyValueInput.propTypes = {
 };
 
 KeyValueInput.defaultProps = {
-  className: '',
+  className: "",
 };
 
 const StyledKeyValueInput = styled(KeyValueInput)`
@@ -103,7 +103,7 @@ function KeyValueInputs(props) {
   const handleAddKeyValuePairClick = () => {
     setKeyValuePairs((previousKeyValuePairs) => [
       ...previousKeyValuePairs,
-      { index: Date.now(), key: '', value: '' },
+      { index: Date.now(), key: "", value: "" },
     ]);
   };
 

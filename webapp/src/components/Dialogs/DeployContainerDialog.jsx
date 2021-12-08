@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 
-import KeyValueInputs from './KeyValueInputs';
-import ValueInputs from './ValueInputs';
+import KeyValueInputs from "./KeyValueInputs";
+import ValueInputs from "./ValueInputs";
 
-const VALID_IMAGE_NAME = new RegExp('[^a-zA-Z0-9-_:/.]');
+const VALID_IMAGE_NAME = new RegExp("[^a-zA-Z0-9-_:/.]");
 const SERVICE_NAME_REGEX = new RegExp(
-  '^([a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9])?$'
+  "^([a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9])?$"
 );
 
 function DeployContainerDialog(props) {
@@ -27,8 +27,8 @@ function DeployContainerDialog(props) {
   const { t } = useTranslation();
 
   const [deploymentInput, setDeploymentInput] = useState({
-    containerImage: '',
-    deploymentName: '',
+    containerImage: "",
+    deploymentName: "",
     deploymentParameters: {},
     deploymentEndpoints: [],
   });
@@ -45,7 +45,7 @@ function DeployContainerDialog(props) {
 
   return (
     <Dialog open>
-      <DialogTitle>{`${t('add')} ${t('deployment')}`}</DialogTitle>
+      <DialogTitle>{`${t("add")} ${t("deployment")}`}</DialogTitle>
       <DialogContent>
         <DialogContentText>
           Make a new deployment in the selected project based on the specific
@@ -63,7 +63,7 @@ function DeployContainerDialog(props) {
           autoComplete="on"
           error={isContainerImageInvalid}
           helperText={
-            isContainerImageInvalid ? 'Image Name is not valid' : null
+            isContainerImageInvalid ? "Image Name is not valid" : null
           }
           fullWidth
           margin="dense"
@@ -76,7 +76,7 @@ function DeployContainerDialog(props) {
           onChange={onChange}
           autoComplete="on"
           error={isDeploymentNameInvalid}
-          helperText={isDeploymentNameInvalid ? 'Name is not valid' : null}
+          helperText={isDeploymentNameInvalid ? "Name is not valid" : null}
           fullWidth
           margin="dense"
         />
@@ -132,7 +132,7 @@ DeployContainerDialog.propTypes = {
 };
 
 DeployContainerDialog.defaultProps = {
-  className: '',
+  className: "",
 };
 
 const StyledDeployContainerDialog = styled(DeployContainerDialog)`

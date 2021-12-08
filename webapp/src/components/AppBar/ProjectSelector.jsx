@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
 
 function ProjectSelector(props) {
   const { activeProject, className, projects, onProjectChange } = props;
@@ -21,7 +21,7 @@ function ProjectSelector(props) {
   // Material-UI throws a warning if the value is an empty object {}. So, it must either be one of the available options, e.g. {id: 'foo', name: 'foo'}, or ''.
   const selectId =
     Object.keys(activeProject).length === 0
-      ? ''
+      ? ""
       : JSON.stringify(activeProject);
   return (
     //   TODO: add div container?
@@ -48,7 +48,7 @@ ProjectSelector.propTypes = {
 
 ProjectSelector.defaultProps = {
   activeProject: {},
-  className: '',
+  className: "",
   projects: [],
 };
 

@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from '../ApiClient';
+import ApiClient from "../ApiClient";
 
 /**
  * The BodyRevokeTokenAuthOauthRevokePost model module.
@@ -34,7 +34,7 @@ class BodyRevokeTokenAuthOauthRevokePost {
    * Only for internal use.
    */
   static initialize(obj, token) {
-    obj['token'] = token;
+    obj["token"] = token;
   }
 
   /**
@@ -48,13 +48,13 @@ class BodyRevokeTokenAuthOauthRevokePost {
     if (data) {
       obj = obj || new BodyRevokeTokenAuthOauthRevokePost();
 
-      if (data.hasOwnProperty('token')) {
-        obj['token'] = ApiClient.convertToType(data['token'], 'String');
+      if (data.hasOwnProperty("token")) {
+        obj["token"] = ApiClient.convertToType(data["token"], "String");
       }
-      if (data.hasOwnProperty('token_type_hint')) {
-        obj['token_type_hint'] = ApiClient.convertToType(
-          data['token_type_hint'],
-          'String'
+      if (data.hasOwnProperty("token_type_hint")) {
+        obj["token_type_hint"] = ApiClient.convertToType(
+          data["token_type_hint"],
+          "String"
         );
       }
     }
@@ -66,12 +66,12 @@ class BodyRevokeTokenAuthOauthRevokePost {
  * The token that should be revoked.
  * @member {String} token
  */
-BodyRevokeTokenAuthOauthRevokePost.prototype['token'] = undefined;
+BodyRevokeTokenAuthOauthRevokePost.prototype["token"] = undefined;
 
 /**
  * A hint about the type of the token submitted for revokation.
  * @member {String} token_type_hint
  */
-BodyRevokeTokenAuthOauthRevokePost.prototype['token_type_hint'] = undefined;
+BodyRevokeTokenAuthOauthRevokePost.prototype["token_type_hint"] = undefined;
 
 export default BodyRevokeTokenAuthOauthRevokePost;

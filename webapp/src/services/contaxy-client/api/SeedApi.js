@@ -11,8 +11,8 @@
  *
  */
 
-import ApiClient from '../ApiClient';
-import ProblemDetails from '../model/ProblemDetails';
+import ApiClient from "../ApiClient";
+import ProblemDetails from "../model/ProblemDetails";
 
 /**
  * Seed service.
@@ -45,11 +45,11 @@ export default class SeedApi {
 
     let authNames = [];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = Object;
     return this.apiClient.callApi(
-      '/seed/default',
-      'GET',
+      "/seed/default",
+      "GET",
       pathParams,
       queryParams,
       headerParams,

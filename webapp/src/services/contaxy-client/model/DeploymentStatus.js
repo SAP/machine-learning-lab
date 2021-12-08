@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from '../ApiClient';
+import ApiClient from "../ApiClient";
 /**
  * Enum class DeploymentStatus.
  * @enum {}
@@ -22,31 +22,31 @@ export default class DeploymentStatus {
    * value: "pending"
    * @const
    */
-  pending = 'pending';
+  pending = "pending";
 
   /**
    * value: "running"
    * @const
    */
-  running = 'running';
+  running = "running";
 
   /**
    * value: "succeeded"
    * @const
    */
-  succeeded = 'succeeded';
+  succeeded = "succeeded";
 
   /**
    * value: "failed"
    * @const
    */
-  failed = 'failed';
+  failed = "failed";
 
   /**
    * value: "unknown"
    * @const
    */
-  unknown = 'unknown';
+  unknown = "unknown";
 
   /**
    * Returns a <code>DeploymentStatus</code> enum value from a Javascript object name.

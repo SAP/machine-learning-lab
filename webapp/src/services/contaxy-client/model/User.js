@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from '../ApiClient';
+import ApiClient from "../ApiClient";
 
 /**
  * The User model module.
@@ -45,26 +45,26 @@ class User {
     if (data) {
       obj = obj || new User();
 
-      if (data.hasOwnProperty('username')) {
-        obj['username'] = ApiClient.convertToType(data['username'], 'String');
+      if (data.hasOwnProperty("username")) {
+        obj["username"] = ApiClient.convertToType(data["username"], "String");
       }
-      if (data.hasOwnProperty('email')) {
-        obj['email'] = ApiClient.convertToType(data['email'], 'String');
+      if (data.hasOwnProperty("email")) {
+        obj["email"] = ApiClient.convertToType(data["email"], "String");
       }
-      if (data.hasOwnProperty('disabled')) {
-        obj['disabled'] = ApiClient.convertToType(data['disabled'], 'Boolean');
+      if (data.hasOwnProperty("disabled")) {
+        obj["disabled"] = ApiClient.convertToType(data["disabled"], "Boolean");
       }
-      if (data.hasOwnProperty('id')) {
-        obj['id'] = ApiClient.convertToType(data['id'], 'String');
+      if (data.hasOwnProperty("id")) {
+        obj["id"] = ApiClient.convertToType(data["id"], "String");
       }
-      if (data.hasOwnProperty('technical_user')) {
-        obj['technical_user'] = ApiClient.convertToType(
-          data['technical_user'],
-          'Boolean'
+      if (data.hasOwnProperty("technical_user")) {
+        obj["technical_user"] = ApiClient.convertToType(
+          data["technical_user"],
+          "Boolean"
         );
       }
-      if (data.hasOwnProperty('created_at')) {
-        obj['created_at'] = ApiClient.convertToType(data['created_at'], 'Date');
+      if (data.hasOwnProperty("created_at")) {
+        obj["created_at"] = ApiClient.convertToType(data["created_at"], "Date");
       }
     }
     return obj;
@@ -75,38 +75,38 @@ class User {
  * A unique username on the system.
  * @member {String} username
  */
-User.prototype['username'] = undefined;
+User.prototype["username"] = undefined;
 
 /**
  * User email address.
  * @member {String} email
  */
-User.prototype['email'] = undefined;
+User.prototype["email"] = undefined;
 
 /**
  * Indicates that user is disabled. Disabling a user will prevent any access to user-accesible resources.
  * @member {Boolean} disabled
  * @default false
  */
-User.prototype['disabled'] = false;
+User.prototype["disabled"] = false;
 
 /**
  * Unique ID of the user.
  * @member {String} id
  */
-User.prototype['id'] = undefined;
+User.prototype["id"] = undefined;
 
 /**
  * Indicates if the user is a technical user created by the system.
  * @member {Boolean} technical_user
  * @default false
  */
-User.prototype['technical_user'] = false;
+User.prototype["technical_user"] = false;
 
 /**
  * Timestamp of the user creation. Assigned by the server and read-only.
  * @member {Date} created_at
  */
-User.prototype['created_at'] = undefined;
+User.prototype["created_at"] = undefined;
 
 export default User;

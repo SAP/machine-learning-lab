@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import Grid from '@material-ui/core/Grid';
-import Widget from './Widget';
+import Grid from "@material-ui/core/Grid";
+import Widget from "./Widget";
 
 function WidgetsGrid(props) {
   const { className, children, spacing } = props;
@@ -48,7 +48,7 @@ WidgetsGrid.propTypes = {
 };
 
 WidgetsGrid.defaultProps = {
-  className: '',
+  className: "",
   spacing: 3,
 };
 

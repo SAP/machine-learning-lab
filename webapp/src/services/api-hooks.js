@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from "react";
 
-import { jobsApi, projectsApi, servicesApi } from './contaxy-api';
+import { jobsApi, projectsApi, servicesApi } from "./contaxy-api";
 
 function useApiHook(apiCall, condition) {
   const sanitizedCondition = condition !== undefined ? condition : true;

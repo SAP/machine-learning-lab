@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route } from "react-router-dom";
 
 /* eslint-disable react/jsx-props-no-spreading */
 function DefaultLoginRoute({ component: Component, isAuthenticated, ...rest }) {
@@ -13,7 +13,7 @@ function DefaultLoginRoute({ component: Component, isAuthenticated, ...rest }) {
         !isAuthenticated ? (
           <Component {...props} />
         ) : (
-          <Redirect to={{ pathname: '/', state: { from: props.location } }} /> // eslint-disable-line react/prop-types
+          <Redirect to={{ pathname: "/", state: { from: props.location } }} /> // eslint-disable-line react/prop-types
         )
       }
     />

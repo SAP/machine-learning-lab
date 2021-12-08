@@ -11,11 +11,11 @@
  *
  */
 
-import ApiClient from '../ApiClient';
-import ProblemDetails from '../model/ProblemDetails';
-import ResourceAction from '../model/ResourceAction';
-import Service from '../model/Service';
-import ServiceInput from '../model/ServiceInput';
+import ApiClient from "../ApiClient";
+import ProblemDetails from "../model/ProblemDetails";
+import ResourceAction from "../model/ResourceAction";
+import Service from "../model/Service";
+import ServiceInput from "../model/ServiceInput";
 
 /**
  * Services service.
@@ -64,23 +64,23 @@ export default class ServicesApi {
       service_id: serviceId,
     };
     let queryParams = {
-      delete_volumes: opts['deleteVolumes'],
+      delete_volumes: opts["deleteVolumes"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = null;
     return this.apiClient.callApi(
-      '/projects/{project_id}/services/{service_id}',
-      'DELETE',
+      "/projects/{project_id}/services/{service_id}",
+      "DELETE",
       pathParams,
       queryParams,
       headerParams,
@@ -133,23 +133,23 @@ export default class ServicesApi {
       project_id: projectId,
     };
     let queryParams = {
-      extension_id: opts['extensionId'],
+      extension_id: opts["extensionId"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = null;
     return this.apiClient.callApi(
-      '/projects/{project_id}/services',
-      'DELETE',
+      "/projects/{project_id}/services",
+      "DELETE",
       pathParams,
       queryParams,
       headerParams,
@@ -208,23 +208,23 @@ export default class ServicesApi {
       project_id: projectId,
     };
     let queryParams = {
-      action_id: opts['actionId'],
+      action_id: opts["actionId"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
-    let contentTypes = ['application/json'];
-    let accepts = ['application/json'];
+    let contentTypes = ["application/json"];
+    let accepts = ["application/json"];
     let returnType = Service;
     return this.apiClient.callApi(
-      '/projects/{project_id}/services',
-      'POST',
+      "/projects/{project_id}/services",
+      "POST",
       pathParams,
       queryParams,
       headerParams,
@@ -294,17 +294,17 @@ export default class ServicesApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = Object;
     return this.apiClient.callApi(
-      '/projects/{project_id}/services/{service_id}/actions/{action_id}',
-      'GET',
+      "/projects/{project_id}/services/{service_id}/actions/{action_id}",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -367,24 +367,24 @@ export default class ServicesApi {
       service_id: serviceId,
     };
     let queryParams = {
-      endpoint: opts['endpoint'],
-      description: opts['description'],
+      endpoint: opts["endpoint"],
+      description: opts["description"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
-    let returnType = 'String';
+    let accepts = ["application/json"];
+    let returnType = "String";
     return this.apiClient.callApi(
-      '/projects/{project_id}/services/{service_id}/token',
-      'GET',
+      "/projects/{project_id}/services/{service_id}/token",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -449,24 +449,24 @@ export default class ServicesApi {
       service_id: serviceId,
     };
     let queryParams = {
-      endpoint: opts['endpoint'],
-      description: opts['description'],
+      endpoint: opts["endpoint"],
+      description: opts["description"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
-    let returnType = 'String';
+    let accepts = ["application/json"];
+    let returnType = "String";
     return this.apiClient.callApi(
-      '/projects/{project_id}/services/{service_id}/token',
-      'GET',
+      "/projects/{project_id}/services/{service_id}/token",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -531,24 +531,24 @@ export default class ServicesApi {
       service_id: serviceId,
     };
     let queryParams = {
-      lines: opts['lines'],
-      since: opts['since'],
+      lines: opts["lines"],
+      since: opts["since"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
-    let returnType = 'String';
+    let accepts = ["application/json"];
+    let returnType = "String";
     return this.apiClient.callApi(
-      '/projects/{project_id}/services/{service_id}/logs',
-      'GET',
+      "/projects/{project_id}/services/{service_id}/logs",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -611,17 +611,17 @@ export default class ServicesApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = Service;
     return this.apiClient.callApi(
-      '/projects/{project_id}/services/{service_id}',
-      'GET',
+      "/projects/{project_id}/services/{service_id}",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -679,23 +679,23 @@ export default class ServicesApi {
       project_id: projectId,
     };
     let queryParams = {
-      extension_id: opts['extensionId'],
+      extension_id: opts["extensionId"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
-    let contentTypes = ['application/json'];
-    let accepts = ['application/json'];
+    let contentTypes = ["application/json"];
+    let accepts = ["application/json"];
     let returnType = [ResourceAction];
     return this.apiClient.callApi(
-      '/projects/{project_id}/services:deploy-actions',
-      'POST',
+      "/projects/{project_id}/services:deploy-actions",
+      "POST",
       pathParams,
       queryParams,
       headerParams,
@@ -758,23 +758,23 @@ export default class ServicesApi {
       service_id: serviceId,
     };
     let queryParams = {
-      extension_id: opts['extensionId'],
+      extension_id: opts["extensionId"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = [ResourceAction];
     return this.apiClient.callApi(
-      '/projects/{project_id}/services/{service_id}/actions',
-      'GET',
+      "/projects/{project_id}/services/{service_id}/actions",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -827,23 +827,23 @@ export default class ServicesApi {
       project_id: projectId,
     };
     let queryParams = {
-      extension_id: opts['extensionId'],
+      extension_id: opts["extensionId"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = [Service];
     return this.apiClient.callApi(
-      '/projects/{project_id}/services',
-      'GET',
+      "/projects/{project_id}/services",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -903,23 +903,23 @@ export default class ServicesApi {
     };
     let queryParams = {
       container_image: containerImage,
-      extension_id: opts['extensionId'],
+      extension_id: opts["extensionId"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = ServiceInput;
     return this.apiClient.callApi(
-      '/projects/{project_id}/services:suggest-config',
-      'GET',
+      "/projects/{project_id}/services:suggest-config",
+      "GET",
       pathParams,
       queryParams,
       headerParams,

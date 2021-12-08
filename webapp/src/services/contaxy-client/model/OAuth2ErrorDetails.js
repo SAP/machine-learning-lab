@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from '../ApiClient';
+import ApiClient from "../ApiClient";
 
 /**
  * The OAuth2ErrorDetails model module.
@@ -34,7 +34,7 @@ class OAuth2ErrorDetails {
    * Only for internal use.
    */
   static initialize(obj, error) {
-    obj['error'] = error;
+    obj["error"] = error;
   }
 
   /**
@@ -48,8 +48,8 @@ class OAuth2ErrorDetails {
     if (data) {
       obj = obj || new OAuth2ErrorDetails();
 
-      if (data.hasOwnProperty('error')) {
-        obj['error'] = ApiClient.convertToType(data['error'], 'String');
+      if (data.hasOwnProperty("error")) {
+        obj["error"] = ApiClient.convertToType(data["error"], "String");
       }
     }
     return obj;
@@ -59,6 +59,6 @@ class OAuth2ErrorDetails {
 /**
  * @member {String} error
  */
-OAuth2ErrorDetails.prototype['error'] = undefined;
+OAuth2ErrorDetails.prototype["error"] = undefined;
 
 export default OAuth2ErrorDetails;

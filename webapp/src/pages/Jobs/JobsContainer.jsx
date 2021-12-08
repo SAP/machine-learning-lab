@@ -1,34 +1,34 @@
-import React from 'react';
+import React from "react";
 
-import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
+import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
 
-import MaterialTable from 'material-table';
+import MaterialTable from "material-table";
 
 const COLUMNS = [
   {
-    field: 'status',
-    title: 'Status',
+    field: "status",
+    title: "Status",
     numeric: false,
-    align: 'left',
+    align: "left",
   },
   {
-    field: 'name',
-    title: 'Name',
+    field: "name",
+    title: "Name",
     numeric: false,
-    align: 'left',
-    render: (rowData) => rowData.metadata['ctxy.deploymentName'],
+    align: "left",
+    render: (rowData) => rowData.metadata["ctxy.deploymentName"],
   },
   {
-    field: 'started_at',
-    title: 'Started At',
-    align: 'left',
+    field: "started_at",
+    title: "Started At",
+    align: "left",
     render: (rowData) => rowData.started_at.getTime(),
   },
   {
-    field: 'finishedAt',
-    title: 'Finished At',
-    align: 'left',
+    field: "finishedAt",
+    title: "Finished At",
+    align: "left",
     render: (rowData) => rowData.stopped_at.getTime(),
   },
 ];
@@ -48,67 +48,67 @@ function JobsContainer(props) {
 
   return (
     <MaterialTable
-      title={t('job_plural')}
+      title={t("job_plural")}
       columns={COLUMNS}
       data={data}
       options={{
         filtering: true,
         columnsButton: false,
         exportButton: true,
-        exportFileName: 'data',
+        exportFileName: "data",
         grouping: false,
         pageSize: 5,
         pageSizeOptions: PAGE_SIZES,
         actionsColumnIndex: -1,
         headerStyle: {
-          fontSize: '0.75rem',
+          fontSize: "0.75rem",
           fontWeight: 500,
-          fontFamily: 'Roboto',
+          fontFamily: "Roboto",
         },
         rowStyle: {
-          fontSize: '0.75rem',
-          fontFamily: 'Roboto',
+          fontSize: "0.75rem",
+          fontFamily: "Roboto",
         },
       }}
-      localization={{ header: { actions: '' } }} // disable localization header name
+      localization={{ header: { actions: "" } }} // disable localization header name
       actions={[
         {
-          icon: 'autorenew',
+          icon: "autorenew",
           isFreeAction: true,
           onClick: onReload,
-          tooltip: t('reload'),
+          tooltip: t("reload"),
         },
         {
-          icon: 'login',
+          icon: "login",
           iconProps: { className: `` },
           onClick: (event, rowData) => {
             onShowJobActions(rowData);
           },
-          tooltip: 'Access job',
+          tooltip: "Access job",
         },
         {
-          icon: 'code',
+          icon: "code",
           iconProps: { className: `` },
           onClick: (event, rowData) => {
             onShowJobMetadata(rowData);
           },
-          tooltip: 'Show job metadata',
+          tooltip: "Show job metadata",
         },
         {
-          icon: 'assignment',
+          icon: "assignment",
           iconProps: { className: `` },
           onClick: (event, rowData) => {
             onShowJobLogs(rowData);
           },
-          tooltip: 'Display logs',
+          tooltip: "Display logs",
         },
         {
-          icon: 'delete',
+          icon: "delete",
           iconProps: { className: `` },
           onClick: (event, rowData) => {
             onJobDelete(rowData);
           },
-          tooltip: 'Delete job',
+          tooltip: "Delete job",
         },
       ]}
     />

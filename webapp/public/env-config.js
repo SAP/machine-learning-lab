@@ -1,3 +1,3 @@
 window.env = {
-  UPLOAD_NOTE: '',
+  UPLOAD_NOTE: "",
 };

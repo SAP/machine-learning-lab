@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from '../ApiClient';
+import ApiClient from "../ApiClient";
 
 /**
  * The ResourceAction model module.
@@ -34,7 +34,7 @@ class ResourceAction {
    * Only for internal use.
    */
   static initialize(obj, actionId) {
-    obj['action_id'] = actionId;
+    obj["action_id"] = actionId;
   }
 
   /**
@@ -48,32 +48,32 @@ class ResourceAction {
     if (data) {
       obj = obj || new ResourceAction();
 
-      if (data.hasOwnProperty('action_id')) {
-        obj['action_id'] = ApiClient.convertToType(data['action_id'], 'String');
+      if (data.hasOwnProperty("action_id")) {
+        obj["action_id"] = ApiClient.convertToType(data["action_id"], "String");
       }
-      if (data.hasOwnProperty('display_name')) {
-        obj['display_name'] = ApiClient.convertToType(
-          data['display_name'],
-          'String'
+      if (data.hasOwnProperty("display_name")) {
+        obj["display_name"] = ApiClient.convertToType(
+          data["display_name"],
+          "String"
         );
       }
-      if (data.hasOwnProperty('icon')) {
-        obj['icon'] = ApiClient.convertToType(data['icon'], 'String');
+      if (data.hasOwnProperty("icon")) {
+        obj["icon"] = ApiClient.convertToType(data["icon"], "String");
       }
-      if (data.hasOwnProperty('extension_id')) {
-        obj['extension_id'] = ApiClient.convertToType(
-          data['extension_id'],
-          'String'
+      if (data.hasOwnProperty("extension_id")) {
+        obj["extension_id"] = ApiClient.convertToType(
+          data["extension_id"],
+          "String"
         );
       }
-      if (data.hasOwnProperty('extension_name')) {
-        obj['extension_name'] = ApiClient.convertToType(
-          data['extension_name'],
-          'String'
+      if (data.hasOwnProperty("extension_name")) {
+        obj["extension_name"] = ApiClient.convertToType(
+          data["extension_name"],
+          "String"
         );
       }
-      if (data.hasOwnProperty('instructions')) {
-        obj['instructions'] = ApiClient.convertToType(data['instructions'], [
+      if (data.hasOwnProperty("instructions")) {
+        obj["instructions"] = ApiClient.convertToType(data["instructions"], [
           Object,
         ]);
       }
@@ -86,36 +86,36 @@ class ResourceAction {
  * ID used to identify this action.
  * @member {String} action_id
  */
-ResourceAction.prototype['action_id'] = undefined;
+ResourceAction.prototype["action_id"] = undefined;
 
 /**
  * Display name of this action.
  * @member {String} display_name
  */
-ResourceAction.prototype['display_name'] = undefined;
+ResourceAction.prototype["display_name"] = undefined;
 
 /**
  * Material Design Icon name or image URL used for displaying this action.
  * @member {String} icon
  */
-ResourceAction.prototype['icon'] = undefined;
+ResourceAction.prototype["icon"] = undefined;
 
 /**
  * The extension ID associated with this action.
  * @member {String} extension_id
  */
-ResourceAction.prototype['extension_id'] = undefined;
+ResourceAction.prototype["extension_id"] = undefined;
 
 /**
  * The extension name associated with this action.
  * @member {String} extension_name
  */
-ResourceAction.prototype['extension_name'] = undefined;
+ResourceAction.prototype["extension_name"] = undefined;
 
 /**
  * A list of instructions for the frontend application.
  * @member {Array.<Object>} instructions
  */
-ResourceAction.prototype['instructions'] = undefined;
+ResourceAction.prototype["instructions"] = undefined;
 
 export default ResourceAction;

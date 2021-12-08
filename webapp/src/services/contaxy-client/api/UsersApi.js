@@ -11,12 +11,12 @@
  *
  */
 
-import ApiClient from '../ApiClient';
-import AccessLevel from '../model/AccessLevel';
-import ProblemDetails from '../model/ProblemDetails';
-import User from '../model/User';
-import UserInput from '../model/UserInput';
-import UserRegistration from '../model/UserRegistration';
+import ApiClient from "../ApiClient";
+import AccessLevel from "../model/AccessLevel";
+import ProblemDetails from "../model/ProblemDetails";
+import User from "../model/User";
+import UserInput from "../model/UserInput";
+import UserRegistration from "../model/UserRegistration";
 
 /**
  * Users service.
@@ -65,17 +65,17 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
-    let contentTypes = ['application/json'];
-    let accepts = ['application/json'];
+    let contentTypes = ["application/json"];
+    let accepts = ["application/json"];
     let returnType = null;
     return this.apiClient.callApi(
-      '/users/{user_id}:change-password',
-      'PUT',
+      "/users/{user_id}:change-password",
+      "PUT",
       pathParams,
       queryParams,
       headerParams,
@@ -134,17 +134,17 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
-    let contentTypes = ['application/json'];
-    let accepts = ['application/json'];
+    let contentTypes = ["application/json"];
+    let accepts = ["application/json"];
     let returnType = null;
     return this.apiClient.callApi(
-      '/users/{user_id}:change-password',
-      'PUT',
+      "/users/{user_id}:change-password",
+      "PUT",
       pathParams,
       queryParams,
       headerParams,
@@ -194,12 +194,12 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [];
-    let contentTypes = ['application/json'];
-    let accepts = ['application/json'];
+    let contentTypes = ["application/json"];
+    let accepts = ["application/json"];
     let returnType = User;
     return this.apiClient.callApi(
-      '/users',
-      'POST',
+      "/users",
+      "POST",
       pathParams,
       queryParams,
       headerParams,
@@ -248,12 +248,12 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [];
-    let contentTypes = ['application/json'];
-    let accepts = ['application/json'];
+    let contentTypes = ["application/json"];
+    let accepts = ["application/json"];
     let returnType = User;
     return this.apiClient.callApi(
-      '/users',
-      'POST',
+      "/users",
+      "POST",
       pathParams,
       queryParams,
       headerParams,
@@ -304,17 +304,17 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = null;
     return this.apiClient.callApi(
-      '/users/{user_id}',
-      'DELETE',
+      "/users/{user_id}",
+      "DELETE",
       pathParams,
       queryParams,
       headerParams,
@@ -365,17 +365,17 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = null;
     return this.apiClient.callApi(
-      '/users/{user_id}',
-      'DELETE',
+      "/users/{user_id}",
+      "DELETE",
       pathParams,
       queryParams,
       headerParams,
@@ -417,17 +417,17 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = User;
     return this.apiClient.callApi(
-      '/users/me',
-      'GET',
+      "/users/me",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -466,17 +466,17 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = User;
     return this.apiClient.callApi(
-      '/users/me',
-      'GET',
+      "/users/me",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -524,17 +524,17 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = User;
     return this.apiClient.callApi(
-      '/users/{user_id}',
-      'GET',
+      "/users/{user_id}",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -583,24 +583,24 @@ export default class UsersApi {
       user_id: userId,
     };
     let queryParams = {
-      access_level: opts['accessLevel'],
-      description: opts['description'],
+      access_level: opts["accessLevel"],
+      description: opts["description"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
-    let returnType = 'String';
+    let accepts = ["application/json"];
+    let returnType = "String";
     return this.apiClient.callApi(
-      '/users/{user_id}/token',
-      'GET',
+      "/users/{user_id}/token",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -654,24 +654,24 @@ export default class UsersApi {
       user_id: userId,
     };
     let queryParams = {
-      access_level: opts['accessLevel'],
-      description: opts['description'],
+      access_level: opts["accessLevel"],
+      description: opts["description"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
-    let returnType = 'String';
+    let accepts = ["application/json"];
+    let returnType = "String";
     return this.apiClient.callApi(
-      '/users/{user_id}/token',
-      'GET',
+      "/users/{user_id}/token",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -725,17 +725,17 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = User;
     return this.apiClient.callApi(
-      '/users/{user_id}',
-      'GET',
+      "/users/{user_id}",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -777,17 +777,17 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = [User];
     return this.apiClient.callApi(
-      '/users',
-      'GET',
+      "/users",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -826,17 +826,17 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = [User];
     return this.apiClient.callApi(
-      '/users',
-      'GET',
+      "/users",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -891,17 +891,17 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
-    let contentTypes = ['application/json'];
-    let accepts = ['application/json'];
+    let contentTypes = ["application/json"];
+    let accepts = ["application/json"];
     let returnType = User;
     return this.apiClient.callApi(
-      '/users/{user_id}',
-      'PATCH',
+      "/users/{user_id}",
+      "PATCH",
       pathParams,
       queryParams,
       headerParams,
@@ -960,17 +960,17 @@ export default class UsersApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
-    let contentTypes = ['application/json'];
-    let accepts = ['application/json'];
+    let contentTypes = ["application/json"];
+    let accepts = ["application/json"];
     let returnType = User;
     return this.apiClient.callApi(
-      '/users/{user_id}',
-      'PATCH',
+      "/users/{user_id}",
+      "PATCH",
       pathParams,
       queryParams,
       headerParams,

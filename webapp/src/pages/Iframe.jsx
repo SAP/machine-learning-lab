@@ -1,22 +1,22 @@
-import React from 'react';
+import React from "react";
 
-import PropTypes from 'prop-types';
-import ReactIframe from 'react-iframe';
-import styled from 'styled-components';
+import PropTypes from "prop-types";
+import ReactIframe from "react-iframe";
+import styled from "styled-components";
 
 // import CircularProgress from '@material-ui/core/CircularProgress';
 
-import GlobalStateContainer from '../app/store';
+import GlobalStateContainer from "../app/store";
 
 function Iframe(props) {
   const { className, url, projectSpecific } = props;
   const { activeProject } = GlobalStateContainer.useContainer();
   // const [isLoading, setIsLoading] = useState(true);
 
-  let iframeUrl = url || '';
+  let iframeUrl = url || "";
   if (projectSpecific) {
     // use '?' if url does not contain a query parameter yet, '&' otherwise
-    const delimiter = url.indexOf('?') > -1 ? '&' : '?';
+    const delimiter = url.indexOf("?") > -1 ? "&" : "?";
     iframeUrl = `${url}${delimiter}project=${activeProject.id}`;
   }
 
@@ -48,7 +48,7 @@ Iframe.propTypes = {
 };
 
 Iframe.defaultProps = {
-  className: '',
+  className: "",
   projectSpecific: false,
 };
 

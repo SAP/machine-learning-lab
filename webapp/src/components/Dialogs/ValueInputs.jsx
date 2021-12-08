@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import AddIcon from '@material-ui/icons/Add';
-import Button from '@material-ui/core/Button';
-import DelIcon from '@material-ui/icons/Delete';
-import TextField from '@material-ui/core/TextField';
+import AddIcon from "@material-ui/icons/Add";
+import Button from "@material-ui/core/Button";
+import DelIcon from "@material-ui/icons/Delete";
+import TextField from "@material-ui/core/TextField";
 
 function ValueInput(props) {
   const { className, index, onChange, placeholder, value } = props;
@@ -36,9 +36,9 @@ ValueInput.propTypes = {
 };
 
 ValueInput.defaultProps = {
-  className: '',
-  placeholder: '',
-  value: '',
+  className: "",
+  placeholder: "",
+  value: "",
 };
 
 const StyledValueInput = styled(ValueInput)`
@@ -148,13 +148,13 @@ ValueInputs.propTypes = {
 };
 
 ValueInputs.defaultProps = {
-  className: '',
+  className: "",
   initialValues: [],
   inputComponent: StyledValueInput,
   inputComponentProps: {
-    defaultValue: '',
+    defaultValue: "",
   },
-  placeholder: 'Value',
+  placeholder: "Value",
 };
 
 const StyledValueInputs = styled(ValueInputs)`

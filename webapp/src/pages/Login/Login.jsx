@@ -1,23 +1,23 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState } from "react";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
-import TextField from '@material-ui/core/TextField';
-import showStandardSnackbar from '../../app/showStandardSnackbar';
+import Button from "@material-ui/core/Button";
+import Link from "@material-ui/core/Link";
+import TextField from "@material-ui/core/TextField";
+import showStandardSnackbar from "../../app/showStandardSnackbar";
 
 import {
   authApi,
   getExternalLoginPageUrl,
   usersApi,
-} from '../../services/contaxy-api';
-import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
-import ContentDialog from '../../components/Dialogs/ContentDialog';
-import GlobalStateContainer from '../../app/store';
+} from "../../services/contaxy-api";
+import { useShowAppDialog } from "../../app/AppDialogServiceProvider";
+import ContentDialog from "../../components/Dialogs/ContentDialog";
+import GlobalStateContainer from "../../app/store";
 
-import './Login.css';
-import mlLabBannerImage from '../../assets/images/ml-lab-banner.png';
+import "./Login.css";
+import mlLabBannerImage from "../../assets/images/ml-lab-banner.png";
 
 const { TOS_TEXT } = window.env;
 
@@ -28,9 +28,9 @@ function Login(props) {
   const showAppDialog = useShowAppDialog();
   const [isRegistration, setIsRegistration] = useState(false);
   const initialFormState = {
-    username: '',
-    password: '',
-    password_confirmation: '',
+    username: "",
+    password: "",
+    password_confirmation: "",
   };
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -39,7 +39,7 @@ function Login(props) {
 
   const login = async () => {
     try {
-      await authApi.requestToken('password', {
+      await authApi.requestToken("password", {
         username: formInput.username,
         password: formInput.password,
         setAsCookie: true,
@@ -52,7 +52,7 @@ function Login(props) {
 
   const register = async () => {
     if (formInput.password !== formInput.password_confirmation) {
-      showStandardSnackbar('Passwords do not match!');
+      showStandardSnackbar("Passwords do not match!");
       return;
     }
 
@@ -94,7 +94,7 @@ function Login(props) {
         onClick={() => {
           showAppDialog(ContentDialog, {
             content: TOS_TEXT,
-            title: 'ML Lab Terms of Service',
+            title: "ML Lab Terms of Service",
           });
         }}
       >
@@ -150,8 +150,8 @@ function Login(props) {
               color="primary"
               className={className}
             >
-              {!isRegistration && 'Login'}
-              {isRegistration && 'Register'}
+              {!isRegistration && "Login"}
+              {isRegistration && "Register"}
             </Button>
             {oauthEnabled && <OrSeparator />}
             {oauthEnabled && (
@@ -170,8 +170,8 @@ function Login(props) {
               className={className}
               color="primary"
             >
-              {!isRegistration && 'Register'}
-              {isRegistration && 'Back to Login'}
+              {!isRegistration && "Register"}
+              {isRegistration && "Back to Login"}
             </Button>
             {tosLink}
           </form>
@@ -186,7 +186,7 @@ Login.propTypes = {
 };
 
 Login.defaultProps = {
-  className: '',
+  className: "",
 };
 
 function OrSeparator() {

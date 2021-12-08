@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from '../ApiClient';
+import ApiClient from "../ApiClient";
 
 /**
  * The BodyRegisterAdminUserSystemAdminPost model module.
@@ -39,8 +39,8 @@ class BodyRegisterAdminUserSystemAdminPost {
    * Only for internal use.
    */
   static initialize(obj, password, passwordConfirm) {
-    obj['password'] = password;
-    obj['password_confirm'] = passwordConfirm;
+    obj["password"] = password;
+    obj["password_confirm"] = passwordConfirm;
   }
 
   /**
@@ -54,13 +54,13 @@ class BodyRegisterAdminUserSystemAdminPost {
     if (data) {
       obj = obj || new BodyRegisterAdminUserSystemAdminPost();
 
-      if (data.hasOwnProperty('password')) {
-        obj['password'] = ApiClient.convertToType(data['password'], 'String');
+      if (data.hasOwnProperty("password")) {
+        obj["password"] = ApiClient.convertToType(data["password"], "String");
       }
-      if (data.hasOwnProperty('password_confirm')) {
-        obj['password_confirm'] = ApiClient.convertToType(
-          data['password_confirm'],
-          'String'
+      if (data.hasOwnProperty("password_confirm")) {
+        obj["password_confirm"] = ApiClient.convertToType(
+          data["password_confirm"],
+          "String"
         );
       }
     }
@@ -71,11 +71,11 @@ class BodyRegisterAdminUserSystemAdminPost {
 /**
  * @member {String} password
  */
-BodyRegisterAdminUserSystemAdminPost.prototype['password'] = undefined;
+BodyRegisterAdminUserSystemAdminPost.prototype["password"] = undefined;
 
 /**
  * @member {String} password_confirm
  */
-BodyRegisterAdminUserSystemAdminPost.prototype['password_confirm'] = undefined;
+BodyRegisterAdminUserSystemAdminPost.prototype["password_confirm"] = undefined;
 
 export default BodyRegisterAdminUserSystemAdminPost;

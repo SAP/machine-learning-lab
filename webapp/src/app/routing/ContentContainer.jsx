@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import { Switch } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { Switch } from "react-router-dom";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import Toolbar from '@material-ui/core/Toolbar';
+import Toolbar from "@material-ui/core/Toolbar";
 
-import APP_PAGES, { APP_DRAWER_ITEM_TYPES } from '../../utils/app-pages';
-import DefaultLoginRoute from './DefaultLoginRoute';
-import GlobalStateContainer from '../store';
-import PrivateRoute from './PrivateRoute';
+import APP_PAGES, { APP_DRAWER_ITEM_TYPES } from "../../utils/app-pages";
+import DefaultLoginRoute from "./DefaultLoginRoute";
+import GlobalStateContainer from "../store";
+import PrivateRoute from "./PrivateRoute";
 
 function ContentContainer(props) {
   const { oauthEnabled } = GlobalStateContainer.useContainer();
@@ -52,7 +52,7 @@ ContentContainer.propTypes = {
 
 ContentContainer.defaultProps = {
   additionalPages: [],
-  className: '',
+  className: "",
 };
 
 const StyledContentContainer = styled(ContentContainer)`

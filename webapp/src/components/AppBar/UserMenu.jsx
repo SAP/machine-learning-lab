@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
-import { API_EXPLORER_URL, DOCUMENTATION_URL } from '../../utils/config';
-import { authApi } from '../../services/contaxy-api';
-import { getUserPemissionId } from '../../utils/app-utils';
-import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
-import ApiTokenDialog from '../Dialogs/ApiTokenDialog';
-import ContentDialog from '../Dialogs/ContentDialog';
-import showStandardSnackbar from '../../app/showStandardSnackbar';
+import { API_EXPLORER_URL, DOCUMENTATION_URL } from "../../utils/config";
+import { authApi } from "../../services/contaxy-api";
+import { getUserPemissionId } from "../../utils/app-utils";
+import { useShowAppDialog } from "../../app/AppDialogServiceProvider";
+import ApiTokenDialog from "../Dialogs/ApiTokenDialog";
+import ContentDialog from "../Dialogs/ContentDialog";
+import showStandardSnackbar from "../../app/showStandardSnackbar";
 
-const ID_MENU_APPBAR = 'menu-appbar';
-const REL = 'noopener noreferrer';
+const ID_MENU_APPBAR = "menu-appbar";
+const REL = "noopener noreferrer";
 
 function UserMenu(props) {
   const { t } = useTranslation();
@@ -32,7 +32,7 @@ function UserMenu(props) {
 
   const onMyUserClick = async () => {
     showAppDialog(ContentDialog, {
-      title: 'Me',
+      title: "Me",
       jsonContent: user,
     });
   };
@@ -58,10 +58,10 @@ function UserMenu(props) {
   const onUserTokenClick = async () => {
     const apiTokens = await authApi.listApiTokens();
     const userToken = apiTokens.filter((apiToken) =>
-      apiToken.scopes.includes('*#admin')
+      apiToken.scopes.includes("*#admin")
     );
     showAppDialog(ContentDialog, {
-      title: 'Your User API Token',
+      title: "Your User API Token",
       content: userToken[0].token,
     });
   };
@@ -77,7 +77,7 @@ function UserMenu(props) {
         const scopeStrings = [`projects/${activeProject.id}#admin`];
         const projectToken = await authApi.createToken({
           scopes: scopeStrings,
-          tokenType: 'api-token',
+          tokenType: "api-token",
         });
         projectTokens.push({ token: projectToken });
       } catch (e) {
@@ -97,8 +97,8 @@ function UserMenu(props) {
       <MenuItem onClick={onMyUserClick}>Me</MenuItem>
       <MenuItem onClick={onUserTokenClick}>Get User API Token</MenuItem>
       <MenuItem onClick={onProjectTokenClick}>Get Project API Token</MenuItem>
-      <MenuItem onClick={onApiTokenClick}>{t('api_tokens')}</MenuItem>
-      <MenuItem onClick={onLogoutClick}>{t('logout')}</MenuItem>
+      <MenuItem onClick={onApiTokenClick}>{t("api_tokens")}</MenuItem>
+      <MenuItem onClick={onLogoutClick}>{t("logout")}</MenuItem>
       <Divider />
     </div>
   );
@@ -116,12 +116,12 @@ function UserMenu(props) {
       <Menu
         anchorEl={anchorEl}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
         id={ID_MENU_APPBAR}
         open={Boolean(anchorEl)}
@@ -135,7 +135,7 @@ function UserMenu(props) {
           rel={REL}
           target="_blank"
         >
-          {t('documentation')}
+          {t("documentation")}
         </MenuItem>
         <MenuItem
           className={`${className} menuItem`}
@@ -144,7 +144,7 @@ function UserMenu(props) {
           rel={REL}
           target="_blank"
         >
-          {t('api_explorer')}
+          {t("api_explorer")}
         </MenuItem>
       </Menu>
     </div>
@@ -159,7 +159,7 @@ UserMenu.propTypes = {
 };
 
 UserMenu.defaultProps = {
-  className: '',
+  className: "",
   isAuthenticated: false,
   user: {},
   activeProject: {},

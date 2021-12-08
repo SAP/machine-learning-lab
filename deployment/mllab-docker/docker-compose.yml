@@ -1,3 +1,4 @@
+version: "3.3"
 services:
   # The main ML Lab backend container that serves as entrypoint for all traffic
   # Contains the contaxy server and hosts the ML Lab web app
@@ -7,7 +8,7 @@ services:
     ports:
       - "30010:8080"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
       - JWT_TOKEN_SECRET=please-change-this-secret
       - SYSTEM_NAMESPACE=pylab

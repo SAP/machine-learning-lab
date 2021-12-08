@@ -1,28 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
-import { getByRole, waitFor } from '@testing-library/react';
+import { getByRole, waitFor } from "@testing-library/react";
 
-import { APP_NAME } from '../../utils/config';
-import { fireEvent, render, screen } from '../../utils/test-custom-render';
-import APP_PAGES, { APP_DRAWER_ITEM_TYPES } from '../../utils/app-pages';
-import App from './App';
-import GlobalStateContainer from '../../app/store';
+import { APP_NAME } from "../../utils/config";
+import { fireEvent, render, screen } from "../../utils/test-custom-render";
+import APP_PAGES, { APP_DRAWER_ITEM_TYPES } from "../../utils/app-pages";
+import App from "./App";
+import GlobalStateContainer from "../../app/store";
 
-test('tests app name', async () => {
+test("tests app name", async () => {
   // waitFor is needed here so that the state changes are renderd in the App component
   await waitFor(() => {
     render(<App />);
   });
-  const linkElement = screen.getByText(new RegExp(APP_NAME, 'i'));
+  const linkElement = screen.getByText(new RegExp(APP_NAME, "i"));
   expect(linkElement).toBeInTheDocument();
 });
 
-test('tests the usermenu and its entries', async () => {
+test("tests the usermenu and its entries", async () => {
   await waitFor(() => {
     render(<App />);
   });
   expect(screen.queryByText(/documentation/i)).toBeNull();
-  fireEvent.click(screen.getByLabelText('usermenu'));
+  fireEvent.click(screen.getByLabelText("usermenu"));
   expect(screen.getByText(/documentation/i)).toBeInTheDocument();
   expect(screen.getByText(/Get User API Token/i)).toBeInTheDocument();
   expect(screen.getByText(/Get Project API Token/i)).toBeInTheDocument();
@@ -30,7 +30,7 @@ test('tests the usermenu and its entries', async () => {
   expect(screen.getByText(/api_tokens/i)).toBeInTheDocument();
 });
 
-test('test that all link app drawer link items exist', async () => {
+test("test that all link app drawer link items exist", async () => {
   await waitFor(() => {
     render(<App />);
   });
@@ -54,14 +54,14 @@ test('test that all link app drawer link items exist', async () => {
 //   );
 // });
 
-test('tests global state', () => {
+test("tests global state", () => {
   const Component = () => {
     const { projects, setProjects } = GlobalStateContainer.useContainer();
 
-    expect(typeof setProjects).toBe('function');
+    expect(typeof setProjects).toBe("function");
 
     useEffect(
-      () => setProjects([{ id: 'myFooProject', name: 'My Foo Project' }]),
+      () => setProjects([{ id: "myFooProject", name: "My Foo Project" }]),
       [setProjects]
     );
     return (
@@ -74,19 +74,19 @@ test('tests global state', () => {
   };
   render(<Component />);
 
-  expect(screen.getByText('myFooProject')).toBeInTheDocument();
+  expect(screen.getByText("myFooProject")).toBeInTheDocument();
 });
 
-test('tests the project selector and its entries', async () => {
+test("tests the project selector and its entries", async () => {
   await waitFor(() => {
     render(<App />);
   });
 
-  const projectSelector = screen.getByLabelText('projectselector');
+  const projectSelector = screen.getByLabelText("projectselector");
   expect(projectSelector).toBeInTheDocument();
-  expect(screen.getByLabelText('appdrawer')).toBeInTheDocument();
+  expect(screen.getByLabelText("appdrawer")).toBeInTheDocument();
 
   // See how Material-UI tests it's Select component (https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Select/Select.test.js)
-  fireEvent.mouseDown(getByRole(projectSelector, 'button'));
-  expect(screen.getByText('myFooProject')).toBeInTheDocument();
+  fireEvent.mouseDown(getByRole(projectSelector, "button"));
+  expect(screen.getByText("myFooProject")).toBeInTheDocument();
 });

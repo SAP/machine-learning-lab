@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from '../ApiClient';
+import ApiClient from "../ApiClient";
 
 /**
  * The ProjectInput model module.
@@ -45,28 +45,28 @@ class ProjectInput {
     if (data) {
       obj = obj || new ProjectInput();
 
-      if (data.hasOwnProperty('display_name')) {
-        obj['display_name'] = ApiClient.convertToType(
-          data['display_name'],
-          'String'
+      if (data.hasOwnProperty("display_name")) {
+        obj["display_name"] = ApiClient.convertToType(
+          data["display_name"],
+          "String"
         );
       }
-      if (data.hasOwnProperty('description')) {
-        obj['description'] = ApiClient.convertToType(
-          data['description'],
-          'String'
+      if (data.hasOwnProperty("description")) {
+        obj["description"] = ApiClient.convertToType(
+          data["description"],
+          "String"
         );
       }
-      if (data.hasOwnProperty('icon')) {
-        obj['icon'] = ApiClient.convertToType(data['icon'], 'String');
+      if (data.hasOwnProperty("icon")) {
+        obj["icon"] = ApiClient.convertToType(data["icon"], "String");
       }
-      if (data.hasOwnProperty('metadata')) {
-        obj['metadata'] = ApiClient.convertToType(data['metadata'], {
-          String: 'String',
+      if (data.hasOwnProperty("metadata")) {
+        obj["metadata"] = ApiClient.convertToType(data["metadata"], {
+          String: "String",
         });
       }
-      if (data.hasOwnProperty('disabled')) {
-        obj['disabled'] = ApiClient.convertToType(data['disabled'], 'Boolean');
+      if (data.hasOwnProperty("disabled")) {
+        obj["disabled"] = ApiClient.convertToType(data["disabled"], "Boolean");
       }
     }
     return obj;
@@ -77,31 +77,31 @@ class ProjectInput {
  * A user-defined human-readable name of the resource. The name can be up to 128 characters long and can consist of any UTF-8 character.
  * @member {String} display_name
  */
-ProjectInput.prototype['display_name'] = undefined;
+ProjectInput.prototype["display_name"] = undefined;
 
 /**
  * A user-defined short description about the resource. Can consist of any UTF-8 character.
  * @member {String} description
  */
-ProjectInput.prototype['description'] = undefined;
+ProjectInput.prototype["description"] = undefined;
 
 /**
  * Identifier or image URL used for displaying this resource.
  * @member {String} icon
  */
-ProjectInput.prototype['icon'] = undefined;
+ProjectInput.prototype["icon"] = undefined;
 
 /**
  * A collection of arbitrary key-value pairs associated with this resource that does not need predefined structure. Enable third-party integrations to decorate objects with additional metadata for their own use.
  * @member {Object.<String, String>} metadata
  */
-ProjectInput.prototype['metadata'] = undefined;
+ProjectInput.prototype["metadata"] = undefined;
 
 /**
  * Allows to disable a resource without requiring deletion. A disabled resource is not shown and not accessible.
  * @member {Boolean} disabled
  * @default false
  */
-ProjectInput.prototype['disabled'] = false;
+ProjectInput.prototype["disabled"] = false;
 
 export default ProjectInput;

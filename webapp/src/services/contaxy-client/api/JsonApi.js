@@ -11,9 +11,9 @@
  *
  */
 
-import ApiClient from '../ApiClient';
-import JsonDocument from '../model/JsonDocument';
-import ProblemDetails from '../model/ProblemDetails';
+import ApiClient from "../ApiClient";
+import JsonDocument from "../model/JsonDocument";
+import ProblemDetails from "../model/ProblemDetails";
 
 /**
  * Json service.
@@ -77,23 +77,23 @@ export default class JsonApi {
       key: key,
     };
     let queryParams = {
-      upsert: opts['upsert'],
+      upsert: opts["upsert"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
-    let contentTypes = ['application/json'];
-    let accepts = ['application/json'];
+    let contentTypes = ["application/json"];
+    let accepts = ["application/json"];
     let returnType = JsonDocument;
     return this.apiClient.callApi(
-      '/projects/{project_id}/json/{collection_id}/{key}',
-      'PUT',
+      "/projects/{project_id}/json/{collection_id}/{key}",
+      "PUT",
       pathParams,
       queryParams,
       headerParams,
@@ -161,17 +161,17 @@ export default class JsonApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = null;
     return this.apiClient.callApi(
-      '/projects/{project_id}/json/{collection_id}',
-      'DELETE',
+      "/projects/{project_id}/json/{collection_id}",
+      "DELETE",
       pathParams,
       queryParams,
       headerParams,
@@ -223,17 +223,17 @@ export default class JsonApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = null;
     return this.apiClient.callApi(
-      '/projects/{project_id}/json',
-      'DELETE',
+      "/projects/{project_id}/json",
+      "DELETE",
       pathParams,
       queryParams,
       headerParams,
@@ -300,17 +300,17 @@ export default class JsonApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = null;
     return this.apiClient.callApi(
-      '/projects/{project_id}/json/{collection_id}/{key}',
-      'DELETE',
+      "/projects/{project_id}/json/{collection_id}/{key}",
+      "DELETE",
       pathParams,
       queryParams,
       headerParams,
@@ -381,17 +381,17 @@ export default class JsonApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = JsonDocument;
     return this.apiClient.callApi(
-      '/projects/{project_id}/json/{collection_id}/{key}',
-      'GET',
+      "/projects/{project_id}/json/{collection_id}/{key}",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -451,23 +451,23 @@ export default class JsonApi {
       collection_id: collectionId,
     };
     let queryParams = {
-      filter: opts['filter'],
+      filter: opts["filter"],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
     let contentTypes = [];
-    let accepts = ['application/json'];
+    let accepts = ["application/json"];
     let returnType = [JsonDocument];
     return this.apiClient.callApi(
-      '/projects/{project_id}/json/{collection_id}',
-      'GET',
+      "/projects/{project_id}/json/{collection_id}",
+      "GET",
       pathParams,
       queryParams,
       headerParams,
@@ -546,17 +546,17 @@ export default class JsonApi {
     let formParams = {};
 
     let authNames = [
-      'APIKeyCookie',
-      'APIKeyHeader',
-      'APIKeyQuery',
-      'OAuth2PasswordBearer',
+      "APIKeyCookie",
+      "APIKeyHeader",
+      "APIKeyQuery",
+      "OAuth2PasswordBearer",
     ];
-    let contentTypes = ['application/json'];
-    let accepts = ['application/json'];
+    let contentTypes = ["application/json"];
+    let accepts = ["application/json"];
     let returnType = JsonDocument;
     return this.apiClient.callApi(
-      '/projects/{project_id}/json/{collection_id}/{key}',
-      'PATCH',
+      "/projects/{project_id}/json/{collection_id}/{key}",
+      "PATCH",
       pathParams,
       queryParams,
       headerParams,

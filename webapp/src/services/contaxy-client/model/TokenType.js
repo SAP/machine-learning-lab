@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from '../ApiClient';
+import ApiClient from "../ApiClient";
 /**
  * Enum class TokenType.
  * @enum {}
@@ -22,13 +22,13 @@ export default class TokenType {
    * value: "session-token"
    * @const
    */
-  'session-token' = 'session-token';
+  "session-token" = "session-token";
 
   /**
    * value: "api-token"
    * @const
    */
-  'api-token' = 'api-token';
+  "api-token" = "api-token";
 
   /**
    * Returns a <code>TokenType</code> enum value from a Javascript object name.

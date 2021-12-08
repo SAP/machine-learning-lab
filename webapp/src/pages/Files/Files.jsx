@@ -1,27 +1,27 @@
 // eslint-disable-next-line camelcase
-import { unstable_batchedUpdates } from 'react-dom';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { unstable_batchedUpdates } from "react-dom";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import PropTypes from 'prop-types';
-import byteSize from 'byte-size';
-import styled from 'styled-components';
+import PropTypes from "prop-types";
+import byteSize from "byte-size";
+import styled from "styled-components";
 
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 
-import moment from 'moment';
+import moment from "moment";
 
 import {
   filesApi,
   getFileDownloadUrl,
   getFileUploadUrl,
-} from '../../services/contaxy-api';
-import FilesTable from './FilesTable';
+} from "../../services/contaxy-api";
+import FilesTable from "./FilesTable";
 
-import GlobalStateContainer from '../../app/store';
-import UploadFilesDialog from '../../components/Dialogs/UploadFilesDialog';
-import Widget from '../../components/Widget';
-import WidgetsGrid from '../../components/WidgetsGrid';
-import showStandardSnackbar from '../../app/showStandardSnackbar';
+import GlobalStateContainer from "../../app/store";
+import UploadFilesDialog from "../../components/Dialogs/UploadFilesDialog";
+import Widget from "../../components/Widget";
+import WidgetsGrid from "../../components/WidgetsGrid";
+import showStandardSnackbar from "../../app/showStandardSnackbar";
 
 function Files(props) {
   const { className, folder, uploadNote } = props;
@@ -29,8 +29,8 @@ function Files(props) {
   const { activeProject } = GlobalStateContainer.useContainer();
   const projectId = activeProject.id;
   const [widgetData, setWidgetData] = useState({
-    totalSize: '0',
-    lastUpdated: '-',
+    totalSize: "0",
+    lastUpdated: "-",
   });
   const [isUploadFileDialogOpen, setUploadFileDialogOpen] = useState(false);
   const componentIsMounted = useRef(true);
@@ -65,8 +65,8 @@ function Files(props) {
           totalSize: byteSize(totalSize).toString(),
           lastUpdated:
             lastUpdated > 0
-              ? moment(lastUpdated).startOf('minute').fromNow()
-              : '-',
+              ? moment(lastUpdated).startOf("minute").fromNow()
+              : "-",
         });
       });
     }
@@ -92,10 +92,10 @@ function Files(props) {
 
   const onFileDownload = useCallback(
     (rowData) => {
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = getFileDownloadUrl(projectId, rowData.key);
-      a.target = '_blank';
-      a.download = rowData.name || 'download';
+      a.target = "_blank";
+      a.download = rowData.name || "download";
       a.click();
     },
     [projectId]
@@ -151,7 +151,7 @@ function Files(props) {
       {fileTable}
       <UploadFilesDialog
         folder={folder}
-        uploadEnpoint={getFileUploadUrl(projectId, '')}
+        uploadEnpoint={getFileUploadUrl(projectId, "")}
         uploadNote={uploadNote}
         open={isUploadFileDialogOpen}
         onClose={() => {
@@ -171,8 +171,8 @@ Files.propTypes = {
 };
 
 Files.defaultProps = {
-  className: '',
-  uploadNote: '',
+  className: "",
+  uploadNote: "",
 };
 
 const StyledFiles = styled(Files)`

@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from '../ApiClient';
+import ApiClient from "../ApiClient";
 
 /**
  * The AllowedImageInfo model module.
@@ -45,20 +45,20 @@ class AllowedImageInfo {
     if (data) {
       obj = obj || new AllowedImageInfo();
 
-      if (data.hasOwnProperty('image_name')) {
-        obj['image_name'] = ApiClient.convertToType(
-          data['image_name'],
-          'String'
+      if (data.hasOwnProperty("image_name")) {
+        obj["image_name"] = ApiClient.convertToType(
+          data["image_name"],
+          "String"
         );
       }
-      if (data.hasOwnProperty('image_tags')) {
-        obj['image_tags'] = ApiClient.convertToType(data['image_tags'], [
-          'String',
+      if (data.hasOwnProperty("image_tags")) {
+        obj["image_tags"] = ApiClient.convertToType(data["image_tags"], [
+          "String",
         ]);
       }
-      if (data.hasOwnProperty('metadata')) {
-        obj['metadata'] = ApiClient.convertToType(data['metadata'], {
-          String: 'String',
+      if (data.hasOwnProperty("metadata")) {
+        obj["metadata"] = ApiClient.convertToType(data["metadata"], {
+          String: "String",
         });
       }
     }
@@ -70,18 +70,18 @@ class AllowedImageInfo {
  * Name of the docker image to allow. Do not specify the image tag (the part after the colon)
  * @member {String} image_name
  */
-AllowedImageInfo.prototype['image_name'] = undefined;
+AllowedImageInfo.prototype["image_name"] = undefined;
 
 /**
  * List of tags that are allowed for this image. Can be set to [\"*\"] to allow all tags.
  * @member {Array.<String>} image_tags
  */
-AllowedImageInfo.prototype['image_tags'] = undefined;
+AllowedImageInfo.prototype["image_tags"] = undefined;
 
 /**
  * A collection of arbitrary key-value pairs associated with this image that does not need predefined structure.
  * @member {Object.<String, String>} metadata
  */
-AllowedImageInfo.prototype['metadata'] = undefined;
+AllowedImageInfo.prototype["metadata"] = undefined;
 
 export default AllowedImageInfo;

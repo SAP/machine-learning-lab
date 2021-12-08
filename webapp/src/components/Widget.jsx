@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import Icon from '@material-ui/core/Icon';
-import Link from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
+import Icon from "@material-ui/core/Icon";
+import Link from "@material-ui/core/Link";
+import Typography from "@material-ui/core/Typography";
 
-import '../assets/colors.css';
+import "../assets/colors.css";
 
 function Widget(props) {
   const { className, classes, color, icon, link, name, value } = props;
@@ -48,11 +48,11 @@ Widget.propTypes = {
 };
 
 Widget.defaultProps = {
-  className: '',
+  className: "",
   classes: {},
-  color: 'white',
-  icon: '',
-  link: '',
+  color: "white",
+  icon: "",
+  link: "",
 };
 
 const StyledWidget = styled(Widget)`
@@ -98,7 +98,7 @@ const StyledWidget = styled(Widget)`
     -o-transition: all 0.95s;
     -webkit-transition: all 0.95s;
     transition: all 0.95s;
-    content: '.';
+    content: ".";
   }
 
   &.hover-expand-effect:hover:after {

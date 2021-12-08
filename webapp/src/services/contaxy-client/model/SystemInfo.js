@@ -11,8 +11,8 @@
  *
  */
 
-import ApiClient from '../ApiClient';
-import SystemState from './SystemState';
+import ApiClient from "../ApiClient";
+import SystemState from "./SystemState";
 
 /**
  * The SystemInfo model module.
@@ -36,8 +36,8 @@ class SystemInfo {
    * Only for internal use.
    */
   static initialize(obj, version, namespace) {
-    obj['version'] = version;
-    obj['namespace'] = namespace;
+    obj["version"] = version;
+    obj["namespace"] = namespace;
   }
 
   /**
@@ -51,21 +51,21 @@ class SystemInfo {
     if (data) {
       obj = obj || new SystemInfo();
 
-      if (data.hasOwnProperty('version')) {
-        obj['version'] = ApiClient.convertToType(data['version'], 'String');
+      if (data.hasOwnProperty("version")) {
+        obj["version"] = ApiClient.convertToType(data["version"], "String");
       }
-      if (data.hasOwnProperty('namespace')) {
-        obj['namespace'] = ApiClient.convertToType(data['namespace'], 'String');
+      if (data.hasOwnProperty("namespace")) {
+        obj["namespace"] = ApiClient.convertToType(data["namespace"], "String");
       }
-      if (data.hasOwnProperty('system_state')) {
-        obj['system_state'] = ApiClient.convertToType(
-          data['system_state'],
+      if (data.hasOwnProperty("system_state")) {
+        obj["system_state"] = ApiClient.convertToType(
+          data["system_state"],
           SystemState
         );
       }
-      if (data.hasOwnProperty('metadata')) {
-        obj['metadata'] = ApiClient.convertToType(data['metadata'], {
-          String: 'String',
+      if (data.hasOwnProperty("metadata")) {
+        obj["metadata"] = ApiClient.convertToType(data["metadata"], {
+          String: "String",
         });
       }
     }
@@ -77,24 +77,24 @@ class SystemInfo {
  * Platform version.
  * @member {String} version
  */
-SystemInfo.prototype['version'] = undefined;
+SystemInfo.prototype["version"] = undefined;
 
 /**
  * Namespace of this system.
  * @member {String} namespace
  */
-SystemInfo.prototype['namespace'] = undefined;
+SystemInfo.prototype["namespace"] = undefined;
 
 /**
  * The state of the system.
  * @member {module:model/SystemState} system_state
  */
-SystemInfo.prototype['system_state'] = undefined;
+SystemInfo.prototype["system_state"] = undefined;
 
 /**
  * Additional key-value metadata associated with this system.
  * @member {Object.<String, String>} metadata
  */
-SystemInfo.prototype['metadata'] = undefined;
+SystemInfo.prototype["metadata"] = undefined;
 
 export default SystemInfo;
