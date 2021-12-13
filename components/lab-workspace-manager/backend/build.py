@@ -70,10 +70,10 @@ def main(args: dict) -> None:
             github_url=GITHUB_URL, main_package=MAIN_PACKAGE, exit_on_error=True
         )
         # Publish distribution on pypi
-        build_python.publish_pypi_distribution(
-            pypi_token=args.get(build_python.FLAG_PYPI_TOKEN),
-            pypi_repository=args.get(build_python.FLAG_PYPI_REPOSITORY),
-        )
+        # build_python.publish_pypi_distribution(
+        #     pypi_token=args.get(build_python.FLAG_PYPI_TOKEN),
+        #     pypi_repository=args.get(build_python.FLAG_PYPI_REPOSITORY),
+        # )
 
         # TODO: Publish coverage report: if private repo set CODECOV_TOKEN="token" or use -t
         # build_utils.run("curl -s https://codecov.io/bash | bash -s", exit_on_error=False)

@@ -3,7 +3,7 @@ services:
   # The main ML Lab backend container that serves as entrypoint for all traffic
   # Contains the contaxy server and hosts the ML Lab web app
   ml-lab-backend:
-    image: ml-lab-backend:latest
+    image: lab-backend:latest
     container_name: ml-lab-backend
     ports:
       - "30010:8080"
@@ -27,6 +27,7 @@ services:
       - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
       - BACKEND_CORS_ORIGINS=http://localhost:3000
       - DEBUG=False
+      - WEB_CONCURRENCY=1
     depends_on:
       - postgres
       - s3

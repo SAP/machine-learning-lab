@@ -4,8 +4,13 @@ from universal_build import build_utils
 
 args = build_utils.parse_arguments()
 
-build_utils.log("Install essentials")
-build_utils.run("yarn install", exit_on_error=False)
+if (
+    args.get(build_utils.FLAG_CHECK)
+    or args.get(build_utils.FLAG_MAKE)
+    or args.get(build_utils.FLAG_TEST)
+):
+    build_utils.log("Install essentials")
+    build_utils.run("yarn install", exit_on_error=False)
 
 if args.get(build_utils.FLAG_CHECK):
     build_utils.log("Run prettier:")

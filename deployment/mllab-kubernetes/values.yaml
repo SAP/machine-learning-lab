@@ -2,9 +2,6 @@
 
 # General ML Lab configuration
 labConfig:
-  # Secret that is used for generating the JWT API token of ML Lab
-  # This must be kept secret and the value should not be pushed into version control
-  jwtSecret: "pleasechange-pleasechange-pleasechange-pleasechange"
   # Prefix to add to the ML Lab API endpoints. Useful if ML Lab is served behind a reverse proxy on a subpath
   baseUrlPrefix: ""
   # Configure an external Open ID Connect (OIDC) provider for passwordless login
