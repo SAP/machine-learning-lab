@@ -31,6 +31,15 @@ RUN \
   apt-get update \
   && apt-get install -y libpq-dev
 
+# Update node and yarn version
+RUN apt-get update \
+    && curl -sL https://deb.nodesource.com/setup_17.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
+    && npm install -g yarn@1 \
+    # Clean up
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY extended-entrypoint.sh /extended-entrypoint.sh
 
 RUN chmod +x /extended-entrypoint.sh
