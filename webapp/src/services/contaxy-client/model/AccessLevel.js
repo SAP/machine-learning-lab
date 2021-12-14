@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from "../ApiClient";
+import ApiClient from '../ApiClient';
 /**
  * Enum class AccessLevel.
  * @enum {}
@@ -22,19 +22,19 @@ export default class AccessLevel {
    * value: "read"
    * @const
    */
-  read = "read";
+  read = 'read';
 
   /**
    * value: "write"
    * @const
    */
-  write = "write";
+  write = 'write';
 
   /**
    * value: "admin"
    * @const
    */
-  admin = "admin";
+  admin = 'admin';
 
   /**
    * Returns a <code>AccessLevel</code> enum value from a Javascript object name.

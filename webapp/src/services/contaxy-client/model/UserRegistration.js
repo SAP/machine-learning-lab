@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from "../ApiClient";
+import ApiClient from '../ApiClient';
 
 /**
  * The UserRegistration model module.
@@ -45,17 +45,17 @@ class UserRegistration {
     if (data) {
       obj = obj || new UserRegistration();
 
-      if (data.hasOwnProperty("username")) {
-        obj["username"] = ApiClient.convertToType(data["username"], "String");
+      if (data.hasOwnProperty('username')) {
+        obj['username'] = ApiClient.convertToType(data['username'], 'String');
       }
-      if (data.hasOwnProperty("email")) {
-        obj["email"] = ApiClient.convertToType(data["email"], "String");
+      if (data.hasOwnProperty('email')) {
+        obj['email'] = ApiClient.convertToType(data['email'], 'String');
       }
-      if (data.hasOwnProperty("disabled")) {
-        obj["disabled"] = ApiClient.convertToType(data["disabled"], "Boolean");
+      if (data.hasOwnProperty('disabled')) {
+        obj['disabled'] = ApiClient.convertToType(data['disabled'], 'Boolean');
       }
-      if (data.hasOwnProperty("password")) {
-        obj["password"] = ApiClient.convertToType(data["password"], "String");
+      if (data.hasOwnProperty('password')) {
+        obj['password'] = ApiClient.convertToType(data['password'], 'String');
       }
     }
     return obj;
@@ -66,25 +66,25 @@ class UserRegistration {
  * A unique username on the system.
  * @member {String} username
  */
-UserRegistration.prototype["username"] = undefined;
+UserRegistration.prototype['username'] = undefined;
 
 /**
  * User email address.
  * @member {String} email
  */
-UserRegistration.prototype["email"] = undefined;
+UserRegistration.prototype['email'] = undefined;
 
 /**
  * Indicates that user is disabled. Disabling a user will prevent any access to user-accesible resources.
  * @member {Boolean} disabled
  * @default false
  */
-UserRegistration.prototype["disabled"] = false;
+UserRegistration.prototype['disabled'] = false;
 
 /**
  * Password for the user. The password will be stored in as a hash.
  * @member {String} password
  */
-UserRegistration.prototype["password"] = undefined;
+UserRegistration.prototype['password'] = undefined;
 
 export default UserRegistration;

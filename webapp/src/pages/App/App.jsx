@@ -1,21 +1,21 @@
 // eslint-disable-next-line camelcase
-import { unstable_batchedUpdates } from "react-dom";
-import React, { useCallback, useEffect, useState } from "react";
+import { unstable_batchedUpdates } from 'react-dom';
+import React, { useCallback, useEffect, useState } from 'react';
 
 // import { useTranslation } from 'react-i18next';
 
-import "./App.css";
+import './App.css';
 import {
   SELECTED_PROJECT_LOCAL_STORAGE_KEY,
   authApi,
   extensionsApi,
   usersApi,
-} from "../../services/contaxy-api";
-import { mapExtensionToAppPage } from "../../utils/app-pages";
-import AppBar from "../../components/AppBar/AppBar";
-import AppDrawer from "../../components/AppDrawer/AppDrawer";
-import ContentContainer from "../../app/routing/ContentContainer";
-import GlobalStateContainer from "../../app/store";
+} from '../../services/contaxy-api';
+import { mapExtensionToAppPage } from '../../utils/app-pages';
+import AppBar from '../../components/AppBar/AppBar';
+import AppDrawer from '../../components/AppDrawer/AppDrawer';
+import ContentContainer from '../../app/routing/ContentContainer';
+import GlobalStateContainer from '../../app/store';
 
 function App() {
   // const { t } = useTranslation();
@@ -55,7 +55,7 @@ function App() {
       }
       try {
         await authApi.verifyAccess({
-          permission: "*#admin",
+          permission: '*#admin',
         });
         userInfo.is_admin = true;
       } catch (e) {
@@ -106,7 +106,7 @@ function App() {
     authApi
       .oauthEnabled()
       .then((res) => {
-        setOauthEnabled(res === "1");
+        setOauthEnabled(res === '1');
       })
       .catch(() => {
         setOauthEnabled(false);
@@ -117,7 +117,7 @@ function App() {
   useEffect(() => {
     if (!isAuthenticated) return;
     extensionsApi
-      .listExtensions("ctxy-global")
+      .listExtensions('ctxy-global')
       .then((res) => setProjectExtensions(res))
       .catch(() => {});
   }, [isAuthenticated, setProjectExtensions]);

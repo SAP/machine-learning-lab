@@ -1,20 +1,20 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from 'react';
 // import React, { useCallback, useMemo } from 'react';
-import { useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import Button from "@material-ui/core/Button";
+import Button from '@material-ui/core/Button';
 
-import { servicesApi } from "../../services/contaxy-api";
-import { useServices } from "../../services/api-hooks";
-import { useShowAppDialog } from "../../app/AppDialogServiceProvider";
-import ContentDialog from "../../components/Dialogs/ContentDialog";
-import DeployServiceDialog from "../../components/Dialogs/DeployContainerDialog";
-import GlobalStateContainer from "../../app/store";
-import ResourceActionsDialog from "../../components/Dialogs/ResourceActionsDialog";
-import ServicesContainer from "./ServicesContainer";
-import showStandardSnackbar from "../../app/showStandardSnackbar";
+import { servicesApi } from '../../services/contaxy-api';
+import { useServices } from '../../services/api-hooks';
+import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
+import ContentDialog from '../../components/Dialogs/ContentDialog';
+import DeployServiceDialog from '../../components/Dialogs/DeployContainerDialog';
+import GlobalStateContainer from '../../app/store';
+import ResourceActionsDialog from '../../components/Dialogs/ResourceActionsDialog';
+import ServicesContainer from './ServicesContainer';
+import showStandardSnackbar from '../../app/showStandardSnackbar';
 
 function Services(props) {
   const { className } = props;
@@ -61,10 +61,10 @@ function Services(props) {
         );
         showAppDialog(ContentDialog, {
           jsonContent: serviceMetadata,
-          title: "Service Metadata",
+          title: 'Service Metadata',
         });
       } catch (err) {
-        showStandardSnackbar("Could not load service metadata");
+        showStandardSnackbar('Could not load service metadata');
       }
     },
     [showAppDialog]
@@ -74,9 +74,9 @@ function Services(props) {
     async (projectId, serviceId) => {
       try {
         const logs = await servicesApi.getServiceLogs(projectId, serviceId);
-        showAppDialog(ContentDialog, { content: logs, title: "Logs" });
+        showAppDialog(ContentDialog, { content: logs, title: 'Logs' });
       } catch (err) {
-        showStandardSnackbar("Could not load service logs");
+        showStandardSnackbar('Could not load service logs');
       }
     },
     [showAppDialog]
@@ -107,7 +107,7 @@ function Services(props) {
 
       if (resourceAction.instructions) {
         resourceAction.instructions.some((instruction) => {
-          if (instruction.type && instruction.type === "new-tab") {
+          if (instruction.type && instruction.type === 'new-tab') {
             window.open(instruction.url);
             return true;
           }
@@ -183,7 +183,7 @@ function Services(props) {
         onClick={onServiceDeploy}
         className={`${className} button`}
       >
-        {`${t("add")} ${t("service")}`}
+        {`${t('add')} ${t('service')}`}
       </Button>
       {servicesContainer}
       {/* <ServicesContainer
@@ -211,7 +211,7 @@ Services.propTypes = {
 };
 
 Services.defaultProps = {
-  className: "",
+  className: '',
 };
 
 const StyledServices = styled(Services)`

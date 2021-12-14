@@ -11,13 +11,13 @@
  *
  */
 
-import ApiClient from "../ApiClient";
-import ApiToken from "../model/ApiToken";
-import OAuth2ErrorDetails from "../model/OAuth2ErrorDetails";
-import OAuthToken from "../model/OAuthToken";
-import OAuthTokenIntrospection from "../model/OAuthTokenIntrospection";
-import ProblemDetails from "../model/ProblemDetails";
-import TokenType from "../model/TokenType";
+import ApiClient from '../ApiClient';
+import ApiToken from '../model/ApiToken';
+import OAuth2ErrorDetails from '../model/OAuth2ErrorDetails';
+import OAuthToken from '../model/OAuthToken';
+import OAuthTokenIntrospection from '../model/OAuthTokenIntrospection';
+import ProblemDetails from '../model/ProblemDetails';
+import TokenType from '../model/TokenType';
 
 /**
  * Auth service.
@@ -51,25 +51,25 @@ export default class AuthApi {
 
     let pathParams = {};
     let queryParams = {
-      scopes: this.apiClient.buildCollectionParam(opts["scopes"], "multi"),
-      token_type: opts["tokenType"],
-      description: opts["description"],
+      scopes: this.apiClient.buildCollectionParam(opts['scopes'], 'multi'),
+      token_type: opts['tokenType'],
+      description: opts['description'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
-    let returnType = "String";
+    let accepts = ['application/json'];
+    let returnType = 'String';
     return this.apiClient.callApi(
-      "/auth/tokens",
-      "POST",
+      '/auth/tokens',
+      'POST',
       pathParams,
       queryParams,
       headerParams,
@@ -123,16 +123,16 @@ export default class AuthApi {
     let headerParams = {};
     let formParams = {
       token: token,
-      token_type_hint: opts["tokenTypeHint"],
+      token_type_hint: opts['tokenTypeHint'],
     };
 
     let authNames = [];
-    let contentTypes = ["application/x-www-form-urlencoded"];
-    let accepts = ["application/json"];
+    let contentTypes = ['application/x-www-form-urlencoded'];
+    let accepts = ['application/json'];
     let returnType = OAuthTokenIntrospection;
     return this.apiClient.callApi(
-      "/auth/oauth/introspect",
-      "POST",
+      '/auth/oauth/introspect',
+      'POST',
       pathParams,
       queryParams,
       headerParams,
@@ -176,17 +176,17 @@ export default class AuthApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = [ApiToken];
     return this.apiClient.callApi(
-      "/auth/tokens",
-      "GET",
+      '/auth/tokens',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -232,18 +232,18 @@ export default class AuthApi {
     let pathParams = {};
     let queryParams = {
       code: code,
-      state: opts["state"],
+      state: opts['state'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = Object;
     return this.apiClient.callApi(
-      "/auth/oauth/callback",
-      "GET",
+      '/auth/oauth/callback',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -304,12 +304,12 @@ export default class AuthApi {
     };
 
     let authNames = [];
-    let contentTypes = ["application/x-www-form-urlencoded"];
-    let accepts = ["application/json"];
+    let contentTypes = ['application/x-www-form-urlencoded'];
+    let accepts = ['application/json'];
     let returnType = null;
     return this.apiClient.callApi(
-      "/auth/login",
-      "GET",
+      '/auth/login',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -353,11 +353,11 @@ export default class AuthApi {
 
     let authNames = [];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = null;
     return this.apiClient.callApi(
-      "/auth/logout",
-      "GET",
+      '/auth/logout',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -399,11 +399,11 @@ export default class AuthApi {
 
     let authNames = [];
     let contentTypes = [];
-    let accepts = ["application/json"];
-    let returnType = "String";
+    let accepts = ['application/json'];
+    let returnType = 'String';
     return this.apiClient.callApi(
-      "/auth/oauth/enabled",
-      "GET",
+      '/auth/oauth/enabled',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -443,11 +443,11 @@ export default class AuthApi {
 
     let authNames = [];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = null;
     return this.apiClient.callApi(
-      "/auth/login-page",
-      "GET",
+      '/auth/login-page',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -504,25 +504,25 @@ export default class AuthApi {
     let headerParams = {};
     let formParams = {
       grant_type: grantType,
-      username: opts["username"],
-      password: opts["password"],
-      scope: opts["scope"],
-      client_id: opts["clientId"],
-      client_secret: opts["clientSecret"],
-      code: opts["code"],
-      redirect_uri: opts["redirectUri"],
-      refresh_token: opts["refreshToken"],
-      state: opts["state"],
-      set_as_cookie: opts["setAsCookie"],
+      username: opts['username'],
+      password: opts['password'],
+      scope: opts['scope'],
+      client_id: opts['clientId'],
+      client_secret: opts['clientSecret'],
+      code: opts['code'],
+      redirect_uri: opts['redirectUri'],
+      refresh_token: opts['refreshToken'],
+      state: opts['state'],
+      set_as_cookie: opts['setAsCookie'],
     };
 
     let authNames = [];
-    let contentTypes = ["application/x-www-form-urlencoded"];
-    let accepts = ["application/json"];
+    let contentTypes = ['application/x-www-form-urlencoded'];
+    let accepts = ['application/json'];
     let returnType = OAuthToken;
     return this.apiClient.callApi(
-      "/auth/oauth/token",
-      "POST",
+      '/auth/oauth/token',
+      'POST',
       pathParams,
       queryParams,
       headerParams,
@@ -584,16 +584,16 @@ export default class AuthApi {
     let headerParams = {};
     let formParams = {
       token: token,
-      token_type_hint: opts["tokenTypeHint"],
+      token_type_hint: opts['tokenTypeHint'],
     };
 
     let authNames = [];
-    let contentTypes = ["application/x-www-form-urlencoded"];
-    let accepts = ["application/json"];
+    let contentTypes = ['application/x-www-form-urlencoded'];
+    let accepts = ['application/json'];
     let returnType = Object;
     return this.apiClient.callApi(
-      "/auth/oauth/revoke",
-      "POST",
+      '/auth/oauth/revoke',
+      'POST',
       pathParams,
       queryParams,
       headerParams,
@@ -633,27 +633,27 @@ export default class AuthApi {
    */
   verifyAccessWithHttpInfo(opts) {
     opts = opts || {};
-    let postBody = opts["body"];
+    let postBody = opts['body'];
 
     let pathParams = {};
     let queryParams = {
-      permission: opts["permission"],
+      permission: opts['permission'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
-    let contentTypes = ["application/json"];
-    let accepts = ["application/json"];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
     let returnType = null;
     return this.apiClient.callApi(
-      "/auth/tokens/verify",
-      "POST",
+      '/auth/tokens/verify',
+      'POST',
       pathParams,
       queryParams,
       headerParams,

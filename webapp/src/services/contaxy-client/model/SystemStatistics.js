@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from "../ApiClient";
+import ApiClient from '../ApiClient';
 
 /**
  * The SystemStatistics model module.
@@ -52,11 +52,11 @@ class SystemStatistics {
     serviceCount,
     fileCount
   ) {
-    obj["project_count"] = projectCount;
-    obj["user_count"] = userCount;
-    obj["job_count"] = jobCount;
-    obj["service_count"] = serviceCount;
-    obj["file_count"] = fileCount;
+    obj['project_count'] = projectCount;
+    obj['user_count'] = userCount;
+    obj['job_count'] = jobCount;
+    obj['service_count'] = serviceCount;
+    obj['file_count'] = fileCount;
   }
 
   /**
@@ -70,31 +70,31 @@ class SystemStatistics {
     if (data) {
       obj = obj || new SystemStatistics();
 
-      if (data.hasOwnProperty("project_count")) {
-        obj["project_count"] = ApiClient.convertToType(
-          data["project_count"],
-          "Number"
+      if (data.hasOwnProperty('project_count')) {
+        obj['project_count'] = ApiClient.convertToType(
+          data['project_count'],
+          'Number'
         );
       }
-      if (data.hasOwnProperty("user_count")) {
-        obj["user_count"] = ApiClient.convertToType(
-          data["user_count"],
-          "Number"
+      if (data.hasOwnProperty('user_count')) {
+        obj['user_count'] = ApiClient.convertToType(
+          data['user_count'],
+          'Number'
         );
       }
-      if (data.hasOwnProperty("job_count")) {
-        obj["job_count"] = ApiClient.convertToType(data["job_count"], "Number");
+      if (data.hasOwnProperty('job_count')) {
+        obj['job_count'] = ApiClient.convertToType(data['job_count'], 'Number');
       }
-      if (data.hasOwnProperty("service_count")) {
-        obj["service_count"] = ApiClient.convertToType(
-          data["service_count"],
-          "Number"
+      if (data.hasOwnProperty('service_count')) {
+        obj['service_count'] = ApiClient.convertToType(
+          data['service_count'],
+          'Number'
         );
       }
-      if (data.hasOwnProperty("file_count")) {
-        obj["file_count"] = ApiClient.convertToType(
-          data["file_count"],
-          "Number"
+      if (data.hasOwnProperty('file_count')) {
+        obj['file_count'] = ApiClient.convertToType(
+          data['file_count'],
+          'Number'
         );
       }
     }
@@ -105,26 +105,26 @@ class SystemStatistics {
 /**
  * @member {Number} project_count
  */
-SystemStatistics.prototype["project_count"] = undefined;
+SystemStatistics.prototype['project_count'] = undefined;
 
 /**
  * @member {Number} user_count
  */
-SystemStatistics.prototype["user_count"] = undefined;
+SystemStatistics.prototype['user_count'] = undefined;
 
 /**
  * @member {Number} job_count
  */
-SystemStatistics.prototype["job_count"] = undefined;
+SystemStatistics.prototype['job_count'] = undefined;
 
 /**
  * @member {Number} service_count
  */
-SystemStatistics.prototype["service_count"] = undefined;
+SystemStatistics.prototype['service_count'] = undefined;
 
 /**
  * @member {Number} file_count
  */
-SystemStatistics.prototype["file_count"] = undefined;
+SystemStatistics.prototype['file_count'] = undefined;
 
 export default SystemStatistics;

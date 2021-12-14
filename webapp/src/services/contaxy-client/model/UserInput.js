@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from "../ApiClient";
+import ApiClient from '../ApiClient';
 
 /**
  * The UserInput model module.
@@ -45,14 +45,14 @@ class UserInput {
     if (data) {
       obj = obj || new UserInput();
 
-      if (data.hasOwnProperty("username")) {
-        obj["username"] = ApiClient.convertToType(data["username"], "String");
+      if (data.hasOwnProperty('username')) {
+        obj['username'] = ApiClient.convertToType(data['username'], 'String');
       }
-      if (data.hasOwnProperty("email")) {
-        obj["email"] = ApiClient.convertToType(data["email"], "String");
+      if (data.hasOwnProperty('email')) {
+        obj['email'] = ApiClient.convertToType(data['email'], 'String');
       }
-      if (data.hasOwnProperty("disabled")) {
-        obj["disabled"] = ApiClient.convertToType(data["disabled"], "Boolean");
+      if (data.hasOwnProperty('disabled')) {
+        obj['disabled'] = ApiClient.convertToType(data['disabled'], 'Boolean');
       }
     }
     return obj;
@@ -63,19 +63,19 @@ class UserInput {
  * A unique username on the system.
  * @member {String} username
  */
-UserInput.prototype["username"] = undefined;
+UserInput.prototype['username'] = undefined;
 
 /**
  * User email address.
  * @member {String} email
  */
-UserInput.prototype["email"] = undefined;
+UserInput.prototype['email'] = undefined;
 
 /**
  * Indicates that user is disabled. Disabling a user will prevent any access to user-accesible resources.
  * @member {Boolean} disabled
  * @default false
  */
-UserInput.prototype["disabled"] = false;
+UserInput.prototype['disabled'] = false;
 
 export default UserInput;

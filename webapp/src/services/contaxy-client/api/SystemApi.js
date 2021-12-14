@@ -11,11 +11,11 @@
  *
  */
 
-import ApiClient from "../ApiClient";
-import AllowedImageInfo from "../model/AllowedImageInfo";
-import ProblemDetails from "../model/ProblemDetails";
-import SystemInfo from "../model/SystemInfo";
-import SystemStatistics from "../model/SystemStatistics";
+import ApiClient from '../ApiClient';
+import AllowedImageInfo from '../model/AllowedImageInfo';
+import ProblemDetails from '../model/ProblemDetails';
+import SystemInfo from '../model/SystemInfo';
+import SystemStatistics from '../model/SystemStatistics';
 
 /**
  * System service.
@@ -54,17 +54,17 @@ export default class SystemApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
-    let contentTypes = ["application/json"];
-    let accepts = ["application/json"];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
     let returnType = AllowedImageInfo;
     return this.apiClient.callApi(
-      "/system/allowed-images",
-      "POST",
+      '/system/allowed-images',
+      'POST',
       pathParams,
       queryParams,
       headerParams,
@@ -106,11 +106,11 @@ export default class SystemApi {
 
     let authNames = [];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = null;
     return this.apiClient.callApi(
-      "/system/health",
-      "GET",
+      '/system/health',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -159,17 +159,17 @@ export default class SystemApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = null;
     return this.apiClient.callApi(
-      "/system/allowed-images",
-      "DELETE",
+      '/system/allowed-images',
+      'DELETE',
       pathParams,
       queryParams,
       headerParams,
@@ -211,11 +211,11 @@ export default class SystemApi {
 
     let authNames = [];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = SystemInfo;
     return this.apiClient.callApi(
-      "/system/info",
-      "GET",
+      '/system/info',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -254,17 +254,17 @@ export default class SystemApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = SystemStatistics;
     return this.apiClient.callApi(
-      "/system/statistics",
-      "GET",
+      '/system/statistics',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -306,11 +306,11 @@ export default class SystemApi {
 
     let authNames = [];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = null;
     return this.apiClient.callApi(
-      "/system/initialize",
-      "POST",
+      '/system/initialize',
+      'POST',
       pathParams,
       queryParams,
       headerParams,
@@ -350,17 +350,17 @@ export default class SystemApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = [AllowedImageInfo];
     return this.apiClient.callApi(
-      "/system/allowed-images",
-      "GET",
+      '/system/allowed-images',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -416,12 +416,12 @@ export default class SystemApi {
     };
 
     let authNames = [];
-    let contentTypes = ["application/x-www-form-urlencoded"];
-    let accepts = ["application/json"];
+    let contentTypes = ['application/x-www-form-urlencoded'];
+    let accepts = ['application/json'];
     let returnType = Object;
     return this.apiClient.callApi(
-      "/system/admin",
-      "POST",
+      '/system/admin',
+      'POST',
       pathParams,
       queryParams,
       headerParams,

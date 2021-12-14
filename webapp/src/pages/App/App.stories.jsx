@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import App from "./App";
+import App from './App';
 
 export default {
-  title: "Example/App",
+  title: 'Example/App',
 };
 
 const Template = () => <App />;

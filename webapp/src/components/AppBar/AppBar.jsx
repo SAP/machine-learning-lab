@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import IconButton from "@material-ui/core/IconButton";
-import MaterialUiAppBar from "@material-ui/core/AppBar";
-import MenuIcon from "@material-ui/icons/Menu";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+import IconButton from '@material-ui/core/IconButton';
+import MaterialUiAppBar from '@material-ui/core/AppBar';
+import MenuIcon from '@material-ui/icons/Menu';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
-import { APP_NAME } from "../../utils/config";
-import { useProjectSelector } from "../../utils/app-utils";
-import GlobalStateContainer from "../../app/store";
-import ProjectSelector from "./ProjectSelector";
-import UserMenu from "./UserMenu";
+import { APP_NAME } from '../../utils/config';
+import { useProjectSelector } from '../../utils/app-utils';
+import GlobalStateContainer from '../../app/store';
+import ProjectSelector from './ProjectSelector';
+import UserMenu from './UserMenu';
 
 function AppBar(props) {
   const { activeProject, projects, user } = GlobalStateContainer.useContainer();
@@ -75,7 +75,7 @@ AppBar.propTypes = {
 };
 
 AppBar.defaultProps = {
-  className: "",
+  className: '',
   isAuthenticated: false,
 };
 
@@ -86,7 +86,7 @@ const StyledAppBar = styled(AppBar)`
 
   &.title {
     flex: 1;
-    margin-left: ${(props) => (props.isAuthenticated ? "0px" : "24px")};
+    margin-left: ${(props) => (props.isAuthenticated ? '0px' : '24px')};
     font-weight: 300;
     text-align: left;
   }

@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from "../ApiClient";
+import ApiClient from '../ApiClient';
 
 /**
  * The BodyLoginUserSessionAuthLoginGet model module.
@@ -35,8 +35,8 @@ class BodyLoginUserSessionAuthLoginGet {
    * Only for internal use.
    */
   static initialize(obj, username, password) {
-    obj["username"] = username;
-    obj["password"] = password;
+    obj['username'] = username;
+    obj['password'] = password;
   }
 
   /**
@@ -50,11 +50,11 @@ class BodyLoginUserSessionAuthLoginGet {
     if (data) {
       obj = obj || new BodyLoginUserSessionAuthLoginGet();
 
-      if (data.hasOwnProperty("username")) {
-        obj["username"] = ApiClient.convertToType(data["username"], "String");
+      if (data.hasOwnProperty('username')) {
+        obj['username'] = ApiClient.convertToType(data['username'], 'String');
       }
-      if (data.hasOwnProperty("password")) {
-        obj["password"] = ApiClient.convertToType(data["password"], "String");
+      if (data.hasOwnProperty('password')) {
+        obj['password'] = ApiClient.convertToType(data['password'], 'String');
       }
     }
     return obj;
@@ -65,12 +65,12 @@ class BodyLoginUserSessionAuthLoginGet {
  * The user’s username or email used for login.
  * @member {String} username
  */
-BodyLoginUserSessionAuthLoginGet.prototype["username"] = undefined;
+BodyLoginUserSessionAuthLoginGet.prototype['username'] = undefined;
 
 /**
  * The user’s password.
  * @member {String} password
  */
-BodyLoginUserSessionAuthLoginGet.prototype["password"] = undefined;
+BodyLoginUserSessionAuthLoginGet.prototype['password'] = undefined;
 
 export default BodyLoginUserSessionAuthLoginGet;

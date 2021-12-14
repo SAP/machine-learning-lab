@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from "../ApiClient";
+import ApiClient from '../ApiClient';
 
 /**
  * The BodyRequestTokenAuthOauthTokenPost model module.
@@ -34,7 +34,7 @@ class BodyRequestTokenAuthOauthTokenPost {
    * Only for internal use.
    */
   static initialize(obj, grantType) {
-    obj["grant_type"] = grantType;
+    obj['grant_type'] = grantType;
   }
 
   /**
@@ -48,48 +48,48 @@ class BodyRequestTokenAuthOauthTokenPost {
     if (data) {
       obj = obj || new BodyRequestTokenAuthOauthTokenPost();
 
-      if (data.hasOwnProperty("grant_type")) {
-        obj["grant_type"] = ApiClient.convertToType(data["grant_type"], Object);
+      if (data.hasOwnProperty('grant_type')) {
+        obj['grant_type'] = ApiClient.convertToType(data['grant_type'], Object);
       }
-      if (data.hasOwnProperty("username")) {
-        obj["username"] = ApiClient.convertToType(data["username"], Object);
+      if (data.hasOwnProperty('username')) {
+        obj['username'] = ApiClient.convertToType(data['username'], Object);
       }
-      if (data.hasOwnProperty("password")) {
-        obj["password"] = ApiClient.convertToType(data["password"], Object);
+      if (data.hasOwnProperty('password')) {
+        obj['password'] = ApiClient.convertToType(data['password'], Object);
       }
-      if (data.hasOwnProperty("scope")) {
-        obj["scope"] = ApiClient.convertToType(data["scope"], Object);
+      if (data.hasOwnProperty('scope')) {
+        obj['scope'] = ApiClient.convertToType(data['scope'], Object);
       }
-      if (data.hasOwnProperty("client_id")) {
-        obj["client_id"] = ApiClient.convertToType(data["client_id"], Object);
+      if (data.hasOwnProperty('client_id')) {
+        obj['client_id'] = ApiClient.convertToType(data['client_id'], Object);
       }
-      if (data.hasOwnProperty("client_secret")) {
-        obj["client_secret"] = ApiClient.convertToType(
-          data["client_secret"],
+      if (data.hasOwnProperty('client_secret')) {
+        obj['client_secret'] = ApiClient.convertToType(
+          data['client_secret'],
           Object
         );
       }
-      if (data.hasOwnProperty("code")) {
-        obj["code"] = ApiClient.convertToType(data["code"], Object);
+      if (data.hasOwnProperty('code')) {
+        obj['code'] = ApiClient.convertToType(data['code'], Object);
       }
-      if (data.hasOwnProperty("redirect_uri")) {
-        obj["redirect_uri"] = ApiClient.convertToType(
-          data["redirect_uri"],
+      if (data.hasOwnProperty('redirect_uri')) {
+        obj['redirect_uri'] = ApiClient.convertToType(
+          data['redirect_uri'],
           Object
         );
       }
-      if (data.hasOwnProperty("refresh_token")) {
-        obj["refresh_token"] = ApiClient.convertToType(
-          data["refresh_token"],
+      if (data.hasOwnProperty('refresh_token')) {
+        obj['refresh_token'] = ApiClient.convertToType(
+          data['refresh_token'],
           Object
         );
       }
-      if (data.hasOwnProperty("state")) {
-        obj["state"] = ApiClient.convertToType(data["state"], Object);
+      if (data.hasOwnProperty('state')) {
+        obj['state'] = ApiClient.convertToType(data['state'], Object);
       }
-      if (data.hasOwnProperty("set_as_cookie")) {
-        obj["set_as_cookie"] = ApiClient.convertToType(
-          data["set_as_cookie"],
+      if (data.hasOwnProperty('set_as_cookie')) {
+        obj['set_as_cookie'] = ApiClient.convertToType(
+          data['set_as_cookie'],
           Object
         );
       }
@@ -101,56 +101,56 @@ class BodyRequestTokenAuthOauthTokenPost {
 /**
  * @member {Object} grant_type
  */
-BodyRequestTokenAuthOauthTokenPost.prototype["grant_type"] = undefined;
+BodyRequestTokenAuthOauthTokenPost.prototype['grant_type'] = undefined;
 
 /**
  * @member {Object} username
  */
-BodyRequestTokenAuthOauthTokenPost.prototype["username"] = undefined;
+BodyRequestTokenAuthOauthTokenPost.prototype['username'] = undefined;
 
 /**
  * @member {Object} password
  */
-BodyRequestTokenAuthOauthTokenPost.prototype["password"] = undefined;
+BodyRequestTokenAuthOauthTokenPost.prototype['password'] = undefined;
 
 /**
  * @member {Object} scope
  */
-BodyRequestTokenAuthOauthTokenPost.prototype["scope"] = undefined;
+BodyRequestTokenAuthOauthTokenPost.prototype['scope'] = undefined;
 
 /**
  * @member {Object} client_id
  */
-BodyRequestTokenAuthOauthTokenPost.prototype["client_id"] = undefined;
+BodyRequestTokenAuthOauthTokenPost.prototype['client_id'] = undefined;
 
 /**
  * @member {Object} client_secret
  */
-BodyRequestTokenAuthOauthTokenPost.prototype["client_secret"] = undefined;
+BodyRequestTokenAuthOauthTokenPost.prototype['client_secret'] = undefined;
 
 /**
  * @member {Object} code
  */
-BodyRequestTokenAuthOauthTokenPost.prototype["code"] = undefined;
+BodyRequestTokenAuthOauthTokenPost.prototype['code'] = undefined;
 
 /**
  * @member {Object} redirect_uri
  */
-BodyRequestTokenAuthOauthTokenPost.prototype["redirect_uri"] = undefined;
+BodyRequestTokenAuthOauthTokenPost.prototype['redirect_uri'] = undefined;
 
 /**
  * @member {Object} refresh_token
  */
-BodyRequestTokenAuthOauthTokenPost.prototype["refresh_token"] = undefined;
+BodyRequestTokenAuthOauthTokenPost.prototype['refresh_token'] = undefined;
 
 /**
  * @member {Object} state
  */
-BodyRequestTokenAuthOauthTokenPost.prototype["state"] = undefined;
+BodyRequestTokenAuthOauthTokenPost.prototype['state'] = undefined;
 
 /**
  * @member {Object} set_as_cookie
  */
-BodyRequestTokenAuthOauthTokenPost.prototype["set_as_cookie"] = undefined;
+BodyRequestTokenAuthOauthTokenPost.prototype['set_as_cookie'] = undefined;
 
 export default BodyRequestTokenAuthOauthTokenPost;

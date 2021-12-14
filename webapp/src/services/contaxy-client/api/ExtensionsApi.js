@@ -11,10 +11,10 @@
  *
  */
 
-import ApiClient from "../ApiClient";
-import Extension from "../model/Extension";
-import ExtensionInput from "../model/ExtensionInput";
-import ProblemDetails from "../model/ProblemDetails";
+import ApiClient from '../ApiClient';
+import Extension from '../model/Extension';
+import ExtensionInput from '../model/ExtensionInput';
+import ProblemDetails from '../model/ProblemDetails';
 
 /**
  * Extensions service.
@@ -64,17 +64,17 @@ export default class ExtensionsApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = null;
     return this.apiClient.callApi(
-      "/projects/{project_id}/extensions/{extension_id}",
-      "DELETE",
+      '/projects/{project_id}/extensions/{extension_id}',
+      'DELETE',
       pathParams,
       queryParams,
       headerParams,
@@ -134,17 +134,17 @@ export default class ExtensionsApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = Extension;
     return this.apiClient.callApi(
-      "/projects/{project_id}/extensions/{extension_id}",
-      "GET",
+      '/projects/{project_id}/extensions/{extension_id}',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -203,17 +203,17 @@ export default class ExtensionsApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
-    let contentTypes = ["application/json"];
-    let accepts = ["application/json"];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
     let returnType = Extension;
     return this.apiClient.callApi(
-      "/projects/{project_id}/extensions",
-      "POST",
+      '/projects/{project_id}/extensions',
+      'POST',
       pathParams,
       queryParams,
       headerParams,
@@ -265,17 +265,17 @@ export default class ExtensionsApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = [Extension];
     return this.apiClient.callApi(
-      "/projects/{project_id}/extensions",
-      "GET",
+      '/projects/{project_id}/extensions',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -335,17 +335,17 @@ export default class ExtensionsApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = ExtensionInput;
     return this.apiClient.callApi(
-      "/projects/{project_id}/extensions:suggest-config",
-      "GET",
+      '/projects/{project_id}/extensions:suggest-config',
+      'GET',
       pathParams,
       queryParams,
       headerParams,

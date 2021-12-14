@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import { Redirect, Route } from "react-router-dom";
-import PropTypes from "prop-types";
+import { Redirect, Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 /* eslint-disable react/jsx-props-no-spreading */
 function PrivateRoute({
@@ -19,7 +19,7 @@ function PrivateRoute({
           <Component {...props} {...componentProps} />
         ) : (
           <Redirect
-            to={{ pathname: "/login", state: { from: props.location } }} // eslint-disable-line react/prop-types
+            to={{ pathname: '/login', state: { from: props.location } }} // eslint-disable-line react/prop-types
           />
         )
       }

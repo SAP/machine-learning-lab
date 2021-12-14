@@ -1,1 +1,4 @@
-"prettier/prettier": ["error", { "endOfLine": "auto", "sin" }]
+{
+  "singleQuote": true,
+  "endOfLine": "auto"
+}

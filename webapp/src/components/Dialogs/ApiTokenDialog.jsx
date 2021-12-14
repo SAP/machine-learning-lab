@@ -1,33 +1,33 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import Button from "@material-ui/core/Button";
-import CopyIcon from "@material-ui/icons/Assignment";
-import DeleteIcon from "@material-ui/icons/Delete";
-import DetailsIcon from "@material-ui/icons/Details";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Divider from "@material-ui/core/Divider";
-import MenuItem from "@material-ui/core/MenuItem";
-import Popover from "@material-ui/core/Popover";
+import Button from '@material-ui/core/Button';
+import CopyIcon from '@material-ui/icons/Assignment';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DetailsIcon from '@material-ui/icons/Details';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Divider from '@material-ui/core/Divider';
+import MenuItem from '@material-ui/core/MenuItem';
+import Popover from '@material-ui/core/Popover';
 // import Tab from '@material-ui/core/Tab';
 // import Tabs from '@material-ui/core/Tabs';
-import Select from "@material-ui/core/Select";
-import TextField from "@material-ui/core/TextField";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
 
-import ReactJson from "react-json-view";
+import ReactJson from 'react-json-view';
 
-import { authApi } from "../../services/contaxy-api";
-import ApiToken from "../../services/contaxy-client/model/ApiToken";
-import ValueInputs from "./ValueInputs";
-import setClipboardText from "../../utils/clipboard";
-import showStandardSnackbar from "../../app/showStandardSnackbar";
+import { authApi } from '../../services/contaxy-api';
+import ApiToken from '../../services/contaxy-client/model/ApiToken';
+import ValueInputs from './ValueInputs';
+import setClipboardText from '../../utils/clipboard';
+import showStandardSnackbar from '../../app/showStandardSnackbar';
 
 function PermissionInput({ className, index, onChange, value }) {
   const handleInputChange = (e) => {
@@ -44,7 +44,7 @@ function PermissionInput({ className, index, onChange, value }) {
     });
   };
 
-  const level = value.level || "read";
+  const level = value.level || 'read';
 
   return (
     <div className={`${className} permissionInput`}>
@@ -76,16 +76,16 @@ PermissionInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.shape({
     input: PropTypes.string,
-    level: PropTypes.oneOf(["read", "write", "admin"]),
+    level: PropTypes.oneOf(['read', 'write', 'admin']),
   }),
 };
 
 PermissionInput.defaultProps = {
-  className: "",
+  className: '',
   index: 0,
   value: {
-    input: "",
-    level: "read",
+    input: '',
+    level: 'read',
   },
 };
 
@@ -118,7 +118,7 @@ function ApiTokenDialog({ className, creationScope, tokens, onClose }) {
         .map((scope) => `${scope.input}#${scope.level}`);
       const token = await authApi.createToken({
         scopes: scopeStrings,
-        tokenType: "api-token",
+        tokenType: 'api-token',
       });
       // TODO: the returned 'token' is a string and not an AccessToken yet
       setTokens([..._tokens, { token }]);
@@ -149,12 +149,12 @@ function ApiTokenDialog({ className, creationScope, tokens, onClose }) {
       anchorEl={tokenDetails.element}
       onClose={() => setTokenDetails({})}
       anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "left",
+        vertical: 'bottom',
+        horizontal: 'left',
       }}
       transformOrigin={{
-        vertical: "top",
-        horizontal: "left",
+        vertical: 'top',
+        horizontal: 'left',
       }}
     >
       <div className={`${className} popovercontent`}>
@@ -205,7 +205,7 @@ function ApiTokenDialog({ className, creationScope, tokens, onClose }) {
       <Typography variant="subtitle1">Existing Tokens</Typography>
       {tokenElements && tokenElements.length > 0
         ? tokenElements
-        : "No API tokens exist"}
+        : 'No API tokens exist'}
     </>
   );
   const createTokenPanel = (
@@ -213,9 +213,9 @@ function ApiTokenDialog({ className, creationScope, tokens, onClose }) {
       <Typography variant="subtitle1">Token Creation</Typography>
       <Typography variant="subtitle2">Scopes</Typography>
       <ValueInputs
-        initialValues={[{ input: creationScope, level: "read" }]}
+        initialValues={[{ input: creationScope, level: 'read' }]}
         inputComponent={StyledPermissionInput}
-        inputComponentProps={{ defaultValue: { input: "", level: "read" } }}
+        inputComponentProps={{ defaultValue: { input: '', level: 'read' } }}
         onValueInputsChange={setScopes}
       />
       <div className={`${className} createtoken`}>
@@ -264,8 +264,8 @@ ApiTokenDialog.propTypes = {
 };
 
 ApiTokenDialog.defaultProps = {
-  className: "",
-  creationScope: "",
+  className: '',
+  creationScope: '',
   tokens: [],
 };
 

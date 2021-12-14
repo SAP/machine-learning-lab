@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from "../ApiClient";
+import ApiClient from '../ApiClient';
 /**
  * Enum class DeploymentType.
  * @enum {}
@@ -22,25 +22,25 @@ export default class DeploymentType {
    * value: "core-backend"
    * @const
    */
-  "core-backend" = "core-backend";
+  'core-backend' = 'core-backend';
 
   /**
    * value: "service"
    * @const
    */
-  service = "service";
+  service = 'service';
 
   /**
    * value: "job"
    * @const
    */
-  job = "job";
+  job = 'job';
 
   /**
    * value: "extension"
    * @const
    */
-  extension = "extension";
+  extension = 'extension';
 
   /**
    * Returns a <code>DeploymentType</code> enum value from a Javascript object name.

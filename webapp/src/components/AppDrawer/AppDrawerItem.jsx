@@ -1,21 +1,21 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 
-import { Link, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import Divider from "@material-ui/core/Divider";
-import Icon from "@material-ui/core/Icon";
-import IconButton from "@material-ui/core/IconButton";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import Tooltip from "@material-ui/core/Tooltip";
+import Divider from '@material-ui/core/Divider';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Tooltip from '@material-ui/core/Tooltip';
 
-import { useShowAppDialog } from "../../app/AppDialogServiceProvider";
-import AddPluginDialog from "../Dialogs/AddPluginDialog";
+import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
+import AddPluginDialog from '../Dialogs/AddPluginDialog';
 
 function AppDrawerItem(props) {
   const { t } = useTranslation();
@@ -23,7 +23,7 @@ function AppDrawerItem(props) {
   const { className, item } = props;
   const showAppDialog = useShowAppDialog();
 
-  const path = item.PATH ? item.PATH : "";
+  const path = item.PATH ? item.PATH : '';
 
   // for why to use useMemo and React.forwardRef see documentation: https://material-ui.com/guides/composition/#caveat-with-inlining
   const CustomLink = useMemo(
@@ -37,7 +37,7 @@ function AppDrawerItem(props) {
   // TODO: split different types into different components
   let element = null;
 
-  if (item.TYPE === "link") {
+  if (item.TYPE === 'link') {
     const isActive = location.pathname === item.PATH;
 
     const isActiveClassName = isActive
@@ -46,7 +46,7 @@ function AppDrawerItem(props) {
 
     let newTabButton = null;
     if (item.NEW_TAB_LINK) {
-      const newTabText = t("new_tab");
+      const newTabText = t('new_tab');
       newTabButton = (
         <Tooltip
           title={<div className={`${className} tooltip`}>{newTabText}</div>}
@@ -83,7 +83,7 @@ function AppDrawerItem(props) {
     );
   }
 
-  if (item.TYPE === "divider") {
+  if (item.TYPE === 'divider') {
     element = (
       <div>
         <Divider component="div" />
@@ -91,7 +91,7 @@ function AppDrawerItem(props) {
     );
   }
 
-  if (item.TYPE === "button") {
+  if (item.TYPE === 'button') {
     // TODO: use dynamic information for content etc.
     element = (
       <>
@@ -127,7 +127,7 @@ AppDrawerItem.propTypes = {
 };
 
 AppDrawerItem.defaultProps = {
-  className: "",
+  className: '',
 };
 
 const StyledAppDrawerItem = styled(AppDrawerItem)`

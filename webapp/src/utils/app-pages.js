@@ -1,15 +1,15 @@
-import { ENDPOINT } from "./config";
-import Files from "../pages/Files";
-import Iframe from "../pages/Iframe";
-import Jobs from "../pages/Jobs";
-import Login from "../pages/Login";
-import Projects from "../pages/Projects";
-import Services from "../pages/Services";
-import UserManagement from "../pages/UserManagement/UserManagement";
+import { ENDPOINT } from './config';
+import Files from '../pages/Files';
+import Iframe from '../pages/Iframe';
+import Jobs from '../pages/Jobs';
+import Login from '../pages/Login';
+import Projects from '../pages/Projects';
+import Services from '../pages/Services';
+import UserManagement from '../pages/UserManagement/UserManagement';
 
 export const APP_DRAWER_ITEM_TYPES = {
-  divider: "divider",
-  link: "link",
+  divider: 'divider',
+  link: 'link',
 };
 
 /**
@@ -17,9 +17,9 @@ export const APP_DRAWER_ITEM_TYPES = {
  */
 const pages = [
   {
-    ICON: "home",
-    NAME: "Home",
-    PATH: "/",
+    ICON: 'home',
+    NAME: 'Home',
+    PATH: '/',
     REQUIRE_LOGIN: true,
     APP_DRAWER_ITEM: true,
     NEW_TAB_OPTION: false,
@@ -28,51 +28,51 @@ const pages = [
     DISPLAY_PRIORITY: 100,
   },
   {
-    NAME: "project-specific-divider",
+    NAME: 'project-specific-divider',
     APP_DRAWER_ITEM: true,
     TYPE: APP_DRAWER_ITEM_TYPES.divider,
     DISPLAY_PRIORITY: 90,
   },
   {
-    ICON: "folder",
-    NAME: "Datasets",
-    PATH: "/datasets",
+    ICON: 'folder',
+    NAME: 'Datasets',
+    PATH: '/datasets',
     REQUIRE_LOGIN: true,
     APP_DRAWER_ITEM: true,
     TYPE: APP_DRAWER_ITEM_TYPES.link,
     COMPONENT: Files,
     PROPS: {
-      folder: "datasets",
+      folder: 'datasets',
       uploadNote: window.env && window.env.UPLOAD_NOTE,
     },
     DISPLAY_PRIORITY: 70,
   },
   {
-    ICON: "layers",
-    NAME: "Models",
-    PATH: "/models",
+    ICON: 'layers',
+    NAME: 'Models',
+    PATH: '/models',
     REQUIRE_LOGIN: true,
     APP_DRAWER_ITEM: true,
     TYPE: APP_DRAWER_ITEM_TYPES.link,
     COMPONENT: Files,
     PROPS: {
-      folder: "models",
+      folder: 'models',
       uploadNote: window.env && window.env.UPLOAD_NOTE,
     },
     DISPLAY_PRIORITY: 70,
   },
 
   {
-    NAME: "admin-specific-divider",
+    NAME: 'admin-specific-divider',
     APP_DRAWER_ITEM: true,
     REQUIRE_ADMIN: true,
     TYPE: APP_DRAWER_ITEM_TYPES.divider,
     DISPLAY_PRIORITY: 30,
   },
   {
-    ICON: "people",
-    NAME: "User Management",
-    PATH: "/user-management",
+    ICON: 'people',
+    NAME: 'User Management',
+    PATH: '/user-management',
     REQUIRE_LOGIN: true,
     REQUIRE_ADMIN: true,
     APP_DRAWER_ITEM: true,
@@ -81,8 +81,8 @@ const pages = [
     DISPLAY_PRIORITY: 20,
   },
   {
-    NAME: "login",
-    PATH: "/login",
+    NAME: 'login',
+    PATH: '/login',
     REQUIRE_LOGIN: false,
     APP_DRAWER_ITEM: false,
     TYPE: APP_DRAWER_ITEM_TYPES.link,
@@ -119,9 +119,9 @@ const pages = [
 
 if (!window.env.HIDE_DEPLOYMENTS) {
   pages.push({
-    ICON: "apps",
-    NAME: "Services",
-    PATH: "/services",
+    ICON: 'apps',
+    NAME: 'Services',
+    PATH: '/services',
     REQUIRE_LOGIN: true,
     APP_DRAWER_ITEM: true,
     TYPE: APP_DRAWER_ITEM_TYPES.link,
@@ -129,9 +129,9 @@ if (!window.env.HIDE_DEPLOYMENTS) {
     DISPLAY_PRIORITY: 50,
   });
   pages.push({
-    ICON: "next_week",
-    NAME: "Jobs",
-    PATH: "/jobs",
+    ICON: 'next_week',
+    NAME: 'Jobs',
+    PATH: '/jobs',
     REQUIRE_LOGIN: true,
     APP_DRAWER_ITEM: true,
     TYPE: APP_DRAWER_ITEM_TYPES.link,
@@ -142,9 +142,9 @@ if (!window.env.HIDE_DEPLOYMENTS) {
 
 export default pages;
 export const mapExtensionToAppPage = (extension) => {
-  const backend = ENDPOINT.replace(/\/api$/, "");
+  const backend = ENDPOINT.replace(/\/api$/, '');
   return {
-    ICON: extension.icon ? extension.icon : "data_usage",
+    ICON: extension.icon ? extension.icon : 'data_usage',
     DISPLAY_PRIORITY: extension.metadata.display_priority
       ? extension.metadata.display_priority
       : 50,

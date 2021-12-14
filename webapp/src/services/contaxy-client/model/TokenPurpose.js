@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from "../ApiClient";
+import ApiClient from '../ApiClient';
 /**
  * Enum class TokenPurpose.
  * @enum {}
@@ -22,31 +22,31 @@ export default class TokenPurpose {
    * value: "user-api-token"
    * @const
    */
-  "user-api-token" = "user-api-token";
+  'user-api-token' = 'user-api-token';
 
   /**
    * value: "project-api-token"
    * @const
    */
-  "project-api-token" = "project-api-token";
+  'project-api-token' = 'project-api-token';
 
   /**
    * value: "service-access-token"
    * @const
    */
-  "service-access-token" = "service-access-token";
+  'service-access-token' = 'service-access-token';
 
   /**
    * value: "login-token"
    * @const
    */
-  "login-token" = "login-token";
+  'login-token' = 'login-token';
 
   /**
    * value: "refresh-token"
    * @const
    */
-  "refresh-token" = "refresh-token";
+  'refresh-token' = 'refresh-token';
 
   /**
    * Returns a <code>TokenPurpose</code> enum value from a Javascript object name.

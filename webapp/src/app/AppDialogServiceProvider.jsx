@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 const AppDialogContext = React.createContext(null);
 export const useShowAppDialog = () => React.useContext(AppDialogContext);

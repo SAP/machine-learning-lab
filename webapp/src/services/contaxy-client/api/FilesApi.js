@@ -11,10 +11,10 @@
  *
  */
 
-import ApiClient from "../ApiClient";
-import FileInput from "../model/FileInput";
-import ProblemDetails from "../model/ProblemDetails";
-import ResourceAction from "../model/ResourceAction";
+import ApiClient from '../ApiClient';
+import FileInput from '../model/FileInput';
+import ProblemDetails from '../model/ProblemDetails';
+import ResourceAction from '../model/ResourceAction';
 
 /**
  * Files service.
@@ -64,24 +64,24 @@ export default class FilesApi {
       file_key: fileKey,
     };
     let queryParams = {
-      version: opts["version"],
-      keep_latest_version: opts["keepLatestVersion"],
+      version: opts['version'],
+      keep_latest_version: opts['keepLatestVersion'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = null;
     return this.apiClient.callApi(
-      "/projects/{project_id}/files/{file_key}",
-      "DELETE",
+      '/projects/{project_id}/files/{file_key}',
+      'DELETE',
       pathParams,
       queryParams,
       headerParams,
@@ -135,23 +135,23 @@ export default class FilesApi {
       project_id: projectId,
     };
     let queryParams = {
-      extension_id: opts["extensionId"],
+      extension_id: opts['extensionId'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = null;
     return this.apiClient.callApi(
-      "/projects/{project_id}/files",
-      "DELETE",
+      '/projects/{project_id}/files',
+      'DELETE',
       pathParams,
       queryParams,
       headerParams,
@@ -211,23 +211,23 @@ export default class FilesApi {
       file_key: fileKey,
     };
     let queryParams = {
-      version: opts["version"],
+      version: opts['version'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = Object;
     return this.apiClient.callApi(
-      "/projects/{project_id}/files/{file_key}:download",
-      "GET",
+      '/projects/{project_id}/files/{file_key}:download',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -296,23 +296,23 @@ export default class FilesApi {
       action_id: actionId,
     };
     let queryParams = {
-      version: opts["version"],
+      version: opts['version'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = Object;
     return this.apiClient.callApi(
-      "/projects/{project_id}/files/{file_key}/actions/{action_id}",
-      "GET",
+      '/projects/{project_id}/files/{file_key}/actions/{action_id}',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -377,23 +377,23 @@ export default class FilesApi {
       file_key: fileKey,
     };
     let queryParams = {
-      version: opts["version"],
+      version: opts['version'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = File;
     return this.apiClient.callApi(
-      "/projects/{project_id}/files/{file_key}:metadata",
-      "GET",
+      '/projects/{project_id}/files/{file_key}:metadata',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -455,24 +455,24 @@ export default class FilesApi {
       file_key: fileKey,
     };
     let queryParams = {
-      version: opts["version"],
-      extension_id: opts["extensionId"],
+      version: opts['version'],
+      extension_id: opts['extensionId'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = [ResourceAction];
     return this.apiClient.callApi(
-      "/projects/{project_id}/files/{file_key}/actions",
-      "GET",
+      '/projects/{project_id}/files/{file_key}/actions',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -529,26 +529,26 @@ export default class FilesApi {
       project_id: projectId,
     };
     let queryParams = {
-      recursive: opts["recursive"],
-      include_versions: opts["includeVersions"],
-      prefix: opts["prefix"],
-      extension_id: opts["extensionId"],
+      recursive: opts['recursive'],
+      include_versions: opts['includeVersions'],
+      prefix: opts['prefix'],
+      extension_id: opts['extensionId'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = [File];
     return this.apiClient.callApi(
-      "/projects/{project_id}/files",
-      "GET",
+      '/projects/{project_id}/files',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -618,23 +618,23 @@ export default class FilesApi {
       file_key: fileKey,
     };
     let queryParams = {
-      version: opts["version"],
+      version: opts['version'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
-    let contentTypes = ["application/json"];
-    let accepts = ["application/json"];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
     let returnType = File;
     return this.apiClient.callApi(
-      "/projects/{project_id}/files/{file_key}",
-      "PATCH",
+      '/projects/{project_id}/files/{file_key}',
+      'PATCH',
       pathParams,
       queryParams,
       headerParams,
@@ -709,17 +709,17 @@ export default class FilesApi {
     };
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
-    let contentTypes = ["multipart/form-data"];
-    let accepts = ["application/json"];
+    let contentTypes = ['multipart/form-data'];
+    let accepts = ['application/json'];
     let returnType = File;
     return this.apiClient.callApi(
-      "/projects/{project_id}/files/{file_key}",
-      "POST",
+      '/projects/{project_id}/files/{file_key}',
+      'POST',
       pathParams,
       queryParams,
       headerParams,

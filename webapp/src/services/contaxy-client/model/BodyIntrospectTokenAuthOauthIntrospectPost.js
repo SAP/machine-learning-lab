@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from "../ApiClient";
+import ApiClient from '../ApiClient';
 
 /**
  * The BodyIntrospectTokenAuthOauthIntrospectPost model module.
@@ -34,7 +34,7 @@ class BodyIntrospectTokenAuthOauthIntrospectPost {
    * Only for internal use.
    */
   static initialize(obj, token) {
-    obj["token"] = token;
+    obj['token'] = token;
   }
 
   /**
@@ -48,13 +48,13 @@ class BodyIntrospectTokenAuthOauthIntrospectPost {
     if (data) {
       obj = obj || new BodyIntrospectTokenAuthOauthIntrospectPost();
 
-      if (data.hasOwnProperty("token")) {
-        obj["token"] = ApiClient.convertToType(data["token"], "String");
+      if (data.hasOwnProperty('token')) {
+        obj['token'] = ApiClient.convertToType(data['token'], 'String');
       }
-      if (data.hasOwnProperty("token_type_hint")) {
-        obj["token_type_hint"] = ApiClient.convertToType(
-          data["token_type_hint"],
-          "String"
+      if (data.hasOwnProperty('token_type_hint')) {
+        obj['token_type_hint'] = ApiClient.convertToType(
+          data['token_type_hint'],
+          'String'
         );
       }
     }
@@ -66,13 +66,13 @@ class BodyIntrospectTokenAuthOauthIntrospectPost {
  * The token that should be instrospected.
  * @member {String} token
  */
-BodyIntrospectTokenAuthOauthIntrospectPost.prototype["token"] = undefined;
+BodyIntrospectTokenAuthOauthIntrospectPost.prototype['token'] = undefined;
 
 /**
  * A hint about the type of the token submitted for introspection (e.g. `access_token`, `id_token` and `refresh_token`).
  * @member {String} token_type_hint
  */
-BodyIntrospectTokenAuthOauthIntrospectPost.prototype["token_type_hint"] =
+BodyIntrospectTokenAuthOauthIntrospectPost.prototype['token_type_hint'] =
   undefined;
 
 export default BodyIntrospectTokenAuthOauthIntrospectPost;

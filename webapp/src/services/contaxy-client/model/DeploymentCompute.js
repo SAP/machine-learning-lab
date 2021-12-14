@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from "../ApiClient";
+import ApiClient from '../ApiClient';
 
 /**
  * The DeploymentCompute model module.
@@ -45,58 +45,58 @@ class DeploymentCompute {
     if (data) {
       obj = obj || new DeploymentCompute();
 
-      if (data.hasOwnProperty("min_cpus")) {
-        obj["min_cpus"] = ApiClient.convertToType(data["min_cpus"], "Number");
+      if (data.hasOwnProperty('min_cpus')) {
+        obj['min_cpus'] = ApiClient.convertToType(data['min_cpus'], 'Number');
       }
-      if (data.hasOwnProperty("max_cpus")) {
-        obj["max_cpus"] = ApiClient.convertToType(data["max_cpus"], "Number");
+      if (data.hasOwnProperty('max_cpus')) {
+        obj['max_cpus'] = ApiClient.convertToType(data['max_cpus'], 'Number');
       }
-      if (data.hasOwnProperty("min_memory")) {
-        obj["min_memory"] = ApiClient.convertToType(
-          data["min_memory"],
-          "Number"
+      if (data.hasOwnProperty('min_memory')) {
+        obj['min_memory'] = ApiClient.convertToType(
+          data['min_memory'],
+          'Number'
         );
       }
-      if (data.hasOwnProperty("max_memory")) {
-        obj["max_memory"] = ApiClient.convertToType(
-          data["max_memory"],
-          "Number"
+      if (data.hasOwnProperty('max_memory')) {
+        obj['max_memory'] = ApiClient.convertToType(
+          data['max_memory'],
+          'Number'
         );
       }
-      if (data.hasOwnProperty("min_gpus")) {
-        obj["min_gpus"] = ApiClient.convertToType(data["min_gpus"], "Number");
+      if (data.hasOwnProperty('min_gpus')) {
+        obj['min_gpus'] = ApiClient.convertToType(data['min_gpus'], 'Number');
       }
-      if (data.hasOwnProperty("max_gpus")) {
-        obj["max_gpus"] = ApiClient.convertToType(data["max_gpus"], "Number");
+      if (data.hasOwnProperty('max_gpus')) {
+        obj['max_gpus'] = ApiClient.convertToType(data['max_gpus'], 'Number');
       }
-      if (data.hasOwnProperty("volume_path")) {
-        obj["volume_path"] = ApiClient.convertToType(
-          data["volume_path"],
-          "String"
+      if (data.hasOwnProperty('volume_path')) {
+        obj['volume_path'] = ApiClient.convertToType(
+          data['volume_path'],
+          'String'
         );
       }
-      if (data.hasOwnProperty("max_volume_size")) {
-        obj["max_volume_size"] = ApiClient.convertToType(
-          data["max_volume_size"],
-          "Number"
+      if (data.hasOwnProperty('max_volume_size')) {
+        obj['max_volume_size'] = ApiClient.convertToType(
+          data['max_volume_size'],
+          'Number'
         );
       }
-      if (data.hasOwnProperty("max_container_size")) {
-        obj["max_container_size"] = ApiClient.convertToType(
-          data["max_container_size"],
-          "Number"
+      if (data.hasOwnProperty('max_container_size')) {
+        obj['max_container_size'] = ApiClient.convertToType(
+          data['max_container_size'],
+          'Number'
         );
       }
-      if (data.hasOwnProperty("max_replicas")) {
-        obj["max_replicas"] = ApiClient.convertToType(
-          data["max_replicas"],
-          "Number"
+      if (data.hasOwnProperty('max_replicas')) {
+        obj['max_replicas'] = ApiClient.convertToType(
+          data['max_replicas'],
+          'Number'
         );
       }
-      if (data.hasOwnProperty("min_lifetime")) {
-        obj["min_lifetime"] = ApiClient.convertToType(
-          data["min_lifetime"],
-          "Number"
+      if (data.hasOwnProperty('min_lifetime')) {
+        obj['min_lifetime'] = ApiClient.convertToType(
+          data['min_lifetime'],
+          'Number'
         );
       }
     }
@@ -108,67 +108,67 @@ class DeploymentCompute {
  * Minimum number of CPU cores required by this deployment. The system will make sure that atleast this amount is available to the deployment.
  * @member {Number} min_cpus
  */
-DeploymentCompute.prototype["min_cpus"] = undefined;
+DeploymentCompute.prototype['min_cpus'] = undefined;
 
 /**
  * Maximum number of CPU cores. Even so the system will try to provide the specified amount, it's only guaranteed that the deployment cannot use more. 0 means unlimited.
  * @member {Number} max_cpus
  */
-DeploymentCompute.prototype["max_cpus"] = undefined;
+DeploymentCompute.prototype['max_cpus'] = undefined;
 
 /**
  * Minimum amount of memory in Megabyte required by this deployment. The system will make sure that atleast this amount is available to the deployment.
  * @member {Number} min_memory
  */
-DeploymentCompute.prototype["min_memory"] = undefined;
+DeploymentCompute.prototype['min_memory'] = undefined;
 
 /**
  * Maximum amount of memory in Megabyte. Even so the system will try to provide the specified amount, it's only guaranteed that the deployment cannot use more. 0 means unlimited.
  * @member {Number} max_memory
  */
-DeploymentCompute.prototype["max_memory"] = undefined;
+DeploymentCompute.prototype['max_memory'] = undefined;
 
 /**
  * Minimum number of GPUs required by this deployments. The system will make sure that atleast this amount is available to the deployment.
  * @member {Number} min_gpus
  */
-DeploymentCompute.prototype["min_gpus"] = undefined;
+DeploymentCompute.prototype['min_gpus'] = undefined;
 
 /**
  * Maximum number of GPUs. Even so the system will try to provide the specified amount, it's only guaranteed that the deployment cannot use more.
  * @member {Number} max_gpus
  */
-DeploymentCompute.prototype["max_gpus"] = undefined;
+DeploymentCompute.prototype['max_gpus'] = undefined;
 
 /**
  * Container internal directory that should mount a volume for data persistence.
  * @member {String} volume_path
  */
-DeploymentCompute.prototype["volume_path"] = undefined;
+DeploymentCompute.prototype['volume_path'] = undefined;
 
 /**
  * Maximum volume size in Megabyte. This is only applied in combination with volume_path.
  * @member {Number} max_volume_size
  */
-DeploymentCompute.prototype["max_volume_size"] = undefined;
+DeploymentCompute.prototype['max_volume_size'] = undefined;
 
 /**
  * Maximum container size in Megabyte. The deployment will be killed if it grows above this limit.
  * @member {Number} max_container_size
  */
-DeploymentCompute.prototype["max_container_size"] = undefined;
+DeploymentCompute.prototype['max_container_size'] = undefined;
 
 /**
  * Maximum number of deployment instances. The system will make sure to optimize the deployment based on the available resources and requests. Use 1 if the deployment is not scalable.
  * @member {Number} max_replicas
  * @default 1
  */
-DeploymentCompute.prototype["max_replicas"] = 1;
+DeploymentCompute.prototype['max_replicas'] = 1;
 
 /**
  * Minimum guaranteed lifetime in seconds. Once the lifetime is reached, the system is allowed to kill the deployment in case it requires additional resources.
  * @member {Number} min_lifetime
  */
-DeploymentCompute.prototype["min_lifetime"] = undefined;
+DeploymentCompute.prototype['min_lifetime'] = undefined;
 
 export default DeploymentCompute;

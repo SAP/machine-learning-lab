@@ -11,8 +11,8 @@
  *
  */
 
-import ApiClient from "../ApiClient";
-import DeploymentCompute from "./DeploymentCompute";
+import ApiClient from '../ApiClient';
+import DeploymentCompute from './DeploymentCompute';
 
 /**
  * The JobInput model module.
@@ -35,7 +35,7 @@ class JobInput {
    * Only for internal use.
    */
   static initialize(obj, containerImage) {
-    obj["container_image"] = containerImage;
+    obj['container_image'] = containerImage;
   }
 
   /**
@@ -49,58 +49,58 @@ class JobInput {
     if (data) {
       obj = obj || new JobInput();
 
-      if (data.hasOwnProperty("container_image")) {
-        obj["container_image"] = ApiClient.convertToType(
-          data["container_image"],
-          "String"
+      if (data.hasOwnProperty('container_image')) {
+        obj['container_image'] = ApiClient.convertToType(
+          data['container_image'],
+          'String'
         );
       }
-      if (data.hasOwnProperty("parameters")) {
-        obj["parameters"] = ApiClient.convertToType(data["parameters"], {
-          String: "String",
+      if (data.hasOwnProperty('parameters')) {
+        obj['parameters'] = ApiClient.convertToType(data['parameters'], {
+          String: 'String',
         });
       }
-      if (data.hasOwnProperty("compute")) {
-        obj["compute"] = ApiClient.convertToType(
-          data["compute"],
+      if (data.hasOwnProperty('compute')) {
+        obj['compute'] = ApiClient.convertToType(
+          data['compute'],
           DeploymentCompute
         );
       }
-      if (data.hasOwnProperty("command")) {
-        obj["command"] = ApiClient.convertToType(data["command"], "String");
+      if (data.hasOwnProperty('command')) {
+        obj['command'] = ApiClient.convertToType(data['command'], 'String');
       }
-      if (data.hasOwnProperty("requirements")) {
-        obj["requirements"] = ApiClient.convertToType(data["requirements"], [
-          "String",
+      if (data.hasOwnProperty('requirements')) {
+        obj['requirements'] = ApiClient.convertToType(data['requirements'], [
+          'String',
         ]);
       }
-      if (data.hasOwnProperty("endpoints")) {
-        obj["endpoints"] = ApiClient.convertToType(data["endpoints"], [
-          "String",
+      if (data.hasOwnProperty('endpoints')) {
+        obj['endpoints'] = ApiClient.convertToType(data['endpoints'], [
+          'String',
         ]);
       }
-      if (data.hasOwnProperty("display_name")) {
-        obj["display_name"] = ApiClient.convertToType(
-          data["display_name"],
-          "String"
+      if (data.hasOwnProperty('display_name')) {
+        obj['display_name'] = ApiClient.convertToType(
+          data['display_name'],
+          'String'
         );
       }
-      if (data.hasOwnProperty("description")) {
-        obj["description"] = ApiClient.convertToType(
-          data["description"],
-          "String"
+      if (data.hasOwnProperty('description')) {
+        obj['description'] = ApiClient.convertToType(
+          data['description'],
+          'String'
         );
       }
-      if (data.hasOwnProperty("icon")) {
-        obj["icon"] = ApiClient.convertToType(data["icon"], "String");
+      if (data.hasOwnProperty('icon')) {
+        obj['icon'] = ApiClient.convertToType(data['icon'], 'String');
       }
-      if (data.hasOwnProperty("metadata")) {
-        obj["metadata"] = ApiClient.convertToType(data["metadata"], {
-          String: "String",
+      if (data.hasOwnProperty('metadata')) {
+        obj['metadata'] = ApiClient.convertToType(data['metadata'], {
+          String: 'String',
         });
       }
-      if (data.hasOwnProperty("disabled")) {
-        obj["disabled"] = ApiClient.convertToType(data["disabled"], "Boolean");
+      if (data.hasOwnProperty('disabled')) {
+        obj['disabled'] = ApiClient.convertToType(data['disabled'], 'Boolean');
       }
     }
     return obj;
@@ -111,67 +111,67 @@ class JobInput {
  * The container image used for this deployment.
  * @member {String} container_image
  */
-JobInput.prototype["container_image"] = undefined;
+JobInput.prototype['container_image'] = undefined;
 
 /**
  * Parmeters (enviornment variables) for this deployment.
  * @member {Object.<String, String>} parameters
  */
-JobInput.prototype["parameters"] = undefined;
+JobInput.prototype['parameters'] = undefined;
 
 /**
  * Compute instructions and limitations for this deployment.
  * @member {module:model/DeploymentCompute} compute
  */
-JobInput.prototype["compute"] = undefined;
+JobInput.prototype['compute'] = undefined;
 
 /**
  * Command to run within the deployment. This overwrites the existing entrypoint.
  * @member {String} command
  */
-JobInput.prototype["command"] = undefined;
+JobInput.prototype['command'] = undefined;
 
 /**
  * Additional requirements for deployment.
  * @member {Array.<String>} requirements
  */
-JobInput.prototype["requirements"] = undefined;
+JobInput.prototype['requirements'] = undefined;
 
 /**
  * A list of HTTP endpoints that can be accessed. This should always have an internal port and can include additional instructions, such as the URL path.
  * @member {Array.<String>} endpoints
  */
-JobInput.prototype["endpoints"] = undefined;
+JobInput.prototype['endpoints'] = undefined;
 
 /**
  * A user-defined human-readable name of the resource. The name can be up to 128 characters long and can consist of any UTF-8 character.
  * @member {String} display_name
  */
-JobInput.prototype["display_name"] = undefined;
+JobInput.prototype['display_name'] = undefined;
 
 /**
  * A user-defined short description about the resource. Can consist of any UTF-8 character.
  * @member {String} description
  */
-JobInput.prototype["description"] = undefined;
+JobInput.prototype['description'] = undefined;
 
 /**
  * Identifier or image URL used for displaying this resource.
  * @member {String} icon
  */
-JobInput.prototype["icon"] = undefined;
+JobInput.prototype['icon'] = undefined;
 
 /**
  * A collection of arbitrary key-value pairs associated with this resource that does not need predefined structure. Enable third-party integrations to decorate objects with additional metadata for their own use.
  * @member {Object.<String, String>} metadata
  */
-JobInput.prototype["metadata"] = undefined;
+JobInput.prototype['metadata'] = undefined;
 
 /**
  * Allows to disable a resource without requiring deletion. A disabled resource is not shown and not accessible.
  * @member {Boolean} disabled
  * @default false
  */
-JobInput.prototype["disabled"] = false;
+JobInput.prototype['disabled'] = false;
 
 export default JobInput;

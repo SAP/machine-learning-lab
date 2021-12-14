@@ -1,18 +1,18 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from 'react';
 
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardHeader from "@material-ui/core/CardHeader";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
-import * as Jdenticon from "jdenticon";
+import * as Jdenticon from 'jdenticon';
 
 function ProjectCard(props) {
   const {
@@ -30,7 +30,7 @@ function ProjectCard(props) {
 
   const createdAt = project.created_at
     ? project.created_at.toLocaleString()
-    : "";
+    : '';
 
   const subHeader = project.display_name ? (
     <>
@@ -50,14 +50,14 @@ function ProjectCard(props) {
           <CardHeader
             avatar={
               <Avatar
-                className={isHighlighted ? `${className} avatar_highlight` : ""}
+                className={isHighlighted ? `${className} avatar_highlight` : ''}
                 alt={project.display_name}
               >
                 <svg
                   ref={svgRef}
                   width="60"
                   height="60"
-                  style={{ backgroundColor: "white" }}
+                  style={{ backgroundColor: 'white' }}
                   data-jdenticon-value={project.display_name}
                 />
               </Avatar>
@@ -97,7 +97,7 @@ ProjectCard.propTypes = {
 };
 
 ProjectCard.defaultProps = {
-  className: "",
+  className: '',
   isHighlighted: false,
 };
 

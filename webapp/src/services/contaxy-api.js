@@ -1,26 +1,26 @@
-import { ENDPOINT } from "../utils/config";
+import { ENDPOINT } from '../utils/config';
 // eslint-disable import/prefer-default-export
-import * as Api from "./contaxy-client";
+import * as Api from './contaxy-client';
 
 export const ENDPOINT_PROJECTS = `${ENDPOINT}/projects/{project_id}`;
 export const ENDPOINT_AUTH = `${ENDPOINT}/auth`;
-export const SELECTED_PROJECT_LOCAL_STORAGE_KEY = "ctx_selected_project_id";
+export const SELECTED_PROJECT_LOCAL_STORAGE_KEY = 'ctx_selected_project_id';
 
 export function getFileDownloadUrl(projectId, fileKey) {
   return `${ENDPOINT_PROJECTS}/files/{file_key:path}:download`
-    .replace("{project_id}", projectId)
-    .replace("{file_key:path}", fileKey);
+    .replace('{project_id}', projectId)
+    .replace('{file_key:path}', fileKey);
 }
 
 export function getFileUploadUrl(projectId, fileKey) {
   if (fileKey) {
     return `${ENDPOINT_PROJECTS}/files/{file_key}`
-      .replace("{project_id}", projectId)
-      .replace("{file_key}", fileKey);
+      .replace('{project_id}', projectId)
+      .replace('{file_key}', fileKey);
   }
 
   return `${ENDPOINT_PROJECTS}/multipart-upload`.replace(
-    "{project_id}",
+    '{project_id}',
     projectId
   );
 }
@@ -33,7 +33,7 @@ const apiClient = new Api.ApiClient();
 apiClient.basePath = ENDPOINT;
 apiClient.enableCookies = true;
 // the generated client includes an User-Agent header which is not allowed to set as it is controlled by the browser
-delete apiClient.defaultHeaders["User-Agent"];
+delete apiClient.defaultHeaders['User-Agent'];
 
 export const authApi = new Api.AuthApi(apiClient);
 export const extensionsApi = new Api.ExtensionsApi(apiClient);

@@ -11,11 +11,11 @@
  *
  */
 
-import ApiClient from "../ApiClient";
-import Job from "../model/Job";
-import JobInput from "../model/JobInput";
-import ProblemDetails from "../model/ProblemDetails";
-import ResourceAction from "../model/ResourceAction";
+import ApiClient from '../ApiClient';
+import Job from '../model/Job';
+import JobInput from '../model/JobInput';
+import ProblemDetails from '../model/ProblemDetails';
+import ResourceAction from '../model/ResourceAction';
 
 /**
  * Jobs service.
@@ -65,17 +65,17 @@ export default class JobsApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = null;
     return this.apiClient.callApi(
-      "/projects/{project_id}/jobs/{job_id}",
-      "DELETE",
+      '/projects/{project_id}/jobs/{job_id}',
+      'DELETE',
       pathParams,
       queryParams,
       headerParams,
@@ -126,23 +126,23 @@ export default class JobsApi {
       project_id: projectId,
     };
     let queryParams = {
-      extension_id: opts["extensionId"],
+      extension_id: opts['extensionId'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = null;
     return this.apiClient.callApi(
-      "/projects/{project_id}/jobs",
-      "DELETE",
+      '/projects/{project_id}/jobs',
+      'DELETE',
       pathParams,
       queryParams,
       headerParams,
@@ -201,23 +201,23 @@ export default class JobsApi {
       project_id: projectId,
     };
     let queryParams = {
-      action_id: opts["actionId"],
+      action_id: opts['actionId'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
-    let contentTypes = ["application/json"];
-    let accepts = ["application/json"];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
     let returnType = Job;
     return this.apiClient.callApi(
-      "/projects/{project_id}/jobs",
-      "POST",
+      '/projects/{project_id}/jobs',
+      'POST',
       pathParams,
       queryParams,
       headerParams,
@@ -287,17 +287,17 @@ export default class JobsApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = Object;
     return this.apiClient.callApi(
-      "/projects/{project_id}/jobs/{job_id}/actions/{action_id}",
-      "GET",
+      '/projects/{project_id}/jobs/{job_id}/actions/{action_id}',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -358,24 +358,24 @@ export default class JobsApi {
       job_id: jobId,
     };
     let queryParams = {
-      lines: opts["lines"],
-      since: opts["since"],
+      lines: opts['lines'],
+      since: opts['since'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
-    let returnType = "String";
+    let accepts = ['application/json'];
+    let returnType = 'String';
     return this.apiClient.callApi(
-      "/projects/{project_id}/jobs/{job_id}/logs",
-      "GET",
+      '/projects/{project_id}/jobs/{job_id}/logs',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -438,17 +438,17 @@ export default class JobsApi {
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = Job;
     return this.apiClient.callApi(
-      "/projects/{project_id}/jobs/{job_id}",
-      "GET",
+      '/projects/{project_id}/jobs/{job_id}',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -506,23 +506,23 @@ export default class JobsApi {
       project_id: projectId,
     };
     let queryParams = {
-      extension_id: opts["extensionId"],
+      extension_id: opts['extensionId'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
-    let contentTypes = ["application/json"];
-    let accepts = ["application/json"];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
     let returnType = [ResourceAction];
     return this.apiClient.callApi(
-      "/projects/{project_id}/jobs:deploy-actions",
-      "POST",
+      '/projects/{project_id}/jobs:deploy-actions',
+      'POST',
       pathParams,
       queryParams,
       headerParams,
@@ -585,23 +585,23 @@ export default class JobsApi {
       job_id: jobId,
     };
     let queryParams = {
-      extension_id: opts["extensionId"],
+      extension_id: opts['extensionId'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = [ResourceAction];
     return this.apiClient.callApi(
-      "/projects/{project_id}/jobs/{job_id}/actions",
-      "GET",
+      '/projects/{project_id}/jobs/{job_id}/actions',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -654,23 +654,23 @@ export default class JobsApi {
       project_id: projectId,
     };
     let queryParams = {
-      extension_id: opts["extensionId"],
+      extension_id: opts['extensionId'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = [Job];
     return this.apiClient.callApi(
-      "/projects/{project_id}/jobs",
-      "GET",
+      '/projects/{project_id}/jobs',
+      'GET',
       pathParams,
       queryParams,
       headerParams,
@@ -730,23 +730,23 @@ export default class JobsApi {
     };
     let queryParams = {
       container_image: containerImage,
-      extension_id: opts["extensionId"],
+      extension_id: opts['extensionId'],
     };
     let headerParams = {};
     let formParams = {};
 
     let authNames = [
-      "APIKeyCookie",
-      "APIKeyHeader",
-      "APIKeyQuery",
-      "OAuth2PasswordBearer",
+      'APIKeyCookie',
+      'APIKeyHeader',
+      'APIKeyQuery',
+      'OAuth2PasswordBearer',
     ];
     let contentTypes = [];
-    let accepts = ["application/json"];
+    let accepts = ['application/json'];
     let returnType = JobInput;
     return this.apiClient.callApi(
-      "/projects/{project_id}/jobs:suggest-config",
-      "GET",
+      '/projects/{project_id}/jobs:suggest-config',
+      'GET',
       pathParams,
       queryParams,
       headerParams,

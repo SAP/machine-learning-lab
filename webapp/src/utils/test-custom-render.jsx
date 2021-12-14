@@ -1,21 +1,21 @@
-import { HashRouter } from "react-router-dom";
-import { render } from "@testing-library/react";
-import PropTypes from "prop-types";
-import React from "react";
+import { HashRouter } from 'react-router-dom';
+import { render } from '@testing-library/react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import { I18nextProvider } from "react-i18next";
-import i18n from "i18next";
+import { I18nextProvider } from 'react-i18next';
+import i18n from 'i18next';
 
-import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
-import { ThemeProvider } from "styled-components";
+import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider } from 'styled-components';
 
-import { authApi, projectsApi, usersApi } from "../services/contaxy-api";
-import AppDialogServiceProvider from "../app/AppDialogServiceProvider";
-import GlobalStateContainer from "../app/store";
-import theme from "./theme";
+import { authApi, projectsApi, usersApi } from '../services/contaxy-api';
+import AppDialogServiceProvider from '../app/AppDialogServiceProvider';
+import GlobalStateContainer from '../app/store';
+import theme from './theme';
 
 i18n.init({
-  lng: "en",
+  lng: 'en',
   debug: false,
   saveMissing: false,
 
@@ -27,24 +27,24 @@ i18n.init({
   react: {
     useSuspense: false,
     wait: true,
-    nsMode: "fallback", // set it to fallback to let passed namespaces to translated hoc act as fallbacks
+    nsMode: 'fallback', // set it to fallback to let passed namespaces to translated hoc act as fallbacks
   },
 });
 
 // Mock api calls
-jest.mock("../services/contaxy-api.js");
+jest.mock('../services/contaxy-api.js');
 projectsApi.listProjects = async () => [
-  { id: "myFooProject", display_name: "My Foo Project" },
+  { id: 'myFooProject', display_name: 'My Foo Project' },
 ];
 authApi.verifyAccess = async () => true;
 usersApi.getMyUser = async () => {
   return {
-    username: "Foo",
-    email: "foo@bar.com",
+    username: 'Foo',
+    email: 'foo@bar.com',
     disabled: false,
-    id: "7uwv4ilewxiju1n0xzpt03n66",
+    id: '7uwv4ilewxiju1n0xzpt03n66',
     technical_user: false,
-    created_at: "2021-04-02T09:21:33.799915+00:00",
+    created_at: '2021-04-02T09:21:33.799915+00:00',
   };
 };
 
@@ -73,5 +73,5 @@ const customRender = (ui, options) => {
 };
 
 // re-export everything
-export * from "@testing-library/react";
+export * from '@testing-library/react';
 export { customRender as render };

@@ -1,21 +1,21 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from 'react';
 
-import { useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import Button from "@material-ui/core/Button";
+import Button from '@material-ui/core/Button';
 
-import { useJobs } from "../../services/api-hooks";
-import { useShowAppDialog } from "../../app/AppDialogServiceProvider";
-import DeployServiceDialog from "../../components/Dialogs/DeployContainerDialog";
+import { useJobs } from '../../services/api-hooks';
+import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
+import DeployServiceDialog from '../../components/Dialogs/DeployContainerDialog';
 // import Widget from '../components/Widget';
 // import WidgetsGrid from '../components/WidgetsGrid';
-import { jobsApi } from "../../services/contaxy-api";
-import ContentDialog from "../../components/Dialogs/ContentDialog";
-import GlobalStateContainer from "../../app/store";
-import JobsContainer from "./JobsContainer";
-import showStandardSnackbar from "../../app/showStandardSnackbar";
+import { jobsApi } from '../../services/contaxy-api';
+import ContentDialog from '../../components/Dialogs/ContentDialog';
+import GlobalStateContainer from '../../app/store';
+import JobsContainer from './JobsContainer';
+import showStandardSnackbar from '../../app/showStandardSnackbar';
 
 function Jobs(props) {
   const { className } = props;
@@ -59,10 +59,10 @@ function Jobs(props) {
         const metadata = await jobsApi.getJobMetadata(projectId, jobId);
         showAppDialog(ContentDialog, {
           jsonContent: metadata,
-          title: "Job Metadata",
+          title: 'Job Metadata',
         });
       } catch (err) {
-        showStandardSnackbar("Could not load Job metadata");
+        showStandardSnackbar('Could not load Job metadata');
       }
     },
     [showAppDialog]
@@ -72,9 +72,9 @@ function Jobs(props) {
     async (projectId, jobId) => {
       try {
         const logs = await jobsApi.getJobLogs(projectId, jobId);
-        showAppDialog(ContentDialog, { content: logs, title: "Logs" });
+        showAppDialog(ContentDialog, { content: logs, title: 'Logs' });
       } catch (err) {
-        showStandardSnackbar("Could not load logs");
+        showStandardSnackbar('Could not load logs');
       }
     },
     [showAppDialog]
@@ -131,7 +131,7 @@ function Jobs(props) {
         onClick={onJobDeploy}
         className={`${className} button`}
       >
-        {`${t("run")} ${t("job")}`}
+        {`${t('run')} ${t('job')}`}
       </Button>
       {jobsContainer}
     </div>
@@ -143,7 +143,7 @@ Jobs.propTypes = {
 };
 
 Jobs.defaultProps = {
-  className: "",
+  className: '',
 };
 
 const StyledJobs = styled(Jobs)`

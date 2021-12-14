@@ -1,23 +1,23 @@
-import React from "react";
+import React from 'react';
 
-import { useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
-import { projectsApi } from "../services/contaxy-api";
-import { useProjectSelector } from "../utils/app-utils";
-import { useShowAppDialog } from "../app/AppDialogServiceProvider";
-import AddProjectDialog from "../components/Dialogs/AddProjectDialog";
-import ConfirmDeleteDialog from "../components/Dialogs/ConfirmDeleteDialog";
-import GlobalStateContainer from "../app/store";
-import ManageProjectDialog from "../components/Dialogs/ManageProjectDialog";
-import ProjectCard from "../components/ProjectCard";
-import Widget from "../components/Widget";
-import WidgetsGrid from "../components/WidgetsGrid";
-import showStandardSnackbar from "../app/showStandardSnackbar";
+import { projectsApi } from '../services/contaxy-api';
+import { useProjectSelector } from '../utils/app-utils';
+import { useShowAppDialog } from '../app/AppDialogServiceProvider';
+import AddProjectDialog from '../components/Dialogs/AddProjectDialog';
+import ConfirmDeleteDialog from '../components/Dialogs/ConfirmDeleteDialog';
+import GlobalStateContainer from '../app/store';
+import ManageProjectDialog from '../components/Dialogs/ManageProjectDialog';
+import ProjectCard from '../components/ProjectCard';
+import Widget from '../components/Widget';
+import WidgetsGrid from '../components/WidgetsGrid';
+import showStandardSnackbar from '../app/showStandardSnackbar';
 
 function Projects(props) {
   const { className } = props;
@@ -53,7 +53,7 @@ function Projects(props) {
 
   const onDeleteProject = (project) => {
     showAppDialog(ConfirmDeleteDialog, {
-      dialogTitle: "Delete Project",
+      dialogTitle: 'Delete Project',
       dialogText: `Do you really want to delete the project ${project.display_name}?`,
       onDelete: async (onClose) => {
         try {
@@ -120,7 +120,7 @@ function Projects(props) {
         onClick={onAddProject}
         className={`${className} button`}
       >
-        {`${t("add")} ${t("project")}`}
+        {`${t('add')} ${t('project')}`}
       </Button>
       <Grid container spacing={3}>
         {projectElements}
@@ -134,7 +134,7 @@ Projects.propTypes = {
 };
 
 Projects.defaultProps = {
-  className: "",
+  className: '',
 };
 
 const StyledProjects = styled(Projects)`

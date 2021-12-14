@@ -1,33 +1,33 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import HighlightOff from "@material-ui/icons/HighlightOff";
-import IconButton from "@material-ui/core/IconButton";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import HighlightOff from '@material-ui/icons/HighlightOff';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
-import { projectsApi } from "../../services/contaxy-api";
-import { useProjectMembers } from "../../services/api-hooks";
-import GlobalStateContainer from "../../app/store";
-import showStandardSnackbar from "../../app/showStandardSnackbar";
+import { projectsApi } from '../../services/contaxy-api';
+import { useProjectMembers } from '../../services/api-hooks';
+import GlobalStateContainer from '../../app/store';
+import showStandardSnackbar from '../../app/showStandardSnackbar';
 
 function ManageProjectDialog(props) {
   const { className, project, onClose } = props;
   const globalStateContainer = GlobalStateContainer.useContainer();
   const { loadProjects } = globalStateContainer;
-  const [userToAdd, setUserToAdd] = useState(""); // set to empty object so that material-ui knows that it is a controlled input
+  const [userToAdd, setUserToAdd] = useState(''); // set to empty object so that material-ui knows that it is a controlled input
   const [projectMembers, reloadProjectMembers] = useProjectMembers(project.id);
 
   const handleSelectUser = (e) => {
@@ -123,7 +123,7 @@ ManageProjectDialog.propTypes = {
 };
 
 ManageProjectDialog.defaultProps = {
-  className: "",
+  className: '',
 };
 
 const StyledManageProjectDialog = styled(ManageProjectDialog)`

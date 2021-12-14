@@ -11,7 +11,7 @@
  *
  */
 
-import ApiClient from "../ApiClient";
+import ApiClient from '../ApiClient';
 /**
  * Enum class ExtensionType.
  * @enum {}
@@ -22,13 +22,13 @@ export default class ExtensionType {
    * value: "user-extension"
    * @const
    */
-  "user-extension" = "user-extension";
+  'user-extension' = 'user-extension';
 
   /**
    * value: "project-extension"
    * @const
    */
-  "project-extension" = "project-extension";
+  'project-extension' = 'project-extension';
 
   /**
    * Returns a <code>ExtensionType</code> enum value from a Javascript object name.
