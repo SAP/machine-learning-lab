@@ -15,6 +15,7 @@ import { authApi } from '../../services/contaxy-api';
 import { getUserPemissionId } from '../../utils/app-utils';
 import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
 import ApiTokenDialog from '../Dialogs/ApiTokenDialog';
+import ChangePasswordDialog from '../Dialogs/ChangePasswordDialog';
 import ContentDialog from '../Dialogs/ContentDialog';
 import showStandardSnackbar from '../../app/showStandardSnackbar';
 
@@ -53,6 +54,13 @@ function UserMenu(props) {
       // ignore
     }
     window.location.reload();
+  };
+
+  const onChangePassword = async () => {
+    showAppDialog(ChangePasswordDialog, {
+      title: 'Change Password',
+      content: 'test',
+    });
   };
 
   const onUserTokenClick = async () => {
@@ -98,6 +106,7 @@ function UserMenu(props) {
       <MenuItem onClick={onUserTokenClick}>Get User API Token</MenuItem>
       <MenuItem onClick={onProjectTokenClick}>Get Project API Token</MenuItem>
       <MenuItem onClick={onApiTokenClick}>{t('api_tokens')}</MenuItem>
+      <MenuItem onClick={onChangePassword}>Change Password</MenuItem>
       <MenuItem onClick={onLogoutClick}>{t('logout')}</MenuItem>
       <Divider />
     </div>
