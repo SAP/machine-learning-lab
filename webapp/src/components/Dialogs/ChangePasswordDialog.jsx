@@ -14,10 +14,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
-import ReactJson from 'react-json-view';
-
 function ChangePasswordDialog(props) {
-  const { content, jsonContent, onClose, title } = props;
+  const { onClose, title } = props;
   const [showPassword, setShowPassword] = useState(false);
   const [newPassword, setNewPassword] = useState('');
 
@@ -29,7 +27,7 @@ function ChangePasswordDialog(props) {
     setNewPassword(e.target.value);
   };
 
-  const contentElement = content ? (
+  const contentElement = (
     <DialogContentText style={{ whiteSpace: 'pre-line' }}>
       <Input
         placeholder="New Password"
@@ -48,8 +46,6 @@ function ChangePasswordDialog(props) {
         }
       />
     </DialogContentText>
-  ) : (
-    <ReactJson src={jsonContent} />
   );
 
   return (
@@ -69,15 +65,11 @@ function ChangePasswordDialog(props) {
 }
 ChangePasswordDialog.propTypes = {
   title: PropTypes.string,
-  content: PropTypes.string,
-  jsonContent: PropTypes.instanceOf(Object),
   onClose: PropTypes.func.isRequired,
 };
 
 ChangePasswordDialog.defaultProps = {
   title: '',
-  content: '',
-  jsonContent: {},
 };
 
 export default ChangePasswordDialog;
