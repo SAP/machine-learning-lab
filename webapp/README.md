@@ -1,8 +1,15 @@
-# Contaxy Webapp
-
-Summary description of the webapp goes here...
+# ML Lab Web App
+This folder container the ML Lab web app which is build with JavaScript and React.
+It communicates with the ML Lab backend (via the contaxy API) and provides the overall UI structure of ML Lab.
+The ML Lab components are integrated into this UI via iframes.
 
 ## Develop
+During development, it can be very helpful to run the web app locally without building the production bundle and putting it into the ML Lab backend docker image.
+To do this, execute `yarn run start-debug` and open [http://localhost:3000](http://localhost:3000) in your browser.
+Note that this debug server will automatically reload if the web application is changed.
+To test the integration with the ML Lab backend, this debug web app can be connected to any running ML Lab instance.
+By default, the ML Lab backend is expected to run at http://localhost:30010/ which is the default when starting ML Lab with docker compose.
+In case you want to connect to a different ML Lab instance, adjust the package.json file accordingly.
 
 This project uses [React](https://reactjs.org) as the main framework. Components should be written as [React Hooks](https://reactjs.org/docs/hooks-intro.html) instead of the old class-style wherever possible. See [Section Components Guide](#components-guide) for some more guidelines. For component styling this project uses the [styled-components library](https://github.com/styled-components/styled-components) (see [Section Component Styling](#component-styling)). As the default design we use [Material](https://material.io/design) and, hence, the [Material-UI Library](https://material-ui.com).
 
@@ -13,10 +20,6 @@ Docs should be written in [JSDoc](https://jsdoc.app/about-getting-started.html) 
 It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) (`yarn create react-app react-webapp`) and, thus, uses the pre-configured webpack and babel build tools.
 
 The used package manager for installing packages is [yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable).
-
-It uses Storybook (see [Section](#storybook)) for documenting components. For more information about testing, check [this Section](#testing).
-
-> All `yarn` commands in this documentation can be executed via `yarn container` to run it inside of the development container instead of using the host. Hereby, the current directory is mounted into the container. See the `yarn container` command in the [package.json](./package.json).
 
 ### Code Style
 
@@ -32,9 +35,7 @@ After executing `yarn install` as they are defined in the [./package.json](./pac
 
 Sometimes, you have to do something that is not allowed by the linting rules. For example, property spreading in React makes sense sometimes. In this example, you can disable the linter for the specific line by adding `// eslint-disable-line react/jsx-props-no-spreading`. Instead of disabling a rule globally, this forces you to think about your decision instead of allowing slopiness by default.
 
-### Build
-
-#### Production Build
+### Production Build
 
 Execute `python build.py --make` to build the app. Under the hood, it uses `yarn build` for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -43,14 +44,6 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-#### Local Development Build and Run
-
-Execute `yarn start` to run the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
 ### Development Walkthrough
 
@@ -116,56 +109,3 @@ The official Jest documentation recommends to add at least smoke tests to make s
 Use `test()` instead of it's alias `it()` ([source](https://jestjs.io/docs/en/api.html#testname-fn-timeout)). See the [App.test.jsx](./src/App.test.jsx) file for an example.
 
 To run the tests, execute `yarn test`. To see test coverage, execute `yarn test -- --coverage` ([source](https://create-react-app.dev/docs/running-tests/#coverage-reporting)).
-
----
-
-### Create React App
-
-#### Available Scripts
-
-In the project directory, you can run:
-
-#### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-#### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-#### Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-##### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-##### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-##### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-##### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-##### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-##### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
