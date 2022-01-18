@@ -15,18 +15,17 @@ import ApiClient from '../ApiClient';
 import DeploymentCompute from './DeploymentCompute';
 
 /**
- * The JobInput model module.
- * @module model/JobInput
+ * The ServiceUpdate model module.
+ * @module model/ServiceUpdate
  * @version 0.0.6
  */
-class JobInput {
+class ServiceUpdate {
   /**
-   * Constructs a new <code>JobInput</code>.
-   * @alias module:model/JobInput
-   * @param containerImage {String} The container image used for this deployment.
+   * Constructs a new <code>ServiceUpdate</code>.
+   * @alias module:model/ServiceUpdate
    */
-  constructor(containerImage) {
-    JobInput.initialize(this, containerImage);
+  constructor() {
+    ServiceUpdate.initialize(this);
   }
 
   /**
@@ -34,20 +33,18 @@ class JobInput {
    * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
    * Only for internal use.
    */
-  static initialize(obj, containerImage) {
-    obj['container_image'] = containerImage;
-  }
+  static initialize(obj) {}
 
   /**
-   * Constructs a <code>JobInput</code> from a plain JavaScript object, optionally creating a new instance.
+   * Constructs a <code>ServiceUpdate</code> from a plain JavaScript object, optionally creating a new instance.
    * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
    * @param {Object} data The plain JavaScript object bearing properties of interest.
-   * @param {module:model/JobInput} obj Optional instance to populate.
-   * @return {module:model/JobInput} The populated <code>JobInput</code> instance.
+   * @param {module:model/ServiceUpdate} obj Optional instance to populate.
+   * @return {module:model/ServiceUpdate} The populated <code>ServiceUpdate</code> instance.
    */
   static constructFromObject(data, obj) {
     if (data) {
-      obj = obj || new JobInput();
+      obj = obj || new ServiceUpdate();
 
       if (data.hasOwnProperty('container_image')) {
         obj['container_image'] = ApiClient.convertToType(
@@ -105,6 +102,24 @@ class JobInput {
       if (data.hasOwnProperty('disabled')) {
         obj['disabled'] = ApiClient.convertToType(data['disabled'], 'Boolean');
       }
+      if (data.hasOwnProperty('graphql_endpoint')) {
+        obj['graphql_endpoint'] = ApiClient.convertToType(
+          data['graphql_endpoint'],
+          'String'
+        );
+      }
+      if (data.hasOwnProperty('openapi_endpoint')) {
+        obj['openapi_endpoint'] = ApiClient.convertToType(
+          data['openapi_endpoint'],
+          'String'
+        );
+      }
+      if (data.hasOwnProperty('health_endpoint')) {
+        obj['health_endpoint'] = ApiClient.convertToType(
+          data['health_endpoint'],
+          'String'
+        );
+      }
     }
     return obj;
   }
@@ -113,74 +128,93 @@ class JobInput {
 /**
  * The container image used for this deployment.
  * @member {String} container_image
+ * @default ''
  */
-JobInput.prototype['container_image'] = undefined;
+ServiceUpdate.prototype['container_image'] = '';
 
 /**
  * Parmeters (enviornment variables) for this deployment.
  * @member {Object.<String, String>} parameters
  */
-JobInput.prototype['parameters'] = undefined;
+ServiceUpdate.prototype['parameters'] = undefined;
 
 /**
  * Compute instructions and limitations for this deployment.
  * @member {module:model/DeploymentCompute} compute
  */
-JobInput.prototype['compute'] = undefined;
+ServiceUpdate.prototype['compute'] = undefined;
 
 /**
  * Command to run within the deployment. This overwrites the existing docker ENTRYPOINT.
  * @member {Array.<String>} command
  */
-JobInput.prototype['command'] = undefined;
+ServiceUpdate.prototype['command'] = undefined;
 
 /**
  * Arguments to the command/entrypoint. This overwrites the existing docker CMD.
  * @member {Array.<String>} args
  */
-JobInput.prototype['args'] = undefined;
+ServiceUpdate.prototype['args'] = undefined;
 
 /**
  * Additional requirements for deployment.
  * @member {Array.<String>} requirements
  */
-JobInput.prototype['requirements'] = undefined;
+ServiceUpdate.prototype['requirements'] = undefined;
 
 /**
  * A list of HTTP endpoints that can be accessed. This should always have an internal port and can include additional instructions, such as the URL path.
  * @member {Array.<String>} endpoints
  */
-JobInput.prototype['endpoints'] = undefined;
+ServiceUpdate.prototype['endpoints'] = undefined;
 
 /**
  * A user-defined human-readable name of the resource. The name can be up to 128 characters long and can consist of any UTF-8 character.
  * @member {String} display_name
  */
-JobInput.prototype['display_name'] = undefined;
+ServiceUpdate.prototype['display_name'] = undefined;
 
 /**
  * A user-defined short description about the resource. Can consist of any UTF-8 character.
  * @member {String} description
  */
-JobInput.prototype['description'] = undefined;
+ServiceUpdate.prototype['description'] = undefined;
 
 /**
  * Identifier or image URL used for displaying this resource.
  * @member {String} icon
  */
-JobInput.prototype['icon'] = undefined;
+ServiceUpdate.prototype['icon'] = undefined;
 
 /**
  * A collection of arbitrary key-value pairs associated with this resource that does not need predefined structure. Enable third-party integrations to decorate objects with additional metadata for their own use.
  * @member {Object.<String, String>} metadata
  */
-JobInput.prototype['metadata'] = undefined;
+ServiceUpdate.prototype['metadata'] = undefined;
 
 /**
  * Allows to disable a resource without requiring deletion. A disabled resource is not shown and not accessible.
  * @member {Boolean} disabled
  * @default false
  */
-JobInput.prototype['disabled'] = false;
+ServiceUpdate.prototype['disabled'] = false;
 
-export default JobInput;
+/**
+ * GraphQL endpoint.
+ * @member {String} graphql_endpoint
+ */
+ServiceUpdate.prototype['graphql_endpoint'] = undefined;
+
+/**
+ * Endpoint that prorvides an OpenAPI schema definition..
+ * @member {String} openapi_endpoint
+ */
+ServiceUpdate.prototype['openapi_endpoint'] = undefined;
+
+/**
+ * The endpoint instruction that can be used for checking the deployment health.
+ * @member {String} health_endpoint
+ */
+ServiceUpdate.prototype['health_endpoint'] = undefined;
+
+export default ServiceUpdate;
