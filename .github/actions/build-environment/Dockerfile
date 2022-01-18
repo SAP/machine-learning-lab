@@ -39,6 +39,7 @@ RUN apt-get update \
     # Clean up
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+ENV NODE_OPTIONS="--openssl-legacy-provider"
 
 COPY extended-entrypoint.sh /extended-entrypoint.sh
 
