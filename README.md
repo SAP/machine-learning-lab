@@ -21,6 +21,9 @@
 
 ML Lab is a centralized hub for development teams to seamlessly build, deploy, and operate machine learning solutions at scale. It is designed to cover the end-to-end machine learning lifecycle from data processing and experimentation to model training and deployment. It combines the libraries, languages, and tools data scientists love, with the infrastructure, services and workflows they need to deliver machine learning solutions into production.
 
+>❗❗❗  
+> This branch contains a new experimental version of ML Lab rewritten in python. The original java version can be found in the branch ml-lab-java.
+
 ## Highlights
 
 - 🔐 Secure multi-user development platform for machine learning solutions.
