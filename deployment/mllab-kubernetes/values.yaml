@@ -40,8 +40,8 @@ labConfig:
 labBackend:
   # Image used for the ml lab backend
   image:
-    repository: "jnkielmann/py-ml-lab"
-    tag: "0.0.4"
+    repository: "ghcr.io/sap/machine-learning-lab/lab-backend"
+    tag: "0.0.5"
     pullPolicy: IfNotPresent
   # Resource requirements of the backend deployment
   resources:
@@ -179,8 +179,8 @@ workspaceManager:
   # Deployment Configuration
   ################################################################################
   image:
-    repository: "jnkielmann/lab-workspace-manager"
-    tag: "0.0.4"
+    repository: "ghcr.io/sap/machine-learning-lab/lab-workspace-manager"
+    tag: "0.0.5"
     pullPolicy: IfNotPresent
   # Resources required
   resources:
