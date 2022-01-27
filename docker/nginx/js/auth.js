@@ -10,7 +10,7 @@ function verifyAccess(r, apiToken, permission) {
   return new Promise((resolve, reject) => {
     ngx
       .fetch(
-        `http://localhost:8090/auth/tokens/verify?permission=${encodeURIComponent(
+        `http://127.0.0.1:8090/auth/tokens/verify?permission=${encodeURIComponent(
           permission
         )}`,
         {
