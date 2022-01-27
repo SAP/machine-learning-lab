@@ -16,31 +16,58 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 function ChangePasswordDialog(props) {
   const { onClose, title } = props;
-  const [showPassword, setShowPassword] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
+  const [showNewPassword, setVisibilityNewPassword] = useState(false);
+  const [showConfirmPassword, setVisibilityConfimPassword] = useState(false);
+  const [newPassword, setNewPasswordValue] = useState('');
+  const [confirmPassword, setConfirmPasswordValue] = useState('');
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
+  const handleClickShowNewPassword = () => {
+    setVisibilityNewPassword(!showNewPassword);
   };
 
-  const setPassword = (e) => {
-    setNewPassword(e.target.value);
+  const handleClickShowConfirmPassword = () => {
+    setVisibilityConfimPassword(!showConfirmPassword);
+  };
+
+  const setNewPassword = (e) => {
+    setNewPasswordValue(e.target.value);
+  };
+
+  const setConfirmPassword = (e) => {
+    setConfirmPasswordValue(e.target.value);
   };
 
   const contentElement = (
     <DialogContentText style={{ whiteSpace: 'pre-line' }}>
       <Input
         placeholder="New Password"
-        type={showPassword ? 'text' : 'password'}
+        type={showNewPassword ? 'text' : 'password'}
         value={newPassword}
-        onChange={setPassword}
+        onChange={setNewPassword}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
               aria-label="Toggle password visibility"
-              onClick={handleClickShowPassword}
+              onClick={handleClickShowNewPassword}
             >
-              {showPassword ? <Visibility /> : <VisibilityOff />}
+              {showNewPassword ? <Visibility /> : <VisibilityOff />}
+            </IconButton>
+          </InputAdornment>
+        }
+      />
+      <div>{'\n'}</div>
+      <Input
+        placeholder="Confirm New Password"
+        type={showConfirmPassword ? 'text' : 'password'}
+        value={confirmPassword}
+        onChange={setConfirmPassword}
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="Toggle password visibility"
+              onClick={handleClickShowConfirmPassword}
+            >
+              {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
             </IconButton>
           </InputAdornment>
         }
