@@ -58,6 +58,5 @@ export function useWorkspaces(userId) {
 
   const [workspaces, reload] = useApiHook(apiCall, userId);
 
-
   return [workspaces, reload];
 }
