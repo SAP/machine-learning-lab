@@ -72,8 +72,7 @@ BodyIntrospectTokenAuthOauthIntrospectPost.prototype['token'] = undefined;
  * A hint about the type of the token submitted for introspection (e.g. `access_token`, `id_token` and `refresh_token`).
  * @member {String} token_type_hint
  */
-BodyIntrospectTokenAuthOauthIntrospectPost.prototype[
-  'token_type_hint'
-] = undefined;
+BodyIntrospectTokenAuthOauthIntrospectPost.prototype['token_type_hint'] =
+  undefined;
 
 export default BodyIntrospectTokenAuthOauthIntrospectPost;
