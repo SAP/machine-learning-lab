@@ -29,12 +29,6 @@ if not VERSION:
         VERSION = re.findall(r"__version__\s*=\s*\"(.+)\"", f.read())[0]
 
 
-if "CTXY_PACKAGE_PATH" in os.environ:
-    contaxy_path = os.environ["CTXY_PACKAGE_PATH"]
-    contaxy_package = f"contaxy @ file://localhost/{contaxy_path}#egg=contaxy"
-else:
-    contaxy_package = "contaxy"
-
 # Where the magic happens:
 setup(
     name=NAME,
@@ -54,7 +48,7 @@ setup(
     install_requires=[
         "fastapi",
         "loguru",
-        contaxy_package
+        "contaxy==0.0.7",
     ],
     # deprecated: dependency_links=dependency_links,
     extras_require={
