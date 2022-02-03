@@ -6,10 +6,13 @@ from contaxy.schema import ClientValueError, Service, ServiceInput
 
 from lab_workspace_manager.app import (
     LABEL_EXTENSION_DEPLOYMENT_TYPE,
-    deploy_workspace,
+    Workspace,
+    WorkspaceCompute,
+    WorkspaceInput,
     delete_workspace,
+    deploy_workspace,
     get_workspace,
-    list_workspaces, WorkspaceInput, WorkspaceCompute, Workspace,
+    list_workspaces,
 )
 
 
@@ -20,7 +23,7 @@ def create_test_workspace_input(display_name: str) -> WorkspaceInput:
         compute=WorkspaceCompute(
             cpus=1,
             memory=1000,
-        )
+        ),
     )
 
 
@@ -31,7 +34,7 @@ class ServiceManagerMock:
                 container_image="ws-image",
                 id="my-workspace",
                 metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "workspace"},
-                display_name="my-workspace"
+                display_name="my-workspace",
             ),
             Service(
                 container_image="service-image",
@@ -39,8 +42,17 @@ class ServiceManagerMock:
                 metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "service"},
                 display_name="my-service",
             ),
-            Service(container_image="service-image", id="my-service-2", metadata={}, display_name="my-service-2"),
-            Service(container_image="other-image", id="other-service", display_name="other-service"),
+            Service(
+                container_image="service-image",
+                id="my-service-2",
+                metadata={},
+                display_name="my-service-2",
+            ),
+            Service(
+                container_image="other-image",
+                id="other-service",
+                display_name="other-service",
+            ),
         ]
         self.delete_service = Mock()
 
@@ -70,7 +82,9 @@ class TestWorkspaceOperations:
         workspace_input = create_test_workspace_input("my-workspace")
         component_manager = ComponentManagerMock()
 
-        workspace: Workspace = deploy_workspace(workspace_input, "test-user-id", component_manager)
+        workspace: Workspace = deploy_workspace(
+            workspace_input, "test-user-id", component_manager
+        )
 
         assert workspace.container_image == workspace_input.container_image
         assert workspace_input.display_name in workspace.display_name

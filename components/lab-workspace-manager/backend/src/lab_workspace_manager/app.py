@@ -148,7 +148,7 @@ def update_workspace(
     user_id: str = USER_ID_PARAM,
     workspace_id: str = SERVICE_ID_PARAM,
     component_manager: ComponentManager = Depends(get_component_manager),
-):
+) -> Any:
     logger.debug(
         f"Update workspace request for user {user_id} "
         f"and workspace {workspace_id}: {workspace_update}"
@@ -169,7 +169,7 @@ def start_workspace(
     user_id: str = USER_ID_PARAM,
     workspace_id: str = SERVICE_ID_PARAM,
     component_manager: ComponentManager = Depends(get_component_manager),
-):
+) -> Any:
     logger.debug(
         f"Start workspace request for user {user_id} " f"and workspace {workspace_id}"
     )
@@ -274,10 +274,10 @@ def get_workspace_config(
         container_image_options=allowed_images,
         cpus_default=settings.WORKSPACE_CPUS_DEFAULT,
         cpus_max=settings.WORKSPACE_CPUS_MAX,
-        cpus_options=settings.WORKSPACE_CPUS_OPTIONS,
+        cpus_options=settings.WORKSPACE_CPUS_OPTIONS,  # type: ignore
         memory_default=settings.WORKSPACE_MEMORY_MB_DEFAULT,
         memory_max=settings.WORKSPACE_MEMORY_MB_MAX,
-        memory_options=settings.WORKSPACE_MEMORY_MB_OPTIONS,
+        memory_options=settings.WORKSPACE_MEMORY_MB_OPTIONS,  # type: ignore
     )
 
 
