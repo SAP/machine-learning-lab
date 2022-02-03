@@ -17,12 +17,14 @@ function ResourceActionsDialog(props) {
 
   const actionElements = resourceActions.map((resourceAction) => {
     return (
-      <Button
-        key={resourceAction.action_id}
-        onClick={() => executeAction(resourceAction)}
-      >
-        {resourceAction.display_name}
-      </Button>
+      <div>
+        <Button
+          key={resourceAction.action_id}
+          onClick={() => executeAction(resourceAction)}
+        >
+          {resourceAction.display_name}
+        </Button>
+      </div>
     );
   });
 
