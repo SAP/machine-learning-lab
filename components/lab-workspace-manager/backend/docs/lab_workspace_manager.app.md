@@ -9,24 +9,20 @@
 
 **Global Variables**
 ---------------
+- **ACTION_START**
 - **CREATE_RESOURCE_RESPONSES**
+- **UPDATE_RESOURCE_RESPONSES**
 - **CONTAXY_API_ENDPOINT**
-- **SELF_ACCESS_URL**
-- **SELF_DEPLOYMENT_NAME**
 - **LABEL_EXTENSION_DEPLOYMENT_TYPE**
-- **WORKSPACE_MAX_MEMORY_MB**
-- **WORKSPACE_MAX_CPUS**
-- **WORKSPACE_MAX_VOLUME_SIZE**
-- **WORKSPACE_MAX_CONTAINER_SIZE**
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L45"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L46"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-## <kbd>function</kbd> `is_workspace`
+## <kbd>function</kbd> `is_ws_service`
 
 ```python
-is_workspace(service: Service) → bool
+is_ws_service(service: Service) → bool
 ```
 
 
@@ -36,13 +32,58 @@ is_workspace(service: Service) → bool
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L51"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-## <kbd>function</kbd> `create_workspace`
+## <kbd>function</kbd> `create_ws_service_input`
 
 ```python
-create_workspace(
-    service: ServiceInput,
+create_ws_service_input(workspace_input: WorkspaceInput) → ServiceInput
+```
+
+
+
+
+
+
+---
+
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L75"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `create_ws_service_update`
+
+```python
+create_ws_service_update(workspace_update: WorkspaceUpdate) → ServiceUpdate
+```
+
+
+
+
+
+
+---
+
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L87"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `create_ws_from_service`
+
+```python
+create_ws_from_service(service: Service) → Workspace
+```
+
+
+
+
+
+
+---
+
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L108"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `deploy_workspace`
+
+```python
+deploy_workspace(
+    workspace_input: WorkspaceInput,
     user_id: str = Path(Ellipsis),
     component_manager: ComponentManager = Depends(get_component_manager)
 ) → Any
@@ -53,7 +94,46 @@ Create a new personal workspace by creating a Contaxy service with a workspace i
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L113"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L139"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `update_workspace`
+
+```python
+update_workspace(
+    workspace_update: WorkspaceUpdate,
+    user_id: str = Path(Ellipsis),
+    workspace_id: str = Path(Ellipsis),
+    component_manager: ComponentManager = Depends(get_component_manager)
+) → Any
+```
+
+
+
+
+
+
+---
+
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L163"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `start_workspace`
+
+```python
+start_workspace(
+    user_id: str = Path(Ellipsis),
+    workspace_id: str = Path(Ellipsis),
+    component_manager: ComponentManager = Depends(get_component_manager)
+) → Any
+```
+
+
+
+
+
+
+---
+
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L182"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `list_workspaces`
 
@@ -71,14 +151,14 @@ list_workspaces(
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L129"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L203"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_workspace`
 
 ```python
 get_workspace(
     user_id: str = Path(Ellipsis),
-    service_id: str = Path(Ellipsis),
+    workspace_id: str = Path(Ellipsis),
     component_manager: ComponentManager = Depends(get_component_manager)
 ) → Any
 ```
@@ -90,7 +170,7 @@ get_workspace(
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L152"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L229"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `delete_workspace`
 
@@ -99,6 +179,23 @@ delete_workspace(
     user_id: str = Path(Ellipsis),
     service_id: str = Path(Ellipsis),
     delete_volumes: Optional[bool] = Query(False),
+    component_manager: ComponentManager = Depends(get_component_manager)
+) → Any
+```
+
+
+
+
+
+
+---
+
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-workspace-manager/backend/src/lab_workspace_manager/app.py#L254"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `get_workspace_config`
+
+```python
+get_workspace_config(
     component_manager: ComponentManager = Depends(get_component_manager)
 ) → Any
 ```

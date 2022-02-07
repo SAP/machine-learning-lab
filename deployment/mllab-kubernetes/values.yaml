@@ -41,7 +41,7 @@ labBackend:
   # Image used for the ml lab backend
   image:
     repository: "ghcr.io/sap/machine-learning-lab/lab-backend"
-    tag: "0.0.6"
+    tag: "0.0.7"
     pullPolicy: IfNotPresent
   # Resource requirements of the backend deployment
   resources:
@@ -180,7 +180,7 @@ workspaceManager:
   ################################################################################
   image:
     repository: "ghcr.io/sap/machine-learning-lab/lab-workspace-manager"
-    tag: "0.0.6"
+    tag: "0.0.7"
     pullPolicy: IfNotPresent
   # Resources required
   resources:
