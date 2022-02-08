@@ -1,0 +1,119 @@
+from abc import ABC, abstractmethod
+from random import randint
+
+import pytest
+import requests
+from contaxy import config
+from contaxy.clients import AuthClient, JsonDocumentClient
+from contaxy.managers.json_db.inmemory_dict import InMemoryDictJsonDocumentManager
+from contaxy.schema import OAuth2TokenRequestFormNew
+from contaxy.schema.auth import AccessLevel, OAuth2TokenGrantTypes
+from contaxy.utils import auth_utils
+from contaxy.utils.state_utils import GlobalState, RequestState
+
+from lab_secret_store.schema import SecretInput
+from lab_secret_store.secret_store.abstract_secret_store import AbstractSecretStore
+from lab_secret_store.secret_store.json_db_secret_store import JsonDbSecretStore
+
+from .conftest import test_settings
+
+
+class SecretStoreTests(ABC):
+    @property
+    @abstractmethod
+    def secret_store(self) -> AbstractSecretStore:
+        pass
+
+    @property
+    @abstractmethod
+    def project_id(self) -> str:
+        pass
+
+    def test_secret_crud(self):
+        # Create new secrets
+        secret1 = self.secret_store.create_secret(
+            project_id=self.project_id,
+            secret_input=SecretInput(
+                display_name="My Secret", metadata={"username": "test"}
+            ),
+        )
+        secret2 = self.secret_store.create_secret(...)
+
+        # Read secret
+        read_secret = self.secret_store.get_secret(
+            project_id=self.project_id,
+            secret_id=secret1.id,
+        )
+        assert read_secret.display_name == secret1.display_name
+        assert read_secret.metadata == secret1.metadata
+        assert read_secret.secret_text == "expected-secret-text"
+
+        # List secrets
+        secrets = self.secret_store.list_secrets(...)
+        assert len(secrets) == 2
+        secrets_ids = [secret.id for secret in secrets]
+        assert secret1.id in secrets_ids and secret2.id in secrets_ids
+
+        # Delete secrets
+        self.secret_store.delete_secret(...)  #
+        self.secret_store.delete_secret(...)
+        assert len(self.secret_store.list_secrets(...)) == 0
+
+
+@pytest.mark.unit
+class TestJsonDbSecretStoreWithInMemoryDB(SecretStoreTests):
+    @pytest.fixture(autouse=True)
+    def _init_secret_store(
+        self, global_state: GlobalState, request_state: RequestState
+    ) -> None:
+        json_db = InMemoryDictJsonDocumentManager(global_state, request_state)
+        self._secret_store = JsonDbSecretStore(json_db)
+
+    @property
+    def secret_store(self) -> AbstractSecretStore:
+        return self._secret_store
+
+    @property
+    def project_id(self) -> str:
+        return f"{randint(1, 100000)}-secret-store-test"
+
+
+@pytest.mark.skipif(
+    not test_settings.REMOTE_CONTAXY_ENDPOINT,
+    reason="No remote backend is configured (via REMOTE_CONTAXY_ENDPOINT).",
+)
+@pytest.mark.skipif(
+    not test_settings.REMOTE_CONTAXY_TESTS,
+    reason="Remote Backend Tests are deactivated, use REMOTE_CONTAXY_TESTS to activate.",
+)
+@pytest.mark.integration
+class TestSecretStoreWithContaxyEndpoint(SecretStoreTests):
+    @pytest.fixture(autouse=True)
+    def _init_secret_store(self, contaxy_remote_client: requests.Session) -> None:
+        json_db = JsonDocumentClient(contaxy_remote_client)
+        self._secret_store = JsonDbSecretStore(json_db)
+        self._auth_manager = AuthClient(contaxy_remote_client)
+        self.login_user(
+            config.SYSTEM_ADMIN_USERNAME, config.SYSTEM_ADMIN_INITIAL_PASSWORD
+        )
+
+    @property
+    def secret_store(self) -> AbstractSecretStore:
+        return self._secret_store
+
+    @property
+    def project_id(self) -> str:
+        return f"{randint(1, 100000)}-secret-store-test"
+
+    def login_user(self, username: str, password: str) -> None:
+        self._auth_manager.request_token(
+            OAuth2TokenRequestFormNew(
+                grant_type=OAuth2TokenGrantTypes.PASSWORD,
+                username=username,
+                password=password,
+                scope=auth_utils.construct_permission(
+                    "*", AccessLevel.ADMIN
+                ),  # Get full scope
+                set_as_cookie=True,
+            )
+        )
