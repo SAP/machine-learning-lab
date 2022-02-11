@@ -48,7 +48,7 @@ function Workspace() {
             setTimeout(() => {
               setWorkspaceLoading(false);
               reloadWorkspaces();
-            }, 5000);
+            }, 10000);
           });
           setWorkspaceLoading(true);
         } else {
@@ -108,7 +108,7 @@ function Workspace() {
               setTimeout(() => {
                 setWorkspaceLoading(false);
                 reloadWorkspaces();
-              }, 5000);
+              }, 10000);
             });
             setWorkspaceLoading(true);
           }}

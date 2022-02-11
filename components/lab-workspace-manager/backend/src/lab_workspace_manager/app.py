@@ -52,7 +52,7 @@ def is_ws_service(service: Service) -> bool:
 def create_ws_service_input(workspace_input: WorkspaceInput) -> ServiceInput:
     return ServiceInput(
         container_image=workspace_input.container_image,
-        display_name=f"ws-{workspace_input.display_name}",
+        display_name=f"WS {workspace_input.display_name}",
         endpoints=["8080b"],
         parameters={
             "WORKSPACE_BASE_URL": "{env.CONTAXY_SERVICE_URL}",
@@ -69,11 +69,23 @@ def create_ws_service_input(workspace_input: WorkspaceInput) -> ServiceInput:
             "max_container_size": settings.WORKSPACE_CONTAINER_SIZE,
         },
         is_stopped=workspace_input.is_stopped,
+        idle_timeout=workspace_input.idle_timeout
+        if workspace_input.idle_timeout != 0
+        else None,
+        clear_volume_on_stop=True
+        if settings.WORKSPACE_ALWAYS_CLEAR_VOLUME_ON_STOP
+        else workspace_input.clear_volume_on_stop,
     )
 
 
 def create_ws_service_update(workspace_update: WorkspaceUpdate) -> ServiceUpdate:
     workspace_update_dict = workspace_update.dict(exclude_unset=True)
+    if "idle_timeout" in workspace_update_dict:
+        if workspace_update_dict["idle_timeout"] == 0:
+            workspace_update_dict["idle_timeout"] = None
+    if "clear_volume_on_stop" in workspace_update_dict:
+        if settings.WORKSPACE_ALWAYS_CLEAR_VOLUME_ON_STOP:
+            workspace_update_dict["clear_volume_on_stop"] = True
     service_update = ServiceUpdate(**workspace_update_dict)
     if "compute" in workspace_update_dict:
         service_update.compute = DeploymentCompute()
@@ -97,9 +109,11 @@ def create_ws_from_service(service: Service) -> Workspace:
         compute.memory = service.compute.max_memory
     return Workspace(
         id=service.id,
-        display_name=service.display_name[len("ws-") :],
+        display_name=service.display_name[len("WS ") :],
         container_image=service.container_image,
         compute=compute,
+        idle_timeout=service.idle_timeout,
+        clear_volume_on_stop=service.clear_volume_on_stop,
         status=service.status,
         access_url=access_url,
     )
@@ -123,7 +137,7 @@ def deploy_workspace(
     try:
         # Use the user's project which has the same id as the user
         service = component_manager.get_service_manager().deploy_service(
-            project_id=user_id, service=service_input
+            project_id=user_id, service_input=service_input
         )
         logger.debug(
             f"Successfully created workspace service with name "
@@ -223,7 +237,7 @@ def get_workspace(
             f"The service with id {workspace_id} is not a workspace!"
         )
 
-    return service
+    return create_ws_from_service(service)
 
 
 @app.delete(
@@ -265,7 +279,7 @@ def get_workspace_config(
         f"{image_info.image_name}:{image_tag}"
         for image_info in allowed_images
         if image_info.metadata
-        and bool(image_info.metadata.get("is-workspace", False)) is True
+        if image_info.metadata.get("is-workspace", None) is not None
         for image_tag in image_info.image_tags
     ]
     return WorkspaceConfigOptions(
@@ -278,6 +292,9 @@ def get_workspace_config(
         memory_default=settings.WORKSPACE_MEMORY_MB_DEFAULT,
         memory_max=settings.WORKSPACE_MEMORY_MB_MAX,
         memory_options=settings.WORKSPACE_MEMORY_MB_OPTIONS,  # type: ignore
+        idle_timeout_default=settings.WORKSPACE_IDLE_TIMEOUT_DEFAULT,
+        idle_timeout_options=settings.WORKSPACE_IDLE_TIMEOUT_OPTIONS,  # type: ignore
+        always_clear_volume_on_stop=settings.WORKSPACE_ALWAYS_CLEAR_VOLUME_ON_STOP,
     )
 
 

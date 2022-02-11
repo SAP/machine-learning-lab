@@ -56,8 +56,8 @@ class ServiceManagerMock:
         ]
         self.delete_service = Mock()
 
-    def deploy_service(self, project_id: str, service: ServiceInput) -> Service:
-        return Service(id=service.display_name, **service.dict())
+    def deploy_service(self, project_id: str, service_input: ServiceInput) -> Service:
+        return Service(id=service_input.display_name, **service_input.dict())
 
     def list_services(self, project_id: str) -> List[Service]:
         return self._fake_services

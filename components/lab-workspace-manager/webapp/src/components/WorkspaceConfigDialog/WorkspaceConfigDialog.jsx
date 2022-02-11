@@ -4,21 +4,17 @@ import PropTypes from 'prop-types';
 
 import {
   Button,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   Divider,
-  FormControl,
-  FormControlLabel,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
 } from '@mui/material';
 
+import ClearDataCheckbox from './ClearDataCheckbox';
+import IdleTimeoutSelect from './IdleTimeoutSelect';
 import ImageSelect from './ImageSelect';
 import NumberSelect from './NumberSelect';
 
@@ -29,16 +25,16 @@ function WorkspaceConfigDialog(props) {
     container_image: currentWorkspace.container_image,
     cpus: currentWorkspace.compute.cpus,
     memory: currentWorkspace.compute.memory,
+    idle_timeout: currentWorkspace.idle_timeout,
+    clear_volume_on_stop: currentWorkspace.clear_volume_on_stop,
   });
 
   const onChange = (e) => {
     setConfigValues({
       ...configValues,
-      [e.target.name]:
-        e.target.checked !== undefined ? e.target.checked : e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
-
   const handleUpdateClick = () => {
     onUpdate(
       {
@@ -47,6 +43,8 @@ function WorkspaceConfigDialog(props) {
           cpus: parseInt(configValues.cpus, 10),
           memory: parseInt(configValues.memory, 10),
         },
+        idle_timeout: configValues.idle_timeout,
+        clear_volume_on_stop: configValues.clear_volume_on_stop,
       },
       onClose
     );
@@ -99,42 +97,35 @@ function WorkspaceConfigDialog(props) {
               allowedNumbers={workspaceManagerConfig.memory_options}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Divider textAlign="left">Other Settings</Divider>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <InputLabel id="max_idle_time">
-                Stop Workspace After Idle Time
-              </InputLabel>
-              <Select
-                label="Stop Workspace After Idle Time"
-                name="max_idle_time"
-                value={configValues.max_idle_time || '4h'}
-                onChange={onChange}
-              >
-                <MenuItem value="1h">1 hour</MenuItem>
-                <MenuItem value="2h">2 hours</MenuItem>
-                <MenuItem value="4h">4 hours</MenuItem>
-                <MenuItem value="8h">8 hours</MenuItem>
-                <MenuItem value="never">Never Stop Workspace</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={6} container alignItems="center">
-            <FormControl fullWidth>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={configValues.clear_data_after_max_idle || false}
-                    onChange={onChange}
-                    name="clear_data_after_max_idle"
-                  />
-                }
-                label="Clear all data after the workspace is stopped"
-              />
-            </FormControl>
-          </Grid>
+          {workspaceManagerConfig.idle_timeout_options.length > 1 ? (
+            <>
+              <Grid item xs={12}>
+                <Divider textAlign="left">Other Settings</Divider>
+              </Grid>
+              <Grid item xs={6}>
+                <IdleTimeoutSelect
+                  label="Stop Workspace After Idle Time"
+                  name="idle_timeout"
+                  value={configValues.idle_timeout}
+                  onChange={onChange}
+                  allowedIdleTimeouts={
+                    workspaceManagerConfig.idle_timeout_options
+                  }
+                />
+              </Grid>
+              <Grid item xs={6} container alignItems="center">
+                <ClearDataCheckbox
+                  label="Clear all data after the workspace is stopped"
+                  name="clear_volume_on_stop"
+                  value={configValues.clear_volume_on_stop}
+                  onChange={onChange}
+                  alwaysClearData={
+                    workspaceManagerConfig.always_clear_volume_on_stop
+                  }
+                />
+              </Grid>
+            </>
+          ) : null}
         </Grid>
       </DialogContent>
       <DialogActions>

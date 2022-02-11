@@ -18,12 +18,17 @@ class WorkspaceManagerSettings(BaseSettings):
     WORKSPACE_CPUS_MAX: int = 4
     WORKSPACE_CPUS_OPTIONS: Union[str, List[int]] = []
 
+    WORKSPACE_IDLE_TIMEOUT_DEFAULT: int = 0  # Zero means no idle timeout
+    WORKSPACE_IDLE_TIMEOUT_OPTIONS: Union[str, List[int]] = []
+    WORKSPACE_ALWAYS_CLEAR_VOLUME_ON_STOP: bool = False
+
     WORKSPACE_VOLUME_SIZE: int = 5000
     WORKSPACE_CONTAINER_SIZE: int = 5000
 
     @validator(
         "WORKSPACE_MEMORY_MB_OPTIONS",
         "WORKSPACE_CPUS_OPTIONS",
+        "WORKSPACE_IDLE_TIMEOUT_OPTIONS",
         pre=True,
         allow_reuse=True,
     )

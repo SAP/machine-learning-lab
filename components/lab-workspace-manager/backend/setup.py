@@ -53,7 +53,7 @@ setup(
     install_requires=[
         "fastapi",
         "loguru",
-        "contaxy==0.0.7",
+        "contaxy==0.0.9",
     ],
     # deprecated: dependency_links=dependency_links,
     extras_require={

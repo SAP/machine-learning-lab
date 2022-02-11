@@ -28,6 +28,8 @@ services:
       - BACKEND_CORS_ORIGINS=http://localhost:3000
       - DEBUG=False
       - WEB_CONCURRENCY=1
+      - JWT_TOKEN_EXPIRY_MINUTES=15 # 15 minutes
+      - SERVICE_IDLE_CHECK_INTERVAL=1200 # 20 minutes
     depends_on:
       - postgres
       - s3
