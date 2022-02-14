@@ -32,6 +32,7 @@
 - [`app.list_workspaces`](./lab_workspace_manager.app.md#function-list_workspaces)
 - [`app.start_workspace`](./lab_workspace_manager.app.md#function-start_workspace)
 - [`app.update_workspace`](./lab_workspace_manager.app.md#function-update_workspace)
+- [`schema.check_if_in_options`](./lab_workspace_manager.schema.md#function-check_if_in_options): Create a pydantic validator that checks if the given field is one of the valid options.
 - [`utils.get_component_manager`](./lab_workspace_manager.utils.md#function-get_component_manager): Returns the initialized component manager.
 
 
