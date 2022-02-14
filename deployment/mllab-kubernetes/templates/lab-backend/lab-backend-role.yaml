@@ -1,7 +1,7 @@
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ include "machine-learning-lab.fullname" . }}-backend 
+  name: {{ include "machine-learning-lab.fullname" . }}-backend
 rules:
   - apiGroups: [""]
     resources: ["pods", "persistentvolumeclaims"]
@@ -24,3 +24,6 @@ rules:
   - apiGroups: ["apps"]
     resources: ["deployments"]
     verbs: ["get", "watch", "list", "create", "delete", "update"]
+  - apiGroups: ["apps"]
+    resources: ["deployments/status"]
+    verbs: ["get"]

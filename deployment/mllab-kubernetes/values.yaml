@@ -33,6 +33,10 @@ labConfig:
   debug: false
   # Number of gunicorn server processes used for the backend
   numServerProcesses: 3
+  # Time in minutes for which a service session token is valid
+  sessionTokenExpiryMinutes: 15 # 15 minutes
+  # Time in seconds between check for idle services
+  serviceIdleCheckInterval: 1200 # 20 minutes
 
 
 
@@ -41,7 +45,7 @@ labBackend:
   # Image used for the ml lab backend
   image:
     repository: "ghcr.io/sap/machine-learning-lab/lab-backend"
-    tag: "0.0.7"
+    tag: "0.0.8"
     pullPolicy: IfNotPresent
   # Resource requirements of the backend deployment
   resources:
@@ -164,23 +168,29 @@ workspaceManager:
   ################################################################################
   # Workspace Configuration
   ################################################################################
-  # Maximum amount of memory (RAM) that can be used by a single workspace (in MB)
-  memoryLimit: 5000
-  # Maximum number of CPUs that can be used by a single workspace
-  cpuLimit: "1"
-  # Size of the volume mounted to the /workspace directory in the workspace (in MB)
-  persistentVolumeSize: 10000
-  # Maximum size of the container in MB (this includes all file that are not in the mounted /workspace folder)
-  maxContainerSize: 10000
-  # If this option is enabled, users can use ssh to access their workspace
-  sshEnabled: true
+  env:
+    WORKSPACE_MEMORY_MB_DEFAULT: "1000"
+    WORKSPACE_MEMORY_MB_MAX: "8000"
+    WORKSPACE_MEMORY_MB_OPTIONS: "1000,2000,4000,8000"
+
+    WORKSPACE_CPUS_DEFAULT: "1"
+    WORKSPACE_CPUS_MAX: "4"
+    WORKSPACE_CPUS_OPTIONS: "1,2,3,4"
+
+    WORKSPACE_IDLE_TIMEOUT_DEFAULT: "0"
+    WORKSPACE_IDLE_TIMEOUT_OPTIONS: "0,3600,7200,14400,28800"
+    WORKSPACE_ALWAYS_CLEAR_VOLUME_ON_STOP: "false"
+
+    WORKSPACE_VOLUME_SIZE: "5000"
+    WORKSPACE_CONTAINER_SIZE: "5000"
+
 
   ################################################################################
   # Deployment Configuration
   ################################################################################
   image:
     repository: "ghcr.io/sap/machine-learning-lab/lab-workspace-manager"
-    tag: "0.0.7"
+    tag: "0.0.8"
     pullPolicy: IfNotPresent
   # Resources required
   resources:
