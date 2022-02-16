@@ -1,34 +1,39 @@
-from pydantic import BaseModel
+from typing import Dict
+
+from pydantic import BaseModel, Field
 
 
 class SecretInput(BaseModel):
     """Input data provided by the client when creating a new secret."""
 
-    # secret_text
-    # display_name
-    # metadata
+    display_name: str
+    metadata: Dict[str, str] = Field(
+        {}, example={"username": ""}, description="optional meta data values"
+    )
+    secret_text: str = Field(description="password or key")
     pass
 
 
 class SecretUpdate(BaseModel):
     """Update data provided by the client when updating a secret."""
 
-    # secret_text
-    # metadata
+    metadata: Dict[str, str] = Field(
+        {}, example={"username": ""}, description="optional meta data values"
+    )
+    secret_text: str = Field("", description="password or key")
     pass
 
 
 class SecretMetadata(BaseModel):
     """Non sensitive secret data without the secret text."""
 
-    # id
-    # display_name
-    # metadata
+    id: str
+    display_name: str
+    metadata: Dict[str, str]
     pass
 
 
 class Secret(SecretMetadata):
-    """Secret data including the sensitive secret text."""
+    secret_text: str
 
-    # secret_text
     pass
