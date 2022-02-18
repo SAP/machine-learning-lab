@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from typing import Any, List, Optional
 
 from contaxy.managers.components import ComponentManager
@@ -70,7 +71,7 @@ def create_ws_service_input(workspace_input: WorkspaceInput) -> ServiceInput:
         },
         is_stopped=workspace_input.is_stopped,
         idle_timeout=workspace_input.idle_timeout
-        if workspace_input.idle_timeout != 0
+        if workspace_input.idle_timeout != timedelta(0)
         else None,
         clear_volume_on_stop=True
         if settings.WORKSPACE_ALWAYS_CLEAR_VOLUME_ON_STOP
@@ -81,7 +82,7 @@ def create_ws_service_input(workspace_input: WorkspaceInput) -> ServiceInput:
 def create_ws_service_update(workspace_update: WorkspaceUpdate) -> ServiceUpdate:
     workspace_update_dict = workspace_update.dict(exclude_unset=True)
     if "idle_timeout" in workspace_update_dict:
-        if workspace_update_dict["idle_timeout"] == 0:
+        if workspace_update_dict["idle_timeout"] == timedelta(0):
             workspace_update_dict["idle_timeout"] = None
     if "clear_volume_on_stop" in workspace_update_dict:
         if settings.WORKSPACE_ALWAYS_CLEAR_VOLUME_ON_STOP:
