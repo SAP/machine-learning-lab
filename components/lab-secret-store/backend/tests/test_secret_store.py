@@ -11,7 +11,7 @@ from contaxy.schema.auth import AccessLevel, OAuth2TokenGrantTypes
 from contaxy.utils import auth_utils
 from contaxy.utils.state_utils import GlobalState, RequestState
 
-from lab_secret_store.schema import SecretInput
+from lab_secret_store.schema import SecretInput, SecretUpdate
 from lab_secret_store.secret_store.abstract_secret_store import AbstractSecretStore
 from lab_secret_store.secret_store.json_db_secret_store import JsonDbSecretStore
 
@@ -33,12 +33,20 @@ class SecretStoreTests(ABC):
         # Create new secrets
         secret1 = self.secret_store.create_secret(
             project_id=self.project_id,
-            secret_input=SecretInput(
-                display_name="My Secret", metadata={"username": "test"}
+            value=SecretInput(
+                display_name="My Secret",
+                metadata={"username": "test"},
+                secret_text="test",
             ),
         )
-        secret2 = self.secret_store.create_secret(...)
-
+        secret2 = self.secret_store.create_secret(
+            project_id=self.project_id,
+            value=SecretInput(
+                display_name="My Secret 2",
+                metadata={"username": "test2"},
+                secret_text="test2",
+            ),
+        )
         # Read secret
         read_secret = self.secret_store.get_secret(
             project_id=self.project_id,
@@ -46,18 +54,38 @@ class SecretStoreTests(ABC):
         )
         assert read_secret.display_name == secret1.display_name
         assert read_secret.metadata == secret1.metadata
-        assert read_secret.secret_text == "expected-secret-text"
+        assert read_secret.secret_text == "test"
 
         # List secrets
-        secrets = self.secret_store.list_secrets(...)
+        secrets = self.secret_store.list_secrets(self.project_id)
         assert len(secrets) == 2
         secrets_ids = [secret.id for secret in secrets]
         assert secret1.id in secrets_ids and secret2.id in secrets_ids
 
+        # update
+        update = SecretUpdate(metadata={"username": "updated_username"})
+        self.secret_store.update_secret(self.project_id, secret1.id, update)
+        read_secret = self.secret_store.get_secret(
+            project_id=self.project_id,
+            secret_id=secret1.id,
+        )
+        assert read_secret.secret_text == "test"
+        assert read_secret.metadata == {"username": "updated_username"}
+
+        # in secret 2
+        update = SecretUpdate(secret_text="updated_secret_text")
+        self.secret_store.update_secret(self.project_id, secret2.id, update)
+        read_secret = self.secret_store.get_secret(
+            project_id=self.project_id,
+            secret_id=secret2.id,
+        )
+        assert read_secret.secret_text == "updated_secret_text"
+        assert read_secret.metadata == {"username": "test2"}
+
         # Delete secrets
-        self.secret_store.delete_secret(...)  #
-        self.secret_store.delete_secret(...)
-        assert len(self.secret_store.list_secrets(...)) == 0
+        self.secret_store.delete_secret(self.project_id, secret1.id)
+        self.secret_store.delete_secret(self.project_id, secret2.id)
+        assert len(self.secret_store.list_secrets(self.project_id)) == 0
 
 
 @pytest.mark.unit
@@ -75,7 +103,7 @@ class TestJsonDbSecretStoreWithInMemoryDB(SecretStoreTests):
 
     @property
     def project_id(self) -> str:
-        return f"{randint(1, 100000)}-secret-store-test"
+        return "secret-store-test"
 
 
 @pytest.mark.skipif(

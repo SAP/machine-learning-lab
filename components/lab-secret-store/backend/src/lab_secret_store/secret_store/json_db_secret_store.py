@@ -2,9 +2,11 @@ from black import List
 from contaxy.operations import JsonDocumentOperations
 from contaxy.schema.json_db import JsonDocument
 
-from lab_secret_store.helper import decrypt, encrypt
-from lab_secret_store.schema import Secret, SecretMetadata, SecretUpdate
+from lab_secret_store.helper import decrypt, display_name_to_id, encrypt
+from lab_secret_store.schema import Secret, SecretInput, SecretMetadata, SecretUpdate
 from lab_secret_store.secret_store.abstract_secret_store import AbstractSecretStore
+
+SECRET_COLLECTION: str = "_lab_secret_store_secrets"
 
 
 class JsonDbSecretStore(AbstractSecretStore):
@@ -14,17 +16,17 @@ class JsonDbSecretStore(AbstractSecretStore):
     def get_secret(self, project_id: str, secret_id: str) -> Secret:
         secret_doc = self.json_db.get_json_document(
             project_id=project_id,
-            collection_id="_lab_secret_store_secrets",
+            collection_id=SECRET_COLLECTION,
             key=secret_id,
         )
         res = Secret.parse_raw(secret_doc.json_value)
         res.secret_text = decrypt(res.secret_text)
         return res
 
-    def get_secrets(self, project_id: str) -> List[SecretMetadata]:
+    def list_secrets(self, project_id: str) -> List[SecretMetadata]:
         secret_docs = self.json_db.list_json_documents(
             project_id=project_id,
-            collection_id="_lab_secret_store_secrets",
+            collection_id=SECRET_COLLECTION,
         )
         return [
             SecretMetadata.parse_raw(secret_doc.json_value)
@@ -32,15 +34,24 @@ class JsonDbSecretStore(AbstractSecretStore):
         ]
 
     def create_secret(
-        self, project_id: str, secret_id: str, value: Secret
+        self, project_id: str, value: SecretInput, key: bytes = b""
     ) -> SecretMetadata:
-        value.secret_text = encrypt(value.secret_text)
+        secretJson = Secret(
+            id=display_name_to_id(value.display_name),
+            display_name=value.display_name,
+            metadata=value.metadata,
+            secret_text=value.secret_text,
+        )
+        if key == b"":
+            secretJson.secret_text = encrypt(secretJson.secret_text)
+        else:
+            secretJson.secret_text = encrypt(secretJson.secret_text, key)
         return SecretMetadata.parse_raw(
             self.json_db.create_json_document(
                 project_id=project_id,
-                collection_id="_lab_secret_store_secrets",
-                key=secret_id,
-                json_document=value.json(),
+                collection_id=SECRET_COLLECTION,
+                key=secretJson.id,
+                json_document=secretJson.json(),
                 upsert=True,
             ).json_value
         )
@@ -48,10 +59,11 @@ class JsonDbSecretStore(AbstractSecretStore):
     def update_secret(
         self, project_id: str, secret_id: str, value: SecretUpdate
     ) -> JsonDocument:
-        value.secret_text = encrypt(value.secret_text)
+        if value.secret_text != "":
+            value.secret_text = encrypt(value.secret_text)
         return self.json_db.update_json_document(
             project_id=project_id,
-            collection_id="_lab_secret_store_secrets",
+            collection_id=SECRET_COLLECTION,
             key=secret_id,
             json_document=value.json(exclude_unset=True),
         )
@@ -59,6 +71,6 @@ class JsonDbSecretStore(AbstractSecretStore):
     def delete_secret(self, project_id: str, secret_id: str) -> None:
         self.json_db.delete_json_document(
             project_id=project_id,
-            collection_id="_lab_secret_store_secrets",
+            collection_id=SECRET_COLLECTION,
             key=secret_id,
         )

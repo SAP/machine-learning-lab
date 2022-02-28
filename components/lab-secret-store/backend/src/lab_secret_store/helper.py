@@ -4,10 +4,12 @@ from cryptography.fernet import Fernet
 
 
 def display_name_to_id(name: str) -> str:
+    """Converts the display name to secret_id. Secred_id is used as a key in the db."""
     return name.replace(" ", "-").lower()
 
 
 def get_key(keyfile: str = "key.txt") -> bytes:
+    """Gets the encryption key from local file ore creats a new one if missing."""
     try:
 
         with open(keyfile) as file:
