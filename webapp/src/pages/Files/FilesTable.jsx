@@ -14,15 +14,16 @@ const COLUMNS = [
     field: 'display_name',
     title: 'Name',
     numeric: false,
-    align: 'center',
-    render: (row) => row.display_name.split('/').pop(),
+    align: 'left',
+    defaultGroupOrder: 0,
   },
   {
     field: 'updated_at',
     title: 'Last modified',
     numeric: false,
     type: 'date',
-    align: 'center',
+    align: 'left',
+    grouping: false,
   },
   // TODO: Uncomment when updated_by field is pobulated
   // {
@@ -33,12 +34,14 @@ const COLUMNS = [
   {
     field: 'version',
     title: 'Version',
-    align: 'center',
+    align: 'left',
+    grouping: false,
   },
   {
     field: 'file_size',
     title: 'Size',
-    align: 'center',
+    align: 'left',
+    grouping: false,
     render: (row) => byteSize(row.file_size).toString(),
   },
 ];
@@ -56,7 +59,7 @@ function FilesTable(props) {
         columnsButton: false,
         exportButton: true,
         exportFileName: 'data',
-        grouping: false,
+        grouping: true,
         pageSize: 5,
         pageSizeOptions: PAGE_SIZES,
         actionsColumnIndex: -1,
