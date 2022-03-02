@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 
 from black import List
-from contaxy.schema.json_db import JsonDocument
 
-from lab_secret_store.schema import Secret, SecretMetadata, SecretUpdate
+from lab_secret_store.schema import Secret, SecretInput, SecretMetadata, SecretUpdate
 
 
 class AbstractSecretStore(ABC):
@@ -12,7 +11,7 @@ class AbstractSecretStore(ABC):
         pass
 
     def create_secret(
-        self, project_id: str, value: Secret, key: bytes = b""
+        self, project_id: str, value: SecretInput, key: bytes = b""
     ) -> SecretMetadata:
         pass
 
@@ -24,5 +23,5 @@ class AbstractSecretStore(ABC):
 
     def update_secret(
         self, project_id: str, secret_id: str, value: SecretUpdate
-    ) -> JsonDocument:
+    ) -> None:
         pass

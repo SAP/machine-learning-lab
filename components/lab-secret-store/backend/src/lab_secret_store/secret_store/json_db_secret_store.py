@@ -1,6 +1,5 @@
 from black import List
 from contaxy.operations import JsonDocumentOperations
-from contaxy.schema.json_db import JsonDocument
 
 from lab_secret_store.helper import decrypt, display_name_to_id, encrypt
 from lab_secret_store.schema import Secret, SecretInput, SecretMetadata, SecretUpdate
@@ -58,10 +57,10 @@ class JsonDbSecretStore(AbstractSecretStore):
 
     def update_secret(
         self, project_id: str, secret_id: str, value: SecretUpdate
-    ) -> JsonDocument:
+    ) -> None:
         if value.secret_text != "":
             value.secret_text = encrypt(value.secret_text)
-        return self.json_db.update_json_document(
+        self.json_db.update_json_document(
             project_id=project_id,
             collection_id=SECRET_COLLECTION,
             key=secret_id,

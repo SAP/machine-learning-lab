@@ -1,16 +1,16 @@
 from abc import ABC, abstractmethod
-from random import randint
 
 import pytest
 import requests
 from contaxy import config
-from contaxy.clients import AuthClient, JsonDocumentClient
+from contaxy.clients import AuthClient
 from contaxy.managers.json_db.inmemory_dict import InMemoryDictJsonDocumentManager
 from contaxy.schema import OAuth2TokenRequestFormNew
 from contaxy.schema.auth import AccessLevel, OAuth2TokenGrantTypes
 from contaxy.utils import auth_utils
 from contaxy.utils.state_utils import GlobalState, RequestState
 
+from lab_secret_store.client import SecretClient
 from lab_secret_store.schema import SecretInput, SecretUpdate
 from lab_secret_store.secret_store.abstract_secret_store import AbstractSecretStore
 from lab_secret_store.secret_store.json_db_secret_store import JsonDbSecretStore
@@ -107,23 +107,27 @@ class TestJsonDbSecretStoreWithInMemoryDB(SecretStoreTests):
 
 
 @pytest.mark.skipif(
-    not test_settings.REMOTE_CONTAXY_ENDPOINT,
+    not test_settings.REMOTE_BACKEND_ENDPOINT,
     reason="No remote backend is configured (via REMOTE_CONTAXY_ENDPOINT).",
 )
 @pytest.mark.skipif(
-    not test_settings.REMOTE_CONTAXY_TESTS,
+    not test_settings.REMOTE_BACKEND_TESTS,
     reason="Remote Backend Tests are deactivated, use REMOTE_CONTAXY_TESTS to activate.",
 )
 @pytest.mark.integration
 class TestSecretStoreWithContaxyEndpoint(SecretStoreTests):
     @pytest.fixture(autouse=True)
-    def _init_secret_store(self, contaxy_remote_client: requests.Session) -> None:
-        json_db = JsonDocumentClient(contaxy_remote_client)
-        self._secret_store = JsonDbSecretStore(json_db)
+    def _init_secret_store(
+        self,
+        remote_client: requests.Session,
+        contaxy_remote_client: requests.Session,
+    ) -> None:
+        self._secret_store = SecretClient(remote_client)
         self._auth_manager = AuthClient(contaxy_remote_client)
         self.login_user(
             config.SYSTEM_ADMIN_USERNAME, config.SYSTEM_ADMIN_INITIAL_PASSWORD
         )
+        remote_client.cookies = contaxy_remote_client.cookies
 
     @property
     def secret_store(self) -> AbstractSecretStore:
@@ -131,7 +135,7 @@ class TestSecretStoreWithContaxyEndpoint(SecretStoreTests):
 
     @property
     def project_id(self) -> str:
-        return f"{randint(1, 100000)}-secret-store-test"
+        return "secret-store-test"
 
     def login_user(self, username: str, password: str) -> None:
         self._auth_manager.request_token(

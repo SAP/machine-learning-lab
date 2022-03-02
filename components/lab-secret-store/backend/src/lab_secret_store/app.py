@@ -11,6 +11,7 @@ from contaxy.schema.project import PROJECT_ID_PARAM, SECRET_ID_PARAM
 from contaxy.utils import fastapi_utils
 from fastapi import Depends, FastAPI, status
 from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import Response
 
 from lab_secret_store.schema import Secret, SecretInput, SecretUpdate
 from lab_secret_store.secret_store.json_db_secret_store import JsonDbSecretStore
@@ -97,6 +98,7 @@ def update_secret(
         secret_id,
         secret_update,
     )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @app.delete(
@@ -111,6 +113,7 @@ def delete_secret(
 ) -> Any:
     secret_store = JsonDbSecretStore(component_manager.get_json_db_manager())
     secret_store.delete_secret(project_id, secret_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 if __name__ == "__main__":

@@ -12,8 +12,9 @@ from starlette.datastructures import State
 class TestSettings(BaseSettings):
     """Test Settings."""
 
-    REMOTE_CONTAXY_TESTS: bool = True
-    REMOTE_CONTAXY_ENDPOINT: Optional[str] = None
+    REMOTE_CONTAXY_ENDPOINT: Optional[str] = "http://localhost:30010/api"
+    REMOTE_BACKEND_TESTS: bool = True
+    REMOTE_BACKEND_ENDPOINT: Optional[str] = "http://localhost:8080"
 
 
 test_settings = TestSettings()
@@ -21,6 +22,12 @@ test_settings = TestSettings()
 
 @pytest.fixture()
 def remote_client() -> requests.Session:
+    """Initializes a remote client using the configured remote backend endpoint."""
+    return BaseUrlSession(base_url=test_settings.REMOTE_BACKEND_ENDPOINT)
+
+
+@pytest.fixture()
+def contaxy_remote_client() -> requests.Session:
     """Initializes a remote client using the configured remote backend endpoint."""
     return BaseUrlSession(base_url=test_settings.REMOTE_CONTAXY_ENDPOINT)
 
