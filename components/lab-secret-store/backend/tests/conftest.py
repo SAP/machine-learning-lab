@@ -13,7 +13,7 @@ class TestSettings(BaseSettings):
     """Test Settings."""
 
     REMOTE_CONTAXY_ENDPOINT: Optional[str] = "http://localhost:30010/api"
-    REMOTE_BACKEND_TESTS: bool = True
+    REMOTE_BACKEND_TESTS: bool = False
     REMOTE_BACKEND_ENDPOINT: Optional[str] = "http://localhost:8080"
 
 
