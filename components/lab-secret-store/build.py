@@ -22,7 +22,7 @@ def main(args: dict) -> None:
     build_utils.build(PYTHON_LIB_COMPONENT, args)
 
     if args.get(build_utils.FLAG_MAKE):
-        build_utils.build(WEBAPP_COMPONENT, args)
+        # build_utils.build(WEBAPP_COMPONENT, args)
 
         build_docker.build_docker_image(COMPONENT_NAME, version, exit_on_error=True)
 
