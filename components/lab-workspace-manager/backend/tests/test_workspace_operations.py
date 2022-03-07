@@ -68,12 +68,21 @@ class ServiceManagerMock:
         )
 
 
+class AuthManagerMock:
+    def create_token(self, **kwargs):
+        return "test-token"
+
+
 class ComponentManagerMock:
     def __init__(self):
         self._service_manager = ServiceManagerMock()
+        self._auth_manager = AuthManagerMock()
 
     def get_service_manager(self):
         return self._service_manager
+
+    def get_auth_manager(self):
+        return self._auth_manager
 
 
 @pytest.mark.unit
