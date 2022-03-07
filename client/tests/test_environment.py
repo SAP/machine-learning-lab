@@ -1,8 +1,6 @@
 import os
 import tempfile
 
-import contaxy.schema.exceptions
-
 from lab_client import Environment
 from .conftest import test_settings
 import requests
