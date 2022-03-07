@@ -30,6 +30,7 @@
 - [`app.get_workspace_config`](./lab_workspace_manager.app.md#function-get_workspace_config)
 - [`app.is_ws_service`](./lab_workspace_manager.app.md#function-is_ws_service)
 - [`app.list_workspaces`](./lab_workspace_manager.app.md#function-list_workspaces)
+- [`app.request_user_token`](./lab_workspace_manager.app.md#function-request_user_token)
 - [`app.start_workspace`](./lab_workspace_manager.app.md#function-start_workspace)
 - [`app.update_workspace`](./lab_workspace_manager.app.md#function-update_workspace)
 - [`schema.check_if_in_options`](./lab_workspace_manager.schema.md#function-check_if_in_options): Create a pydantic validator that checks if the given field is one of the valid options.
