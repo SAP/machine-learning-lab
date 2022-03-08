@@ -142,7 +142,7 @@ if (!window.env.HIDE_DEPLOYMENTS) {
 
 export default pages;
 export const mapExtensionToAppPage = (extension) => {
-  const backend = ENDPOINT.replace(/\/api$/, '');
+  const backend = new URL(ENDPOINT).origin;
   return {
     ICON: extension.icon ? extension.icon : 'data_usage',
     DISPLAY_PRIORITY: extension.metadata.display_priority
