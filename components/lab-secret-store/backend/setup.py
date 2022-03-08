@@ -81,6 +81,7 @@ setup(
             # TODO: Move to required when necessary
             "universal-build",
             "requests",
+            "types-requests",
         ],
     },
     include_package_data=True,
