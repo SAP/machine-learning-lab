@@ -43,6 +43,10 @@ spec:
               value: "{{ .Values.labConfig.jwtSecret }}"
             - name: SYSTEM_NAMESPACE
               value: lab
+            {{- if .Values.labConfig.baseUrlPrefix }}
+            - name: CONTAXY_BASE_URL
+              value: "{{ .Values.labConfig.baseUrlPrefix }}"
+            {{- end }}
             {{- if .Values.labConfig.externalOIDC.enabled }}
             - name: OIDC_AUTH_ENABLED
               value: "{{ .Values.labConfig.externalOIDC.enabled }}"
