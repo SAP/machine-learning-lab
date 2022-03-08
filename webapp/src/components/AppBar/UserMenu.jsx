@@ -11,12 +11,11 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import { API_EXPLORER_URL, DOCUMENTATION_URL } from '../../utils/config';
-import { authApi } from '../../services/contaxy-api';
+import { authApi, projectsApi, usersApi } from '../../services/contaxy-api';
 import { getUserPemissionId } from '../../utils/app-utils';
 import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
 import ApiTokenDialog from '../Dialogs/ApiTokenDialog';
 import ContentDialog from '../Dialogs/ContentDialog';
-import showStandardSnackbar from '../../app/showStandardSnackbar';
 
 const ID_MENU_APPBAR = 'menu-appbar';
 const REL = 'noopener noreferrer';
@@ -56,39 +55,25 @@ function UserMenu(props) {
   };
 
   const onUserTokenClick = async () => {
-    const apiTokens = await authApi.listApiTokens();
-    const userToken = apiTokens.filter((apiToken) =>
-      apiToken.scopes.includes('*#admin')
-    );
+    const userApiToken = await usersApi.getUserToken(user.id, {
+      accessLevel: 'write',
+    });
     showAppDialog(ContentDialog, {
       title: 'Your User API Token',
-      content: userToken[0].token,
+      content: userApiToken,
     });
   };
 
   const onProjectTokenClick = async () => {
-    const apiTokens = await authApi.listApiTokens();
-    const projectTokens = apiTokens.filter((apiToken) =>
-      apiToken.scopes.includes(`projects/${activeProject.id}#admin`)
-    );
-    // The project admin token hasn't been created then we create one
-    if (projectTokens.length === 0) {
-      try {
-        const scopeStrings = [`projects/${activeProject.id}#admin`];
-        const projectToken = await authApi.createToken({
-          scopes: scopeStrings,
-          tokenType: 'api-token',
-        });
-        projectTokens.push({ token: projectToken });
-      } catch (e) {
-        showStandardSnackbar(
-          `Could not create API token. Reason: ${e.message}`
-        );
+    const projectApiToken = await projectsApi.getProjectToken(
+      activeProject.id,
+      {
+        accessLevel: 'write',
       }
-    }
+    );
     showAppDialog(ContentDialog, {
       title: `Your Project API Token for ${activeProject.display_name}`,
-      content: projectTokens[0].token,
+      content: projectApiToken,
     });
   };
 
