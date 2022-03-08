@@ -17,7 +17,7 @@ const COLUMNS = [
     title: 'Name',
     numeric: false,
     align: 'left',
-    render: (rowData) => rowData.metadata['ctxy.deploymentName'],
+    render: (rowData) => rowData.display_name,
   },
   {
     field: 'container_image',
@@ -29,7 +29,7 @@ const COLUMNS = [
     field: 'started_at',
     title: 'Started At',
     align: 'left',
-    render: (rowData) => rowData.started_at.getTime(),
+    render: (rowData) => rowData.started_at?.getTime(),
   },
 ];
 

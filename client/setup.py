@@ -29,12 +29,6 @@ if not VERSION:
         VERSION = re.findall(r"__version__\s*=\s*\"(.+)\"", f.read())[0]
 
 
-if "CTXY_PACKAGE_PATH" in os.environ:
-    contaxy_path = os.environ["CTXY_PACKAGE_PATH"]
-    contaxy_package = f"contaxy @ file://localhost/{contaxy_path}#egg=contaxy"
-else:
-    contaxy_package = "contaxy"
-
 # Where the magic happens:
 setup(
     name=NAME,
@@ -52,8 +46,9 @@ setup(
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     zip_safe=False,
     install_requires=[
-        # "loguru",
-        contaxy_package,
+        "loguru",
+        "contaxy==0.0.10",
+        "tqdm",
     ],
     # deprecated: dependency_links=dependency_links,
     extras_require={
@@ -70,6 +65,7 @@ setup(
             "pytest-cov",
             "mypy",
             "black",
+            "isort",
             "pydocstyle",
             "isort",
             "lazydocs",

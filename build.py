@@ -1,6 +1,8 @@
 """Root build.py for the ML Lab project. Will also execute the build.py in sub-directories."""
 
 import os
+import re
+from argparse import ArgumentParser
 
 from universal_build import build_utils
 from universal_build.helpers import build_docker, build_python, openapi_utils
@@ -13,6 +15,14 @@ WEBAPP_COMPONENT = "webapp"
 PROJECT_NAME = "lab-backend"
 
 
+def update_contaxy_version(file_path, contaxy_version):
+    with open(file_path, "r+") as f:
+        data = f.read()
+        f.seek(0)
+        f.write(re.sub(r'\"contaxy==[^\"]*\"', f'"contaxy=={contaxy_version}"', data))
+        f.truncate()
+
+
 def main(args: dict) -> None:
     """Execute all component builds."""
 
@@ -20,6 +30,10 @@ def main(args: dict) -> None:
     os.chdir(HERE)
 
     version = args.get(build_utils.FLAG_VERSION)
+
+    contaxy_version = args.get("contaxy-version")
+    if contaxy_version:
+        update_contaxy_version("./Dockerfile", contaxy_version)
 
     # Build all ML Lab components
     build_utils.build(LAB_COMPONENTS, args)
@@ -44,7 +58,11 @@ def main(args: dict) -> None:
 
 
 if __name__ == "__main__":
-    args = build_utils.parse_arguments()
+    parser = ArgumentParser()
+    parser.add_argument(
+        f"--contaxy-version", help="Version of the contaxy library to use."
+    )
+    args = build_utils.parse_arguments(argument_parser=parser)
 
     if args.get(build_utils.FLAG_RELEASE):
         # Run main without release to see whether everything can be built and all tests run through
