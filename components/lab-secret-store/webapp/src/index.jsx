@@ -3,22 +3,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { HashRouter } from 'react-router-dom';
-import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from '@mui/material';
 
 import './index.css';
 import App from './pages/App';
+import AppDialogServiceProvider from './app/AppDialogServiceProvider';
 import theme from './utils/theme';
 
 ReactDOM.render(
   <React.StrictMode>
-    <MuiThemeProvider theme={theme}>
-      <ThemeProvider theme={theme}>
-        <HashRouter>
+    <ThemeProvider theme={theme}>
+      <HashRouter>
+        <AppDialogServiceProvider>
           <App />
-        </HashRouter>
-      </ThemeProvider>
-    </MuiThemeProvider>
+        </AppDialogServiceProvider>
+      </HashRouter>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

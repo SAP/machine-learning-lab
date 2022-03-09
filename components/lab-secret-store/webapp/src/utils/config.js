@@ -6,5 +6,5 @@ export const EXTENSION_ENDPOINT =
 
 export const CONTAXY_ENDPOINT =
   process.env.REACT_APP_CONTAXY_ENDPOINT === undefined
-    ? ''
+    ? '/api'
     : process.env.REACT_APP_CONTAXY_ENDPOINT;
