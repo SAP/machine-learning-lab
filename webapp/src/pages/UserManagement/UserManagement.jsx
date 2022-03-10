@@ -9,8 +9,9 @@ import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
 import { usersApi } from '../../services/contaxy-api';
 import CreateUserDialog from '../../components/Dialogs/CreateUserDialog';
 // import Dashboard from '../../components/Dashboard';
-import UserCard from '../../components/UserCard';
-import UserSearch from '../../components/UserSearch';
+// import UserCard from '../../components/UserCard';
+// import UserSearch from '../../components/UserSearch';
+import UsersContainer from './UsersContainer';
 import Widget from '../../components/Widget';
 import WidgetsGrid from '../../components/WidgetsGrid';
 import showStandardSnackbar from '../../app/showStandardSnackbar';
@@ -19,18 +20,8 @@ function UserManagement(props) {
   const { className } = props;
   const showAppDialog = useShowAppDialog();
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState();
 
-  const onUserSelect = (username) => {
-    let selectUser = users.filter((user) => user.username === username);
-    if (selectUser.length === 0) {
-      // If there are no users with the username, assume we're searching by id
-      selectUser = users.filter((user) => user.id === username);
-    }
-    setSelectedUser(selectUser[0]);
-  };
-
-  async function requestUsers() {
+  const requestUsers = async () => {
     let response;
     try {
       response = await usersApi.listUsers();
@@ -38,7 +29,7 @@ function UserManagement(props) {
     } catch (e) {
       setUsers([]);
     }
-  }
+  };
 
   const onCreateUser = () => {
     showAppDialog(CreateUserDialog, {
@@ -79,9 +70,7 @@ function UserManagement(props) {
       <Button color="primary" variant="contained" onClick={onCreateUser}>
         Create User
       </Button>
-      <UserSearch userList={users} onUserSelect={onUserSelect} />
-      {selectedUser && <UserCard user={selectedUser} />}
-      {/* <Dashboard userList={users} /> */}
+      <UsersContainer data={users} getUsers={requestUsers} />
     </div>
   );
 }
