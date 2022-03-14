@@ -30,7 +30,7 @@
     "react-iframe": "^1.8.0",
     "react-json-view": "^1.21.3",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.1",
+    "react-scripts": "5.0.0",
     "styled-components": "^5.2.1",
     "superagent": "^6.1.0",
     "unstated-next": "^1.1.0",
@@ -58,7 +58,6 @@
     "react-is": "^17.0.1",
     "stylelint": "^13.8.0",
     "stylelint-config-prettier": "^8.0.2",
-    "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^20.0.0"
   },
   "scripts": {
@@ -87,6 +86,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "browser": {
+    "fs": false
   },
   "resolutions": {
     "babel-loader": "8.1.0"
