@@ -89,7 +89,7 @@ ENV PYTHONPATH=/resources/app \
 RUN mkdir ${_SSL_RESOURCES_PATH}
 
 # Install Contaxy
-RUN pip install "contaxy[server]==0.0.13"
+RUN pip install "contaxy[server]==0.0.14"
 # Uncomment lines below if you want to install your local contaxy code (useful when developing contaxy features)
 # By only copying the setup.py first, only the dependencies are installed which leads to faster docker builds on code changes
 # COPY ./contaxy/backend/setup.py /resources/app/contaxy/
