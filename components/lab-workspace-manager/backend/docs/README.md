@@ -18,9 +18,12 @@
 - [`schema.WorkspaceConfigOptions`](./lab_workspace_manager.schema.md#class-workspaceconfigoptions)
 - [`schema.WorkspaceInput`](./lab_workspace_manager.schema.md#class-workspaceinput)
 - [`schema.WorkspaceUpdate`](./lab_workspace_manager.schema.md#class-workspaceupdate)
+- [`utils.APITokenExtractor`](./lab_workspace_manager.utils.md#class-apitokenextractor)
 
 ## Functions
 
+- [`app.compute_min_cpu`](./lab_workspace_manager.app.md#function-compute_min_cpu)
+- [`app.compute_min_memory`](./lab_workspace_manager.app.md#function-compute_min_memory)
 - [`app.create_ws_from_service`](./lab_workspace_manager.app.md#function-create_ws_from_service)
 - [`app.create_ws_service_input`](./lab_workspace_manager.app.md#function-create_ws_service_input)
 - [`app.create_ws_service_update`](./lab_workspace_manager.app.md#function-create_ws_service_update)
