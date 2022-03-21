@@ -2,19 +2,23 @@ import os
 from datetime import timedelta
 from typing import Any, List, Optional
 
-from contaxy.managers.components import ComponentManager
-from contaxy.managers.deployment.manager import ACTION_START
 from contaxy.operations import AuthOperations
+from contaxy.operations.components import ComponentOperations
 from contaxy.schema import Service, ServiceInput
-from contaxy.schema.auth import USER_ID_PARAM, AccessLevel, TokenType
-from contaxy.schema.deployment import SERVICE_ID_PARAM, DeploymentCompute, ServiceUpdate
+from contaxy.schema.auth import USER_ID_PARAM, AccessLevel
+from contaxy.schema.deployment import (
+    ACTION_START,
+    SERVICE_ID_PARAM,
+    DeploymentCompute,
+    ServiceUpdate,
+)
 from contaxy.schema.exceptions import (
     CREATE_RESOURCE_RESPONSES,
     UPDATE_RESOURCE_RESPONSES,
     ClientValueError,
     ResourceAlreadyExistsError,
 )
-from contaxy.utils import auth_utils, fastapi_utils
+from contaxy.utils import fastapi_utils
 from fastapi import Depends, FastAPI, Query, Response, status
 from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
@@ -69,7 +73,9 @@ def create_ws_service_input(
         compute={
             "volume_path": "/workspace",
             "max_cpus": workspace_input.compute.cpus,
+            "min_cpus": compute_min_cpu(workspace_input.compute.cpus),
             "max_memory": workspace_input.compute.memory,
+            "min_memory": compute_min_memory(workspace_input.compute.memory),
             "max_volume_size": settings.WORKSPACE_VOLUME_SIZE,
             "max_container_size": settings.WORKSPACE_CONTAINER_SIZE,
         },
@@ -96,9 +102,26 @@ def create_ws_service_update(workspace_update: WorkspaceUpdate) -> ServiceUpdate
         service_update.compute = DeploymentCompute()
         if "cpus" in workspace_update_dict["compute"]:
             service_update.compute.max_cpus = workspace_update.compute.cpus
+            service_update.compute.min_cpus = compute_min_cpu(
+                workspace_update.compute.cpus
+            )
         if "memory" in workspace_update_dict["compute"]:
             service_update.compute.max_memory = workspace_update.compute.memory
+            service_update.compute.min_memory = compute_min_memory(
+                workspace_update.compute.memory
+            )
     return service_update
+
+
+def compute_min_cpu(max_cpus: int) -> float:
+    # Only reserve halve of the CPU per workspace as CPU resources can be easily shared
+    return max_cpus * 0.5
+
+
+def compute_min_memory(max_memory: int) -> int:
+    # Reserve 80% of the workspace memory. This allows some over committing on the node but hopefully does not cause
+    # pods to be evicted (would happen if many workspaces use their max memory limit).
+    return int(max_memory * 0.75)
 
 
 def create_ws_from_service(service: Service) -> Workspace:
@@ -124,16 +147,8 @@ def create_ws_from_service(service: Service) -> Workspace:
     )
 
 
-def request_user_token(
-    user_id: str, workspace_name: str, auth_manager: AuthOperations
-) -> str:
-    return auth_manager.create_token(
-        scopes=[auth_utils.construct_permission("*", AccessLevel.ADMIN)],
-        token_type=TokenType.API_TOKEN,
-        token_subject=f"users/{user_id}",
-        description=f"User token for workspace '{workspace_name}'.",
-        token_purpose="workspace-user-token",
-    )
+def request_user_token(user_id: str, auth_manager: AuthOperations) -> str:
+    return auth_manager.get_user_token(user_id=user_id, access_level=AccessLevel.WRITE)
 
 
 @app.post(
@@ -146,13 +161,11 @@ def request_user_token(
 def deploy_workspace(
     workspace_input: WorkspaceInput,
     user_id: str = USER_ID_PARAM,
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     """Create a new personal workspace by creating a Contaxy service with a workspace image in the personal project."""
     logger.debug(f"Deploy workspace request for user {user_id}: {workspace_input}")
-    user_token = request_user_token(
-        user_id, workspace_input.display_name, component_manager.get_auth_manager()
-    )
+    user_token = request_user_token(user_id, component_manager.get_auth_manager())
     service_input = create_ws_service_input(workspace_input, user_token)
     try:
         # Use the user's project which has the same id as the user
@@ -181,7 +194,7 @@ def update_workspace(
     workspace_update: WorkspaceUpdate,
     user_id: str = USER_ID_PARAM,
     workspace_id: str = SERVICE_ID_PARAM,
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     logger.debug(
         f"Update workspace request for user {user_id} "
@@ -202,7 +215,7 @@ def update_workspace(
 def start_workspace(
     user_id: str = USER_ID_PARAM,
     workspace_id: str = SERVICE_ID_PARAM,
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     logger.debug(
         f"Start workspace request for user {user_id} " f"and workspace {workspace_id}"
@@ -221,7 +234,7 @@ def start_workspace(
 )
 def list_workspaces(
     user_id: str = USER_ID_PARAM,
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     logger.info(f"List workspaces request for user {user_id}")
 
@@ -243,7 +256,7 @@ def list_workspaces(
 def get_workspace(
     user_id: str = USER_ID_PARAM,
     workspace_id: str = SERVICE_ID_PARAM,
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     logger.info(
         f"Get workspace request for user {user_id} with workspace id {workspace_id}."
@@ -271,7 +284,7 @@ def delete_workspace(
     delete_volumes: Optional[bool] = Query(
         False, description="Delete all volumes associated with the deployment."
     ),
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     logger.debug(
         f"Delete workspace request for user {user_id} with workspace id {service_id}."
@@ -292,7 +305,7 @@ def delete_workspace(
     status_code=status.HTTP_200_OK,
 )
 def get_workspace_config(
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     allowed_images = component_manager.get_system_manager().list_allowed_images()
     allowed_images = [
