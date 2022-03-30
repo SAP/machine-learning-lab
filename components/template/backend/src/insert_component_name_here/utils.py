@@ -4,7 +4,7 @@ from typing import Generator
 from contaxy.api.dependencies import get_api_token
 from contaxy.clients import (
     AuthClient,
-    DeploymentManagerClient,
+    DeploymentClient,
     ExtensionClient,
     FileClient,
     JsonDocumentClient,
@@ -34,6 +34,6 @@ def get_component_manager(
         component_manager._project_manager = ProjectClient(session)
         component_manager._system_manager = SystemClient(session)
         component_manager._json_db_manager = JsonDocumentClient(session)
-        component_manager._deployment_manager = DeploymentManagerClient(session)
+        component_manager._deployment_manager = DeploymentClient(session)
         component_manager._file_manager = FileClient(session)
         yield component_manager

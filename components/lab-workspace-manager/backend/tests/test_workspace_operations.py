@@ -69,7 +69,7 @@ class ServiceManagerMock:
 
 
 class AuthManagerMock:
-    def create_token(self, **kwargs):
+    def get_user_token(self, **kwargs):
         return "test-token"
 
 

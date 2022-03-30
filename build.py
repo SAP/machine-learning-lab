@@ -19,7 +19,7 @@ def update_contaxy_version(file_path, contaxy_version):
     with open(file_path, "r+") as f:
         data = f.read()
         f.seek(0)
-        f.write(re.sub(r'\"contaxy==[^\"]*\"', f'"contaxy=={contaxy_version}"', data))
+        f.write(re.sub(r'\"contaxy([^=]*)==[^\"]*\"', fr'"contaxy\1=={contaxy_version}"', data))
         f.truncate()
 
 
