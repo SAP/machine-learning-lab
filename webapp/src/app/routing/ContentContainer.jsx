@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -23,14 +23,17 @@ function ContentContainer(props) {
         : DefaultLoginRoute;
 
       return (
-        <RouteElement
+        <Route
           key={item.NAME}
           path={item.PATH}
-          exact
-          component={item.COMPONENT}
-          isAuthenticated={isAuthenticated}
-          useDefaultLogin={!oauthEnabled}
-          componentProps={item.PROPS}
+          element={
+            <RouteElement
+              element={item.COMPONENT}
+              isAuthenticated={isAuthenticated}
+              useDefaultLogin={!oauthEnabled}
+              componentProps={item.PROPS}
+            />
+          }
         />
       );
     });
@@ -39,7 +42,7 @@ function ContentContainer(props) {
     <div className={`${className} root`}>
       {/* Adding toolbar makes the drawer "clip" below the web app's top bar as the Toolbar has the same height */}
       <Toolbar />
-      <Switch>{routes}</Switch>
+      <Routes>{routes}</Routes>
     </div>
   );
 }
