@@ -65,7 +65,7 @@ export const initialState = {
     // },
   ],
   projectExtensions: [],
-  isAuthenticated: !!JSON.parse(localStorage.getItem('token')),
+  isAuthenticated: !!JSON.parse(window.localStorage.getItem('token')),
   oauthEnabled: false,
   users: null,
 };
