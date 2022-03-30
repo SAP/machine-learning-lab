@@ -30,7 +30,7 @@
     "react-iframe": "^1.8.0",
     "react-json-view": "^1.21.3",
     "react-router-dom": "^6.2.2",
-    "react-scripts": "4.0.1",
+    "react-scripts": "5.0.0",
     "styled-components": "^5.2.1",
     "superagent": "^6.1.0",
     "unstated-next": "^1.1.0",
