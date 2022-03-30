@@ -58,7 +58,6 @@
     "react-is": "^17.0.1",
     "stylelint": "^13.8.0",
     "stylelint-config-prettier": "^8.0.2",
-    "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^20.0.0"
   },
   "scripts": {
@@ -87,6 +86,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "browser": {
+    "fs": false
   },
   "resolutions": {
     "babel-loader": "8.1.0"
