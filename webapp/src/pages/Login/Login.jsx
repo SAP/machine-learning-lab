@@ -44,7 +44,6 @@ function Login(props) {
         password: formInput.password,
         setAsCookie: true,
       });
-      window.localStorage.setItem('token', true);
       setIsAuthenticated(true);
     } catch (e) {
       showStandardSnackbar(`Login failed!`);

@@ -51,7 +51,6 @@ function UserMenu(props) {
     } catch (err) {
       // ignore
     }
-    window.localStorage.setItem('token', false);
     window.location.reload();
   };
 
