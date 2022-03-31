@@ -2,31 +2,30 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import { Redirect, Route } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 /* eslint-disable react/jsx-props-no-spreading */
-function DefaultLoginRoute({ component: Component, isAuthenticated, ...rest }) {
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        !isAuthenticated ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={{ pathname: '/', state: { from: props.location } }} /> // eslint-disable-line react/prop-types
-        )
-      }
-    />
-  );
+function DefaultLoginRoute({
+  element: Component,
+  isAuthenticated,
+  componentProps,
+}) {
+  const location = useLocation();
+  if (!isAuthenticated) {
+    return <Component {...componentProps} />;
+  }
+  return <Navigate to="/" state={{ from: location }} />;
 }
 
 DefaultLoginRoute.propTypes = {
-  component: PropTypes.instanceOf(Object).isRequired,
+  element: PropTypes.instanceOf(Object).isRequired,
   isAuthenticated: PropTypes.bool,
+  componentProps: PropTypes.instanceOf(Object),
 };
 
 DefaultLoginRoute.defaultProps = {
   isAuthenticated: false,
+  componentProps: {},
 };
 
 export default DefaultLoginRoute;

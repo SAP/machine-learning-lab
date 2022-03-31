@@ -1,34 +1,20 @@
 import React from 'react';
 
-import { Redirect, Route } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { Navigate, useLocation } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
 
 /* eslint-disable react/jsx-props-no-spreading */
-function PrivateRoute({
-  component: Component,
-  isAuthenticated,
-  useDefaultLogin,
-  componentProps,
-  ...rest
-}) {
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isAuthenticated ? (
-          <Component {...props} {...componentProps} />
-        ) : (
-          <Redirect
-            to={{ pathname: '/login', state: { from: props.location } }} // eslint-disable-line react/prop-types
-          />
-        )
-      }
-    />
-  );
+function PrivateRoute({ element: Component, isAuthenticated, componentProps }) {
+  const location = useLocation();
+
+  if (isAuthenticated) {
+    return <Component {...componentProps} />;
+  }
+  return <Navigate to="/login" state={{ from: location }} />;
 }
 
 PrivateRoute.propTypes = {
-  component: PropTypes.oneOfType([PropTypes.func, PropTypes.object]).isRequired,
+  element: PropTypes.oneOfType([PropTypes.func, PropTypes.object]).isRequired,
   componentProps: PropTypes.instanceOf(Object),
   isAuthenticated: PropTypes.bool,
   useDefaultLogin: PropTypes.bool,

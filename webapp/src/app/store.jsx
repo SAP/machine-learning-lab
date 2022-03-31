@@ -65,7 +65,8 @@ export const initialState = {
     // },
   ],
   projectExtensions: [],
-  isAuthenticated: false,
+  // Check if the ctxy_authorized_user cookie is set which means the user is already logged in
+  isAuthenticated: document.cookie.includes('ctxy_authorized_user='),
   oauthEnabled: false,
   users: null,
 };
