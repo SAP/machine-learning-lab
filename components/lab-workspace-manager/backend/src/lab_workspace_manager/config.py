@@ -1,6 +1,11 @@
 from typing import List, Union
 
-from pydantic import BaseSettings, Field, validator
+from pydantic import BaseModel, BaseSettings, Field, validator
+
+
+class WorkspaceImage(BaseModel):
+    image: str
+    display_name: str
 
 
 class WorkspaceManagerSettings(BaseSettings):
@@ -24,6 +29,11 @@ class WorkspaceManagerSettings(BaseSettings):
 
     WORKSPACE_VOLUME_SIZE: int = 5000
     WORKSPACE_CONTAINER_SIZE: int = 5000
+
+    WORKSPACE_IMAGE_DEFAULT: WorkspaceImage = WorkspaceImage(
+        image="mltooling/ml-workspace-minimal", display_name="Default Minimal Workspace"
+    )
+    WORKSPACE_IMAGE_OPTIONS: List[WorkspaceImage] = []
 
     @validator(
         "WORKSPACE_MEMORY_MB_OPTIONS",

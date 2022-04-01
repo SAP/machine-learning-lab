@@ -27,6 +27,14 @@ function ImageSelect({ availableImages, value, onChange, label, name }) {
     );
   }
   // Return select with available images
+  let imageSelectOptions = availableImages;
+  if (!availableImages.some((imageDesc) => imageDesc.image === value)) {
+    // If the current image is not in the list of available images, still show it in the select
+    imageSelectOptions = [
+      ...imageSelectOptions,
+      { image: value, display_name: value },
+    ];
+  }
   return (
     <FormControl fullWidth>
       <InputLabel id={name}>{label}</InputLabel>
@@ -37,9 +45,9 @@ function ImageSelect({ availableImages, value, onChange, label, name }) {
         onChange={onChange}
         fullWidth
       >
-        {availableImages.map((image) => (
-          <MenuItem key={image} value={image}>
-            {image}
+        {imageSelectOptions.map((imageDesc) => (
+          <MenuItem key={imageDesc.image} value={imageDesc.image}>
+            {imageDesc.display_name}
           </MenuItem>
         ))}
       </Select>
@@ -48,7 +56,7 @@ function ImageSelect({ availableImages, value, onChange, label, name }) {
 }
 
 ImageSelect.propTypes = {
-  availableImages: PropTypes.arrayOf(PropTypes.string).isRequired,
+  availableImages: PropTypes.arrayOf(PropTypes.instanceOf(Object)).isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
