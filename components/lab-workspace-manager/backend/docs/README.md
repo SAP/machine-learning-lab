@@ -11,6 +11,7 @@
 
 ## Classes
 
+- [`config.WorkspaceImage`](./lab_workspace_manager.config.md#class-workspaceimage)
 - [`config.WorkspaceManagerSettings`](./lab_workspace_manager.config.md#class-workspacemanagersettings)
 - [`schema.Workspace`](./lab_workspace_manager.schema.md#class-workspace)
 - [`schema.WorkspaceBase`](./lab_workspace_manager.schema.md#class-workspacebase)
