@@ -6,7 +6,7 @@ from contaxy.schema.deployment import DeploymentStatus
 from contaxy.schema.shared import MAX_DISPLAY_NAME_LENGTH
 from pydantic import BaseModel, Field
 
-from lab_workspace_manager.config import settings
+from lab_workspace_manager.config import WorkspaceImage, settings
 
 
 def check_if_in_options(field_name: str, options: List) -> classmethod:
@@ -61,7 +61,7 @@ class WorkspaceBase(BaseModel):
         description="A user-defined human-readable name of the workspace. The name can be up to 128 characters long and can consist of any UTF-8 character.",
     )
     container_image: str = Field(
-        "mltooling/ml-workspace-minimal:latest",
+        settings.WORKSPACE_IMAGE_DEFAULT.image,
         example="mltooling/ml-workspace-minimal:latest",
         max_length=2000,
         description="The container image used for this workspace.",
@@ -121,10 +121,10 @@ class WorkspaceConfigOptions(BaseModel):
         description="The default display name that should be used for new workspaces.",
     )
 
-    container_image_default: str = Field(
+    container_image_default: WorkspaceImage = Field(
         ..., description="The default image that should be used for new workspaces."
     )
-    container_image_options: List[str] = Field(
+    container_image_options: List[WorkspaceImage] = Field(
         [],
         description="The list of images that are allowed for workspaces. An empty list means no restrictions!",
     )

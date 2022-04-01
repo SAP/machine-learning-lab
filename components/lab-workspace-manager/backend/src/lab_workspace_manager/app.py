@@ -307,18 +307,10 @@ def delete_workspace(
 def get_workspace_config(
     component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
-    allowed_images = component_manager.get_system_manager().list_allowed_images()
-    allowed_images = [
-        f"{image_info.image_name}:{image_tag}"
-        for image_info in allowed_images
-        if image_info.metadata
-        if image_info.metadata.get("is-workspace", None) is not None
-        for image_tag in image_info.image_tags
-    ]
     return WorkspaceConfigOptions(
         display_name_default="Default Workspace",
-        container_image_default="mltooling/ml-workspace-minimal",
-        container_image_options=allowed_images,
+        container_image_default=settings.WORKSPACE_IMAGE_DEFAULT,
+        container_image_options=settings.WORKSPACE_IMAGE_OPTIONS,
         cpus_default=settings.WORKSPACE_CPUS_DEFAULT,
         cpus_max=settings.WORKSPACE_CPUS_MAX,
         cpus_options=settings.WORKSPACE_CPUS_OPTIONS,  # type: ignore
