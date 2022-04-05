@@ -1,8 +1,6 @@
 import os
 import tempfile
 
-import contaxy.schema.exceptions
-
 from lab_client import Environment
 from .conftest import test_settings
 import requests
@@ -27,20 +25,8 @@ class TestEnvironment:
             Environment(lab_endpoint=test_settings.LAB_BACKEND,
                         lab_api_token='not-valid-token',
                         project=test_settings.LAB_PROJECT)
-        with pytest.raises(contaxy.schema.exceptions.PermissionDeniedError):
-            Environment(lab_endpoint=test_settings.LAB_BACKEND,
-                        lab_api_token=test_settings.LAB_TOKEN,
-                        project='not-existent-project')
 
-    def test_upload(self) -> None:
-        env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
-                          lab_api_token=test_settings.LAB_TOKEN,
-                          project=test_settings.LAB_PROJECT)
-        tf = tempfile.NamedTemporaryFile()
-        file_key = env.upload_file(tf.name, "dataset")
-        assert file_key == f"datasets/{tf.name.split(os.sep)[-1]}"
-
-    def test_download(self) -> None:
+    def test_upload_download(self) -> None:
         env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
                           lab_api_token=test_settings.LAB_TOKEN,
                           project=test_settings.LAB_PROJECT)
@@ -50,6 +36,7 @@ class TestEnvironment:
             f.write(sample_text)
             f.seek(0)
             file_key = env.upload_file(tf.name, "dataset")
+        assert file_key == f"datasets/{tf.name.split(os.sep)[-1]}"
 
         local_path = env.get_file(file_key)
         assert os.path.exists(local_path)

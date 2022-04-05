@@ -7,7 +7,7 @@ import { EXTENSION_ENDPOINT } from '../utils/config';
 function useApiHook(apiCall, condition) {
   const sanitizedCondition = condition !== undefined ? condition : true;
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [reloadRequested, setReloadRequested] = useState(new Date().getTime());
   const requestRunning = useRef(false);
 
@@ -57,15 +57,6 @@ export function useWorkspaces(userId) {
   }, [userId]);
 
   const [workspaces, reload] = useApiHook(apiCall, userId);
-
-  // Reload workspaces every 5 seconds if not all of them are running
-  useEffect(() => {
-    if (workspaces.filter((ws) => ws.status !== 'running').length > 0) {
-      setTimeout(() => {
-        reload();
-      }, 5000);
-    }
-  }, [workspaces, reload]);
 
   return [workspaces, reload];
 }

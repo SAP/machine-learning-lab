@@ -6,22 +6,24 @@ from contaxy.schema import ClientValueError, Service, ServiceInput
 
 from lab_workspace_manager.app import (
     LABEL_EXTENSION_DEPLOYMENT_TYPE,
-    create_workspace,
+    Workspace,
+    WorkspaceCompute,
+    WorkspaceInput,
     delete_workspace,
+    deploy_workspace,
     get_workspace,
     list_workspaces,
 )
 
 
-def create_test_workspace_input(display_name: str) -> ServiceInput:
-    return ServiceInput(
+def create_test_workspace_input(display_name: str) -> WorkspaceInput:
+    return WorkspaceInput(
         container_image="mltooling/ml-workspace-minimal",
         display_name=display_name,
-        description="This is a test service",
-        parameters={
-            "FOO": "bar",
-            "FOO2": "bar2",
-        },
+        compute=WorkspaceCompute(
+            cpus=1,
+            memory=1000,
+        ),
     )
 
 
@@ -32,19 +34,30 @@ class ServiceManagerMock:
                 container_image="ws-image",
                 id="my-workspace",
                 metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "workspace"},
+                display_name="my-workspace",
             ),
             Service(
                 container_image="service-image",
                 id="my-service",
                 metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "service"},
+                display_name="my-service",
             ),
-            Service(container_image="service-image", id="my-service-2", metadata={}),
-            Service(container_image="other-image", id="other-service"),
+            Service(
+                container_image="service-image",
+                id="my-service-2",
+                metadata={},
+                display_name="my-service-2",
+            ),
+            Service(
+                container_image="other-image",
+                id="other-service",
+                display_name="other-service",
+            ),
         ]
         self.delete_service = Mock()
 
-    def deploy_service(self, project_id: str, service: ServiceInput) -> Service:
-        return Service(**service.dict())
+    def deploy_service(self, project_id: str, service_input: ServiceInput) -> Service:
+        return Service(id=service_input.display_name, **service_input.dict())
 
     def list_services(self, project_id: str) -> List[Service]:
         return self._fake_services
@@ -55,12 +68,21 @@ class ServiceManagerMock:
         )
 
 
+class AuthManagerMock:
+    def create_token(self, **kwargs):
+        return "test-token"
+
+
 class ComponentManagerMock:
     def __init__(self):
         self._service_manager = ServiceManagerMock()
+        self._auth_manager = AuthManagerMock()
 
     def get_service_manager(self):
         return self._service_manager
+
+    def get_auth_manager(self):
+        return self._auth_manager
 
 
 @pytest.mark.unit
@@ -69,23 +91,12 @@ class TestWorkspaceOperations:
         workspace_input = create_test_workspace_input("my-workspace")
         component_manager = ComponentManagerMock()
 
-        workspace = create_workspace(workspace_input, "test-user-id", component_manager)
+        workspace: Workspace = deploy_workspace(
+            workspace_input, "test-user-id", component_manager
+        )
 
         assert workspace.container_image == workspace_input.container_image
         assert workspace_input.display_name in workspace.display_name
-        assert all(
-            [param in workspace.parameters for param in workspace_input.parameters]
-        )
-        assert workspace.metadata[LABEL_EXTENSION_DEPLOYMENT_TYPE] == "workspace"
-        assert workspace.compute.volume_path == "/workspace"
-
-    def test_create_workspace_without_display_name(self):
-        workspace_input = create_test_workspace_input("my-workspace")
-        workspace_input.display_name = None
-        component_manager_mock = ComponentManagerMock()
-
-        with pytest.raises(ClientValueError):
-            create_workspace(workspace_input, "test-user-id", component_manager_mock)
 
     def test_list_workspaces(self):
         component_manager = ComponentManagerMock()
@@ -93,7 +104,7 @@ class TestWorkspaceOperations:
         workspaces = list_workspaces("test-user-id", component_manager)
 
         assert len(workspaces) == 1
-        assert workspaces[0]["id"] == "my-workspace"
+        assert workspaces[0].id == "my-workspace"
 
     def test_get_workspace(self):
         component_manager = ComponentManagerMock()

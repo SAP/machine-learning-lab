@@ -1,32 +1,35 @@
 import os
-from typing import Any, Optional
+from datetime import timedelta
+from typing import Any, List, Optional
 
 from contaxy.managers.components import ComponentManager
+from contaxy.managers.deployment.manager import ACTION_START
+from contaxy.operations import AuthOperations
 from contaxy.schema import Service, ServiceInput
-from contaxy.schema.auth import USER_ID_PARAM
-from contaxy.schema.deployment import SERVICE_ID_PARAM
+from contaxy.schema.auth import USER_ID_PARAM, AccessLevel, TokenType
+from contaxy.schema.deployment import SERVICE_ID_PARAM, DeploymentCompute, ServiceUpdate
 from contaxy.schema.exceptions import (
     CREATE_RESOURCE_RESPONSES,
+    UPDATE_RESOURCE_RESPONSES,
     ClientValueError,
     ResourceAlreadyExistsError,
 )
-from contaxy.utils import fastapi_utils
+from contaxy.utils import auth_utils, fastapi_utils
 from fastapi import Depends, FastAPI, Query, Response, status
 from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
 
+from lab_workspace_manager.config import settings
+from lab_workspace_manager.schema import (
+    Workspace,
+    WorkspaceCompute,
+    WorkspaceConfigOptions,
+    WorkspaceInput,
+    WorkspaceUpdate,
+)
 from lab_workspace_manager.utils import CONTAXY_API_ENDPOINT, get_component_manager
 
-SELF_ACCESS_URL = os.getenv("CONTAXY_SERVICE_URL", "")
-
-SELF_DEPLOYMENT_NAME = os.getenv("CONTAXY_DEPLOYMENT_NAME", "")
-
 LABEL_EXTENSION_DEPLOYMENT_TYPE = "ctxy.workspaceExtension.deploymentType"
-
-WORKSPACE_MAX_MEMORY_MB = int(os.getenv("WORKSPACE_MAX_MEMORY_MB", "500"))
-WORKSPACE_MAX_CPUS = int(os.getenv("WORKSPACE_MAX_CPUS", "1"))
-WORKSPACE_MAX_VOLUME_SIZE = int(os.getenv("WORKSPACE_MAX_VOLUME_SIZE", "5000"))
-WORKSPACE_MAX_CONTAINER_SIZE = int(os.getenv("WORKSPACE_MAX_CONTAINER_SIZE", "5000"))
 
 app = FastAPI()
 # Patch FastAPI to allow relative path resolution.
@@ -42,78 +45,179 @@ if "BACKEND_CORS_ORIGINS" in os.environ:
     )
 
 
-def is_workspace(service: Service) -> bool:
+def is_ws_service(service: Service) -> bool:
     if service.metadata is None:
         return False
     return service.metadata.get(LABEL_EXTENSION_DEPLOYMENT_TYPE, "") == "workspace"
+
+
+def create_ws_service_input(
+    workspace_input: WorkspaceInput, user_token: str
+) -> ServiceInput:
+    return ServiceInput(
+        container_image=workspace_input.container_image,
+        display_name=f"WS {workspace_input.display_name}",
+        endpoints=["8080b"],
+        parameters={
+            "WORKSPACE_BASE_URL": "{env.CONTAXY_SERVICE_URL}",
+            "SSH_JUMPHOST_TARGET": "{env.CONTAXY_DEPLOYMENT_NAME}",
+            "SELF_ACCESS_TOKEN": "{env.CONTAXY_API_TOKEN}",
+            "LAB_API_ENDPOINT": "{env.CONTAXY_API_ENDPOINT}",
+            "LAB_API_TOKEN": user_token,
+        },
+        metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "workspace"},
+        compute={
+            "volume_path": "/workspace",
+            "max_cpus": workspace_input.compute.cpus,
+            "max_memory": workspace_input.compute.memory,
+            "max_volume_size": settings.WORKSPACE_VOLUME_SIZE,
+            "max_container_size": settings.WORKSPACE_CONTAINER_SIZE,
+        },
+        is_stopped=workspace_input.is_stopped,
+        idle_timeout=workspace_input.idle_timeout
+        if workspace_input.idle_timeout != timedelta(0)
+        else None,
+        clear_volume_on_stop=True
+        if settings.WORKSPACE_ALWAYS_CLEAR_VOLUME_ON_STOP
+        else workspace_input.clear_volume_on_stop,
+    )
+
+
+def create_ws_service_update(workspace_update: WorkspaceUpdate) -> ServiceUpdate:
+    workspace_update_dict = workspace_update.dict(exclude_unset=True)
+    if "idle_timeout" in workspace_update_dict:
+        if workspace_update_dict["idle_timeout"] == timedelta(0):
+            workspace_update_dict["idle_timeout"] = None
+    if "clear_volume_on_stop" in workspace_update_dict:
+        if settings.WORKSPACE_ALWAYS_CLEAR_VOLUME_ON_STOP:
+            workspace_update_dict["clear_volume_on_stop"] = True
+    service_update = ServiceUpdate(**workspace_update_dict)
+    if "compute" in workspace_update_dict:
+        service_update.compute = DeploymentCompute()
+        if "cpus" in workspace_update_dict["compute"]:
+            service_update.compute.max_cpus = workspace_update.compute.cpus
+        if "memory" in workspace_update_dict["compute"]:
+            service_update.compute.max_memory = workspace_update.compute.memory
+    return service_update
+
+
+def create_ws_from_service(service: Service) -> Workspace:
+    access_url = None
+    if service.status == "running":
+        project_id = service.metadata["ctxy.projectName"]
+        workspace_id = service.id
+        access_url = f"/projects/{project_id}/services/{workspace_id}/access/8080b"
+    compute = WorkspaceCompute()
+    if service.compute.max_cpus:
+        compute.cpus = service.compute.max_cpus
+    if service.compute.max_memory:
+        compute.memory = service.compute.max_memory
+    return Workspace(
+        id=service.id,
+        display_name=service.display_name[len("WS ") :],
+        container_image=service.container_image,
+        compute=compute,
+        idle_timeout=service.idle_timeout,
+        clear_volume_on_stop=service.clear_volume_on_stop,
+        status=service.status,
+        access_url=access_url,
+    )
+
+
+def request_user_token(
+    user_id: str, workspace_name: str, auth_manager: AuthOperations
+) -> str:
+    return auth_manager.create_token(
+        scopes=[auth_utils.construct_permission("*", AccessLevel.ADMIN)],
+        token_type=TokenType.API_TOKEN,
+        token_subject=f"users/{user_id}",
+        description=f"User token for workspace '{workspace_name}'.",
+        token_purpose="workspace-user-token",
+    )
 
 
 @app.post(
     "/users/{user_id}/workspace",
     summary="Create a new personal workspace for the user.",
     status_code=status.HTTP_200_OK,
+    response_model=Workspace,
     responses={**CREATE_RESOURCE_RESPONSES},
 )
-def create_workspace(
-    service: ServiceInput,
+def deploy_workspace(
+    workspace_input: WorkspaceInput,
     user_id: str = USER_ID_PARAM,
     component_manager: ComponentManager = Depends(get_component_manager),
 ) -> Any:
     """Create a new personal workspace by creating a Contaxy service with a workspace image in the personal project."""
-    if service.display_name is None:
-        raise ClientValueError("The display_name field needs to be set!")
-    logger.info(
-        f"Create workspace request for user {user_id} with workspace name "
-        f"{service.display_name} and image {service.container_image}"
+    logger.debug(f"Deploy workspace request for user {user_id}: {workspace_input}")
+    user_token = request_user_token(
+        user_id, workspace_input.display_name, component_manager.get_auth_manager()
     )
-
-    # Use the user's project which has the same id as the user
-    project_id = user_id
-
-    # TODO: Check which fields should be taken from the input (compute, endpoints, metadata, etc.)
-    if service.parameters is None:
-        service.parameters = {}
-    display_name = f"ws-{service.display_name}"
-    workspace_service_config = ServiceInput(
-        container_image=service.container_image,
-        display_name=display_name,
-        endpoints=["8080b"],
-        parameters={
-            **service.parameters,
-            "WORKSPACE_BASE_URL": "{env.CONTAXY_SERVICE_URL}",
-            "SSH_JUMPHOST_TARGET": "{env.CONTAXY_DEPLOYMENT_NAME}",
-            "SELF_ACCESS_TOKEN": "{env.CONTAXY_API_TOKEN}",
-            "LAB_API_ENDPOINT": "{env.CONTAXY_API_ENDPOINT}",
-        },
-        metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "workspace"},
-        compute={
-            "volume_path": "/workspace",
-            "max_memory": WORKSPACE_MAX_MEMORY_MB,
-            "max_cpus": WORKSPACE_MAX_CPUS,
-            "max_volume_size": WORKSPACE_MAX_VOLUME_SIZE,
-            "max_container_size": WORKSPACE_MAX_CONTAINER_SIZE,
-        },
-    )
-
+    service_input = create_ws_service_input(workspace_input, user_token)
     try:
-        workspace_service = component_manager.get_service_manager().deploy_service(
-            project_id=project_id, service=workspace_service_config
+        # Use the user's project which has the same id as the user
+        service = component_manager.get_service_manager().deploy_service(
+            project_id=user_id, service_input=service_input
         )
-        logger.info(
+        logger.debug(
             f"Successfully created workspace service with name "
-            f"{workspace_service.display_name} and id {workspace_service.id}"
+            f"{service.display_name} and id {service.id}"
         )
-        return workspace_service
+        return create_ws_from_service(service)
     except ResourceAlreadyExistsError:
         raise ResourceAlreadyExistsError(
-            f"A workspace with the name {service.display_name} already exists for user {user_id}!"
+            f"A workspace with the name {workspace_input.display_name} already exists for user {user_id}!"
         )
+
+
+@app.patch(
+    "/users/{user_id}/workspace/{workspace_id}",
+    summary="Updates the workspace for the user.",
+    status_code=status.HTTP_200_OK,
+    response_model=Workspace,
+    responses={**UPDATE_RESOURCE_RESPONSES},
+)
+def update_workspace(
+    workspace_update: WorkspaceUpdate,
+    user_id: str = USER_ID_PARAM,
+    workspace_id: str = SERVICE_ID_PARAM,
+    component_manager: ComponentManager = Depends(get_component_manager),
+) -> Any:
+    logger.debug(
+        f"Update workspace request for user {user_id} "
+        f"and workspace {workspace_id}: {workspace_update}"
+    )
+    service_update = create_ws_service_update(workspace_update)
+    service = component_manager.get_service_manager().update_service(
+        project_id=user_id, service_id=workspace_id, service=service_update
+    )
+    return create_ws_from_service(service)
+
+
+@app.post(
+    "/users/{user_id}/workspace/{workspace_id}:start",
+    summary="Start the specified workspace if it is stopped.",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def start_workspace(
+    user_id: str = USER_ID_PARAM,
+    workspace_id: str = SERVICE_ID_PARAM,
+    component_manager: ComponentManager = Depends(get_component_manager),
+) -> Any:
+    logger.debug(
+        f"Start workspace request for user {user_id} " f"and workspace {workspace_id}"
+    )
+    component_manager.get_service_manager().execute_service_action(
+        project_id=user_id, service_id=workspace_id, action_id=ACTION_START
+    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @app.get(
     "/users/{user_id}/workspace",
     summary="Get a list of all workspaces for the user",
     status_code=status.HTTP_200_OK,
+    response_model=List[Workspace],
 )
 def list_workspaces(
     user_id: str = USER_ID_PARAM,
@@ -122,31 +226,38 @@ def list_workspaces(
     logger.info(f"List workspaces request for user {user_id}")
 
     services = component_manager.get_service_manager().list_services(project_id=user_id)
-    workspaces = [service.dict() for service in services if is_workspace(service)]
+    workspaces = [
+        create_ws_from_service(service)
+        for service in services
+        if is_ws_service(service)
+    ]
     return workspaces
 
 
 @app.get(
-    "/users/{user_id}/workspace/{service_id}",
+    "/users/{user_id}/workspace/{workspace_id}",
     summary="Get information about a specific workspace",
     status_code=status.HTTP_200_OK,
+    response_model=Workspace,
 )
 def get_workspace(
     user_id: str = USER_ID_PARAM,
-    service_id: str = SERVICE_ID_PARAM,
+    workspace_id: str = SERVICE_ID_PARAM,
     component_manager: ComponentManager = Depends(get_component_manager),
 ) -> Any:
     logger.info(
-        f"Get workspace request for user {user_id} with workspace id {service_id}."
+        f"Get workspace request for user {user_id} with workspace id {workspace_id}."
     )
 
     service = component_manager.get_service_manager().get_service_metadata(
-        user_id, service_id
+        user_id, workspace_id
     )
-    if not is_workspace(service):
-        raise ClientValueError(f"The service with id {service_id} is not a workspace!")
+    if not is_ws_service(service):
+        raise ClientValueError(
+            f"The service with id {workspace_id} is not a workspace!"
+        )
 
-    return service
+    return create_ws_from_service(service)
 
 
 @app.delete(
@@ -162,16 +273,49 @@ def delete_workspace(
     ),
     component_manager: ComponentManager = Depends(get_component_manager),
 ) -> Any:
-    logger.info(
+    logger.debug(
         f"Delete workspace request for user {user_id} with workspace id {service_id}."
     )
 
-    service = get_workspace(user_id, service_id, component_manager)
+    workspace = get_workspace(user_id, service_id, component_manager)
 
     component_manager.get_service_manager().delete_service(
-        user_id, service.id, delete_volumes
+        user_id, workspace.id, delete_volumes
     )
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.get(
+    "/config",
+    summary="Get workspace manager config.",
+    response_model=WorkspaceConfigOptions,
+    status_code=status.HTTP_200_OK,
+)
+def get_workspace_config(
+    component_manager: ComponentManager = Depends(get_component_manager),
+) -> Any:
+    allowed_images = component_manager.get_system_manager().list_allowed_images()
+    allowed_images = [
+        f"{image_info.image_name}:{image_tag}"
+        for image_info in allowed_images
+        if image_info.metadata
+        if image_info.metadata.get("is-workspace", None) is not None
+        for image_tag in image_info.image_tags
+    ]
+    return WorkspaceConfigOptions(
+        display_name_default="Default Workspace",
+        container_image_default="mltooling/ml-workspace-minimal",
+        container_image_options=allowed_images,
+        cpus_default=settings.WORKSPACE_CPUS_DEFAULT,
+        cpus_max=settings.WORKSPACE_CPUS_MAX,
+        cpus_options=settings.WORKSPACE_CPUS_OPTIONS,  # type: ignore
+        memory_default=settings.WORKSPACE_MEMORY_MB_DEFAULT,
+        memory_max=settings.WORKSPACE_MEMORY_MB_MAX,
+        memory_options=settings.WORKSPACE_MEMORY_MB_OPTIONS,  # type: ignore
+        idle_timeout_default=settings.WORKSPACE_IDLE_TIMEOUT_DEFAULT,
+        idle_timeout_options=settings.WORKSPACE_IDLE_TIMEOUT_OPTIONS,  # type: ignore
+        always_clear_volume_on_stop=settings.WORKSPACE_ALWAYS_CLEAR_VOLUME_ON_STOP,
+    )
 
 
 if __name__ == "__main__":

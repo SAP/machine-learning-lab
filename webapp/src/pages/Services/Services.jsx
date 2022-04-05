@@ -98,13 +98,6 @@ function Services(props) {
   /* eslint-disable react-hooks/exhaustive-deps */
   const onExecuteAction = useCallback(async (resource, resourceAction) => {
     try {
-      // servicesApi.apiClient.agent.redirects(0);
-      // const response = await servicesApi.executeServiceAction(
-      //   activeProject.id,
-      //   resource.id,
-      //   resourceAction.action_id
-      // );
-
       if (resourceAction.instructions) {
         resourceAction.instructions.some((instruction) => {
           if (instruction.type && instruction.type === 'new-tab') {
@@ -114,10 +107,22 @@ function Services(props) {
 
           return false;
         });
+      } else {
+        await servicesApi.executeServiceAction(
+          activeProject.id,
+          resource.id,
+          resourceAction.action_id
+        );
       }
     } catch (e) {
+      let reason;
+      if (e.body && e.body.message) {
+        reason = e.body.message;
+      } else {
+        reason = 'unknown';
+      }
       showStandardSnackbar(
-        `Could not execute action '${resourceAction.action_id}' for service '${resource.id}'. Reason: ${e}`
+        `Could not execute action '${resourceAction.action_id}' for service '${resource.id}'. Reason: ${reason}`
       );
     }
   });

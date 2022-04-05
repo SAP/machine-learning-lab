@@ -1,21 +1,21 @@
 import React from 'react';
 
 import { Route, Switch } from 'react-router-dom';
+import Box from '@mui/material/Box';
 
-import './App.css';
-import WorkspaceTabs from '../WorkspaceTabs';
+import Workspace from './Workspace';
 
 function App() {
   return (
-    <div className="App">
+    <Box sx={{ height: '100vh' }}>
       <Switch>
         <Route path="/users/:userId/workspace">
-          <WorkspaceTabs />
+          <Workspace />
         </Route>
         <Route path="*">Not Found. Visit /users/:userId/workspace</Route>
       </Switch>
       <div id="snackbar-container" />
-    </div>
+    </Box>
   );
 }
 

@@ -34,12 +34,6 @@ if not VERSION:
     except FileNotFoundError:
         VERSION = "0.0.0"
 
-if "CTXY_PACKAGE_PATH" in os.environ:
-    contaxy_path = os.environ["CTXY_PACKAGE_PATH"]
-    contaxy_package = f"contaxy @ file://localhost/{contaxy_path}#egg=contaxy"
-else:
-    contaxy_package = "contaxy"
-
 # Where the magic happens:
 setup(
     name=NAME,
@@ -59,8 +53,7 @@ setup(
     install_requires=[
         "fastapi",
         "loguru",
-        "contaxy"
-        # contaxy_package
+        "contaxy==0.0.11",
     ],
     # deprecated: dependency_links=dependency_links,
     extras_require={

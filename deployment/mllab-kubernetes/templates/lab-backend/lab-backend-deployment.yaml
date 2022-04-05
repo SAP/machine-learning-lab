@@ -102,6 +102,14 @@ spec:
             - name: HIDE_DEPLOYMENTS
               value: "{{ .Values.labConfig.hideDeployments }}"
             {{- end }}
+            {{- if .Values.labConfig.sessionTokenExpiryMinutes }}
+            - name: JWT_TOKEN_EXPIRY_MINUTES
+              value: "{{ .Values.labConfig.sessionTokenExpiryMinutes }}"
+            {{- end }}
+            {{- if .Values.labConfig.serviceIdleCheckInterval }}
+            - name: SERVICE_IDLE_CHECK_INTERVAL
+              value: "{{ .Values.labConfig.serviceIdleCheckInterval }}"
+            {{- end }}
             # - name: SERVICE_SSL_ENABLED
             #   value: "true"
             # - name: _SSL_RESOURCES_PATH

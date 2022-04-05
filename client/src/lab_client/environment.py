@@ -1,10 +1,12 @@
 import os
+from typing import Optional
 
-from contaxy.clients import FileClient, AuthClient
+from contaxy.clients import AuthClient, FileClient
 from contaxy.clients.shared import BaseUrlSession
 from contaxy.config import API_TOKEN_NAME
 
-from .utils import simplify
+from .handler.file_handler import FileHandler
+from .utils.text_utils import simplify
 
 
 class Environment:
@@ -44,8 +46,13 @@ class Environment:
         DATASET = "dataset"
         BACKUP = "backup"
 
-    def __init__(self, project: str = None, root_folder: str = None, lab_endpoint: str = None,
-                 lab_api_token: str = None):
+    def __init__(
+        self,
+        project: str = None,
+        root_folder: str = None,
+        lab_endpoint: str = None,
+        lab_api_token: str = None,
+    ):
         self._connected = False
 
         if lab_endpoint is None:
@@ -62,8 +69,10 @@ class Environment:
         self._endpoint_client = BaseUrlSession(lab_endpoint)
         # TODO: Enable SSL verification!
         self._endpoint_client.verify = False
-        self._auth_manager = AuthClient(self._endpoint_client)
-        self._file_manager = FileClient(self._endpoint_client)
+        self._auth_client = AuthClient(self._endpoint_client)
+        self._file_client = FileClient(self._endpoint_client)
+
+        self._file_handler = None
 
         self._check_connection()
 
@@ -78,9 +87,9 @@ class Environment:
 
         if root_folder == self._TEMP_ROOT_FOLDER:
             # if folder is temp -> create temporary folder that will be removed on exit
-            import tempfile
             import atexit
             import shutil
+            import tempfile
 
             root_folder = tempfile.mkdtemp()
 
@@ -95,6 +104,12 @@ class Environment:
 
         self._root_folder = root_folder
 
+    def is_connected(self) -> bool:
+        """
+        Returns `True`, if the environment is connected to a Lab instance.
+        """
+        return self._connected
+
     def print_info(self, host_info: bool = False):
         """
         Prints out a summary of the configuration of the environment instance. Can be used as watermark for notebooks.
@@ -107,6 +122,7 @@ class Environment:
             print("Lab Endpoint: Not connected!")
         print("")
         from lab_client._about import __version__
+
         print("Client Version: " + str(__version__))
         print("Configured Project: " + self.project)
         print("")
@@ -118,13 +134,13 @@ class Environment:
 
     def _check_connection(self):
         # We check that everything is working by querying the endpoint to list the files.
-        token_information = self._auth_manager.introspect_token(self.lab_api_token)
+        token_information = self._auth_client.introspect_token(self.lab_api_token)
         if not token_information.active:
             raise ConnectionError("Not valid token")
         # Set token as a cookie for all other requests
         self._endpoint_client.cookies.set(API_TOKEN_NAME, self.lab_api_token)
         # Will raise exception if connection fails.
-        self._file_manager.list_files(self.project)
+        self._file_client.list_files(self.project)
         self._connected = True
 
     @property
@@ -171,57 +187,47 @@ class Environment:
 
         return folder
 
-    def upload_file(self, file_path: str, data_type: str, metadata: dict = None,
-                    file_name: str = None, track_event: bool = True) -> str:
+    @property
+    def file_handler(self) -> FileHandler:
         """
-        Uploads a file to the remote storage.
-
-        # Arguments
-            file_path (string): Local file path to the file you want ot upload.
-            data_type (string): Data type of the file. Possible values are `model`, `dataset`, `experiment`.
-            metadata (dict): Adds additional metadata to remote storage (optional).
-            file_name (str): File name to use in the remote storage. If not provided, the name will be extracted from the provided path (optional)
-            track_event (bool): If `True`, this file operation will be tracked and registered experiments will be notified (optional)
-
-        # Returns
-        Key of the uploaded file.
-
-        # Raises
-        Exception if file does not exist locally.
+        Returns the file handler. The file handler provides additional functionality for interacting with the remote storage.
         """
-        if file_name is None:
-            file_name = file_path.split(os.sep)[-1]
-        with open(file_path, 'rb') as f:
-            file = self._file_manager.upload_file(self.project, f"{data_type}s/{file_name}", f)
-        return file.key
 
-    def get_file(self, key: str, force_download: bool = False, unpack: bool = False, track_event: bool = True) -> str:
+        if self._file_handler is None:
+            self._file_handler = FileHandler(self, self._file_client)
+
+        return self._file_handler
+
+    def upload_file(
+        self,
+        file_path: str,
+        data_type: str,
+        metadata: dict = None,
+        file_name: str = None,
+    ) -> str:
+        """Uploads a file to the storage of the Lab Instance.
+
+        Args:
+            file_path: Local file path to the file you want ot upload.
+            data_type: Data type of the file. Possible values are `model`, `dataset`, `experiment`.
+            metadata: Adds additional metadata to remote storage (optional).
+            file_name: File name to use in the remote storage. If not provided, the name will be extracted from the provided path (optional)
+        Returns:
+            Key of the uploaded file.
         """
-        Returns local path to the file for the given `key`. If the file is not available locally, download it from the remote storage.
+        return self.file_handler.upload_file(file_path, data_type, metadata, file_name)
 
-        # Arguments
-            key (string): Key or url of the requested file.
-            force_download (boolean): If `True`, the file will always be downloaded and not loaded locally (optional).
-            unpack (boolean): If `True`, the file - if a valid ZIP - will be unpacked within the data folder
-                and the folder path will be returned (optional).
-            track_event (bool): If `True`, this file operation will be tracked and registered experiments will be notified (optional)
+    def get_file(
+        self, key: str, version: Optional[str] = None, force_download: bool = False
+    ) -> str:
+        """Returns local path to the file for the given `key`.
+        If the file is not available locally, download it from the storage of the Lab Instance.
 
-        # Returns
-        Local path to the requested file or `None` if file is not available.
+        Args:
+            key: Key or url of the requested file.
+            version: Version of the file to return. If `None` (default) the latest version will be returned.
+            force_download: If `True`, the file will always be downloaded and not loaded locally (optional).
+        Returns:
+            Local path to the requested file or `None` if file is not available.
         """
-        prefix, file_name = key.split('/')[0], key.split('/')[-1]
-        if prefix == "datasets":
-            folder = self.datasets_folder
-        elif prefix == "models":
-            folder = self.models_folder
-        else:
-            folder = self.root_folder
-        local_destination_path = os.path.join(folder, file_name)
-
-        if not os.path.exists(local_destination_path) or force_download:
-            bytes_iterator = self._file_manager.download_file(self.project, key)
-            with open(local_destination_path, 'wb') as f:
-                for byte in bytes_iterator:
-                    f.write(byte)
-
-        return local_destination_path
+        return self.file_handler.get_file(key, version, force_download)

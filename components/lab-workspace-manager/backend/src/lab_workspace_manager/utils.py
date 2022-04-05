@@ -28,7 +28,7 @@ def get_component_manager(
     """
     session = BaseUrlSession(base_url=CONTAXY_API_ENDPOINT)
     session.headers = {"Authorization": f"Bearer {token}"}
-    with ComponentManager(request) as component_manager:
+    with ComponentManager.from_request(request) as component_manager:
         component_manager._auth_manager = AuthClient(session)
         component_manager._extension_manager = ExtensionClient(session)
         component_manager._project_manager = ProjectClient(session)

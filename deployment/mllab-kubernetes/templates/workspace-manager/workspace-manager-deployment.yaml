@@ -58,14 +58,10 @@ spec:
               value: "lab-p-ctxy-global-s-workspace-manager"
             - name: CONTAXY_SERVICE_URL
               value: /projects/ctxy-global/services/lab-p-ctxy-global-s-workspace-manager/access/{{ .Values.workspaceManager.service.port }}
-            - name: WORKSPACE_MAX_MEMORY_MB
-              value: "{{ .Values.workspaceManager.memoryLimit }}"
-            - name: WORKSPACE_MAX_CPUS
-              value: "{{ .Values.workspaceManager.cpuLimit }}"
-            - name: WORKSPACE_MAX_VOLUME_SIZE
-              value: "{{ .Values.workspaceManager.persistentVolumeSize }}"
-            - name: WORKSPACE_MAX_CONTAINER_SIZE
-              value: "{{ .Values.workspaceManager.maxContainerSize }}"
+            {{- range $name, $value := .Values.workspaceManager.env }}
+            - name: {{ $name }}
+              value: {{ $value | quote }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080

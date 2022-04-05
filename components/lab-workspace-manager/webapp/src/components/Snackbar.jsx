@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import MaterialUiSnackbar from '@material-ui/core/Snackbar';
+import MaterialUiSnackbar from '@mui/material/Snackbar';
 
 function Snackbar({ message }) {
   const [isOpen, setIsOpen] = useState(true);
