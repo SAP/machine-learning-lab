@@ -60,6 +60,7 @@ function UserMenu(props) {
     showAppDialog(ChangePasswordDialog, {
       title: 'Change Password',
       content: 'test',
+      userId: user.id,
     });
   };
 
@@ -106,7 +107,9 @@ function UserMenu(props) {
       <MenuItem onClick={onUserTokenClick}>Get User API Token</MenuItem>
       <MenuItem onClick={onProjectTokenClick}>Get Project API Token</MenuItem>
       <MenuItem onClick={onApiTokenClick}>{t('api_tokens')}</MenuItem>
-      <MenuItem onClick={onChangePassword}>Change Password</MenuItem>
+      <MenuItem onClick={onChangePassword} disabled={user.has_password}>
+        Change Password
+      </MenuItem>
       <MenuItem onClick={onLogoutClick}>{t('logout')}</MenuItem>
       <Divider />
     </div>
