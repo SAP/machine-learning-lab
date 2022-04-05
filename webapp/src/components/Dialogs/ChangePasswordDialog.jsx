@@ -13,9 +13,12 @@ import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import showStandardSnackbar from '../../app/showStandardSnackbar';
+
+import { usersApi } from '../../services/contaxy-api';
 
 function ChangePasswordDialog(props) {
-  const { onClose, title } = props;
+  const { onClose, title, userId } = props;
   const [showNewPassword, setVisibilityNewPassword] = useState(false);
   const [showConfirmPassword, setVisibilityConfimPassword] = useState(false);
   const [newPassword, setNewPasswordValue] = useState('');
@@ -35,6 +38,14 @@ function ChangePasswordDialog(props) {
 
   const setConfirmPassword = (e) => {
     setConfirmPasswordValue(e.target.value);
+  };
+
+  const onClickOk = async () => {
+    try {
+      usersApi.changePassword(userId, newPassword);
+    } catch (e) {
+      showStandardSnackbar(`Failed to change password!`);
+    }
   };
 
   const contentElement = (
@@ -80,7 +91,7 @@ function ChangePasswordDialog(props) {
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{contentElement}</DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={onClickOk} color="primary">
           OK
         </Button>
         <Button onClick={onClose} color="primary">
@@ -93,6 +104,7 @@ function ChangePasswordDialog(props) {
 ChangePasswordDialog.propTypes = {
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 ChangePasswordDialog.defaultProps = {
