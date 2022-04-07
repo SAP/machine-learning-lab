@@ -8,7 +8,7 @@ import MaterialTable from 'material-table';
 
 import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
 import { usersApi } from '../../services/contaxy-api';
-import ChangePassword from '../../components/Dialogs/ChangePassword';
+import ChangePasswordDialog from '../../components/Dialogs/ChangePasswordDialog';
 import ConfirmDeleteDialog from '../../components/Dialogs/ConfirmDeleteDialog';
 import showStandardSnackbar from '../../app/showStandardSnackbar';
 
@@ -67,7 +67,7 @@ function UsersContainer(props) {
   };
 
   const onChangePassword = (rowData) => {
-    showAppDialog(ChangePassword, {
+    showAppDialog(ChangePasswordDialog, {
       dialogTitle: 'Change Password',
       onSubmit: async (onClose, password) => {
         try {

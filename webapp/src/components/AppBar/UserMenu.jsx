@@ -10,12 +10,14 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { API_EXPLORER_URL, DOCUMENTATION_URL } from '../../utils/config';
+import { API_EXPLORER_URL } from '../../utils/config';
 import { authApi, projectsApi, usersApi } from '../../services/contaxy-api';
 import { getUserPemissionId } from '../../utils/app-utils';
 import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
 import ApiTokenDialog from '../Dialogs/ApiTokenDialog';
+import ChangePasswordDialog from '../Dialogs/ChangePasswordDialog';
 import ContentDialog from '../Dialogs/ContentDialog';
+import showStandardSnackbar from '../../app/showStandardSnackbar';
 
 const ID_MENU_APPBAR = 'menu-appbar';
 const REL = 'noopener noreferrer';
@@ -54,6 +56,23 @@ function UserMenu(props) {
     window.location.reload();
   };
 
+  const onChangePassword = () => {
+    showAppDialog(ChangePasswordDialog, {
+      dialogTitle: 'Change Password',
+      onSubmit: async (onCloseDialog, password) => {
+        try {
+          await usersApi.changePassword(user.id, `"${password}"`);
+          showStandardSnackbar('Password successfully changed.');
+        } catch (e) {
+          showStandardSnackbar(
+            `Could not change password! Reason: ${e.body.message}`
+          );
+        }
+        onCloseDialog();
+      },
+    });
+  };
+
   const onUserTokenClick = async () => {
     const userApiToken = await usersApi.getUserToken(user.id, {
       accessLevel: 'write',
@@ -83,6 +102,9 @@ function UserMenu(props) {
       <MenuItem onClick={onUserTokenClick}>Get User API Token</MenuItem>
       <MenuItem onClick={onProjectTokenClick}>Get Project API Token</MenuItem>
       <MenuItem onClick={onApiTokenClick}>{t('api_tokens')}</MenuItem>
+      {user?.has_password ? (
+        <MenuItem onClick={onChangePassword}>Change Password</MenuItem>
+      ) : null}
       <MenuItem onClick={onLogoutClick}>{t('logout')}</MenuItem>
       <Divider />
     </div>
@@ -113,7 +135,7 @@ function UserMenu(props) {
         onClose={onClose}
       >
         {isAuthenticated ? privateElements : false}
-        <MenuItem
+        {/* <MenuItem
           className={`${className} menuItem`}
           component="a"
           href={DOCUMENTATION_URL}
@@ -121,7 +143,7 @@ function UserMenu(props) {
           target="_blank"
         >
           {t('documentation')}
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
           className={`${className} menuItem`}
           component="a"
