@@ -2,113 +2,139 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
-import Button from '@material-ui/core/Button';
+import styled from 'styled-components';
+
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  IconButton,
+  InputAdornment,
+  TextField,
+} from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import showStandardSnackbar from '../../app/showStandardSnackbar';
 
-import { usersApi } from '../../services/contaxy-api';
+const ChangePassword = ({ onClose, onSubmit }) => {
+  // eslint-disable-next-line no-unused-vars
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
-function ChangePasswordDialog(props) {
-  const { onClose, title, userId } = props;
-  const [showNewPassword, setVisibilityNewPassword] = useState(false);
-  const [showConfirmPassword, setVisibilityConfimPassword] = useState(false);
-  const [newPassword, setNewPasswordValue] = useState('');
-  const [confirmPassword, setConfirmPasswordValue] = useState('');
-
-  const handleClickShowNewPassword = () => {
-    setVisibilityNewPassword(!showNewPassword);
+  const changePassword = (e) => {
+    setPassword(e.target.value);
   };
 
-  const handleClickShowConfirmPassword = () => {
-    setVisibilityConfimPassword(!showConfirmPassword);
+  const changeConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value);
   };
 
-  const setNewPassword = (e) => {
-    setNewPasswordValue(e.target.value);
+  const handelSubmitClick = (pass) => {
+    onSubmit(onClose, pass);
   };
 
-  const setConfirmPassword = (e) => {
-    setConfirmPasswordValue(e.target.value);
-  };
-
-  const onClickOk = async () => {
-    try {
-      usersApi.changePassword(userId, newPassword);
-    } catch (e) {
-      showStandardSnackbar(`Failed to change password!`);
+  const submit = async (pass, passConfirmation) => {
+    if (pass !== passConfirmation) {
+      showStandardSnackbar('Passwords do not match!');
+    } else {
+      handelSubmitClick(pass);
     }
   };
 
-  const contentElement = (
-    <DialogContentText style={{ whiteSpace: 'pre-line' }}>
-      <Input
-        placeholder="New Password"
-        type={showNewPassword ? 'text' : 'password'}
-        value={newPassword}
-        onChange={setNewPassword}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="Toggle password visibility"
-              onClick={handleClickShowNewPassword}
-            >
-              {showNewPassword ? <Visibility /> : <VisibilityOff />}
-            </IconButton>
-          </InputAdornment>
-        }
-      />
-      <div>{'\n'}</div>
-      <Input
-        placeholder="Confirm New Password"
-        type={showConfirmPassword ? 'text' : 'password'}
-        value={confirmPassword}
-        onChange={setConfirmPassword}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="Toggle password visibility"
-              onClick={handleClickShowConfirmPassword}
-            >
-              {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-            </IconButton>
-          </InputAdornment>
-        }
-      />
-    </DialogContentText>
-  );
-
   return (
     <Dialog open>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>{contentElement}</DialogContent>
+      <DialogTitle>Change Password</DialogTitle>
+      <DialogContent>
+        <form>
+          <TextField
+            required
+            id="password"
+            name="password"
+            label="Password"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="current-password"
+            onChange={changePassword}
+            margin="dense"
+            fullWidth
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {password.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            required
+            id="passwordConfirmation"
+            name="passwordConfirmation"
+            label="Password Confirm"
+            type={showPassword ? 'text' : 'password'}
+            onChange={changeConfirmPassword}
+            margin="dense"
+            fullWidth
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {passwordConfirmation.showPassword ? (
+                      <VisibilityOff />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </form>
+      </DialogContent>
       <DialogActions>
-        <Button onClick={onClickOk} color="primary">
-          OK
-        </Button>
         <Button onClick={onClose} color="primary">
-          CLOSE
+          {}
+          CANCEL{}
+        </Button>
+        <Button
+          onClick={() => submit(password, passwordConfirmation)}
+          color="primary"
+        >
+          SUBMIT
         </Button>
       </DialogActions>
     </Dialog>
   );
-}
-ChangePasswordDialog.propTypes = {
-  title: PropTypes.string,
+};
+ChangePassword.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-  userId: PropTypes.string.isRequired,
 };
 
-ChangePasswordDialog.defaultProps = {
-  title: '',
+ChangePassword.defaultProps = {
+  // className: '',
+  // submit: () => {},
 };
 
-export default ChangePasswordDialog;
+const StyledChangePassword = styled(ChangePassword)`
+  &.projectIdFields {
+    display: flex;
+  }
+`;
+
+export default StyledChangePassword;
