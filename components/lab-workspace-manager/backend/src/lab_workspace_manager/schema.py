@@ -71,7 +71,7 @@ class WorkspaceBase(BaseModel):
         description="Compute requirements for this workspace.",
     )
     idle_timeout: Optional[timedelta] = Field(
-        settings.WORKSPACE_IDLE_TIMEOUT_DEFAULT,
+        timedelta(settings.WORKSPACE_IDLE_TIMEOUT_DEFAULT),
         description="Time after which the workspace is considered idling and will be stopped during the next idle check."
         "If set to None, the workspace will never be considered idling."
         "Can be specified as seconds or ISO 8601 time delta.",
