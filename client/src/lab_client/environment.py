@@ -4,6 +4,7 @@ from typing import Dict, Optional
 from contaxy.clients import AuthClient, FileClient
 from contaxy.clients.shared import BaseUrlSession
 from contaxy.config import API_TOKEN_NAME
+from contaxy.schema import File
 
 from .handler.file_handler import FileHandler
 from .utils.text_utils import simplify
@@ -253,7 +254,7 @@ class Environment:
 
     def get_file_metadata(
         self, project: str, key: str, version: Optional[str] = None
-    ) -> Dict[str, str]:
+    ) -> File:
         """Returns file metadata to the file for the given `key`.
 
         Args:

@@ -12,6 +12,7 @@ import sys
 
 from lab_client.utils import file_handler_utils, request_utils
 from zipfile import ZipFile
+import shutil
 
 class FileHandler:
     def __init__(self, env, file_client: FileClient):
@@ -198,13 +199,14 @@ class FileHandler:
 
         if unpack and os.path.splitext(key)[1]:
             zip_folder_path = download_path.split('.')[0]
-            if not os.path.exists(zip_folder_path):
-                os.makedirs(zip_folder_path)
+            if os.path.exists(zip_folder_path):
+                shutil.rmtree(zip_folder_path)
+            
+            os.makedirs(zip_folder_path)
 
             with ZipFile(download_path, 'r') as zipObj:
                 zipObj.extractall(path=zip_folder_path)
 
-            os.remove(download_path)
             return zip_folder_path            
 
         return download_path
@@ -241,9 +243,9 @@ class FileHandler:
         project_id: str,
         file_key: str,
         version: Optional[str] = None
-    ) -> Dict[str, str]:
+    ) -> File:
 
         metadata_file = self.file_client.get_file_metadata(project_id,
             file_key, version)
         
-        return metadata_file.metadata
+        return metadata_file
