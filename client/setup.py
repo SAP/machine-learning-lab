@@ -54,6 +54,7 @@ setup(
     install_requires=[
         # "loguru",
         contaxy_package,
+        "tqdm",
     ],
     # deprecated: dependency_links=dependency_links,
     extras_require={
