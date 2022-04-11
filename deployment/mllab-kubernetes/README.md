@@ -6,5 +6,5 @@ For a productive deployment these values should be changed!
 
 To install ML Lab using this helm chart make sure that you navigate to this folder and execute:
 ```
-helm install ml-lab -n ml-lab -f values.yaml -f secret-values.yaml .
+helm install ml-lab -n ml-lab -f values.yaml -f secret-values.yaml --create-namespace .
 ```
