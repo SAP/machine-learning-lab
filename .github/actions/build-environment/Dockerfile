@@ -41,6 +41,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 ENV NODE_OPTIONS="--openssl-legacy-provider"
 
+RUN pip install --no-cache-dir pipenv==2022.4.20
+
 COPY extended-entrypoint.sh /extended-entrypoint.sh
 
 RUN chmod +x /extended-entrypoint.sh
