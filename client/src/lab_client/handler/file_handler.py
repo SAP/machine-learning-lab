@@ -1,14 +1,18 @@
 from __future__ import absolute_import, division, print_function
+from fileinput import filename
 
 import os
-from typing import Iterator, List, Optional
+from typing import Dict, Iterator, List, Optional
 
 from contaxy.clients import FileClient
 from contaxy.schema import File
 from loguru import logger
+import tqdm
+import sys
 
 from lab_client.utils import file_handler_utils, request_utils
-
+from zipfile import ZipFile
+import shutil
 
 class FileHandler:
     def __init__(self, env, file_client: FileClient):
@@ -23,6 +27,7 @@ class FileHandler:
         key: str,
         version: Optional[str] = None,
         force_download: bool = False,
+        unpack: bool = False
     ) -> str:
         """Returns local path to the file for the given `key`.
         If the file is not available locally, download it from the storage of the Lab Instance.
@@ -31,6 +36,7 @@ class FileHandler:
             key: Key or url of the requested file.
             version: Version of the file to return. If `None` (default) the latest version will be returned.
             force_download: If `True`, the file will always be downloaded and not loaded locally (optional).
+            unpack: If 'True', the zip file will be unzipped to the original folder structure.
         Returns:
             Local path to the requested file or `None` if file is not available.
         """
@@ -52,7 +58,7 @@ class FileHandler:
 
         if force_download or not os.path.isfile(local_file_path):
             # no local file found or download forced -> try to directly download file
-            return self._download_file(key, version)
+            return self._download_file(key, version, unpack)
         else:
             return local_file_path
 
@@ -85,7 +91,7 @@ class FileHandler:
             file_name = file_path.split(os.sep)[-1]
         with open(file_path, "rb") as f:
             file = self.file_client.upload_file(
-                self.env.project, f"{data_type}s/{file_name}", f
+                self.env.project, f"{data_type}s/{file_name}", f, metadata=metadata
             )
         return file.key
 
@@ -106,7 +112,27 @@ class FileHandler:
         Returns:
             Key of the uploaded (zipped) folder.
         """
-        raise NotImplemented()
+        if os.path.isfile(folder_path):
+            logger.info("Path is a file, uploading as file instead.")
+            return self.upload_file(folder_path,
+                                    data_type=data_type,
+                                    metadata=metadata,
+                                    file_name=file_name)
+
+        if not os.path.isdir(folder_path):
+            raise Exception('Folder does not exist locally:' + folder_path)
+
+        if not self.env.is_connected():
+            logger.warning("Environment is not connected to Lab. Only local file operations are supported.")
+            return None
+
+        logger.info("Zipping folder: " + folder_path)
+        zip_file_path = file_handler_utils.zip_folder(folder_path)
+        
+        key = self.upload_file(zip_file_path, data_type, metadata=metadata,
+                               file_name=file_name + '.zip' if file_name else None)
+        os.remove(zip_file_path)  # remove file after upload
+        return key
 
     def list_remote_files(
         self, data_type: str = None, prefix: str = None
@@ -154,7 +180,7 @@ class FileHandler:
             key = f"{key}.{version}"
         return os.path.abspath(os.path.join(self.env.project_folder, key))
 
-    def _download_file(self, key: str, version: str) -> str or None:
+    def _download_file(self, key: str, version: str, unpack: bool) -> str or None:
         """
         Loads a local file with the given key. Will also try to find the newest version if multiple versions exists locally for the key.
         # Arguments
@@ -163,16 +189,29 @@ class FileHandler:
         Path to file or `None` if no local file was found.
         """
         logger.info(f"Downloading remote file: {key}")
-        file_stream = self.file_client.download_file(
+        file_stream, content_length = self.file_client.download_file(
             project_id=self.env.project,
             file_key=key,
             version=version,
         )
         download_path = self.resolve_path_from_key(key, version)
-        self._download_file_stream(file_stream, download_path)
+        self._download_file_stream(file_stream, download_path, content_length)
+
+        if unpack and os.path.splitext(key)[1]:
+            zip_folder_path = download_path.split('.')[0]
+            if os.path.exists(zip_folder_path):
+                shutil.rmtree(zip_folder_path)
+            
+            os.makedirs(zip_folder_path)
+
+            with ZipFile(download_path, 'r') as zipObj:
+                zipObj.extractall(path=zip_folder_path)
+
+            return zip_folder_path            
+
         return download_path
 
-    def _download_file_stream(self, stream: Iterator[bytes], file_path: str) -> bool:
+    def _download_file_stream(self, stream: Iterator[bytes], file_path: str, content_length: int) -> bool:
         """
         Stream the requested file to file_path. This way, even large files can be downloaded.
         # Arguments
@@ -183,6 +222,30 @@ class FileHandler:
         """
         if not os.path.exists(os.path.dirname(file_path)):
             os.makedirs(os.path.dirname(file_path))
+
         with open(file_path, "wb") as out:
+            pbar = tqdm.tqdm(
+                total=content_length,
+                initial=0,
+                mininterval=0.3,
+                unit="B",
+                unit_scale=True,
+                desc="Downloading file",
+                file=sys.stdout,
+            )
             for chunk in stream:
+                pbar.update(len(chunk))
                 out.write(chunk)
+            pbar.close()
+
+    def get_file_metadata(
+        self,
+        project_id: str,
+        file_key: str,
+        version: Optional[str] = None
+    ) -> File:
+
+        metadata_file = self.file_client.get_file_metadata(project_id,
+            file_key, version)
+        
+        return metadata_file
