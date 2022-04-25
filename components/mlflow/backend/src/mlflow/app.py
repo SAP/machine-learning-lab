@@ -1,27 +1,28 @@
 import os
 from typing import Any
 
-from contaxy.managers.components import ComponentManager
+from contaxy.operations.components import ComponentOperations
 from contaxy.schema.auth import USER_ID_PARAM
 from contaxy.schema.exceptions import CREATE_RESOURCE_RESPONSES
 from contaxy.utils import fastapi_utils
 from fastapi import Depends, FastAPI, status
-from mlflow.utils import CONTAXY_API_ENDPOINT, get_component_manager
 from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
+
+from mlflow.utils import CONTAXY_API_ENDPOINT, get_component_manager
 
 app = FastAPI()
 # Patch FastAPI to allow relative path resolution.
 fastapi_utils.patch_fastapi(app)
 # Allow CORS configuration
-# if "BACKEND_CORS_ORIGINS" in os.environ:
-#     app.add_middleware(
-#         CORSMiddleware,
-#         allow_origins=os.environ["BACKEND_CORS_ORIGINS"].split(","),
-#         allow_credentials=True,
-#         allow_methods=["*"],
-#         allow_headers=["*"],
-#     )
+if "BACKEND_CORS_ORIGINS" in os.environ:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=os.environ["BACKEND_CORS_ORIGINS"].split(","),
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 
 @app.get(
@@ -32,7 +33,7 @@ fastapi_utils.patch_fastapi(app)
 )
 def example_endpoint(
     user_id: str = USER_ID_PARAM,
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     logger.info(user_id)
     user = component_manager.get_auth_manager().get_user(user_id)
