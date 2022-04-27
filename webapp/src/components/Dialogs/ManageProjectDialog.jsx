@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -9,44 +9,70 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
 import HighlightOff from '@material-ui/icons/HighlightOff';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Typography from '@material-ui/core/Typography';
 
-import { projectsApi } from '../../services/contaxy-api';
+import { Select } from '@material-ui/core';
+import { projectsApi, usersApi } from '../../services/contaxy-api';
 import { useProjectMembers } from '../../services/api-hooks';
 import GlobalStateContainer from '../../app/store';
+import UserSearch from '../UserSearch';
 import showStandardSnackbar from '../../app/showStandardSnackbar';
 
 function ManageProjectDialog(props) {
   const { className, project, onClose } = props;
   const globalStateContainer = GlobalStateContainer.useContainer();
   const { loadProjects } = globalStateContainer;
-  const [userToAdd, setUserToAdd] = useState(''); // set to empty object so that material-ui knows that it is a controlled input
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(''); // set to empty object so that material-ui knows that it is a controlled input
+  const [permission, setPermission] = useState('read');
   const [projectMembers, reloadProjectMembers] = useProjectMembers(project.id);
 
-  const handleSelectUser = (e) => {
-    setUserToAdd(e.target.value);
+  const onUserSelect = (user) => {
+    setSelectedUser(user);
   };
+
+  async function requestUsers(projectMembers) {
+    let response;
+    try {
+      response = await usersApi.listUsers();
+      const userList = response.filter(
+        (a) => !projectMembers.some((b) => a.id === b.id)
+      );
+      setUsers(userList);
+    } catch (e) {
+      setUsers([]);
+    }
+  }
 
   const handleAddUser = async () => {
     try {
-      await projectsApi.addProjectMember(project.id, userToAdd);
+      await projectsApi.addProjectMember(project.id, selectedUser.id, {
+        accessLevel: permission,
+      });
       showStandardSnackbar(
-        `Added user '${userToAdd}' to project '${project.id}'.`
+        `Added user '${selectedUser.username}' to project '${project.id} with permission '${permission}''.`
       );
+      onUserSelect('');
       reloadProjectMembers();
     } catch (e) {
       showStandardSnackbar(
-        `Could not add user '${userToAdd}' to project '${project.id}'.`
+        `Could not add user '${selectedUser.username}' to project '${project.id}'.`
       );
     }
   };
+
+  useEffect(() => {
+    requestUsers(projectMembers);
+  }, [setUsers, projectMembers, selectedUser]);
 
   const handleRemoveMemberFromProject = async (user) => {
     try {
@@ -59,6 +85,10 @@ function ManageProjectDialog(props) {
         `Could not remove member. Reason: ${err.body.message}`
       );
     }
+  };
+
+  const handleChange = (event) => {
+    setPermission(event.target.value);
   };
 
   return (
@@ -92,16 +122,38 @@ function ManageProjectDialog(props) {
           Add members:
         </Typography>
         <div className={`${className} userInputContainer`}>
-          <TextField
-            className={`${className} userInputTextfield`}
-            value={userToAdd}
-            onChange={handleSelectUser}
-            placeholder="User Id"
+          <UserSearch
+            userList={users}
+            onUserSelect={onUserSelect}
+            value={selectedUser}
+            selected={selectedUser}
           />
+          <div
+            style={{ width: 100 }}
+            className={`${className} selectPermssion`}
+          >
+            <FormControl fullWidth>
+              <Select
+                labelId="permission-select-label"
+                label="Permissions"
+                id="permission-select"
+                onChange={handleChange}
+                defaultValue="read"
+                input={<OutlinedInput variant="filled" />}
+                autoWidth
+              >
+                <MenuItem value="read">Read</MenuItem>
+                <MenuItem value="write">Write</MenuItem>
+                <MenuItem value="admin">Admin</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
           <Button
             color="secondary"
-            onClick={handleAddUser}
-            disabled={userToAdd === null || Object.keys(userToAdd).length === 0}
+            onClick={async () => {
+              await handleAddUser();
+            }}
+            disabled={selectedUser === null}
           >
             ADD
           </Button>
@@ -137,6 +189,10 @@ const StyledManageProjectDialog = styled(ManageProjectDialog)`
 
   &.userInputTextField {
     flex: 1;
+  }
+
+  &.selectPermssion {
+    padding-top: 16px;
   }
 `;
 
