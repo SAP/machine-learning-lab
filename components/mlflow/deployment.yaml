@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  workspace-plugin:
+    container_name: ctxy-p-ctxy-global-s-workspace
+    build:
+        context: .
+        dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - "127.0.0.1:30020:8080"
+    environment:
+      - CONTAXY_API_ENDPOINT=http://test_deployment_contaxy_1:8090
+      - CONTAXY_DEPLOYMENT_NAME=ctxy-p-ctxy-global-s-workspace
+      - CONTAXY_SERVICE_URL=/projects/ctxy-global/services/ctxy-p-ctxy-global-s-workspace/access/8080
+      - BACKEND_CORS_ORIGINS=http://localhost:3000
+      - WORKSPACE_MAX_MEMORY_MB=1024
+      - WORKSPACE_MAX_CPUS=2
+    labels:
+      ctxy.deploymentType: "extension"
+      ctxy.deploymentName: "ctxy-p-ctxy-global-s-workspace"
+      ctxy.displayName: "Workspaces"
+      ctxy.endpoints: "8080"
+      ctxy.namespace: "ctxy"
+      ctxy.projectName: "ctxy-global"
+      ctxy.extensionType: "project-extension"
+      ctxy.ui_extension_endpoint: "8080/app#/users/{env.userId}/workspace"
+      ctxy.api_extension_endpoint: "8080/api"
+    depends_on:
+      - contaxy
+networks:
+  default:
+    external: true
+    name: test_deployment_default
