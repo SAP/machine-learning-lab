@@ -123,8 +123,6 @@ services:
       - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
       - CONTAXY_DEPLOYMENT_NAME=pylab-p-ctxy-global-s-mlflow
       - CONTAXY_SERVICE_URL=/projects/ctxy-global/services/pylab-p-ctxy-global-s-mlflow/access/8080
-      - WORKSPACE_MAX_MEMORY_MB=1024
-      - WORKSPACE_MAX_CPUS=1
     labels:
       ctxy.deploymentType: "extension"
       ctxy.deploymentName: "pylab-p-ctxy-global-s-mlflow"
