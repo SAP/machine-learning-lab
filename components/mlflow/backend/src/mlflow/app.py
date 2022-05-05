@@ -4,15 +4,22 @@ from typing import Any
 
 from contaxy.operations.components import ComponentOperations
 from contaxy.operations import AuthOperations
-from contaxy.schema.auth import USER_ID_PARAM, AccessLevel
+
 from contaxy.schema import Service, ServiceInput
-from contaxy.schema.exceptions import CREATE_RESOURCE_RESPONSES
-from contaxy.utils import fastapi_utils
+from contaxy.schema.auth import USER_ID_PARAM, AccessLevel
+from contaxy.schema.deployment import (
+    ACTION_START,
+    SERVICE_ID_PARAM,
+)
 from contaxy.schema.exceptions import (
-    ResourceAlreadyExistsError,
+    CREATE_RESOURCE_RESPONSES,
+    ResourceAlreadyExistsError
 )
 
-from fastapi import Depends, FastAPI, status
+from contaxy.utils import fastapi_utils
+
+
+from fastapi import Depends, FastAPI, Response, status
 from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
 
@@ -58,12 +65,12 @@ def example_endpoint(
 
 @app.post(
     "/users/{user_id}/mlserver",
-    summary="Create a new ML server for the user.",
+    summary="Create a new ML Flow server for the user.",
     status_code=status.HTTP_200_OK,
     response_model=MLFlow,
     responses={**CREATE_RESOURCE_RESPONSES},
 )
-def deploy_workspace(
+def deploy_mlflow_server(
     mlflow_input: MLFlowInput,
     user_id: str = USER_ID_PARAM,
     component_manager: ComponentOperations = Depends(get_component_manager),
@@ -86,6 +93,25 @@ def deploy_workspace(
         raise ResourceAlreadyExistsError(
             f"A workspace with the name {mlflow_input.display_name} already exists for user {user_id}!"
         )
+
+
+@app.post(
+    "/users/{user_id}/mlserver/{mlserver_id}:start",
+    summary="Start the specified ML Flow server if it is stopped.",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def start_mlflow_server(
+    user_id: str = USER_ID_PARAM,
+    mlserver_id: str = SERVICE_ID_PARAM,
+    component_manager: ComponentOperations = Depends(get_component_manager),
+) -> Any:
+    logger.debug(
+        f"Start ML Flow server for user {user_id} " + f"and server {mlserver_id}"
+    )
+    component_manager.get_service_manager().execute_service_action(
+        project_id=user_id, service_id=mlserver_id, action_id=ACTION_START
+    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 def request_user_token(user_id: str, auth_manager: AuthOperations) -> str:
