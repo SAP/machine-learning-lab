@@ -8,7 +8,7 @@ import requests
 import pytest
 
 @pytest.mark.integration
-class TestEnvironment:
+class TestFile:
 
     def test_creation(self) -> None:
         env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
