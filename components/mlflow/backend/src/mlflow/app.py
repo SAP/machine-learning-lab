@@ -1,6 +1,6 @@
 from datetime import timedelta
 import os
-from typing import Any
+from typing import Any, Optional
 
 from contaxy.operations.components import ComponentOperations
 from contaxy.operations import AuthOperations
@@ -13,13 +13,14 @@ from contaxy.schema.deployment import (
 )
 from contaxy.schema.exceptions import (
     CREATE_RESOURCE_RESPONSES,
+    ClientValueError,
     ResourceAlreadyExistsError
 )
 
 from contaxy.utils import fastapi_utils
 
 
-from fastapi import Depends, FastAPI, Response, status
+from fastapi import Depends, FastAPI, Query, Response, status
 from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
 
@@ -32,7 +33,7 @@ from mlflow.schema import (
 )
 
 
-LABEL_EXTENSION_DEPLOYMENT_TYPE = "ctxy.workspaceExtension.deploymentType"
+LABEL_EXTENSION_DEPLOYMENT_TYPE = "ctxy.mlflowExtension.deploymentType"
 
 app = FastAPI()
 # Patch FastAPI to allow relative path resolution.
@@ -64,25 +65,24 @@ def example_endpoint(
 
 
 @app.post(
-    "/users/{user_id}/mlserver",
-    summary="Create a new ML Flow server for the user.",
+    "/projects/{project_id}/mlserver",
+    summary="Create a new ML Flow server for project.",
     status_code=status.HTTP_200_OK,
     response_model=MLFlow,
     responses={**CREATE_RESOURCE_RESPONSES},
 )
 def deploy_mlflow_server(
     mlflow_input: MLFlowInput,
-    user_id: str = USER_ID_PARAM,
+    project_id: str,
     component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     """Create a new ML server by creating a Contaxy service with a mlflow server image in the personal project."""
-    logger.debug(f"Deploy workspace request for user {user_id}: {mlflow_input}")
-    user_token = request_user_token(user_id, component_manager.get_auth_manager())
-    service_input = create_mlflow_server_service_input(mlflow_input, user_token)
+    logger.debug(
+        f"Deploy ML Flow server request for project {project_id}: {mlflow_input}")
+    service_input = create_mlflow_server_service_input(mlflow_input)
     try:
-        # Use the user's project which has the same id as the user
         service = component_manager.get_service_manager().deploy_service(
-            project_id=user_id, service_input=service_input
+            project_id=project_id, service_input=service_input
         )
         logger.debug(
             f"Successfully created workspace service with name "
@@ -91,47 +91,43 @@ def deploy_mlflow_server(
         return create_mlflow_server_from_service(service)
     except ResourceAlreadyExistsError:
         raise ResourceAlreadyExistsError(
-            f"A workspace with the name {mlflow_input.display_name} already exists for user {user_id}!"
+            f"An ML Flow server with the name {mlflow_input.display_name} already exists for project {project_id}!"
         )
 
 
-@app.post(
-    "/users/{user_id}/mlserver/{mlserver_id}:start",
-    summary="Start the specified ML Flow server if it is stopped.",
-    status_code=status.HTTP_204_NO_CONTENT,
+@app.get(
+    "/projects/{project_id}/mlserver/{mlserver_id}",
+    summary="Get information about a specific ML Flow server.",
+    status_code=status.HTTP_200_OK,
+    response_model=MLFlow,
 )
-def start_mlflow_server(
-    user_id: str = USER_ID_PARAM,
+def get_mlflow_server(
+    project_id: str,
     mlserver_id: str = SERVICE_ID_PARAM,
     component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
-    logger.debug(
-        f"Start ML Flow server for user {user_id} " + f"and server {mlserver_id}"
+    logger.info(
+        f"Get ML Flow server for project {project_id} with server id {mlserver_id}."
     )
-    component_manager.get_service_manager().execute_service_action(
-        project_id=user_id, service_id=mlserver_id, action_id=ACTION_START
+
+    service = component_manager.get_service_manager().get_service_metadata(
+        project_id, mlserver_id
     )
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    if not is_mlflow_service(service):
+        raise ClientValueError(
+            f"The service with id {mlserver_id} is not an ML Flow server!"
+        )
 
-
-def request_user_token(user_id: str, auth_manager: AuthOperations) -> str:
-    return auth_manager.get_user_token(user_id=user_id, access_level=AccessLevel.WRITE)
+    return create_mlflow_server_from_service(service)
 
 
 def create_mlflow_server_service_input(
-    mlflow_input: MLFlowInput, user_token: str
+    mlflow_input: MLFlowInput
 ) -> ServiceInput:
     return ServiceInput(
         container_image=mlflow_input.container_image,
         display_name=f"ML Flow {mlflow_input.display_name}",
         endpoints=["8080b"],
-        parameters={
-            "WORKSPACE_BASE_URL": "{env.CONTAXY_SERVICE_URL}",
-            "SSH_JUMPHOST_TARGET": "{env.CONTAXY_DEPLOYMENT_NAME}",
-            "SELF_ACCESS_TOKEN": "{env.CONTAXY_API_TOKEN}",
-            "LAB_API_ENDPOINT": "{env.CONTAXY_API_ENDPOINT}",
-            "LAB_API_TOKEN": user_token,
-        },
         metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "mlflow"},
         compute={
             "volume_path": "/mlflow",
@@ -143,12 +139,9 @@ def create_mlflow_server_service_input(
             "max_container_size": settings.MLFLOW_CONTAINER_SIZE,
         },
         is_stopped=mlflow_input.is_stopped,
-        idle_timeout=mlflow_input.idle_timeout
-        if mlflow_input.idle_timeout != timedelta(0)
-        else None,
-        clear_volume_on_stop=True
-        if settings.MLFLOW_ALWAYS_CLEAR_VOLUME_ON_STOP
-        else mlflow_input.clear_volume_on_stop,
+        idle_timeout=mlflow_input.idle_timeout if mlflow_input.idle_timeout != timedelta(
+            0) else None,
+        clear_volume_on_stop=True if settings.MLFLOW_ALWAYS_CLEAR_VOLUME_ON_STOP else mlflow_input.clear_volume_on_stop,
     )
 
 
@@ -156,8 +149,8 @@ def create_mlflow_server_from_service(service: Service) -> MLFlow:
     access_url = None
     if service.status == "running":
         project_id = service.metadata["ctxy.projectName"]
-        workspace_id = service.id
-        access_url = f"/projects/{project_id}/services/{workspace_id}/access/8080b"
+        mlflow_server_id = service.id
+        access_url = f"/projects/{project_id}/services/{mlflow_server_id}/access/8080b"
     compute = MLFlowCompute()
     if service.compute.max_cpus:
         compute.cpus = service.compute.max_cpus
@@ -173,6 +166,12 @@ def create_mlflow_server_from_service(service: Service) -> MLFlow:
         status=service.status,
         access_url=access_url,
     )
+
+
+def is_mlflow_service(service: Service) -> bool:
+    if service.metadata is None:
+        return False
+    return service.metadata.get(LABEL_EXTENSION_DEPLOYMENT_TYPE, "") == "mlflow"
 
 
 def compute_min_cpu(max_cpus: int) -> float:
