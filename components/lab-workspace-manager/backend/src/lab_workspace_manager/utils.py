@@ -1,9 +1,9 @@
 import os
 
-from contaxy.utils.auth_utils import get_api_token
 from contaxy.clients.components import ComponentClient
 from contaxy.clients.shared import BaseUrlSession
 from contaxy.operations.components import ComponentOperations
+from contaxy.utils.auth_utils import get_api_token
 from fastapi import Depends
 
 CONTAXY_API_ENDPOINT = os.getenv("CONTAXY_API_ENDPOINT", None)
