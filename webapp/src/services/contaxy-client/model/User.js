@@ -82,6 +82,9 @@ class User {
         );
       }
     }
+    if (data.hasOwnProperty('permission')) {
+      obj['permission'] = ApiClient.convertToType(data['permission'], 'String');
+    }
     return obj;
   }
 }
