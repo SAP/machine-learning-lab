@@ -3,16 +3,16 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import './App.css';
-import Workspace from './Workspace';
+import MLFlowServer from './MLFlowServer';
 
 function App() {
   return (
     <div className="App">
       <Switch>
-        <Route path="/users/:userId/workspace">
-          <Workspace />
+        <Route path="/mlflow-server">
+          <MLFlowServer />
         </Route>
-        <Route path="*">Not Found. Visit /users/:userId/workspace</Route>
+        <Route path="*">Not Found. Visit /mlflow-server</Route>
       </Switch>
       <div id="snackbar-container" />
     </div>

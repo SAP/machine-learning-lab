@@ -31,7 +31,7 @@ class MLFlowManagerSettings(BaseSettings):
     MLFLOW_CONTAINER_SIZE: int = 5000
 
     MLFLOW_IMAGE_DEFAULT: MLFlowImage = MLFlowImage(
-        image="mlserver", display_name="Default ML Flow Server image"
+        image="local-mlserver", display_name="Default ML Flow Server image"
     )
     MLFLOW_IMAGE_OPTIONS: List[MLFlowImage] = []
 

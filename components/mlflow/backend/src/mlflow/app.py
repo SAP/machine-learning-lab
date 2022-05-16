@@ -1,6 +1,6 @@
 from datetime import timedelta
 import os
-from typing import Any, Optional
+from typing import Any, List, Optional
 
 from contaxy.operations.components import ComponentOperations
 from contaxy.operations import AuthOperations
@@ -65,7 +65,7 @@ def example_endpoint(
 
 
 @app.post(
-    "/projects/{project_id}/mlserver",
+    "/projects/{project_id}/mlflow-server",
     summary="Create a new ML Flow server for project.",
     status_code=status.HTTP_200_OK,
     response_model=MLFlow,
@@ -120,6 +120,67 @@ def get_mlflow_server(
 
     return create_mlflow_server_from_service(service)
 
+@app.post(
+    "/projects/{project_id}/mlflow-server/{mlflow_server_id}:start",
+    summary="Start the specified ML Flow server if it is stopped.",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def start_mlflow_server(
+    project_id: str,
+    mlflow_server_id: str = SERVICE_ID_PARAM,
+    component_manager: ComponentOperations = Depends(get_component_manager),
+) -> Any:
+    logger.debug(
+        f"Start ML Flow server request for project {project_id} " + f"and mlflow server {mlflow_server_id}"
+    )
+    component_manager.get_service_manager().execute_service_action(
+        project_id=project_id, service_id=mlflow_server_id, action_id=ACTION_START
+    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+@app.get(
+    "/projects/{project_id}/mlflow-server",
+    summary="Get a list of all ML Flow servers for the project",
+    status_code=status.HTTP_200_OK,
+    response_model=List[MLFlow],
+)
+def list_mlflow_servers(
+    project_id: str,
+    component_manager: ComponentOperations = Depends(get_component_manager),
+) -> Any:
+    logger.info(f"List ML Flow servers for project {project_id}")
+
+    services = component_manager.get_service_manager().list_services(project_id=project_id)
+    workspaces = [
+        create_mlflow_server_from_service(service)
+        for service in services
+        if is_mlflow_service(service)
+    ]
+    return workspaces
+
+@app.delete(
+    "/projects/{project_id}/mlflow-server/{service_id}",
+    summary="Delete the specified ML Flow server.",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def delete_mlflow_server(
+    project_id: str,
+    mlflow_server_id: str = SERVICE_ID_PARAM,
+    delete_volumes: Optional[bool] = Query(
+        False, description="Delete all volumes associated with the deployment."
+    ),
+    component_manager: ComponentOperations = Depends(get_component_manager),
+) -> Any:
+    logger.debug(
+        f"Delete workspace request for project {project_id} with workspace id {mlflow_server_id}."
+    )
+
+    workspace = get_mlflow_server(project_id, mlflow_server_id, component_manager)
+
+    component_manager.get_service_manager().delete_service(
+        project_id, workspace.id, delete_volumes
+    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 def create_mlflow_server_service_input(
     mlflow_input: MLFlowInput
@@ -127,7 +188,7 @@ def create_mlflow_server_service_input(
     return ServiceInput(
         container_image=mlflow_input.container_image,
         display_name=f"ML Flow {mlflow_input.display_name}",
-        endpoints=["8080b"],
+        endpoints=["5001b"],
         metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "mlflow"},
         compute={
             "volume_path": "/mlflow",
@@ -150,7 +211,7 @@ def create_mlflow_server_from_service(service: Service) -> MLFlow:
     if service.status == "running":
         project_id = service.metadata["ctxy.projectName"]
         mlflow_server_id = service.id
-        access_url = f"/projects/{project_id}/services/{mlflow_server_id}/access/8080b"
+        access_url = f"/projects/{project_id}/services/{mlflow_server_id}/access/5001b/"
     compute = MLFlowCompute()
     if service.compute.max_cpus:
         compute.cpus = service.compute.max_cpus

@@ -39,7 +39,7 @@
     "start": "react-scripts start",
     "start-debug": "REACT_APP_CONTAXY_ENDPOINT=http://localhost:30010/api REACT_APP_EXTENSION_ENDPOINT=http://localhost:8080/ yarn start",
     "container": "run(){ docker build -t project-template-dev ../.github/actions/build-environment && echo 'Starting the container. That can take a moment...' && docker run -it --rm -p 3000:3000 -p 6006:6006 -v $(pwd):/workspace:delegated --entrypoint \"/bin/bash\" project-template-dev -c \"cd workspace/ && yarn $1\"; }; run",
-    "build": "react-scripts --openssl-legacy-provider build",
+    "build": "react-scripts build",
     "test": "react-scripts test a --watchAll=false",
     "test-interactive": "react-scripts test",
     "eject": "react-scripts eject",
