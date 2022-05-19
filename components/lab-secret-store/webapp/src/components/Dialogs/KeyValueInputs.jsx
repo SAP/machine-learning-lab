@@ -1,7 +1,11 @@
 import React, { useRef, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { Button, TextField } from '@mui/material';
+import styled from 'styled-components';
+
+import AddIcon from '@mui/icons-material/Add';
+import { TextField, Button } from '@mui/material';
+import DelIcon from '@mui/icons-material/Delete';
 
 const ENV_NAME_REGEX = new RegExp('^([a-zA-Z_]{1,}[a-zA-Z0-9_]{0,})?$');
 
@@ -26,7 +30,29 @@ function KeyValueInput(props) {
 
   const isInvalid = !ENV_NAME_REGEX.test(key);
 
-  return <div>test</div>;
+  return (
+    <>
+      <TextField
+        className={`${className} inputField`}
+        autoComplete="on"
+        placeholder={FIELD_KEY}
+        type="text"
+        value={key}
+        onChange={handleKeyChange}
+        error={isInvalid}
+        helperText={isInvalid ? 'Key format is not valid' : null}
+      />
+
+      <TextField
+        className={`${className} inputField`}
+        autoComplete="on"
+        placeholder={FIELD_VALUE}
+        type="text"
+        value={value}
+        onChange={handleValueChange}
+      />
+    </>
+  );
 }
 
 KeyValueInput.propTypes = {
@@ -38,6 +64,12 @@ KeyValueInput.propTypes = {
 KeyValueInput.defaultProps = {
   className: '',
 };
+
+const StyledKeyValueInput = styled(KeyValueInput)`
+  &.inputField {
+    margin: 10px 10px 10px 0px;
+  }
+`;
 
 function KeyValueInputs(props) {
   const [keyValuePairs, setKeyValuePairs] = useState([]);
@@ -94,7 +126,7 @@ function KeyValueInputs(props) {
     <>
       {keyValuePairs.map((keyValuePair) => (
         <div key={keyValuePair.index}>
-          <KeyValueInput
+          <StyledKeyValueInput
             index={keyValuePair.index}
             onChange={handleKeyValuePairChange}
           />
@@ -104,13 +136,14 @@ function KeyValueInputs(props) {
             aria-label="del"
             onClick={() => handleDeleteKeyValueClick(keyValuePair.index)}
           >
-            del
+            <DelIcon />
           </Button>
         </div>
       ))}
 
       <Button color="primary" onClick={handleAddKeyValuePairClick}>
         Add
+        <AddIcon />
       </Button>
     </>
   );
