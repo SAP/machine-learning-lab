@@ -3,7 +3,7 @@ services:
   # The main ML Lab backend container that serves as entrypoint for all traffic
   # Contains the contaxy server and hosts the ML Lab web app
   ml-lab-backend:
-    image: lab-backend:latest
+    image: ghcr.io/sap/machine-learning-lab/lab-backend:0.0.15
     container_name: ml-lab-backend
     ports:
       - "30010:8080"
@@ -95,7 +95,7 @@ services:
   # Workspace manager that allows users to spawn their machine learning workspaces
   lab-workspace-manager:
     container_name: pylab-p-ctxy-global-s-workspace-manager
-    image: lab-workspace-manager:latest
+    image: ghcr.io/sap/machine-learning-lab/lab-workspace-manager:0.0.15
     environment:
       - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
       - CONTAXY_DEPLOYMENT_NAME=pylab-p-ctxy-global-s-workspace-manager

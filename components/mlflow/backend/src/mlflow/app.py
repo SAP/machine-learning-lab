@@ -121,7 +121,7 @@ def get_mlflow_server(
     return create_mlflow_server_from_service(service)
 
 @app.post(
-    "/projects/{project_id}/mlflow-server/{mlflow_server_id}:start",
+    "/projects/{project_id}/mlflow-server/{mlflow_server_id}/start",
     summary="Start the specified ML Flow server if it is stopped.",
     status_code=status.HTTP_204_NO_CONTENT,
 )

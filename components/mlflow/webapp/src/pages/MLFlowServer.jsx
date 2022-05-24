@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
 import Stack from '@mui/material/Stack';
@@ -9,8 +10,17 @@ import MlFlowServerStatusStopped from '../components/MlFlowServerStatusStopped';
 
 import { CONTAXY_ENDPOINT } from '../utils/config';
 
+// A custom hook that builds on useLocation to parse
+// the query string for you.
+function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
 function MLFlowServer() {
-  const projectId = 'newprojectid';
+  const query = useQuery();
+  const projectId = query.get('project');
 
   const [isDeploymentLoading, setIsDeploymentLoading] = useState(false);
   const [isServerLoading, setIsServerLoading] = useState(false);

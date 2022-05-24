@@ -8,7 +8,8 @@ export async function deployServer(projectId, workspaceInfo) {
     await superagent
       .post(`${EXTENSION_ENDPOINT}/projects/${projectId}/mlflow-server`)
       .withCredentials()
-      .send(workspaceInfo);
+      .send(workspaceInfo)
+      .set('Content-Type', 'application/json');
   } catch (err) {
     let message = err.response?.body?.detail;
     if (typeof message === 'undefined') {
@@ -23,7 +24,7 @@ export async function startServer(projectId, workspaceId) {
   try {
     await superagent
       .post(
-        `${EXTENSION_ENDPOINT}/projects/${projectId}/mlflow-server/${workspaceId}:start`
+        `${EXTENSION_ENDPOINT}/projects/${projectId}/mlflow-server/${workspaceId}/start`
       )
       .withCredentials()
       .send();
