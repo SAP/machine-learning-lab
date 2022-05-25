@@ -34,17 +34,37 @@ class DeploymentEnvironment:
     
     def deploy_job(
         self,
-        job_input: dict = None,
+        job_input: JobInput,
         action_id: Optional[str] = None,
-        wait: bool = False) -> Job:
+        wait: bool = False) -> str:
         return self.job_handler.deploy_job(
             job_input=job_input, 
             action_id=action_id, 
             wait=wait
         )
+    
+    def deploy_jobs(
+        self,
+        job_inputs: List[JobInput],
+        action_id: Optional[str] = None,
+        wait: bool = False) -> List[str]:
+        return self.job_handler.deploy_jobs(
+            job_input=job_inputs, 
+            action_id=action_id, 
+            wait=wait
+        )
 
-    def get_job_metadata(self, job_id: str) -> Job:
+    def get_job_metadata(self, job_id: str) -> Dict:
         return self.job_handler.get_job_metadata(job_id)
+    
+    def check_job_status(self, job_id: str) -> str:
+        return self.job_handler.check_job_status(job_id)
+    
+    def wait_for_job_completion(self, job_id: str) -> bool:
+        return self.job_handler.wait_for_job_completion(job_id)
+
+    def wait_for_jobs_completion(self, job_ids: List[str]) -> bool:
+        return self.job_handler.wait_for_jobs_completion(job_ids)
     
     def delete_job(self, job_id: str) -> None:
         self.job_handler.delete_job(
@@ -65,32 +85,6 @@ class DeploymentEnvironment:
             since=since
         )
     
-    def list_deploy_job_actions(
-        self,
-        job_input: dict = None
-    ) -> List[ResourceAction]:
-        return self.job_handler.list_deploy_job_actions(
-            job_input=job_input
-        )
-
-    def suggest_job_config(
-        self,
-        container_image: str,
-    ) -> JobInput:
-
-        return self.job_handler.suggest_job_config(
-            container_image=container_image
-        )
-    
-    def list_job_actions(
-        self,
-        job_id: str
-    ) -> List[ResourceAction]:
-
-        return self.job_handler.list_job_actions(
-            job_id=job_id
-        )
-    
     def list_services(self) -> List[Service]:
         return self.service_handler.list_services()
     
@@ -98,9 +92,20 @@ class DeploymentEnvironment:
         self,
         service_input: ServiceInput,
         action_id: Optional[str] = None,
-        wait: bool = False) -> Service:
+        wait: bool = False) -> str:
         return self.service_handler.deploy_service(
             service_input=service_input, 
+            action_id=action_id, 
+            wait=wait
+        )
+    
+    def deploy_services(
+        self,
+        service_inputs: List[ServiceInput],
+        action_id: Optional[str] = None,
+        wait: bool = False) -> List[str]:
+        return self.service_handler.deploy_services(
+            service_input=service_inputs, 
             action_id=action_id, 
             wait=wait
         )
@@ -114,6 +119,11 @@ class DeploymentEnvironment:
         'Service' if service was found or 'None'.
         """
         return self.service_handler.get_service_metadata(
+            service_id=service_id
+        )
+    
+    def check_service_status(self, service_id: str) -> str:
+        return self.service_handler.check_service_status(
             service_id=service_id
         )
     
@@ -139,42 +149,10 @@ class DeploymentEnvironment:
     def update_service(
         self,
         service_id: str,
-        service_update: dict = None
+        service_update: ServiceUpdate
     ) -> Service:
 
         return self.service_handler.update_service(
             service_id=service_id,
             service_update=service_update
-        )
-
-    def update_service_access(
-        self,
-        service_id: str
-    ) -> None:
-        return self.service_handler.update_service_access(
-            service_id=service_id
-        )
-
-    def list_deploy_service_actions(
-        self,
-        service_input: dict = None
-    ) -> List[ResourceAction]:
-        return self.service_handler.list_deploy_service_actions(
-            service_input=service_input
-        )
-    
-    def suggest_service_config(
-        self,
-        container_image: str,
-    ) -> ServiceInput:
-        return self.service_handler.suggest_service_config(
-            container_image=container_image
-        )
-
-    def list_service_actions(
-        self,
-        service_id: str
-    ) -> List[ResourceAction]:
-        return self.service_handler.list_service_actions(
-            service_id=service_id
         )

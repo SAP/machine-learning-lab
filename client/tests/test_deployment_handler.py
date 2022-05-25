@@ -1,6 +1,5 @@
 from importlib.metadata import metadata
-import os
-import json
+from contaxy.schema.deployment import JobInput, ServiceInput, ServiceUpdate
 
 from lab_client import Environment
 from .conftest import test_settings
@@ -30,28 +29,40 @@ class TestJob:
         env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
                           lab_api_token=test_settings.LAB_TOKEN,
                           project=test_settings.LAB_PROJECT)
-        job_input = dict()
-        job_input['container_image'] = 'hello-world:latest'
-        job_input['display_name'] = 'Job1'
-        job_data = env.deploy_job(job_input)
-
-        env.delete_job(job_data.id)
+        
+        input = JobInput(
+            container_image = 'hello-world:latest',
+            display_name = 'Job1'
+        )
+        job_id = env.deploy_job(input, wait=True)
+        assert job_id is not None
+        
+        env.delete_job(job_id)
 
     def test_list_jobs_get_job_metadata(self) -> None:
         env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
                           lab_api_token=test_settings.LAB_TOKEN,
                           project=test_settings.LAB_PROJECT)
-        job_input = dict()
-        job_input['container_image'] = 'hello-world:latest'
-        job_input['display_name'] = 'Job2'
-        job_data = env.deploy_job(job_input)
-        assert job_data.container_image == job_input['container_image']
+        
+        input = JobInput(
+            container_image = 'ubuntu:latest',
+            display_name = 'Job2',
+            command=['/bin/bash','-c','--'],
+            args=['sleep 30']
+        )
+        job_id = env.deploy_job(input)
 
-        job_metadata = env.get_job_metadata(job_data.id)
-        assert job_metadata.id == job_data.id
+        job_metadata = env.get_job_metadata(job_id)
+        assert job_metadata['ctxy.deploymentId'] == job_id
 
         job_list = env.list_jobs()
         assert len(job_list) > 0
+
+        job_status = env.check_job_status(job_id)
+        assert job_status == "running"
+
+        status = env.wait_for_job_completion(job_id)
+        assert status == True
 
         env.delete_jobs()
         job_list = env.list_jobs()
@@ -61,23 +72,19 @@ class TestJob:
         env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
                           lab_api_token=test_settings.LAB_TOKEN,
                           project=test_settings.LAB_PROJECT)
-        job_input = dict()
-        job_input['container_image'] = 'hello-world:latest'
-        job_input['display_name'] = 'Job3'
-        job_data = env.deploy_job(job_input)
-        assert job_data.container_image == job_input['container_image']
+        job_input = JobInput(
+            container_image = 'hello-world:latest',
+            display_name = 'Job3'
+        )
+        job_id = env.deploy_job(job_input)
 
-        logs = env.get_job_logs(job_data.id)
-        assert logs is not None
+        job_logs = env.get_job_logs(job_id)
+        assert job_logs[-min(len(job_logs), 1000):] is not None
 
-        actions = env.list_deploy_job_actions(job_input)
-        assert len(actions) > 0
+        status = env.wait_for_job_completion(job_id)
+        assert status == True
 
-        config = env.suggest_job_config(job_input['container_image'])
-        assert config is not None
-
-        act = env.list_job_actions(job_data.id)
-        assert act is not None
+        env.delete_jobs()
 
 @pytest.mark.integration
 class TestService:
@@ -98,51 +105,61 @@ class TestService:
                         lab_api_token='not-valid-token',
                         project=test_settings.LAB_PROJECT)
     
-    def test_deploy_service(self) -> None:
+    def test_deploy_service_update_and_delete(self) -> None:
         env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
                           lab_api_token=test_settings.LAB_TOKEN,
                           project=test_settings.LAB_PROJECT)
-        service_input = dict()
-        service_input['container_image'] = 'hello-world:latest'
-        service_input['display_name'] = 'Service1'
-        service = env.deploy_service(service_input)
-        assert service.container_image == service_input['container_image']
+
+        service_input = ServiceInput(
+            container_image = 'hello-world:latest',
+            display_name = 'Service1'
+        )
+        service_id = env.deploy_service(service_input)
+        assert service_id is not None
+
+        env.delete_service(service_id)
         
     def test_get_service_list_and_metadata(self) -> None:
         env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
                           lab_api_token=test_settings.LAB_TOKEN,
                           project=test_settings.LAB_PROJECT)
-        service_input = dict()
-        service_input['container_image'] = 'hello-world:latest'
-        service_input['display_name'] = 'Service2'
-        service = env.deploy_service(service_input)
-        assert service.container_image == service_input['container_image']
+        service_input = ServiceInput(
+            container_image = 'hello-world:latest',
+            display_name = 'Service2'
+        )
+        service_id = env.deploy_service(service_input)
+        
+        serv_status = env.check_service_status(service_id)
+        assert serv_status == 'succeeded'
 
-        service_metadata = env.get_service_metadata(service.id)
-        assert service_metadata.id == service.id
+        service_meta = dict()
+        service_meta['desciption'] = 'This is hello world!'
+        service_input = ServiceUpdate(
+            metadata=service_meta
+        )
+        service_id = env.update_service(service_id, service_input)
+        assert service_id is not None
+
+        service_metadata = env.get_service_metadata(service_id)
+        assert service_meta.items() <= service_metadata.items()
 
         service_list = env.list_services()
         assert len(service_list) > 0
+
+        env.delete_services()
     
     def test_service_logs(self) -> None:
         env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
                           lab_api_token=test_settings.LAB_TOKEN,
                           project=test_settings.LAB_PROJECT)
-        service_input = dict()
-        service_input['container_image'] = 'hello-world:latest'
-        service_input['display_name'] = 'Service3'
-        service_data = env.deploy_service(service_input)
-        assert service_data.container_image == service_input['container_image']
+        service_input = ServiceInput(
+            container_image = 'hello-world:latest',
+            display_name = 'Service3'
+        )
+        service_id = env.deploy_service(service_input)
 
-        logs = env.get_service_logs(service_data.id)
-        assert logs is not None
+        service_logs = env.get_service_logs(service_id)
+        assert service_logs[-min(len(service_logs), 1000):] is not None
 
-        actions = env.list_deploy_service_actions(service_input)
-        assert len(actions) > 0
-
-        config = env.suggest_service_config(service_input['container_image'])
-        assert config is not None
-
-        act = env.list_service_actions(service_data.id)
-        assert act is not None
+        env.delete_services()
     

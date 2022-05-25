@@ -1,3 +1,4 @@
+from turtle import st
 from contaxy.clients.deployment import DeploymentClient
 from contaxy.schema import Service, ServiceInput, ResourceAction
 from datetime import datetime
@@ -5,6 +6,10 @@ from datetime import datetime
 from typing import Dict, List, Optional
 from contaxy.schema.deployment import ServiceUpdate
 from contaxy.schema.shared import ResourceActionExecution
+
+from loguru import logger
+from tqdm import tqdm
+import time
 
 class ServiceHandler:
     def __init__(self, env, deployment_client: DeploymentClient):
@@ -15,24 +20,73 @@ class ServiceHandler:
             raise RuntimeError("Environment is not connected to Lab!")
     
     def list_services(self) -> List[Service]:
-        return self.deployment_client.list_services(
+        """List all services under the current project.
+
+        Returns:
+            List[Service]: List of all services.
+        """
+        services_list = []
+        logger.info('Listing all services under project : ' + self.env.project)
+        services_list = self.deployment_client.list_services(
             project_id=self.env.project
         )
+        logger.info('Found ' + str(len(services_list)) + ' services!')
+        return services_list
     
     def deploy_service(
         self,
-        service_input: dict = None,
+        service_input: ServiceInput,
         action_id: Optional[str] = None,
-        wait: bool = False) -> Service:
+        wait: bool = False) -> str:
+        """Deploys a service under a specific project.
 
-        service_input_obj = ServiceInput.parse_obj(service_input)
+        Args:
+            service_input (ServiceInput): Service input with their container-image and display-name.
+            action_id (Optional[str], optional): The ID of the action. Defaults to None.
+            wait (bool, optional): If 'True', the return will be until service completion.. Defaults to False.
 
-        return self.deployment_client.deploy_service(
+        Returns:
+            str: Service ID.
+        """
+        logger.info('Deploying service '+ service_input.display_name + ' under project : ' + self.env.project)
+        deployed_service = self.deployment_client.deploy_service(
             project_id=self.env.project, 
-            service_input=service_input_obj, 
+            service_input=service_input, 
             action_id=action_id, 
             wait=wait
         )
+        if deployed_service is None:
+            logger.info('Service '+ service_input.display_name + ' could not be deployed successfully!')
+            return None
+        return deployed_service.id
+    
+    def deploy_services(
+        self,
+        service_inputs: List[ServiceInput],
+        action_id: Optional[str] = None,
+        wait: bool = False) -> List[str]:
+        """Deploys multiple services under a specific project.
+
+        Args:
+            service_inputs (List[ServiceInput]): The list of service inputs with their container-image and display-name.
+            action_id (Optional[str], optional): The ID of the action. Defaults to None.
+            wait (bool, optional): If 'True', the return will be until service completion. Defaults to False.
+
+        Returns:
+            List[str]: The Service IDs of all services.
+        """
+        all_services = []
+        logger.info('Deploying '+ len(service_inputs) + ' services under project : ' + self.env.project)
+        for service_input in service_inputs:
+            deployed_serv_id = self.deploy_service(
+                service_input=service_input, 
+                action_id=action_id, 
+                wait=wait
+            )
+            if deployed_serv_id:
+                all_services.append(deployed_serv_id)
+        logger.info('Successfully deployed '+ len(all_services) + ' services!')
+        return all_services
 
     def get_service_metadata(self, service_id: str) -> Service:
         """
@@ -42,18 +96,50 @@ class ServiceHandler:
         # Returns
         'Service' if service was found or 'None'.
         """
-        return self.deployment_client.get_service_metadata(
+        logger.info('Fetching metadata of service '+  service_id)
+        service = self.deployment_client.get_service_metadata(
             project_id=self.env.project, 
             service_id=service_id
         )
+        if service:
+            logger.info('Fetching service metadata!')
+            return service.metadata
+        return None
     
+    def check_service_status(self, service_id: str) -> str:
+        """Check service status.
+
+        Args:
+            service_id (str): Job ID.
+
+        Returns:
+            str: Status of service
+        """
+        logger.info('Checking status of service '+  service_id)
+        service = self.deployment_client.get_service_metadata(
+            project_id=self.env.project, 
+            service_id=service_id
+        )
+        if service:
+            logger.info('Fetching service status!')
+            return service.status
+        return None
+
     def delete_service(self, service_id: str) -> None:
+        """Delete a specific service
+
+        Args:
+            service_id (str): Service ID.
+        """
+        logger.info('Deleting service '+  service_id)
         self.deployment_client.delete_service(
             project_id=self.env.project, 
             service_id=service_id
         )
     
     def delete_services(self) -> None:
+        """Deletes all services of a project.
+        """
         self.deployment_client.delete_services(
             project_id=self.env.project
         )
@@ -63,6 +149,16 @@ class ServiceHandler:
         service_id: str,
         lines: Optional[int] = None,
         since: Optional[datetime] = None) -> str:
+        """Get the logs of a service.
+
+        Args:
+            service_id (str): Service ID.
+            lines (Optional[int], optional): The number of lines in the logs to be returned. Defaults to None.
+            since (Optional[datetime], optional): The date time. Defaults to None.
+
+        Returns:
+            str: Logs as a string
+        """
         return self.deployment_client.get_service_logs(
             project_id=self.env.project, 
             service_id=service_id, 
@@ -73,66 +169,25 @@ class ServiceHandler:
     def update_service(
         self,
         service_id: str,
-        service_update: dict = None
+        service_update: ServiceUpdate
     ) -> Service:
+        """Update an already deployed service.
 
-        service_update_obj = ServiceUpdate.parse_obj(service_update)
-        return self.deployment_client.update_service(
+        Args:
+            service_id (str): Service ID.
+            service_update (dict, optional): _description_. Defaults to None.
+
+        Returns:
+            Service: _description_
+        """
+        service = self.deployment_client.update_service(
             project_id=self.env.project,
             service_id=service_id,
-            service=service_update_obj
+            service=service_update
         )
-
-    def update_service_access(
-        self,
-        service_id: str
-    ) -> None:
-        return self.deployment_client.update_service_access(
-            project_id=self.env.project,
-            service_id=service_id
-        )
-
-    def list_deploy_service_actions(
-        self,
-        service_input: dict = None
-    ) -> List[ResourceAction]:
-        service_input_obj = ServiceInput.parse_obj(service_input)
-
-        return self.deployment_client.list_deploy_service_actions(
-            project_id=self.env.project,
-            service=service_input_obj
-        )
-    
-
-    def suggest_service_config(
-        self,
-        container_image: str,
-    ) -> ServiceInput:
-        return self.deployment_client.suggest_service_config(
-            project_id=self.env.project,
-            container_image=container_image
-        )
-
-    def list_service_actions(
-        self,
-        service_id: str
-    ) -> List[ResourceAction]:
-        return self.deployment_client.list_service_actions(
-            project_id=self.env.project,
-            service_id=service_id
-        )
-
-    def access_service(
-        self,
-        service_id: str,
-        endpoint: str,
-    ) -> None:
-        pass
-    
-    def execute_service_action(
-        self,
-        service_id: str,
-        action_id: str,
-        action_execution: ResourceActionExecution = ResourceActionExecution()
-    ) -> None:
-        pass
+        
+        if service is None:
+            logger.info('Service could not be updated successfully!')
+            return None
+        logger.info('Updated service '+ service.display_name + ' under project : ' + self.env.project)
+        return service.id

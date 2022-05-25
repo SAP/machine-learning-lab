@@ -23,13 +23,13 @@ const COLUMNS = [
     field: 'started_at',
     title: 'Started At',
     align: 'left',
-    render: (rowData) => rowData.started_at.getTime(),
+    render: (rowData) => rowData.started_at?.getTime(),
   },
   {
     field: 'finishedAt',
     title: 'Finished At',
     align: 'left',
-    render: (rowData) => rowData.stopped_at.getTime(),
+    render: (rowData) => rowData.stopped_at?.getTime(),
   },
 ];
 
