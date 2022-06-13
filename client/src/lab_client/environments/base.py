@@ -1,16 +1,14 @@
 import os
-from typing import Dict, Optional
 
 from contaxy.clients import AuthClient, FileClient
 from contaxy.clients import DeploymentClient
 from contaxy.clients.shared import BaseUrlSession
 from contaxy.config import API_TOKEN_NAME
-from contaxy.schema import File
-from lab_client.handler.job_handler import JobHandler
 
 from lab_client.utils.text_utils import simplify
 from lab_client.environments.file import FileEnvironment
 from lab_client.environments.deployment import DeploymentEnvironment
+
 
 class Environment(FileEnvironment, DeploymentEnvironment):
     """

@@ -1,15 +1,9 @@
-import os
-from typing import Dict, Optional
+from typing import Optional
 
-from contaxy.clients import AuthClient, FileClient
-from contaxy.clients import DeploymentClient
-from contaxy.clients.shared import BaseUrlSession
-from contaxy.config import API_TOKEN_NAME
 from contaxy.schema import File
-from lab_client.handler.job_handler import JobHandler
 
 from lab_client.handler.file_handler import FileHandler
-from lab_client.utils.text_utils import simplify
+
 
 class FileEnvironment:
     @property
@@ -56,7 +50,7 @@ class FileEnvironment:
             Local path to the requested file or `None` if file is not available.
         """
         return self.file_handler.get_file(key, version, force_download, unpack)
-    
+
     def upload_folder(
         self,
         folder_path: str,
@@ -85,7 +79,7 @@ class FileEnvironment:
             project: Project ID.
             key: Key or url of the requested file.
             version: Version of the file whose metadata is to be returned. If `None` (default) the latest version metadata will be returned.
-            
+
         Returns:
             The metadata Dictionary of the file.
         """

@@ -17,21 +17,20 @@ class JobHandler:
         self.check_wait_time = check_wait_time
         if not self.env.is_connected():
             raise RuntimeError("Environment is not connected to Lab!")
-    
+
     def list_jobs(self) -> List[Job]:
         """List all jobs under the current project
 
         Returns:
             List[Job]: List of all jobs.
         """
-        jobs_list = []
         logger.info('Listing all jobs under project : ' + self.env.project)
         jobs_list = self.deployment_client.list_jobs(
             project_id=self.env.project
         )
         logger.info('Found ' + str(len(jobs_list)) + ' jobs!')
         return jobs_list
-    
+
     def deploy_job(
         self,
         job_input: JobInput,
@@ -50,19 +49,19 @@ class JobHandler:
 
         logger.info('Deploying job '+ job_input.display_name + ' under project : ' + self.env.project)
         deployed_job = self.deployment_client.deploy_job(
-            project_id=self.env.project, 
-            job_input=job_input, 
+            project_id=self.env.project,
+            job_input=job_input,
             action_id=action_id
         )
         if deployed_job is None:
             logger.info('Job '+ job_input.display_name + ' could not be deployed successfully!')
             return None
-        
+
         if wait:
             return deployed_job.id if self.wait_for_job_completion(deployed_job.id) else None
 
         return deployed_job.id
-    
+
     def deploy_jobs(
         self,
         job_inputs: List[JobInput],
@@ -82,8 +81,8 @@ class JobHandler:
         logger.info('Deploying '+ len(job_inputs) + ' jobs under project : ' + self.env.project)
         for job_input in job_inputs:
             deployed_job_id = self.deploy_job(
-                job_input=job_input, 
-                action_id=action_id, 
+                job_input=job_input,
+                action_id=action_id,
                 wait=wait
             )
             if deployed_job_id:
@@ -101,14 +100,14 @@ class JobHandler:
         """
         logger.info('Fetching metadata of job '+  job_id)
         job = self.deployment_client.get_job_metadata(
-            project_id=self.env.project, 
+            project_id=self.env.project,
             job_id=job_id
         )
         if job:
             logger.info('Fetching job metadata!')
             return job.metadata
         return None
-    
+
     def check_job_status(self, job_id: str) -> str:
         """Check job status.
 
@@ -120,14 +119,14 @@ class JobHandler:
         """
         logger.info('Checking status of job '+  job_id)
         job = self.deployment_client.get_job_metadata(
-            project_id=self.env.project, 
+            project_id=self.env.project,
             job_id=job_id
         )
         if job:
             logger.info('Fetching job status!')
             return job.status
         return None
-    
+
     def wait_for_job_completion(self, job_id: str) -> bool:
         """Wait for job completion.
 
@@ -138,7 +137,7 @@ class JobHandler:
             bool: Job successfully run or not.
         """
         return self.wait_for_jobs_completion([job_id])
-    
+
     def wait_for_jobs_completion(self, job_ids: List[str]) -> bool:
         """Wait for job completion.
 
@@ -165,7 +164,7 @@ class JobHandler:
             jobs_to_check = running_jobs
             for job in jobs_to_check:
                 deployed_job_status = None
-                
+
                 deployed_job_status = self.check_job_status(job_id=job)
 
                 if deployed_job_status is None:
@@ -192,7 +191,7 @@ class JobHandler:
 
         pbar.close()
         return successful
-    
+
     def delete_job(self, job_id: str) -> None:
         """Delete a specific job
 
@@ -201,17 +200,17 @@ class JobHandler:
         """
         logger.info('Deleting job '+  job_id)
         self.deployment_client.delete_job(
-            project_id=self.env.project, 
+            project_id=self.env.project,
             job_id=job_id
         )
-    
+
     def delete_jobs(self) -> None:
         """Deletes all jobs of a project.
         """
         self.deployment_client.delete_jobs(
             project_id=self.env.project
         )
-    
+
     def get_job_logs(
         self,
         job_id: str,
@@ -228,12 +227,12 @@ class JobHandler:
             str: Logs as a string
         """
         return self.deployment_client.get_job_logs(
-            project_id=self.env.project, 
-            job_id=job_id, 
-            lines=lines, 
+            project_id=self.env.project,
+            job_id=job_id,
+            lines=lines,
             since=since
         )
-    
+
     def list_deploy_job_actions(
         self,
         job_input: JobInput
@@ -267,7 +266,7 @@ class JobHandler:
             project_id=self.env.project,
             container_image=container_image
         )
-    
+
     def list_job_actions(
         self,
         job_id: str

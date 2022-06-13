@@ -1,15 +1,12 @@
-from turtle import st
 from contaxy.clients.deployment import DeploymentClient
-from contaxy.schema import Service, ServiceInput, ResourceAction
+from contaxy.schema import Service, ServiceInput
 from datetime import datetime
 
-from typing import Dict, List, Optional
+from typing import List, Optional
 from contaxy.schema.deployment import ServiceUpdate
-from contaxy.schema.shared import ResourceActionExecution
 
 from loguru import logger
-from tqdm import tqdm
-import time
+
 
 class ServiceHandler:
     def __init__(self, env, deployment_client: DeploymentClient):
@@ -18,21 +15,20 @@ class ServiceHandler:
         self.deployment_client = deployment_client
         if not self.env.is_connected():
             raise RuntimeError("Environment is not connected to Lab!")
-    
+
     def list_services(self) -> List[Service]:
         """List all services under the current project.
 
         Returns:
             List[Service]: List of all services.
         """
-        services_list = []
         logger.info('Listing all services under project : ' + self.env.project)
         services_list = self.deployment_client.list_services(
             project_id=self.env.project
         )
         logger.info('Found ' + str(len(services_list)) + ' services!')
         return services_list
-    
+
     def deploy_service(
         self,
         service_input: ServiceInput,
@@ -48,18 +44,18 @@ class ServiceHandler:
         Returns:
             str: Service ID.
         """
-        logger.info('Deploying service '+ service_input.display_name + ' under project : ' + self.env.project)
+        logger.info('Deploying service ' + service_input.display_name + ' under project : ' + self.env.project)
         deployed_service = self.deployment_client.deploy_service(
-            project_id=self.env.project, 
-            service_input=service_input, 
-            action_id=action_id, 
+            project_id=self.env.project,
+            service_input=service_input,
+            action_id=action_id,
             wait=wait
         )
         if deployed_service is None:
-            logger.info('Service '+ service_input.display_name + ' could not be deployed successfully!')
+            logger.info('Service ' + service_input.display_name + ' could not be deployed successfully!')
             return None
         return deployed_service.id
-    
+
     def deploy_services(
         self,
         service_inputs: List[ServiceInput],
@@ -76,19 +72,19 @@ class ServiceHandler:
             List[str]: The Service IDs of all services.
         """
         all_services = []
-        logger.info('Deploying '+ len(service_inputs) + ' services under project : ' + self.env.project)
+        logger.info('Deploying ' + len(service_inputs) + ' services under project : ' + self.env.project)
         for service_input in service_inputs:
             deployed_serv_id = self.deploy_service(
-                service_input=service_input, 
-                action_id=action_id, 
+                service_input=service_input,
+                action_id=action_id,
                 wait=wait
             )
             if deployed_serv_id:
                 all_services.append(deployed_serv_id)
-        logger.info('Successfully deployed '+ len(all_services) + ' services!')
+        logger.info('Successfully deployed ' + len(all_services) + ' services!')
         return all_services
 
-    def get_service_metadata(self, service_id: str) -> Service:
+    def get_service(self, service_id: str) -> Service:
         """
         Returns the service metadata for the given Service ID
         # Arguments
@@ -96,16 +92,15 @@ class ServiceHandler:
         # Returns
         'Service' if service was found or 'None'.
         """
-        logger.info('Fetching metadata of service '+  service_id)
+        logger.info('Fetching metadata of service ' + service_id)
         service = self.deployment_client.get_service_metadata(
-            project_id=self.env.project, 
+            project_id=self.env.project,
             service_id=service_id
         )
         if service:
-            logger.info('Fetching service metadata!')
-            return service.metadata
+            return service
         return None
-    
+
     def check_service_status(self, service_id: str) -> str:
         """Check service status.
 
@@ -115,9 +110,9 @@ class ServiceHandler:
         Returns:
             str: Status of service
         """
-        logger.info('Checking status of service '+  service_id)
+        logger.info('Checking status of service ' + service_id)
         service = self.deployment_client.get_service_metadata(
-            project_id=self.env.project, 
+            project_id=self.env.project,
             service_id=service_id
         )
         if service:
@@ -131,19 +126,19 @@ class ServiceHandler:
         Args:
             service_id (str): Service ID.
         """
-        logger.info('Deleting service '+  service_id)
+        logger.info('Deleting service ' + service_id)
         self.deployment_client.delete_service(
-            project_id=self.env.project, 
+            project_id=self.env.project,
             service_id=service_id
         )
-    
+
     def delete_services(self) -> None:
         """Deletes all services of a project.
         """
         self.deployment_client.delete_services(
             project_id=self.env.project
         )
-    
+
     def get_service_logs(
         self,
         service_id: str,
@@ -160,12 +155,12 @@ class ServiceHandler:
             str: Logs as a string
         """
         return self.deployment_client.get_service_logs(
-            project_id=self.env.project, 
-            service_id=service_id, 
-            lines=lines, 
+            project_id=self.env.project,
+            service_id=service_id,
+            lines=lines,
             since=since
         )
-    
+
     def update_service(
         self,
         service_id: str,
@@ -185,9 +180,9 @@ class ServiceHandler:
             service_id=service_id,
             service=service_update
         )
-        
+
         if service is None:
             logger.info('Service could not be updated successfully!')
             return None
-        logger.info('Updated service '+ service.display_name + ' under project : ' + self.env.project)
+        logger.info('Updated service ' + service.display_name + ' under project : ' + self.env.project)
         return service.id
