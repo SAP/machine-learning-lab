@@ -5,9 +5,10 @@ import PropTypes, { object } from 'prop-types';
 
 import MaterialTable from '@material-table/core';
 import Stack from '@mui/material/Stack';
-import { Button, IconButton } from '@mui/material';
+import { Button, CircularProgress, IconButton } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import LoginIcon from '@mui/icons-material/Login';
+import LoginIcon from '@mui/icons-material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { displayNameToId } from '../services/helper';
 import {
@@ -38,7 +39,7 @@ MethadataDisplay.propTypes = {
 };
 
 function PasswordDisplay(props) {
-  const { displayName } = props;
+  const { displayName, project } = props;
   let text;
   const [password, setPassword] = useState('loading...');
   const [passwordShown, setPasswordShown] = useState(false);
@@ -49,7 +50,7 @@ function PasswordDisplay(props) {
   useEffect(() => {
     const getPw = async () => {
       const pw = await getSecretsPassword(
-        'image-search-engine',
+        project,
         displayNameToId(displayName)
       );
       setPassword(pw.secret_text);
@@ -57,7 +58,7 @@ function PasswordDisplay(props) {
     if (passwordShown) {
       getPw();
     }
-  }, [displayName, passwordShown]);
+  }, [project, displayName, passwordShown]);
 
   if (passwordShown) {
     text = <p>{password}</p>;
@@ -72,7 +73,7 @@ function PasswordDisplay(props) {
       <IconButton
         onClick={async () => {
           const pw = await getSecretsPassword(
-            'image-search-engine',
+            project,
             displayNameToId(displayName)
           );
           setClipboardText(pw.secret_text);
@@ -85,75 +86,114 @@ function PasswordDisplay(props) {
 }
 PasswordDisplay.propTypes = {
   displayName: PropTypes.string.isRequired,
+  project: PropTypes.string.isRequired,
 };
-
-const COLUMNS = [
-  {
-    field: 'display_name',
-    title: 'Name',
-    numeric: false,
-    align: 'left',
-  },
-  {
-    title: 'metadata',
-    numeric: false,
-    sortable: false,
-    disableClickEventBubbling: true,
-    render: (params) => (
-      <Stack direction="row" spacing={1}>
-        <MethadataDisplay metadata={params.metadata} />
-        <IconButton
-          onClick={() => {
-            return alert(JSON.stringify(params.metadata, null, 4));
-          }}
-        >
-          <VisibilityIcon />
-        </IconButton>
-      </Stack>
-    ),
-  },
-  {
-    title: 'secred',
-    numeric: false,
-    sortable: false,
-    disableClickEventBubbling: true,
-    render: (params) => {
-      return <PasswordDisplay displayName={params.display_name} />;
-    },
-  },
-  {
-    field: 'delete',
-    title: 'delete',
-    align: 'right',
-    render: (params) => {
-      return (
-        <button
-          type="button"
-          onClick={async () => {
-            const pw = await deleteSecret(
-              'image-search-engine',
-              displayNameToId(params.display_name)
-            );
-            secretReload();
-          }}
-        >
-          delete
-        </button>
-      );
-    },
-  },
-];
 
 const PAGE_SIZES = [5, 10, 15, 30, 50, 75, 100];
 
 function SecretStore() {
-  const [secrets, secretReload] = useSecrets('image-search-engine');
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const project = urlParams.get('project');
+
+  const [secrets, secretReload] = useSecrets(project);
+
   const showAppDialog = useShowAppDialog();
   const openDialog = () => {
     showAppDialog(ContentDialog, {
       title: 'Create secret',
+      refresh: secretReload,
+      project,
     });
   };
+
+  function DeleteDisplay(props) {
+    const { displayName } = props;
+    let text;
+    const [isLoading, setIsLoading] = useState();
+
+    if (isLoading) {
+      text = <CircularProgress size="2rem" color="secondary" />;
+    } else {
+      text = (
+        <IconButton
+          onClick={async () => {
+            setIsLoading(true);
+            const pw = await deleteSecret(
+              project,
+              displayNameToId(displayName)
+            );
+            setIsLoading(true);
+            secretReload();
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      );
+    }
+
+    return (
+      <Stack direction="row" spacing={1}>
+        {text}
+      </Stack>
+    );
+  }
+  DeleteDisplay.propTypes = {
+    displayName: PropTypes.string.isRequired,
+  };
+
+  const COLUMNS = [
+    {
+      field: 'display_name',
+      title: 'Name',
+      numeric: false,
+      align: 'left',
+      width: '30%',
+    },
+    {
+      title: 'metadata',
+      numeric: false,
+      sortable: false,
+      disableClickEventBubbling: true,
+      width: '30%',
+      render: (params) => (
+        <Stack direction="row" spacing={1}>
+          <MethadataDisplay metadata={params.metadata} />
+          <IconButton
+            onClick={() => {
+              return alert(JSON.stringify(params.metadata, null, 4));
+            }}
+          >
+            <VisibilityIcon />
+          </IconButton>
+        </Stack>
+      ),
+    },
+    {
+      title: 'secred',
+      numeric: false,
+      sortable: false,
+      disableClickEventBubbling: true,
+      width: '30%',
+      render: (params) => {
+        return (
+          <PasswordDisplay
+            displayName={params.display_name}
+            project={project}
+          />
+        );
+      },
+    },
+    {
+      field: 'delete',
+      title: '',
+      width: '5%',
+      render: (params) => {
+        return <DeleteDisplay displayName={params.display_name} />;
+      },
+    },
+  ];
+
   return (
     <Stack
       sx={{
@@ -163,7 +203,12 @@ function SecretStore() {
         mt: 6,
       }}
     >
-      <Button onClick={() => openDialog()} variant="contained" color="primary">
+      <Button
+        onClick={() => openDialog()}
+        variant="contained"
+        color="primary"
+        style={{ maxWidth: '150px' }}
+      >
         Add Secret
       </Button>
       <MaterialTable

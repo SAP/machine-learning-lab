@@ -3,7 +3,7 @@ services:
   # The main ML Lab backend container that serves as entrypoint for all traffic
   # Contains the contaxy server and hosts the ML Lab web app
   ml-lab-backend:
-    image: lab-backend:latest
+    image: ghcr.io/sap/machine-learning-lab/lab-backend:0.0.15
     container_name: ml-lab-backend
     ports:
       - "30010:8080"
@@ -12,13 +12,13 @@ services:
     environment:
       - JWT_TOKEN_SECRET=please-change-this-secret
       - SYSTEM_NAMESPACE=pylab
-#      - SERVICE_SSL_ENABLED=true
+      #      - SERVICE_SSL_ENABLED=true
       - CONTAXY_HOST=localhost:30010
-#      - OIDC_AUTH_ENABLED=True
-#      - OIDC_AUTH_URL=
-#      - OIDC_TOKEN_URL=
-#      - OIDC_CLIENT_ID=
-#      - OIDC_CLIENT_SECRET=
+      #      - OIDC_AUTH_ENABLED=True
+      #      - OIDC_AUTH_URL=
+      #      - OIDC_TOKEN_URL=
+      #      - OIDC_CLIENT_ID=
+      #      - OIDC_CLIENT_SECRET=
       - POSTGRES_CONNECTION_URI=postgresql://postgres:postgres-password-change-me@postgres:5432/postgres
       - S3_ENDPOINT=s3:9000
       - S3_ACCESS_KEY=minioadmin
@@ -31,17 +31,21 @@ services:
     depends_on:
       - postgres
       - s3
-#    secrets:
-#      - source: ssl_cert
-#        target: /run/secrets/cert.crt
-#      - source: ssl_key
-#        target: /run/secrets/cert.key
+  #    secrets:
+  #      - source: ssl_cert
+  #        target: /run/secrets/cert.crt
+  #      - source: ssl_key
+  #        target: /run/secrets/cert.key
 
   # Initialization container that calls the /system/initialize endpoint and thereby creates the default admin user
   ml-lab-backend-setup:
     image: curlimages/curl:7.75.0
     entrypoint:
-      ["sh", "-c", "sleep 10 && curl -v -X POST http://ml-lab-backend:8080/api/system/initialize"]
+      [
+        "sh",
+        "-c",
+        "sleep 10 && curl -v -X POST http://ml-lab-backend:8080/api/system/initialize",
+      ]
     restart: "no"
     depends_on:
       - ml-lab-backend
@@ -60,23 +64,23 @@ services:
 
   # Web interface to access postgres DB
   # (ATTENTION: uncommenting gives access to the DB without authentication)
-  # pgweb:
-  #   container_name: pgweb
-  #   restart: always
-  #   image: sosedoff/pgweb
-  #   # ports:
-  #   #   - "30012:8081"
-  #   environment:
-  #     - DATABASE_URL=postgres://postgres:postgres-password-change-me@postgres:5432/postgres?sslmode=disable
-  #   depends_on:
-  #     - postgres
+  pgweb:
+    container_name: pgweb
+    restart: always
+    image: sosedoff/pgweb
+    ports:
+      - "30012:8081"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres-password-change-me@postgres:5432/postgres?sslmode=disable
+    depends_on:
+      - postgres
 
   # Minio object storage used by the contaxy server in the ML Lab backend
   s3:
     image: minio/minio:RELEASE.2021-03-04T00-53-13Z
     command: server /data/data{1...4}
     ports:
-        - "127.0.0.1:30013:9000"
+      - "127.0.0.1:30013:9000"
     environment:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minio-password-change-me
@@ -89,7 +93,7 @@ services:
   # Workspace manager that allows users to spawn their machine learning workspaces
   lab-workspace-manager:
     container_name: pylab-p-ctxy-global-s-workspace-manager
-    image: lab-workspace-manager:latest
+    image: ghcr.io/sap/machine-learning-lab/lab-workspace-manager:0.0.15
     environment:
       - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
       - CONTAXY_DEPLOYMENT_NAME=pylab-p-ctxy-global-s-workspace-manager
@@ -109,6 +113,28 @@ services:
       ctxy.api_extension_endpoint: "8080/api"
       display_priority: 95
 
+  lab-secret-store:
+    container_name: pylab-p-ctxy-global-s-secret-store
+    image: lab-secret-store
+    environment:
+      - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
+      - CONTAXY_DEPLOYMENT_NAME=pylab-p-ctxy-global-s-secret-store
+      - CONTAXY_SERVICE_URL=/projects/ctxy-global/services/pylab-p-ctxy-global-s-secret-store/access/8080
+    ports:
+      - "127.0.0.1:8085:8080"
+    labels:
+      ctxy.deploymentType: "extension"
+      ctxy.deploymentName: "pylab-p-ctxy-global-s-secret-store"
+      ctxy.displayName: "Secret Store"
+      ctxy.endpoints: "8080"
+      ctxy.namespace: "pylab"
+      ctxy.projectName: "ctxy-global"
+      ctxy.extensionType: "global-extension"
+      ctxy.icon: "key"
+      ctxy.ui_extension_endpoint: "8080/app"
+      ctxy.api_extension_endpoint: "8080/api"
+      display_priority: 50
+
 #secrets:
 #  ssl_cert:
 #    file: /docker_mount/ssl/cert.crt
@@ -117,6 +143,6 @@ services:
 volumes:
   lab-postgres-data:
     # External volumes need to be manually created with "docker volume create contaxy-postgres-data"
-#    external: true
+  #    external: true
   lab-s3-data:
 #    external: true

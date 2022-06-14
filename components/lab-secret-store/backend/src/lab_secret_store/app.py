@@ -1,19 +1,19 @@
 import os
 from typing import Any
 
-from contaxy.managers.components import ComponentManager
+from contaxy.operations.components import ComponentOperations
 from contaxy.schema.exceptions import (
     CREATE_RESOURCE_RESPONSES,
     GET_RESOURCE_RESPONSES,
     UPDATE_RESOURCE_RESPONSES,
 )
-from contaxy.schema.project import PROJECT_ID_PARAM, SECRET_ID_PARAM
+from contaxy.schema.project import PROJECT_ID_PARAM
 from contaxy.utils import fastapi_utils
 from fastapi import Depends, FastAPI, status
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import Response
 
-from lab_secret_store.schema import Secret, SecretInput, SecretUpdate
+from lab_secret_store.schema import SECRET_ID_PARAM, Secret, SecretInput, SecretUpdate
 from lab_secret_store.secret_store.json_db_secret_store import JsonDbSecretStore
 from lab_secret_store.utils import CONTAXY_API_ENDPOINT, get_component_manager
 
@@ -41,7 +41,7 @@ if "BACKEND_CORS_ORIGINS" in os.environ:
 def get_secret(
     project_id: str = PROJECT_ID_PARAM,
     secret_id: str = SECRET_ID_PARAM,
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     secret_store = JsonDbSecretStore(component_manager.get_json_db_manager())
     return secret_store.get_secret(project_id, secret_id)
@@ -56,7 +56,7 @@ def get_secret(
 )
 def list_secrets(
     project_id: str = PROJECT_ID_PARAM,
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     secret_store = JsonDbSecretStore(component_manager.get_json_db_manager())
     return secret_store.list_secrets(project_id)
@@ -70,7 +70,7 @@ def list_secrets(
 def create_secret(
     secret_input: SecretInput,
     project_id: str = PROJECT_ID_PARAM,
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     secret_store = JsonDbSecretStore(component_manager.get_json_db_manager())
 
@@ -90,7 +90,7 @@ def update_secret(
     secret_update: SecretUpdate,
     project_id: str = PROJECT_ID_PARAM,
     secret_id: str = SECRET_ID_PARAM,
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     secret_store = JsonDbSecretStore(component_manager.get_json_db_manager())
     secret_store.update_secret(
@@ -109,7 +109,7 @@ def update_secret(
 def delete_secret(
     project_id: str = PROJECT_ID_PARAM,
     secret_id: str = SECRET_ID_PARAM,
-    component_manager: ComponentManager = Depends(get_component_manager),
+    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     secret_store = JsonDbSecretStore(component_manager.get_json_db_manager())
     secret_store.delete_secret(project_id, secret_id)

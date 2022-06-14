@@ -41,6 +41,7 @@ function KeyValueInput(props) {
         onChange={handleKeyChange}
         error={isInvalid}
         helperText={isInvalid ? 'Key format is not valid' : null}
+        variant="standard"
       />
 
       <TextField
@@ -50,6 +51,7 @@ function KeyValueInput(props) {
         type="text"
         value={value}
         onChange={handleValueChange}
+        variant="standard"
       />
     </>
   );
@@ -132,7 +134,6 @@ function KeyValueInputs(props) {
           />
           <Button
             // className={classes.keyValueButton}
-            color="default"
             aria-label="del"
             onClick={() => handleDeleteKeyValueClick(keyValuePair.index)}
           >
@@ -141,7 +142,12 @@ function KeyValueInputs(props) {
         </div>
       ))}
 
-      <Button color="primary" onClick={handleAddKeyValuePairClick}>
+      <Button
+        color="primary"
+        onClick={handleAddKeyValuePairClick}
+        align="left"
+        sx={{ width: 40 }}
+      >
         Add
         <AddIcon />
       </Button>

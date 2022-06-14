@@ -1,5 +1,6 @@
 from typing import Dict
 
+from fastapi import Path
 from pydantic import BaseModel, Field
 
 
@@ -37,3 +38,11 @@ class Secret(SecretMetadata):
     secret_text: str
 
     pass
+
+
+SECRET_ID_PARAM = Path(
+    ...,
+    title="Secret ID",
+    example="my-secret",
+    description="A valid secret ID.",
+)

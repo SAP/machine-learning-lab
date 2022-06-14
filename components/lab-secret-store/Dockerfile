@@ -43,7 +43,7 @@ COPY docker/nginx /etc/nginx
 COPY webapp/build /resources/webapp
 
 ENV PYTHONPATH=/resources/app \
-    MODULE_NAME=insert_component_name_here.app \
+    MODULE_NAME=lab_secret_store.app \
     WEB_CONCURRENCY="1"
 
 ENTRYPOINT ["/bin/bash"]

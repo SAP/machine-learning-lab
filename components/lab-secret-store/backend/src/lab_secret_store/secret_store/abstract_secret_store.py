@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-
-from black import List
+from typing import List
 
 from lab_secret_store.schema import Secret, SecretInput, SecretMetadata, SecretUpdate
 
@@ -11,7 +10,9 @@ class AbstractSecretStore(ABC):
         pass
 
     def create_secret(
-        self, project_id: str, value: SecretInput, key: bytes = b""
+        self,
+        project_id: str,
+        value: SecretInput,
     ) -> SecretMetadata:
         pass
 

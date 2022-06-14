@@ -1,4 +1,5 @@
-from black import List
+from typing import List
+
 from contaxy.operations import JsonDocumentOperations
 
 from lab_secret_store.helper import decrypt, display_name_to_id, encrypt

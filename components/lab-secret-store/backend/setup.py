@@ -48,7 +48,9 @@ setup(
     install_requires=[
         "fastapi",
         "loguru",
-        "contaxy==0.0.7",
+        "contaxy==0.0.17",
+        "cryptography",
+        "pydantic[email]",
     ],
     # deprecated: dependency_links=dependency_links,
     extras_require={
@@ -82,6 +84,7 @@ setup(
             "universal-build",
             "requests",
             "types-requests",
+            "uvicorn",
         ],
     },
     include_package_data=True,
