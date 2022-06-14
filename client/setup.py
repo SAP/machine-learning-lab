@@ -47,7 +47,7 @@ setup(
     zip_safe=False,
     install_requires=[
         "loguru",
-        "contaxy==0.0.17",
+        "contaxy==0.0.18",
         "tqdm",
     ],
     # deprecated: dependency_links=dependency_links,

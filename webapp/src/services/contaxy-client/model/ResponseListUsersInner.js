@@ -12,20 +12,26 @@
  */
 
 import ApiClient from '../ApiClient';
+import User from './User';
+import UserRead from './UserRead';
 
 /**
- * The User model module.
- * @module model/User
+ * The ResponseListUsersInner model module.
+ * @module model/ResponseListUsersInner
  * @version 0.0.18
  */
-class User {
+class ResponseListUsersInner {
   /**
-   * Constructs a new <code>User</code>.
-   * @alias module:model/User
+   * Constructs a new <code>ResponseListUsersInner</code>.
+   * @alias module:model/ResponseListUsersInner
+   * @implements module:model/User
+   * @implements module:model/UserRead
    * @param id {String} Unique ID of the user.
    */
   constructor(id) {
     User.initialize(this, id);
+    UserRead.initialize(this, id);
+    ResponseListUsersInner.initialize(this, id);
   }
 
   /**
@@ -38,15 +44,17 @@ class User {
   }
 
   /**
-   * Constructs a <code>User</code> from a plain JavaScript object, optionally creating a new instance.
+   * Constructs a <code>ResponseListUsersInner</code> from a plain JavaScript object, optionally creating a new instance.
    * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
    * @param {Object} data The plain JavaScript object bearing properties of interest.
-   * @param {module:model/User} obj Optional instance to populate.
-   * @return {module:model/User} The populated <code>User</code> instance.
+   * @param {module:model/ResponseListUsersInner} obj Optional instance to populate.
+   * @return {module:model/ResponseListUsersInner} The populated <code>ResponseListUsersInner</code> instance.
    */
   static constructFromObject(data, obj) {
     if (data) {
-      obj = obj || new User();
+      obj = obj || new ResponseListUsersInner();
+      User.constructFromObject(data, obj);
+      UserRead.constructFromObject(data, obj);
 
       if (data.hasOwnProperty('username')) {
         obj['username'] = ApiClient.convertToType(data['username'], 'String');
@@ -90,51 +98,118 @@ class User {
  * A unique username on the system.
  * @member {String} username
  */
-User.prototype['username'] = undefined;
+ResponseListUsersInner.prototype['username'] = undefined;
 
 /**
  * User email address.
  * @member {String} email
  */
-User.prototype['email'] = undefined;
+ResponseListUsersInner.prototype['email'] = undefined;
 
 /**
  * Indicates that user is disabled. Disabling a user will prevent any access to user-accessible resources.
  * @member {Boolean} disabled
  * @default false
  */
-User.prototype['disabled'] = false;
+ResponseListUsersInner.prototype['disabled'] = false;
 
 /**
  * Unique ID of the user.
  * @member {String} id
  */
-User.prototype['id'] = undefined;
+ResponseListUsersInner.prototype['id'] = undefined;
 
 /**
  * Indicates if the user is a technical user created by the system.
  * @member {Boolean} technical_user
  * @default false
  */
-User.prototype['technical_user'] = false;
+ResponseListUsersInner.prototype['technical_user'] = false;
 
 /**
  * Timestamp of the user creation. Assigned by the server and read-only.
  * @member {Date} created_at
  */
-User.prototype['created_at'] = undefined;
+ResponseListUsersInner.prototype['created_at'] = undefined;
 
 /**
  * Last time the user accessed the system. Right now this is only updated when the user calls the /users/me endpoint so that call should always be done when the user loads the UI.
  * @member {Date} last_activity
  */
-User.prototype['last_activity'] = undefined;
+ResponseListUsersInner.prototype['last_activity'] = undefined;
 
 /**
  * Indicates if the user log in with password or SSO
  * @member {Boolean} has_password
  * @default true
  */
-User.prototype['has_password'] = true;
+ResponseListUsersInner.prototype['has_password'] = true;
 
-export default User;
+// Implement User interface:
+/**
+ * A unique username on the system.
+ * @member {String} username
+ */
+User.prototype['username'] = undefined;
+/**
+ * User email address.
+ * @member {String} email
+ */
+User.prototype['email'] = undefined;
+/**
+ * Indicates that user is disabled. Disabling a user will prevent any access to user-accessible resources.
+ * @member {Boolean} disabled
+ * @default false
+ */
+User.prototype['disabled'] = false;
+/**
+ * Unique ID of the user.
+ * @member {String} id
+ */
+User.prototype['id'] = undefined;
+/**
+ * Indicates if the user is a technical user created by the system.
+ * @member {Boolean} technical_user
+ * @default false
+ */
+User.prototype['technical_user'] = false;
+/**
+ * Timestamp of the user creation. Assigned by the server and read-only.
+ * @member {Date} created_at
+ */
+User.prototype['created_at'] = undefined;
+/**
+ * Last time the user accessed the system. Right now this is only updated when the user calls the /users/me endpoint so that call should always be done when the user loads the UI.
+ * @member {Date} last_activity
+ */
+User.prototype['last_activity'] = undefined;
+/**
+ * Indicates if the user log in with password or SSO
+ * @member {Boolean} has_password
+ * @default true
+ */
+User.prototype['has_password'] = true;
+// Implement UserRead interface:
+/**
+ * A unique username on the system.
+ * @member {String} username
+ */
+UserRead.prototype['username'] = undefined;
+/**
+ * User email address.
+ * @member {String} email
+ */
+UserRead.prototype['email'] = undefined;
+/**
+ * Indicates that user is disabled. Disabling a user will prevent any access to user-accessible resources.
+ * @member {Boolean} disabled
+ * @default false
+ */
+UserRead.prototype['disabled'] = false;
+/**
+ * Unique ID of the user.
+ * @member {String} id
+ */
+UserRead.prototype['id'] = undefined;
+
+export default ResponseListUsersInner;

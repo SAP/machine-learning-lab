@@ -14,17 +14,18 @@
 import ApiClient from '../ApiClient';
 
 /**
- * The UserInput model module.
- * @module model/UserInput
+ * The UserRead model module.
+ * @module model/UserRead
  * @version 0.0.18
  */
-class UserInput {
+class UserRead {
   /**
-   * Constructs a new <code>UserInput</code>.
-   * @alias module:model/UserInput
+   * Constructs a new <code>UserRead</code>.
+   * @alias module:model/UserRead
+   * @param id {String} Unique ID of the user.
    */
-  constructor() {
-    UserInput.initialize(this);
+  constructor(id) {
+    UserRead.initialize(this, id);
   }
 
   /**
@@ -32,18 +33,20 @@ class UserInput {
    * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
    * Only for internal use.
    */
-  static initialize(obj) {}
+  static initialize(obj, id) {
+    obj['id'] = id;
+  }
 
   /**
-   * Constructs a <code>UserInput</code> from a plain JavaScript object, optionally creating a new instance.
+   * Constructs a <code>UserRead</code> from a plain JavaScript object, optionally creating a new instance.
    * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
    * @param {Object} data The plain JavaScript object bearing properties of interest.
-   * @param {module:model/UserInput} obj Optional instance to populate.
-   * @return {module:model/UserInput} The populated <code>UserInput</code> instance.
+   * @param {module:model/UserRead} obj Optional instance to populate.
+   * @return {module:model/UserRead} The populated <code>UserRead</code> instance.
    */
   static constructFromObject(data, obj) {
     if (data) {
-      obj = obj || new UserInput();
+      obj = obj || new UserRead();
 
       if (data.hasOwnProperty('username')) {
         obj['username'] = ApiClient.convertToType(data['username'], 'String');
@@ -54,6 +57,9 @@ class UserInput {
       if (data.hasOwnProperty('disabled')) {
         obj['disabled'] = ApiClient.convertToType(data['disabled'], 'Boolean');
       }
+      if (data.hasOwnProperty('id')) {
+        obj['id'] = ApiClient.convertToType(data['id'], 'String');
+      }
     }
     return obj;
   }
@@ -63,19 +69,25 @@ class UserInput {
  * A unique username on the system.
  * @member {String} username
  */
-UserInput.prototype['username'] = undefined;
+UserRead.prototype['username'] = undefined;
 
 /**
  * User email address.
  * @member {String} email
  */
-UserInput.prototype['email'] = undefined;
+UserRead.prototype['email'] = undefined;
 
 /**
  * Indicates that user is disabled. Disabling a user will prevent any access to user-accessible resources.
  * @member {Boolean} disabled
  * @default false
  */
-UserInput.prototype['disabled'] = false;
+UserRead.prototype['disabled'] = false;
 
-export default UserInput;
+/**
+ * Unique ID of the user.
+ * @member {String} id
+ */
+UserRead.prototype['id'] = undefined;
+
+export default UserRead;

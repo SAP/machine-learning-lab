@@ -12,19 +12,21 @@
  */
 
 import ApiClient from '../ApiClient';
+import AccessLevel from './AccessLevel';
 
 /**
- * The UserInput model module.
- * @module model/UserInput
+ * The UserPermission model module.
+ * @module model/UserPermission
  * @version 0.0.18
  */
-class UserInput {
+class UserPermission {
   /**
-   * Constructs a new <code>UserInput</code>.
-   * @alias module:model/UserInput
+   * Constructs a new <code>UserPermission</code>.
+   * @alias module:model/UserPermission
+   * @param id {String} Unique ID of the user.
    */
-  constructor() {
-    UserInput.initialize(this);
+  constructor(id) {
+    UserPermission.initialize(this, id);
   }
 
   /**
@@ -32,18 +34,20 @@ class UserInput {
    * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
    * Only for internal use.
    */
-  static initialize(obj) {}
+  static initialize(obj, id) {
+    obj['id'] = id;
+  }
 
   /**
-   * Constructs a <code>UserInput</code> from a plain JavaScript object, optionally creating a new instance.
+   * Constructs a <code>UserPermission</code> from a plain JavaScript object, optionally creating a new instance.
    * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
    * @param {Object} data The plain JavaScript object bearing properties of interest.
-   * @param {module:model/UserInput} obj Optional instance to populate.
-   * @return {module:model/UserInput} The populated <code>UserInput</code> instance.
+   * @param {module:model/UserPermission} obj Optional instance to populate.
+   * @return {module:model/UserPermission} The populated <code>UserPermission</code> instance.
    */
   static constructFromObject(data, obj) {
     if (data) {
-      obj = obj || new UserInput();
+      obj = obj || new UserPermission();
 
       if (data.hasOwnProperty('username')) {
         obj['username'] = ApiClient.convertToType(data['username'], 'String');
@@ -54,6 +58,15 @@ class UserInput {
       if (data.hasOwnProperty('disabled')) {
         obj['disabled'] = ApiClient.convertToType(data['disabled'], 'Boolean');
       }
+      if (data.hasOwnProperty('id')) {
+        obj['id'] = ApiClient.convertToType(data['id'], 'String');
+      }
+      if (data.hasOwnProperty('permission')) {
+        obj['permission'] = ApiClient.convertToType(
+          data['permission'],
+          AccessLevel
+        );
+      }
     }
     return obj;
   }
@@ -63,19 +76,31 @@ class UserInput {
  * A unique username on the system.
  * @member {String} username
  */
-UserInput.prototype['username'] = undefined;
+UserPermission.prototype['username'] = undefined;
 
 /**
  * User email address.
  * @member {String} email
  */
-UserInput.prototype['email'] = undefined;
+UserPermission.prototype['email'] = undefined;
 
 /**
  * Indicates that user is disabled. Disabling a user will prevent any access to user-accessible resources.
  * @member {Boolean} disabled
  * @default false
  */
-UserInput.prototype['disabled'] = false;
+UserPermission.prototype['disabled'] = false;
 
-export default UserInput;
+/**
+ * Unique ID of the user.
+ * @member {String} id
+ */
+UserPermission.prototype['id'] = undefined;
+
+/**
+ * Permissions of the user for the particular project
+ * @member {module:model/AccessLevel} permission
+ */
+UserPermission.prototype['permission'] = undefined;
+
+export default UserPermission;
