@@ -128,7 +128,7 @@ class FileHandler:
 
         logger.info("Zipping folder: " + folder_path)
         zip_file_path = file_handler_utils.zip_folder(folder_path)
-        
+
         key = self.upload_file(zip_file_path, data_type, metadata=metadata,
                                file_name=file_name + '.zip' if file_name else None)
         os.remove(zip_file_path)  # remove file after upload
@@ -151,7 +151,7 @@ class FileHandler:
         if prefix:
             path += prefix
 
-        self.file_client.list_files(
+        return self.file_client.list_files(
             project_id=self.env.project,
             prefix=path,
         )
@@ -201,13 +201,13 @@ class FileHandler:
             zip_folder_path = download_path.split('.')[0]
             if os.path.exists(zip_folder_path):
                 shutil.rmtree(zip_folder_path)
-            
+
             os.makedirs(zip_folder_path)
 
             with ZipFile(download_path, 'r') as zipObj:
                 zipObj.extractall(path=zip_folder_path)
 
-            return zip_folder_path            
+            return zip_folder_path
 
         return download_path
 
@@ -247,5 +247,5 @@ class FileHandler:
 
         metadata_file = self.file_client.get_file_metadata(project_id,
             file_key, version)
-        
+
         return metadata_file
