@@ -266,7 +266,7 @@ class Environment:
         requests.post(endpoint, headers={"Authorization": "Bearer " + self.lab_api_token})
     
     def _start_mlflow_server(self, extension: Extension, server_id: str) -> None:
-        endpoint = self._get_mlflow_backend_api_endpoint(extension) + "/projects/" + self.project + "/mlflow-server" + server_id + "/start"
+        endpoint = self._get_mlflow_backend_api_endpoint(extension) + "/projects/" + self.project + "/mlflow-server/" + server_id + "/start"
         requests.post(endpoint, headers={"Authorization": "Bearer " + self.lab_api_token})
 
     def _get_mlflow_backend_api_endpoint(self, extension: Extension) -> str:
