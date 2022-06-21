@@ -245,7 +245,6 @@ class Environment:
         """
         extension_display_name = "MLFlow Server"
         mlflow_extension = self._get_extension(extension_display_name)
-        print(mlflow_extension)
         if not self._is_extension_running(mlflow_extension):
             self._create_mlflow_server(mlflow_extension)
         tracking_uri = self._get_mlflow_tracking_uri(mlflow_extension)
