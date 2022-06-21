@@ -290,13 +290,13 @@ class Environment:
         return base_url + mlflow_server["access_url"]
 
     def _set_mlflow_env_vars(self, tracking_uri: str, token: str) -> None:
-        self._set_tracking_uri_env_var(tracking_uri)
-        self._set_token_env_var(token)
+        self._set_mlflow_tracking_uri_env_var(tracking_uri)
+        self._set_mlflow_token_env_var(token)
     
-    def _set_tracking_uri_env_var(self, tracking_uri: str) -> None:
+    def _set_mlflow_tracking_uri_env_var(self, tracking_uri: str) -> None:
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
     
-    def _set_token_env_var(self, token: str) -> None:
+    def _set_mlflow_token_env_var(self, token: str) -> None:
         os.environ["MLFLOW_TRACKING_TOKEN"] = token
         
 
