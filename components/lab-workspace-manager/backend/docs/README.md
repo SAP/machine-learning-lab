@@ -19,7 +19,6 @@
 - [`schema.WorkspaceConfigOptions`](./lab_workspace_manager.schema.md#class-workspaceconfigoptions)
 - [`schema.WorkspaceInput`](./lab_workspace_manager.schema.md#class-workspaceinput)
 - [`schema.WorkspaceUpdate`](./lab_workspace_manager.schema.md#class-workspaceupdate)
-- [`utils.APITokenExtractor`](./lab_workspace_manager.utils.md#class-apitokenextractor)
 
 ## Functions
 
