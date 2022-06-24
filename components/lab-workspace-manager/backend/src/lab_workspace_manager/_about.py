@@ -1,5 +1,5 @@
 """Information about this library. This file will automatically changed."""
 
-__version__ = "0.0.15"
+__version__ = "0.0.16"
 # __author__
 # __email__
