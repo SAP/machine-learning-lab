@@ -234,7 +234,7 @@ class Environment:
             Local path to the requested file or `None` if file is not available.
         """
         return self.file_handler.get_file(key, version, force_download)
-    
+
     def setup_mlflow(self) -> None:
         """
         Sets up the MLflow environment.
@@ -249,56 +249,66 @@ class Environment:
             self._create_mlflow_server(mlflow_extension)
         tracking_uri = self._get_mlflow_tracking_uri(mlflow_extension)
         self._set_mlflow_env_vars(tracking_uri=tracking_uri, token=self.lab_api_token)
-    
+
     def _get_extension(self, target_extension: str) -> Extension:
         global_project_name = "ctxy-global"
         all_extensions = self._extension_client.list_extensions(global_project_name)
         for extension in all_extensions:
             if extension.display_name == target_extension:
                 return extension
-        raise ExtensionNotInstalledError("ML Flow extension is not installed on this ML Lab instance.")
-    
+        raise ExtensionNotInstalledError(
+            "ML Flow extension is not installed on this ML Lab instance.")
+
     def _is_extension_running(self, extension: Extension) -> bool:
         return extension.status == "running"
-    
+
     def _create_mlflow_server(self, extension: Extension) -> None:
-        endpoint = self._get_mlflow_backend_api_endpoint(extension) + "/projects/" + self.project + "/mlflow-server"
-        requests.post(endpoint, headers={"Authorization": "Bearer " + self.lab_api_token})
-    
+        endpoint = self._get_mlflow_backend_api_endpoint(
+            extension) + "/projects/" + self.project + "/mlflow-server"
+        body = {"is_stopped": False}
+        requests.post(
+            endpoint, json=body, headers={"Authorization": "Bearer " + self.lab_api_token})
+
     def _start_mlflow_server(self, extension: Extension, server_id: str) -> None:
-        endpoint = self._get_mlflow_backend_api_endpoint(extension) + "/projects/" + self.project + "/mlflow-server/" + server_id + "/start"
-        requests.post(endpoint, headers={"Authorization": "Bearer " + self.lab_api_token})
+        endpoint = self._get_mlflow_backend_api_endpoint(
+            extension) + "/projects/" + self.project + "/mlflow-server/" + server_id + "/start"
+        requests.post(endpoint, headers={
+                      "Authorization": "Bearer " + self.lab_api_token})
 
     def _get_mlflow_backend_api_endpoint(self, extension: Extension) -> str:
         base_url = self.lab_endpoint.replace("/api", "")
         return base_url + extension.api_extension_endpoint
-    
+
     def _get_mlflow_tracking_uri(self, extension: Extension) -> str:
-        endpoint = self._get_mlflow_backend_api_endpoint(extension) + "/projects/" + self.project + "/mlflow-server"
-        response = requests.get(endpoint, headers={"Authorization": "Bearer " + self.lab_api_token}).json()
-        
+        endpoint = self._get_mlflow_backend_api_endpoint(
+            extension) + "/projects/" + self.project + "/mlflow-server"
+        response = requests.get(
+            endpoint, headers={"Authorization": "Bearer " + self.lab_api_token}).json()
+
         if len(response) == 0:
             self._create_mlflow_server(extension)
+            # TODO: think of adding max tries or sleep function
             return self._get_mlflow_tracking_uri(extension)
-        
+
         mlflow_server = response[0]
         if mlflow_server["status"] == "stopped":
             self._start_mlflow_server(extension, mlflow_server["id"])
+            # TODO: think of adding max tries or sleep function
             return self._get_mlflow_tracking_uri(extension)
 
         base_url = self.lab_endpoint.replace("/api", "")
-        return base_url + mlflow_server["access_url"]
+        return base_url + mlflow_server["access_url"][:-2] # [:-2] removes trailing slash and 'b' from the url
 
     def _set_mlflow_env_vars(self, tracking_uri: str, token: str) -> None:
         self._set_mlflow_tracking_uri_env_var(tracking_uri)
         self._set_mlflow_token_env_var(token)
-    
+
     def _set_mlflow_tracking_uri_env_var(self, tracking_uri: str) -> None:
         os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
-    
+
     def _set_mlflow_token_env_var(self, token: str) -> None:
         os.environ["MLFLOW_TRACKING_TOKEN"] = token
-        
+
 
 class ExtensionNotInstalledError(Exception):
     """
