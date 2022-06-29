@@ -53,6 +53,7 @@ function UserMenu(props) {
     } catch (err) {
       // ignore
     }
+    document.location.href = '/';
     window.location.reload();
   };
 
