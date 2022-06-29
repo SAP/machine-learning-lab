@@ -54,7 +54,6 @@ function UserMenu(props) {
       // ignore
     }
     document.location.href = '/';
-    window.location.reload();
   };
 
   const onChangePassword = () => {
