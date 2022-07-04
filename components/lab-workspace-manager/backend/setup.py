@@ -51,7 +51,7 @@ setup(
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     zip_safe=False,
     install_requires=[
-        "fastapi",
+        "fastapi==0.75.2",
         "loguru",
         "contaxy==0.0.18",
     ],
