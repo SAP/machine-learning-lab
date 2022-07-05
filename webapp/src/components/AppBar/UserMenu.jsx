@@ -53,7 +53,7 @@ function UserMenu(props) {
     } catch (err) {
       // ignore
     }
-    window.location.reload();
+    document.location.href = '/';
   };
 
   const onChangePassword = () => {
