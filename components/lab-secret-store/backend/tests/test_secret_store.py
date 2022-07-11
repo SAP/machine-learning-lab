@@ -14,7 +14,7 @@ from lab_secret_store.client import SecretClient
 from lab_secret_store.schema import SecretInput, SecretUpdate
 from lab_secret_store.secret_store.abstract_secret_store import AbstractSecretStore
 from lab_secret_store.secret_store.json_db_secret_store import JsonDbSecretStore
-
+from lab_secret_store.secret_store.vault_secret_store import VaultSecretStore
 from .conftest import test_settings
 
 
@@ -96,6 +96,24 @@ class TestJsonDbSecretStoreWithInMemoryDB(SecretStoreTests):
     ) -> None:
         json_db = InMemoryDictJsonDocumentManager(global_state, request_state)
         self._secret_store = JsonDbSecretStore(json_db)
+
+    @property
+    def secret_store(self) -> AbstractSecretStore:
+        return self._secret_store
+
+    @property
+    def project_id(self) -> str:
+        return "secret-store-test"
+
+
+@pytest.mark.unit
+class TestVaultSecretStoreWithInMemoryDB(SecretStoreTests):
+    @pytest.fixture(autouse=True)
+    def _init_secret_store(
+        self, global_state: GlobalState, request_state: RequestState
+    ) -> None:
+        json_db = InMemoryDictJsonDocumentManager(global_state, request_state)
+        self._secret_store = VaultSecretStore(json_db)
 
     @property
     def secret_store(self) -> AbstractSecretStore:

@@ -51,6 +51,7 @@ setup(
         "contaxy==0.0.17",
         "cryptography",
         "pydantic[email]",
+        "hvac",
     ],
     # deprecated: dependency_links=dependency_links,
     extras_require={
@@ -85,6 +86,7 @@ setup(
             "requests",
             "types-requests",
             "uvicorn",
+            "json-merge-patch",
         ],
     },
     include_package_data=True,
