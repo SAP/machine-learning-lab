@@ -22,7 +22,6 @@ class VaultSecretStore(AbstractSecretStore):
 
     def get_secret(self, project_id: str, secret_id: str) -> Secret:
         if self.client.is_authenticated():
-        #    response = self.client.secrets.kv.v2.update_metadata(path=project_id + "/" + secret_id)
             response = self.client.secrets.kv.v2.read_secret(path=project_id + "/" + secret_id)
             secret_text = response['data']["data"]["key"]
             custom_metadata = response['data']['metadata']["custom_metadata"]
@@ -35,11 +34,8 @@ class VaultSecretStore(AbstractSecretStore):
         return Secret(id=secret_id,display_name=display_name,metadata=metadata,secret_text=secret_text)
 
     def list_secrets(self, project_id: str) -> List[SecretMetadata]:
-        
         response = self.client.secrets.kv.v2.list_secrets(path=project_id)
-        
         secret_docs = []
-
         for secret in response["data"]["keys"]:
             response = self.client.secrets.kv.v2.read_secret(path=project_id + "/" + secret)
 
@@ -49,7 +45,6 @@ class VaultSecretStore(AbstractSecretStore):
             metadata = custom_metadata
 
             secret_docs.append(SecretMetadata(id=secret,display_name=display_name,metadata=metadata))
-        
   
         return secret_docs
 
@@ -65,14 +60,12 @@ class VaultSecretStore(AbstractSecretStore):
             'key': value.secret_text,
         }   
         self.client.secrets.kv.v2.create_or_update_secret(
-        path=project_id + "/" + id,
-        secret=secret,
+            path=project_id + "/" + id,
+            secret=secret,
         )
-        test = value.metadata
-        test["display_name"]=value.display_name
-        requests.post( "http://127.0.0.1:8200/v1/secret/metadata/" + project_id + "/" + id , json={"custom_metadata":test
-            
-        }, headers={"X-Vault-Token":"myroot"})
+        metadata = value.metadata
+        metadata["display_name"]=value.display_name
+        requests.post( settings.SECRETSTORE_VAULT_URL + project_id + "/" + id , json={"custom_metadata":metadata}, headers={"X-Vault-Token":"myroot"})
         
         return secretJson
 
@@ -84,21 +77,20 @@ class VaultSecretStore(AbstractSecretStore):
                 'key': value.secret_text,
             }   
             self.client.secrets.kv.v2.create_or_update_secret(
-            path=project_id + "/" + secret_id,
-            secret=secret,
+                path=project_id + "/" + secret_id,
+                secret=secret,
             )
         else:
-            test = value.metadata
-            test["display_name"]= self.client.secrets.kv.v2.read_secret(path=project_id + "/" + secret_id)['data']['metadata']["custom_metadata"]["display_name"]
-            requests.post( "http://127.0.0.1:8200/v1/secret/metadata/" + project_id + "/" + secret_id , json={"custom_metadata":test}, headers={"X-Vault-Token":"myroot"})
+            metadata = value.metadata
+            metadata["display_name"]= self.client.secrets.kv.v2.read_secret(path=project_id + "/" + secret_id)['data']['metadata']["custom_metadata"]["display_name"]
+            requests.post( settings.SECRETSTORE_VAULT_URL + project_id + "/" + secret_id , json={"custom_metadata":metadata}, headers={"X-Vault-Token":"myroot"})
 
             
 
     def delete_secret(self, project_id: str, secret_id: str) -> None:
-       
         self.client.secrets.kv.v2.delete_metadata_and_all_versions(
-        path=project_id,
-)
+            path=project_id,
+        )
 
 
         
