@@ -15,6 +15,7 @@ from lab_secret_store.schema import SecretInput, SecretUpdate
 from lab_secret_store.secret_store.abstract_secret_store import AbstractSecretStore
 from lab_secret_store.secret_store.json_db_secret_store import JsonDbSecretStore
 from lab_secret_store.secret_store.vault_secret_store import VaultSecretStore
+
 from .conftest import test_settings
 
 

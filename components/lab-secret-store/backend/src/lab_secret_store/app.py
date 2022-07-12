@@ -1,7 +1,6 @@
 import os
 from typing import Any
 
-from contaxy.operations.components import ComponentOperations
 from contaxy.schema.exceptions import (
     CREATE_RESOURCE_RESPONSES,
     GET_RESOURCE_RESPONSES,
@@ -10,13 +9,12 @@ from contaxy.schema.exceptions import (
 from contaxy.schema.project import PROJECT_ID_PARAM
 from contaxy.utils import fastapi_utils
 from fastapi import Depends, FastAPI, status
-from lab_secret_store.secret_store.abstract_secret_store import AbstractSecretStore
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import Response
 
 from lab_secret_store.schema import SECRET_ID_PARAM, Secret, SecretInput, SecretUpdate
-from lab_secret_store.secret_store.json_db_secret_store import JsonDbSecretStore
-from lab_secret_store.utils import CONTAXY_API_ENDPOINT, get_component_manager, get_secret_store
+from lab_secret_store.secret_store.abstract_secret_store import AbstractSecretStore
+from lab_secret_store.utils import CONTAXY_API_ENDPOINT, get_secret_store
 
 app = FastAPI()
 # Patch FastAPI to allow relative path resolution.
