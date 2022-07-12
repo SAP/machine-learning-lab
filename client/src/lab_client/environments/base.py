@@ -62,6 +62,9 @@ class Environment(FileEnvironment, DeploymentEnvironment):
         if lab_api_token is None:
             lab_api_token = os.getenv(self._ENV_NAME_LAB_API_TOKEN)
 
+        if project is None:
+            project = os.getenv(self._ENV_NAME_LAB_PROJECT)
+
         self.project = project
         self.lab_api_token = lab_api_token
         self.lab_endpoint = lab_endpoint
