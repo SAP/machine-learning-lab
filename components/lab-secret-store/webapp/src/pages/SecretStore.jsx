@@ -18,8 +18,9 @@ import {
   useSecrets,
 } from '../services/secret-store-api';
 import setClipboardText from '../utils/clipboard';
-import ContentDialog from '../components/Dialogs/ContentDialog';
 import { useShowAppDialog } from '../app/AppDialogServiceProvider';
+import ContentDialogForJson from '../components/Dialogs/ContentDialogForJson';
+import ContentDialog from '../components/Dialogs/ContentDialog';
 
 function MethadataDisplay(props) {
   const { metadata } = props;
@@ -161,7 +162,11 @@ function SecretStore() {
           <MethadataDisplay metadata={params.metadata} />
           <IconButton
             onClick={() => {
-              return alert(JSON.stringify(params.metadata, null, 4));
+              showAppDialog(ContentDialogForJson, {
+                jsonContent: params.metadata,
+                title: 'Service Metadata',
+              });
+              // return alert(JSON.stringify(params.metadata, null, 4));
             }}
           >
             <VisibilityIcon />

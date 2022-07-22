@@ -76,12 +76,16 @@ class VaultSecretStore(AbstractSecretStore):
         )
         metadata = value.metadata
         metadata["display_name"] = value.display_name
-        requests.post(
-            settings.SECRETSTORE_VAULT_URL + project_id + "/" + id,
+        test = requests.post(
+            settings.SECRETSTORE_VAULT_URL
+            + "v1/secret/metadata/"
+            + project_id
+            + "/"
+            + id,
             json={"custom_metadata": metadata},
-            headers={"X-Vault-Token": "myroot"},
+            headers={"X-Vault-Token": settings.SECRETSTORE_VAULT_TOKEN},
         )
-
+        print(test)
         return secretJson
 
     def update_secret(
@@ -103,7 +107,7 @@ class VaultSecretStore(AbstractSecretStore):
             requests.post(
                 settings.SECRETSTORE_VAULT_URL + project_id + "/" + secret_id,
                 json={"custom_metadata": metadata},
-                headers={"X-Vault-Token": "myroot"},
+                headers={"X-Vault-Token": settings.SECRETSTORE_VAULT_TOKEN},
             )
 
     def delete_secret(self, project_id: str, secret_id: str) -> None:
