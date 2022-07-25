@@ -1,4 +1,4 @@
-pipenv==2022.6.7
+pipenv==2022.7.24
 universal_build==0.6.18
 urllib3==1.26.9
 twine==4.0.1
