@@ -4,6 +4,7 @@ from typing import Any, List, Optional
 
 from contaxy.operations.components import ComponentOperations
 from contaxy.operations import AuthOperations
+from contaxy.utils.auth_utils import get_api_token
 
 from contaxy.schema import Service, ServiceInput
 from contaxy.schema.auth import USER_ID_PARAM, AccessLevel
@@ -75,11 +76,14 @@ def deploy_mlflow_server(
     mlflow_input: MLFlowInput,
     project_id: str,
     component_manager: ComponentOperations = Depends(get_component_manager),
+    token: str = Depends(get_api_token),
 ) -> Any:
     """Create a new ML server by creating a Contaxy service with a mlflow server image in the personal project."""
     logger.debug(
         f"Deploy ML Flow server request for project {project_id}: {mlflow_input}")
-    service_input = create_mlflow_server_service_input(mlflow_input)
+    host = "ml-lab-backend:8080"
+    service_input = create_mlflow_server_service_input(
+        mlflow_input, token, project_id, host)
     try:
         service = component_manager.get_service_manager().deploy_service(
             project_id=project_id, service_input=service_input
@@ -120,6 +124,7 @@ def get_mlflow_server(
 
     return create_mlflow_server_from_service(service)
 
+
 @app.post(
     "/projects/{project_id}/mlflow-server/{mlflow_server_id}/start",
     summary="Start the specified ML Flow server if it is stopped.",
@@ -131,12 +136,14 @@ def start_mlflow_server(
     component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     logger.debug(
-        f"Start ML Flow server request for project {project_id} " + f"and mlflow server {mlflow_server_id}"
+        f"Start ML Flow server request for project {project_id} " +
+        f"and mlflow server {mlflow_server_id}"
     )
     component_manager.get_service_manager().execute_service_action(
         project_id=project_id, service_id=mlflow_server_id, action_id=ACTION_START
     )
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
 
 @app.get(
     "/projects/{project_id}/mlflow-server",
@@ -157,6 +164,7 @@ def list_mlflow_servers(
         if is_mlflow_service(service)
     ]
     return workspaces
+
 
 @app.delete(
     "/projects/{project_id}/mlflow-server/{service_id}",
@@ -182,8 +190,12 @@ def delete_mlflow_server(
     )
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+
 def create_mlflow_server_service_input(
-    mlflow_input: MLFlowInput
+    mlflow_input: MLFlowInput,
+    lab_api_token: str,
+    project_id: str,
+    host: str,
 ) -> ServiceInput:
     return ServiceInput(
         container_image=mlflow_input.container_image,
@@ -198,6 +210,11 @@ def create_mlflow_server_service_input(
             "min_memory": compute_min_memory(mlflow_input.compute.memory),
             "max_volume_size": settings.MLFLOW_VOLUME_SIZE,
             "max_container_size": settings.MLFLOW_CONTAINER_SIZE,
+        },
+        parameters={
+            "LAB_API_TOKEN": lab_api_token,
+            "PROJECT_ID": project_id,
+            "HOST": host,
         },
         is_stopped=mlflow_input.is_stopped,
         idle_timeout=mlflow_input.idle_timeout if mlflow_input.idle_timeout != timedelta(

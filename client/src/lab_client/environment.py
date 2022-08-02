@@ -297,7 +297,8 @@ class Environment:
             return self._get_mlflow_tracking_uri(extension)
 
         base_url = self.lab_endpoint.replace("/api", "")
-        return base_url + mlflow_server["access_url"][:-2] # [:-2] removes trailing slash and 'b' from the url
+        # [:-2] removes trailing slash and 'b' from the url. Removing 'b' uses nginx to talk to the api with the full path
+        return base_url + mlflow_server["access_url"][:-2]
 
     def _set_mlflow_env_vars(self, tracking_uri: str, token: str) -> None:
         self._set_mlflow_tracking_uri_env_var(tracking_uri)
