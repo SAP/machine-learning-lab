@@ -54,8 +54,7 @@ function DeployContainerDialog(props) {
         </DialogContentText>
         <TextField
           required
-          label="Container Image"
-          type="text"
+            type="text"
           name="containerImage"
           value={deploymentInput.containerImage}
           onChange={onChange}
@@ -65,7 +64,8 @@ function DeployContainerDialog(props) {
           helperText={
             isContainerImageInvalid ? 'Image Name is not valid' : null
           }
-          fullWidth
+          fullWidth     label="Container Image"
+   
           margin="dense"
         />
         <TextField
