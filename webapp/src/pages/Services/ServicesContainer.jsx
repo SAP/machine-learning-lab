@@ -3,6 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
+import CircularProgress from '@mui/material/CircularProgress';
 import MaterialTable from 'material-table';
 
 const COLUMNS = [
@@ -45,7 +46,8 @@ function ServicesContainer(props) {
     onShowServiceMetadata,
   } = props;
   const { t } = useTranslation();
-
+  // https://github.com/facebook/react/issues/19098
+  const [state, setState] = React.useState({ deleteIcon: 'delete' });
   return (
     <MaterialTable
       title={t('service_plural')}
@@ -103,9 +105,20 @@ function ServicesContainer(props) {
           tooltip: 'Display logs',
         },
         {
-          icon: 'delete',
+          icon: state.deleteIcon,
           iconProps: { className: `` },
-          onClick: (event, rowData) => {
+          onClick: (_, rowData) => {
+            setState({
+              ...state,
+              deleteIcon: () => (
+                <CircularProgress
+                  size={24}
+                  style={{
+                    color: '#3f51b5',
+                  }}
+                />
+              ),
+            });
             onServiceDelete(rowData);
           },
           tooltip: 'Delete service',

@@ -3,7 +3,8 @@ services:
   # The main ML Lab backend container that serves as entrypoint for all traffic
   # Contains the contaxy server and hosts the ML Lab web app
   ml-lab-backend:
-    image: ghcr.io/sap/machine-learning-lab/lab-backend:0.0.15
+    # image: ghcr.io/sap/machine-learning-lab/lab-backend:0.0.17
+    image: ml-lab-backend
     container_name: ml-lab-backend
     ports:
       - "30010:8080"
