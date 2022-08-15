@@ -43,7 +43,7 @@ COPY docker/nginx /etc/nginx
 COPY webapp/build /resources/webapp
 
 ENV PYTHONPATH=/resources/app \
-    MODULE_NAME=mlflow.app \
+    MODULE_NAME=lab_mlflow_manager.app \
     WEB_CONCURRENCY="1"
 
 ENTRYPOINT ["/bin/bash"]

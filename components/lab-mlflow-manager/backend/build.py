@@ -5,7 +5,7 @@ from universal_build import build_utils
 from universal_build.helpers import build_python
 
 # Project specific configuration
-MAIN_PACKAGE = "mlflow"
+MAIN_PACKAGE = "lab_mlflow_manager"
 GITHUB_URL = "https://github.com/ml-tooling/contaxy"
 
 HERE = os.path.abspath(os.path.dirname(__file__))

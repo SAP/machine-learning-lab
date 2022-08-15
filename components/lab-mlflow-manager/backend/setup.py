@@ -7,7 +7,7 @@ from os.path import basename, splitext
 
 from setuptools import find_packages, setup  # type: ignore
 
-NAME = "mlflow"
+NAME = "lab-mlflow-manager"
 MAIN_PACKAGE = NAME.replace("-", "_")  # Change if main package != NAME
 DESCRIPTION = "Python package template."
 URL = "https://github.com/SAP/machine-learning-lab"

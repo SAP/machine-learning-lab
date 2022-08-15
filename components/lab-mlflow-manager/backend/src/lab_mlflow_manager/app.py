@@ -25,9 +25,9 @@ from fastapi import Depends, FastAPI, Query, Response, status
 from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
 
-from mlflow.utils import CONTAXY_API_ENDPOINT, get_component_manager
-from mlflow.config import settings
-from mlflow.schema import (
+from lab_mlflow_manager.utils import CONTAXY_API_ENDPOINT, get_component_manager
+from lab_mlflow_manager.config import settings
+from lab_mlflow_manager.schema import (
     MLFlow,
     MLFlowInput,
     MLFlowCompute
@@ -273,7 +273,7 @@ if __name__ == "__main__":
     log_config = uvicorn.config.LOGGING_CONFIG
     log_config["loggers"]["uvicorn"]["propagate"] = False
     uvicorn.run(
-        "mlflow.app:app",
+        "lab_mlflow_manager.app:app",
         host="localhost",
         port=int(os.getenv("PORT", 8080)),
         log_level="info",

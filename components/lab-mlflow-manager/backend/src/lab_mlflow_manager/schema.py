@@ -6,7 +6,7 @@ from contaxy.schema.deployment import DeploymentStatus
 from contaxy.schema.shared import MAX_DISPLAY_NAME_LENGTH
 from pydantic import BaseModel, Field
 
-from mlflow.config import MLFlowImage, settings
+from lab_mlflow_manager.config import MLFlowImage, settings
 
 
 def check_if_in_options(field_name: str, options: List) -> classmethod:
