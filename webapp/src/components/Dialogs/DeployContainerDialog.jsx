@@ -69,6 +69,7 @@ function DeployContainerDialog(props) {
           margin="dense"
         />
         <TextField
+          required
           label="Deployment Name"
           type="text"
           name="deploymentName"
@@ -113,7 +114,8 @@ function DeployContainerDialog(props) {
           disabled={
             isContainerImageInvalid ||
             isDeploymentNameInvalid ||
-            !deploymentInput.containerImage
+            !deploymentInput.containerImage ||
+            !deploymentInput.deploymentName
           }
           onClick={() => onDeploy(deploymentInput, onClose)}
           color="primary"

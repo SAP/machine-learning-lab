@@ -96,7 +96,8 @@ services:
   # Workspace manager that allows users to spawn their machine learning workspaces
   lab-workspace-manager:
     container_name: pylab-p-ctxy-global-s-workspace-manager
-    image: ghcr.io/sap/machine-learning-lab/lab-workspace-manager:0.0.15
+    # image: ghcr.io/sap/machine-learning-lab/lab-workspace-manager:0.0.15
+    image: lab-workspace-manager:latest
     environment:
       - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
       - CONTAXY_DEPLOYMENT_NAME=pylab-p-ctxy-global-s-workspace-manager

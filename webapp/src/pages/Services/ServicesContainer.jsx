@@ -48,6 +48,8 @@ function ServicesContainer(props) {
   const { t } = useTranslation();
   // https://github.com/facebook/react/issues/19098
   const [state, setState] = React.useState({ deleteIcon: 'delete' });
+  console.log('Data');
+  console.log(data);
   return (
     <MaterialTable
       title={t('service_plural')}
@@ -108,6 +110,8 @@ function ServicesContainer(props) {
           icon: state.deleteIcon,
           iconProps: { className: `` },
           onClick: (_, rowData) => {
+            console.log('Row data');
+            console.log(rowData);
             setState({
               ...state,
               deleteIcon: () => (
