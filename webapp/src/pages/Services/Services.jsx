@@ -85,6 +85,7 @@ function Services(props) {
   const onServiceDelete = useCallback(
     async (projectId, serviceId) => {
       try {
+        showStandardSnackbar(`Deleting service ${serviceId}...`);
         await servicesApi.deleteService(projectId, serviceId);
         showStandardSnackbar(`Deleted service '${serviceId}'`);
         reloadServices();
