@@ -1,3 +1,4 @@
+{{- if .Values.integratedPostgres.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -8,9 +9,10 @@ metadata:
     ctxy.deploymentName: "postgres"
 spec:
   accessModes: [ "ReadWriteOnce" ]
-  {{- if .Values.postgres.storageClassName }}
-  storageClassName: {{ .Values.postgres.storageClassName }}
+  {{- if .Values.integratedPostgres.storageClassName }}
+  storageClassName: {{ .Values.integratedPostgres.storageClassName }}
   {{- end }}
   resources:
     requests:
-      storage: {{ .Values.postgres.storageSize }}
+      storage: {{ .Values.integratedPostgres.storageSize }}
+{{- end }}

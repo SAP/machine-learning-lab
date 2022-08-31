@@ -13,6 +13,8 @@
     "prettier/react"
   ],
   "rules": {
+    // note you must disable the base rule as it can report incorrect errors
+    "no-shadow": "off",
     "no-case-declarations": "warn",
     "sort-imports-es6-autofix/sort-imports-es6": [
       2,

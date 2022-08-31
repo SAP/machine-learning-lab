@@ -1,14 +1,17 @@
 import os
-import requests
 from typing import Optional
 
 from contaxy.clients import AuthClient, FileClient, ExtensionClient
+from contaxy.clients import DeploymentClient
 from contaxy.clients.shared import BaseUrlSession
 from contaxy.config import API_TOKEN_NAME
-from contaxy.schema.extension import Extension
+from contaxy.schema import File
 
-from .handler.file_handler import FileHandler
-from .utils.text_utils import simplify
+from lab_client.handler.file_handler import FileHandler
+from lab_client.handler.job_handler import JobHandler
+from lab_client.handler.service_handler import ServiceHandler
+from lab_client.handler.mlflow_handler import MLFlowHandler
+from lab_client.utils.text_utils import simplify
 
 
 class Environment:
@@ -63,6 +66,9 @@ class Environment:
         if lab_api_token is None:
             lab_api_token = os.getenv(self._ENV_NAME_LAB_API_TOKEN)
 
+        if project is None:
+            project = os.getenv(self._ENV_NAME_LAB_PROJECT)
+
         self.project = project
         self.lab_api_token = lab_api_token
         self.lab_endpoint = lab_endpoint
@@ -73,9 +79,13 @@ class Environment:
         self._endpoint_client.verify = False
         self._auth_client = AuthClient(self._endpoint_client)
         self._file_client = FileClient(self._endpoint_client)
+        self._deployment_client = DeploymentClient(self._endpoint_client)
         self._extension_client = ExtensionClient(self._endpoint_client)
 
         self._file_handler = None
+        self._job_handler = None
+        self._service_handler = None
+        self._mlflow_handler = None
 
         self._check_connection()
 
@@ -191,6 +201,28 @@ class Environment:
         return folder
 
     @property
+    def job_handler(self) -> JobHandler:
+        """
+        Returns the file handler. The file handler provides additional functionality for interacting with the remote storage.
+        """
+
+        if self._job_handler is None:
+            self._job_handler = JobHandler(self, self._deployment_client)
+
+        return self._job_handler
+
+    @property
+    def service_handler(self) -> ServiceHandler:
+        """
+        Returns the file handler. The file handler provides additional functionality for interacting with the remote storage.
+        """
+
+        if self._service_handler is None:
+            self._service_handler = ServiceHandler(self, self._deployment_client)
+
+        return self._service_handler
+
+    @property
     def file_handler(self) -> FileHandler:
         """
         Returns the file handler. The file handler provides additional functionality for interacting with the remote storage.
@@ -221,7 +253,7 @@ class Environment:
         return self.file_handler.upload_file(file_path, data_type, metadata, file_name)
 
     def get_file(
-        self, key: str, version: Optional[str] = None, force_download: bool = False
+        self, key: str, version: Optional[str] = None, force_download: bool = False, unpack: bool = False
     ) -> str:
         """Returns local path to the file for the given `key`.
         If the file is not available locally, download it from the storage of the Lab Instance.
@@ -233,7 +265,48 @@ class Environment:
         Returns:
             Local path to the requested file or `None` if file is not available.
         """
-        return self.file_handler.get_file(key, version, force_download)
+        return self.file_handler.get_file(key, version, force_download, unpack)
+
+    def upload_folder(
+        self,
+        folder_path: str,
+        data_type: str,
+        metadata: dict = None,
+        file_name: str = None,
+    ) -> str:
+        """Packages the folder (via `zipfile`) and uploads the specified folder to the storage of the Lab instance.
+
+        Args:
+            folder_path: Local path to the folder you want ot upload.
+            data_type: Data type of the resulting zip-file. Possible values are `model`, `dataset`, `experiment`.
+            metadata: Adds additional metadata to remote storage (optional).
+            file_name: File name to use in the remote storage. If not provided, the name will be extracted from the provided path (optional)
+        Returns:
+            Key of the uploaded (zipped) folder.
+        """
+        return self.file_handler.upload_folder(folder_path, data_type, metadata, file_name)
+
+    def get_file_metadata(
+        self, project: str, key: str, version: Optional[str] = None
+    ) -> File:
+        """Returns file metadata to the file for the given `key`.
+
+        Args:
+            project: Project ID.
+            key: Key or url of the requested file.
+            version: Version of the file whose metadata is to be returned. If `None` (default) the latest version metadata will be returned.
+
+        Returns:
+            The metadata Dictionary of the file.
+        """
+        return self.file_handler.get_file_metadata(project, key, version)
+
+    @property
+    def mlflow_handler(self) -> MLFlowHandler:
+        if self._mlflow_handler is None:
+            self._mlflow_handler = MLFlowHandler(self, self._extension_client)
+
+        return self._mlflow_handler
 
     def setup_mlflow(self) -> None:
         """
@@ -243,78 +316,4 @@ class Environment:
         * Uses the ML Flow extension API to check if the ML Flow server is running (and if not, starts it)
         * Sets the tracking URI and token environment variables
         """
-        extension_display_name = "MLFlow Server"
-        mlflow_extension = self._get_extension(extension_display_name)
-        if not self._is_extension_running(mlflow_extension):
-            self._create_mlflow_server(mlflow_extension)
-        tracking_uri = self._get_mlflow_tracking_uri(mlflow_extension)
-        self._set_mlflow_env_vars(tracking_uri=tracking_uri, token=self.lab_api_token)
-
-    def _get_extension(self, target_extension: str) -> Extension:
-        global_project_name = "ctxy-global"
-        all_extensions = self._extension_client.list_extensions(global_project_name)
-        for extension in all_extensions:
-            if extension.display_name == target_extension:
-                return extension
-        raise ExtensionNotInstalledError(
-            "ML Flow extension is not installed on this ML Lab instance.")
-
-    def _is_extension_running(self, extension: Extension) -> bool:
-        return extension.status == "running"
-
-    def _create_mlflow_server(self, extension: Extension) -> None:
-        endpoint = self._get_mlflow_backend_api_endpoint(
-            extension) + "/projects/" + self.project + "/mlflow-server"
-        body = {"is_stopped": False}
-        requests.post(
-            endpoint, json=body, headers={"Authorization": "Bearer " + self.lab_api_token})
-
-    def _start_mlflow_server(self, extension: Extension, server_id: str) -> None:
-        endpoint = self._get_mlflow_backend_api_endpoint(
-            extension) + "/projects/" + self.project + "/mlflow-server/" + server_id + "/start"
-        requests.post(endpoint, headers={
-                      "Authorization": "Bearer " + self.lab_api_token})
-
-    def _get_mlflow_backend_api_endpoint(self, extension: Extension) -> str:
-        base_url = self.lab_endpoint.replace("/api", "")
-        return base_url + extension.api_extension_endpoint
-
-    def _get_mlflow_tracking_uri(self, extension: Extension) -> str:
-        endpoint = self._get_mlflow_backend_api_endpoint(
-            extension) + "/projects/" + self.project + "/mlflow-server"
-        response = requests.get(
-            endpoint, headers={"Authorization": "Bearer " + self.lab_api_token}).json()
-
-        if len(response) == 0:
-            self._create_mlflow_server(extension)
-            # TODO: think of adding max tries or sleep function
-            return self._get_mlflow_tracking_uri(extension)
-
-        mlflow_server = response[0]
-        if mlflow_server["status"] == "stopped":
-            self._start_mlflow_server(extension, mlflow_server["id"])
-            # TODO: think of adding max tries or sleep function
-            return self._get_mlflow_tracking_uri(extension)
-
-        base_url = self.lab_endpoint.replace("/api", "")
-        # [:-2] removes trailing slash and 'b' from the url. Removing 'b' uses nginx to talk to the api with the full path
-        return base_url + mlflow_server["access_url"][:-2]
-
-    def _set_mlflow_env_vars(self, tracking_uri: str, token: str) -> None:
-        self._set_mlflow_tracking_uri_env_var(tracking_uri)
-        self._set_mlflow_token_env_var(token)
-
-    def _set_mlflow_tracking_uri_env_var(self, tracking_uri: str) -> None:
-        os.environ["MLFLOW_TRACKING_URI"] = tracking_uri
-
-    def _set_mlflow_token_env_var(self, token: str) -> None:
-        os.environ["MLFLOW_TRACKING_TOKEN"] = token
-
-
-class ExtensionNotInstalledError(Exception):
-    """
-    Exception raised when the ML Flow extension is not installed on the Lab instance.
-    """
-
-    def __init__(self, message):
-        super().__init__(message)
+        return self.mlflow_handler.setup_mlflow()

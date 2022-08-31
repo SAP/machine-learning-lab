@@ -83,12 +83,14 @@ labBackend:
           - path: "/"
             pathType: Prefix
 
-# Configuration of the ML Lab Mongo DB
-postgres:
-  # Mongo DB image to use
+# Configuration of the integrated ML Lab Postgres DB
+# If you want to use an external Postgres DB, disable this component
+integratedPostgres:
+  enabled: True
+  # Postgres image to use
   image:
     repository: "postgres"
-    tag: "13.2"
+    tag: "14.2"
     pullPolicy: IfNotPresent
   # Resources required for the Postgres deployment
   resources:
@@ -99,7 +101,7 @@ postgres:
       cpu: 100m
       memory: 1Gi
   # Size of the persisten volume used for the DB data
-  storageSize: "5Gi"
+  storageSize: "10Gi"
   # Storage class to use for the volume
   storageClassName: ""
   # Service configuration for the postgres deployment
@@ -114,6 +116,16 @@ postgres:
   podSecurityContext: {}
   containerSecurityContext: {}
   imagePullSecrets: []
+
+# Instead of the integrated Postgres DB an external one can be configured
+externalPostgres:
+  enabled: False
+  # Host name of the Postgres instance
+  host: ""
+  # Port of the Postgres instance
+  port: 5432
+  # Name of the database to use on the postgres instance
+  dbName: "postgres"
 
 # Configuration of the integrated ML Lab Minio DB
 # If you want to use an external file storage, disable this component

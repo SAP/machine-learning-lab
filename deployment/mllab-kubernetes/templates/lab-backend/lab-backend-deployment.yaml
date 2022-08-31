@@ -61,8 +61,13 @@ spec:
             - name: OIDC_CLIENT_SECRET
               value: "{{ .Values.labConfig.externalOIDC.clientSecret }}"
             {{- end }}
+            {{- if .Values.integratedPostgres.enabled }}
             - name: POSTGRES_CONNECTION_URI
-              value: "postgresql://{{ .Values.postgres.username }}:{{ .Values.postgres.password }}@{{ include "machine-learning-lab.fullname" . }}-postgres:{{ .Values.postgres.service.port }}/postgres"
+              value: "postgresql://{{ .Values.integratedPostgres.username | urlquery }}:{{ .Values.integratedPostgres.password | urlquery }}@{{ include "machine-learning-lab.fullname" . }}-postgres:{{ .Values.integratedPostgres.service.port }}/postgres"
+            {{- else }}
+            - name: POSTGRES_CONNECTION_URI
+              value: "postgresql://{{ .Values.externalPostgres.username | urlquery }}:{{ .Values.externalPostgres.password | urlquery }}@{{ .Values.externalPostgres.host }}:{{ .Values.externalPostgres.port }}/{{ .Values.externalPostgres.dbName }}"
+            {{- end }}
             {{- if and .Values.integratedMinioStorage.enabled .Values.externalS3Storage.enabled }}
             {{- fail "Cannot enable integrated Minio and external file storage at the same time!"}}
             {{- end }}

@@ -95,7 +95,7 @@ function Files(props) {
       const a = document.createElement('a');
       a.href = getFileDownloadUrl(projectId, rowData.key);
       a.target = '_blank';
-      a.download = rowData.name || 'download';
+      a.download = rowData.display_name || 'download';
       a.click();
     },
     [projectId]

@@ -14,7 +14,6 @@ import PrivateRoute from './PrivateRoute';
 function ContentContainer(props) {
   const { oauthEnabled } = GlobalStateContainer.useContainer();
   const { additionalPages, className, isAuthenticated } = props;
-
   const routes = [...APP_PAGES, ...additionalPages]
     .filter((item) => item.TYPE === APP_DRAWER_ITEM_TYPES.link)
     .map((item) => {
@@ -26,6 +25,7 @@ function ContentContainer(props) {
         <Route
           key={item.NAME}
           path={item.PATH}
+          exact={item.name === 'home'}
           element={
             <RouteElement
               element={item.COMPONENT}

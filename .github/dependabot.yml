@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    # Only scan production packages for JavaScript
+    allow:
+    - dependency-type: "production"
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"

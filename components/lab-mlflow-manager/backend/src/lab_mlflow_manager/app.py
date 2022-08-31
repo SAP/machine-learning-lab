@@ -1,6 +1,7 @@
 from datetime import timedelta
 import os
 from typing import Any, List, Optional
+from urllib import parse
 
 from contaxy.operations.components import ComponentOperations
 from contaxy.operations import AuthOperations
@@ -20,7 +21,6 @@ from contaxy.schema.exceptions import (
 
 from contaxy.utils import fastapi_utils
 
-
 from fastapi import Depends, FastAPI, Query, Response, status
 from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
@@ -32,7 +32,6 @@ from lab_mlflow_manager.schema import (
     MLFlowInput,
     MLFlowCompute
 )
-
 
 LABEL_EXTENSION_DEPLOYMENT_TYPE = "ctxy.mlflowExtension.deploymentType"
 
@@ -81,7 +80,7 @@ def deploy_mlflow_server(
     """Create a new ML server by creating a Contaxy service with a mlflow server image in the personal project."""
     logger.debug(
         f"Deploy ML Flow server request for project {project_id}: {mlflow_input}")
-    host = "ml-lab-backend:8080"
+    host = parse.urlparse(os.getenv("CONTAXY_API_ENDPOINT")).netloc
     service_input = create_mlflow_server_service_input(
         mlflow_input, token, project_id, host)
     try:
@@ -236,7 +235,7 @@ def create_mlflow_server_from_service(service: Service) -> MLFlow:
         compute.memory = service.compute.max_memory
     return MLFlow(
         id=service.id,
-        display_name=service.display_name[len("ML Flow ") :],
+        display_name=service.display_name[len("ML Flow "):],
         container_image=service.container_image,
         compute=compute,
         idle_timeout=service.idle_timeout,

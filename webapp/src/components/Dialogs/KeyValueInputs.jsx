@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -21,12 +21,12 @@ function KeyValueInput(props) {
 
   const handleKeyChange = (e) => {
     setKey(e.target.value);
-    onChange(index, key, value);
+    onChange(index, e.target.value, value);
   };
 
   const handleValueChange = (e) => {
     setValue(e.target.value);
-    onChange(index, key, value);
+    onChange(index, key, e.target.value);
   };
 
   const isInvalid = !ENV_NAME_REGEX.test(key);
@@ -76,15 +76,8 @@ function KeyValueInputs(props) {
   const [keyValuePairs, setKeyValuePairs] = useState([]);
   const { onKeyValuePairChange } = props;
 
-  // Use a ref here so that the `handleKeyValuePairChange` callback
-  // access the right state value and not the one it had when the
-  // callback was passed to the child
-  // TODO: maybe only needed when memoized functions are used?
-  const stateRef = useRef();
-  stateRef.current = keyValuePairs;
-
   const handleKeyValuePairChange = (index, key, value) => {
-    const newKeyValuePairs = stateRef.current.map((keyValuePair) => {
+    const newKeyValuePairs = keyValuePairs.map((keyValuePair) => {
       if (keyValuePair.index === index) {
         return { index, key, value };
       }
@@ -108,7 +101,7 @@ function KeyValueInputs(props) {
   };
 
   const handleDeleteKeyValueClick = (index) => {
-    const newKeyValuePairs = stateRef.current.reduce((result, keyValuePair) => {
+    const newKeyValuePairs = keyValuePairs.reduce((result, keyValuePair) => {
       if (keyValuePair.index !== index) {
         result.push(keyValuePair);
       }

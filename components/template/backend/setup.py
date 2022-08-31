@@ -48,7 +48,7 @@ setup(
     install_requires=[
         "fastapi",
         "loguru",
-        "contaxy==0.0.7",
+        "contaxy==0.0.19",
     ],
     # deprecated: dependency_links=dependency_links,
     extras_require={
@@ -81,6 +81,7 @@ setup(
             # TODO: Move to required when necessary
             "universal-build",
             "requests",
+            "uvicorn",
         ],
     },
     include_package_data=True,
