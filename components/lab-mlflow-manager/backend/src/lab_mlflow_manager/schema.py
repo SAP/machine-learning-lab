@@ -79,8 +79,9 @@ class MLFlowBase(BaseModel):
     _validate_idle_timeout_options: classmethod = check_if_in_options(
         "idle_timeout",
         [
-            timedelta(seconds=t) for t in settings.MLFLOW_IDLE_TIMEOUT_OPTIONS
-        ],  # type: ignore
+            
+            timedelta(seconds=t) for t in settings.MLFLOW_IDLE_TIMEOUT_OPTIONS # type: ignore
+        ],
     )
     clear_volume_on_stop: bool = Field(
         False,
