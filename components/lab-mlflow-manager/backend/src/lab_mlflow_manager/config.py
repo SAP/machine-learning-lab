@@ -44,8 +44,9 @@ class MLFlowManagerSettings(BaseSettings):
     )
     def _parse_int_list(cls, int_list: Union[str, List[int]]) -> Union[str, List[int]]:
         if isinstance(int_list, str):
-            int_list = [int(item.strip())
-                        for item in int_list.split(",")]  # type: ignore
+            int_list = [
+                int(item.strip()) for item in int_list.split(",")
+            ]  # type: ignore
         return sorted(int_list)
 
 

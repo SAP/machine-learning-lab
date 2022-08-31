@@ -15,7 +15,7 @@ from contaxy.schema.deployment import (
 from contaxy.schema.exceptions import (
     CREATE_RESOURCE_RESPONSES,
     ClientValueError,
-    ResourceAlreadyExistsError
+    ResourceAlreadyExistsError,
 )
 
 from contaxy.utils import fastapi_utils
@@ -26,11 +26,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from lab_mlflow_manager.utils import CONTAXY_API_ENDPOINT, get_component_manager
 from lab_mlflow_manager.config import settings
-from lab_mlflow_manager.schema import (
-    MLFlow,
-    MLFlowInput,
-    MLFlowCompute
-)
+from lab_mlflow_manager.schema import MLFlow, MLFlowInput, MLFlowCompute
 
 LABEL_EXTENSION_DEPLOYMENT_TYPE = "ctxy.mlflowExtension.deploymentType"
 
@@ -78,10 +74,12 @@ def deploy_mlflow_server(
 ) -> Any:
     """Create a new ML server by creating a Contaxy service with a mlflow server image in the personal project."""
     logger.debug(
-        f"Deploy ML Flow server request for project {project_id}: {mlflow_input}")
+        f"Deploy ML Flow server request for project {project_id}: {mlflow_input}"
+    )
     host = parse.urlparse(os.getenv("CONTAXY_API_ENDPOINT")).netloc
     service_input = create_mlflow_server_service_input(
-        mlflow_input, token, project_id, host)
+        mlflow_input, token, project_id, host
+    )
     try:
         service = component_manager.get_service_manager().deploy_service(
             project_id=project_id, service_input=service_input
@@ -135,7 +133,8 @@ def start_mlflow_server(
 ) -> Any:
     logger.debug(
         "Start ML Flow server request for project {} and mlflow server {}".format(
-            project_id, mlflow_server_id)
+            project_id, mlflow_server_id
+        )
     )
     component_manager.get_service_manager().execute_service_action(
         project_id=project_id, service_id=mlflow_server_id, action_id=ACTION_START
@@ -155,7 +154,9 @@ def list_mlflow_servers(
 ) -> Any:
     logger.info(f"List ML Flow servers for project {project_id}")
 
-    services = component_manager.get_service_manager().list_services(project_id=project_id)
+    services = component_manager.get_service_manager().list_services(
+        project_id=project_id
+    )
     workspaces = [
         create_mlflow_server_from_service(service)
         for service in services
@@ -215,9 +216,12 @@ def create_mlflow_server_service_input(
             "HOST": host,
         },
         is_stopped=mlflow_input.is_stopped,
-        idle_timeout=mlflow_input.idle_timeout if mlflow_input.idle_timeout != timedelta(
-            0) else None,
-        clear_volume_on_stop=True if settings.MLFLOW_ALWAYS_CLEAR_VOLUME_ON_STOP else mlflow_input.clear_volume_on_stop,
+        idle_timeout=mlflow_input.idle_timeout
+        if mlflow_input.idle_timeout != timedelta(0)
+        else None,
+        clear_volume_on_stop=True
+        if settings.MLFLOW_ALWAYS_CLEAR_VOLUME_ON_STOP
+        else mlflow_input.clear_volume_on_stop,
     )
 
 
@@ -234,7 +238,7 @@ def create_mlflow_server_from_service(service: Service) -> MLFlow:
         compute.memory = service.compute.max_memory
     return MLFlow(
         id=service.id,
-        display_name=service.display_name[len("ML Flow "):],
+        display_name=service.display_name[len("ML Flow ") :],
         container_image=service.container_image,
         compute=compute,
         idle_timeout=service.idle_timeout,
