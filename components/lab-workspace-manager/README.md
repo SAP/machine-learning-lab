@@ -4,7 +4,7 @@ Using the workspace manager UI, the users can view their workspaces, create new 
 
 ## Installation
 Right now the docker image workspace manager is not published in a docker registry, so it need to be build locally.
-Fot this, the build.py script can be used:
+For this, the build.py script can be used:
 ```
 python build.py --make
 ```

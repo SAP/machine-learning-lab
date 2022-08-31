@@ -60,7 +60,7 @@ docker-compose up
 ```
 **Important**: The configurations in the docker-compose.yaml are not meant to be used for production
 as the JWT secret is the default one and the ports of all services are published, instead of only the ML Lab backend service.
-For a list of all configurable environment variables, have a look at the [contaxy config file](./contaxy/backend/src/contaxy/config.py#L31).
+For a list of all configurable environment variables, have a look at the [contaxy config file](https://github.com/ml-tooling/contaxy/blob/main/backend/src/contaxy/config.py#L32).
 All fields of the `Settings` class represent an environment variable that can be set.
 
 ### Kubernetes Installation

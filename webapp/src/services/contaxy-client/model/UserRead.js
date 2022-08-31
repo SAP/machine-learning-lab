@@ -14,17 +14,18 @@
 import ApiClient from '../ApiClient';
 
 /**
- * The UserRegistration model module.
- * @module model/UserRegistration
+ * The UserRead model module.
+ * @module model/UserRead
  * @version 0.0.19
  */
-class UserRegistration {
+class UserRead {
   /**
-   * Constructs a new <code>UserRegistration</code>.
-   * @alias module:model/UserRegistration
+   * Constructs a new <code>UserRead</code>.
+   * @alias module:model/UserRead
+   * @param id {String} Unique ID of the user.
    */
-  constructor() {
-    UserRegistration.initialize(this);
+  constructor(id) {
+    UserRead.initialize(this, id);
   }
 
   /**
@@ -32,18 +33,20 @@ class UserRegistration {
    * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
    * Only for internal use.
    */
-  static initialize(obj) {}
+  static initialize(obj, id) {
+    obj['id'] = id;
+  }
 
   /**
-   * Constructs a <code>UserRegistration</code> from a plain JavaScript object, optionally creating a new instance.
+   * Constructs a <code>UserRead</code> from a plain JavaScript object, optionally creating a new instance.
    * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
    * @param {Object} data The plain JavaScript object bearing properties of interest.
-   * @param {module:model/UserRegistration} obj Optional instance to populate.
-   * @return {module:model/UserRegistration} The populated <code>UserRegistration</code> instance.
+   * @param {module:model/UserRead} obj Optional instance to populate.
+   * @return {module:model/UserRead} The populated <code>UserRead</code> instance.
    */
   static constructFromObject(data, obj) {
     if (data) {
-      obj = obj || new UserRegistration();
+      obj = obj || new UserRead();
 
       if (data.hasOwnProperty('username')) {
         obj['username'] = ApiClient.convertToType(data['username'], 'String');
@@ -54,8 +57,8 @@ class UserRegistration {
       if (data.hasOwnProperty('disabled')) {
         obj['disabled'] = ApiClient.convertToType(data['disabled'], 'Boolean');
       }
-      if (data.hasOwnProperty('password')) {
-        obj['password'] = ApiClient.convertToType(data['password'], 'String');
+      if (data.hasOwnProperty('id')) {
+        obj['id'] = ApiClient.convertToType(data['id'], 'String');
       }
     }
     return obj;
@@ -66,25 +69,25 @@ class UserRegistration {
  * A unique username on the system.
  * @member {String} username
  */
-UserRegistration.prototype['username'] = undefined;
+UserRead.prototype['username'] = undefined;
 
 /**
  * User email address.
  * @member {String} email
  */
-UserRegistration.prototype['email'] = undefined;
+UserRead.prototype['email'] = undefined;
 
 /**
  * Indicates that user is disabled. Disabling a user will prevent any access to user-accessible resources.
  * @member {Boolean} disabled
  * @default false
  */
-UserRegistration.prototype['disabled'] = false;
+UserRead.prototype['disabled'] = false;
 
 /**
- * Password for the user. The password will be stored in as a hash.
- * @member {String} password
+ * Unique ID of the user.
+ * @member {String} id
  */
-UserRegistration.prototype['password'] = undefined;
+UserRead.prototype['id'] = undefined;
 
-export default UserRegistration;
+export default UserRead;

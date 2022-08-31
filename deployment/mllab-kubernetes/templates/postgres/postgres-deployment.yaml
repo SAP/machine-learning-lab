@@ -1,3 +1,4 @@
+{{- if .Values.integratedPostgres.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +17,7 @@ spec:
   template:
     metadata:
       name: {{ include "machine-learning-lab.fullname" . }}-postgres
-      {{- with .Values.postgres.podAnnotations }}
+      {{- with .Values.integratedPostgres.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -25,25 +26,25 @@ spec:
         ctxy.deploymentType: "core"
         ctxy.deploymentName: "postgres"
     spec:
-      {{- with .Values.postgres.imagePullSecrets }}
+      {{- with .Values.integratedPostgres.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       securityContext:
-        {{- toYaml .Values.postgres.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.integratedPostgres.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
+          image: "{{ .Values.integratedPostgres.image.repository }}:{{ .Values.integratedPostgres.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.integratedPostgres.image.pullPolicy }}
           securityContext:
-            {{- toYaml .Values.postgres.containerSecurityContext | nindent 12 }}
+            {{- toYaml .Values.integratedPostgres.containerSecurityContext | nindent 12 }}
           env:
             - name: POSTGRES_DB
               value: "postgres"
             - name: POSTGRES_USER
-              value: "{{ .Values.postgres.username }}"
+              value: "{{ .Values.integratedPostgres.username }}"
             - name: POSTGRES_PASSWORD
-              value: "{{ .Values.postgres.password }}"
+              value: "{{ .Values.integratedPostgres.password }}"
           ports:
             - name: postgres
               containerPort: 5432
@@ -57,7 +58,7 @@ spec:
           #     path: /
           #     port: http
           resources:
-            {{- toYaml .Values.postgres.resources | nindent 12 }}
+            {{- toYaml .Values.integratedPostgres.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgres-data
@@ -66,15 +67,16 @@ spec:
         - name: postgres-data
           persistentVolumeClaim:
             claimName: {{ include "machine-learning-lab.fullname" . }}-postgres-data
-      {{- with .Values.postgres.nodeSelector }}
+      {{- with .Values.integratedPostgres.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.postgres.affinity }}
+      {{- with .Values.integratedPostgres.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.postgres.tolerations }}
+      {{- with .Values.integratedPostgres.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}

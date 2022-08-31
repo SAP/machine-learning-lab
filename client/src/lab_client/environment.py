@@ -1,15 +1,17 @@
 import os
-import requests
 from typing import Optional
 
 from contaxy.clients import AuthClient, FileClient, ExtensionClient
+from contaxy.clients import DeploymentClient
 from contaxy.clients.shared import BaseUrlSession
 from contaxy.config import API_TOKEN_NAME
-from contaxy.schema.extension import Extension
+from contaxy.schema import File
 
-from .handler.file_handler import FileHandler
-from .handler.mlflow_handler import MLFlowHandler
-from .utils.text_utils import simplify
+from lab_client.handler.file_handler import FileHandler
+from lab_client.handler.job_handler import JobHandler
+from lab_client.handler.service_handler import ServiceHandler
+from lab_client.handler.mlflow_handler import MLFlowHandler
+from lab_client.utils.text_utils import simplify
 
 
 class Environment:
@@ -64,6 +66,9 @@ class Environment:
         if lab_api_token is None:
             lab_api_token = os.getenv(self._ENV_NAME_LAB_API_TOKEN)
 
+        if project is None:
+            project = os.getenv(self._ENV_NAME_LAB_PROJECT)
+
         self.project = project
         self.lab_api_token = lab_api_token
         self.lab_endpoint = lab_endpoint
@@ -74,9 +79,12 @@ class Environment:
         self._endpoint_client.verify = False
         self._auth_client = AuthClient(self._endpoint_client)
         self._file_client = FileClient(self._endpoint_client)
+        self._deployment_client = DeploymentClient(self._endpoint_client)
         self._extension_client = ExtensionClient(self._endpoint_client)
 
         self._file_handler = None
+        self._job_handler = None
+        self._service_handler = None
         self._mlflow_handler = None
 
         self._check_connection()
@@ -193,6 +201,28 @@ class Environment:
         return folder
 
     @property
+    def job_handler(self) -> JobHandler:
+        """
+        Returns the file handler. The file handler provides additional functionality for interacting with the remote storage.
+        """
+
+        if self._job_handler is None:
+            self._job_handler = JobHandler(self, self._deployment_client)
+
+        return self._job_handler
+
+    @property
+    def service_handler(self) -> ServiceHandler:
+        """
+        Returns the file handler. The file handler provides additional functionality for interacting with the remote storage.
+        """
+
+        if self._service_handler is None:
+            self._service_handler = ServiceHandler(self, self._deployment_client)
+
+        return self._service_handler
+
+    @property
     def file_handler(self) -> FileHandler:
         """
         Returns the file handler. The file handler provides additional functionality for interacting with the remote storage.
@@ -223,7 +253,7 @@ class Environment:
         return self.file_handler.upload_file(file_path, data_type, metadata, file_name)
 
     def get_file(
-        self, key: str, version: Optional[str] = None, force_download: bool = False
+        self, key: str, version: Optional[str] = None, force_download: bool = False, unpack: bool = False
     ) -> str:
         """Returns local path to the file for the given `key`.
         If the file is not available locally, download it from the storage of the Lab Instance.
@@ -235,7 +265,41 @@ class Environment:
         Returns:
             Local path to the requested file or `None` if file is not available.
         """
-        return self.file_handler.get_file(key, version, force_download)
+        return self.file_handler.get_file(key, version, force_download, unpack)
+
+    def upload_folder(
+        self,
+        folder_path: str,
+        data_type: str,
+        metadata: dict = None,
+        file_name: str = None,
+    ) -> str:
+        """Packages the folder (via `zipfile`) and uploads the specified folder to the storage of the Lab instance.
+
+        Args:
+            folder_path: Local path to the folder you want ot upload.
+            data_type: Data type of the resulting zip-file. Possible values are `model`, `dataset`, `experiment`.
+            metadata: Adds additional metadata to remote storage (optional).
+            file_name: File name to use in the remote storage. If not provided, the name will be extracted from the provided path (optional)
+        Returns:
+            Key of the uploaded (zipped) folder.
+        """
+        return self.file_handler.upload_folder(folder_path, data_type, metadata, file_name)
+
+    def get_file_metadata(
+        self, project: str, key: str, version: Optional[str] = None
+    ) -> File:
+        """Returns file metadata to the file for the given `key`.
+
+        Args:
+            project: Project ID.
+            key: Key or url of the requested file.
+            version: Version of the file whose metadata is to be returned. If `None` (default) the latest version metadata will be returned.
+
+        Returns:
+            The metadata Dictionary of the file.
+        """
+        return self.file_handler.get_file_metadata(project, key, version)
 
     @property
     def mlflow_handler(self) -> MLFlowHandler:

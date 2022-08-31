@@ -17,19 +17,19 @@ const COLUMNS = [
     title: 'Name',
     numeric: false,
     align: 'left',
-    render: (rowData) => rowData.metadata['ctxy.deploymentName'],
+    render: (rowData) => rowData.display_name,
   },
   {
     field: 'started_at',
     title: 'Started At',
     align: 'left',
-    render: (rowData) => rowData.started_at.getTime(),
+    render: (rowData) => rowData.started_at?.getTime(),
   },
   {
     field: 'finishedAt',
     title: 'Finished At',
     align: 'left',
-    render: (rowData) => rowData.stopped_at.getTime(),
+    render: (rowData) => rowData.stopped_at?.getTime(),
   },
 ];
 
