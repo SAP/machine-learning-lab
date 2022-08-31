@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -23,7 +23,6 @@ function Services(props) {
   const { activeProject } = GlobalStateContainer.useContainer();
   const showAppDialog = useShowAppDialog();
   const [services, reloadServices] = useServices(activeProject.id);
-  const [serviceLogs, setServiceLogs] = useState('');
 
   const onServiceDeploy = useCallback(() => {
     showAppDialog(DeployServiceDialog, {
@@ -78,9 +77,7 @@ function Services(props) {
   const onShowServiceLogs = useCallback(
     async (projectId, serviceId) => {
       try {
-        setServiceLogs(await servicesApi.getServiceLogs(projectId, serviceId));
         showAppDialog(LogsDialog, {
-          content: serviceLogs,
           title: 'Logs',
           projectId,
           serviceId,
@@ -89,7 +86,7 @@ function Services(props) {
         showStandardSnackbar('Could not load service logs');
       }
     },
-    [showAppDialog, serviceLogs]
+    [showAppDialog]
   );
 
   const onServiceDelete = useCallback(
@@ -188,7 +185,6 @@ function Services(props) {
       onShowServiceLogs,
       onShowServiceMetadata,
       reloadServices,
-      serviceLogs,
     ]
   );
 
