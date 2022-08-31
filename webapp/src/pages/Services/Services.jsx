@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -12,6 +12,7 @@ import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
 import ContentDialog from '../../components/Dialogs/ContentDialog';
 import DeployServiceDialog from '../../components/Dialogs/DeployContainerDialog';
 import GlobalStateContainer from '../../app/store';
+import LogsDialog from '../../components/Dialogs/LogsDialog';
 import ResourceActionsDialog from '../../components/Dialogs/ResourceActionsDialog';
 import ServicesContainer from './ServicesContainer';
 import showStandardSnackbar from '../../app/showStandardSnackbar';
@@ -22,6 +23,7 @@ function Services(props) {
   const { activeProject } = GlobalStateContainer.useContainer();
   const showAppDialog = useShowAppDialog();
   const [services, reloadServices] = useServices(activeProject.id);
+  const [serviceLogs, setServiceLogs] = useState('');
 
   const onServiceDeploy = useCallback(() => {
     showAppDialog(DeployServiceDialog, {
@@ -73,13 +75,18 @@ function Services(props) {
   const onShowServiceLogs = useCallback(
     async (projectId, serviceId) => {
       try {
-        const logs = await servicesApi.getServiceLogs(projectId, serviceId);
-        showAppDialog(ContentDialog, { content: logs, title: 'Logs' });
+        setServiceLogs(await servicesApi.getServiceLogs(projectId, serviceId));
+        showAppDialog(LogsDialog, {
+          content: serviceLogs,
+          title: 'Logs',
+          projectId,
+          serviceId,
+        });
       } catch (err) {
         showStandardSnackbar('Could not load service logs');
       }
     },
-    [showAppDialog]
+    [showAppDialog, serviceLogs]
   );
 
   const onServiceDelete = useCallback(
@@ -178,6 +185,7 @@ function Services(props) {
       onShowServiceLogs,
       onShowServiceMetadata,
       reloadServices,
+      serviceLogs,
     ]
   );
 
