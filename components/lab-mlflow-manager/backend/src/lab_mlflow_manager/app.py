@@ -4,11 +4,10 @@ from typing import Any, List, Optional
 from urllib import parse
 
 from contaxy.operations.components import ComponentOperations
-from contaxy.operations import AuthOperations
 from contaxy.utils.auth_utils import get_api_token
 
 from contaxy.schema import Service, ServiceInput
-from contaxy.schema.auth import USER_ID_PARAM, AccessLevel
+from contaxy.schema.auth import USER_ID_PARAM
 from contaxy.schema.deployment import (
     ACTION_START,
     SERVICE_ID_PARAM,
@@ -135,8 +134,8 @@ def start_mlflow_server(
     component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     logger.debug(
-        f"Start ML Flow server request for project {project_id} " +
-        f"and mlflow server {mlflow_server_id}"
+        "Start ML Flow server request for project {} and mlflow server {}".format(
+            project_id, mlflow_server_id)
     )
     component_manager.get_service_manager().execute_service_action(
         project_id=project_id, service_id=mlflow_server_id, action_id=ACTION_START
