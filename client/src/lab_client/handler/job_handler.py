@@ -9,6 +9,7 @@ from loguru import logger
 from tqdm import tqdm
 import time
 
+
 class JobHandler:
     def __init__(self, env, deployment_client: DeploymentClient, check_wait_time: int = 10):
         # Initialize variables
@@ -47,14 +48,14 @@ class JobHandler:
             str: Job ID.
         """
 
-        logger.info('Deploying job '+ job_input.display_name + ' under project : ' + self.env.project)
+        logger.info('Deploying job ' + job_input.display_name + ' under project : ' + self.env.project)
         deployed_job = self.deployment_client.deploy_job(
             project_id=self.env.project,
             job_input=job_input,
             action_id=action_id
         )
         if deployed_job is None:
-            logger.info('Job '+ job_input.display_name + ' could not be deployed successfully!')
+            logger.info('Job ' + job_input.display_name + ' could not be deployed successfully!')
             return None
 
         if wait:
@@ -78,7 +79,7 @@ class JobHandler:
             List[str]: The Job IDs of all jobs.
         """
         all_jobs = []
-        logger.info('Deploying '+ len(job_inputs) + ' jobs under project : ' + self.env.project)
+        logger.info('Deploying ' + len(job_inputs) + ' jobs under project : ' + self.env.project)
         for job_input in job_inputs:
             deployed_job_id = self.deploy_job(
                 job_input=job_input,
@@ -87,7 +88,7 @@ class JobHandler:
             )
             if deployed_job_id:
                 all_jobs.append(deployed_job_id)
-        logger.info('Successfully deployed '+ len(all_jobs) + ' jobs!')
+        logger.info('Successfully deployed ' + len(all_jobs) + ' jobs!')
         return all_jobs
 
     def get_job_metadata(self, job_id: str) -> Dict:
@@ -98,7 +99,7 @@ class JobHandler:
         # Returns
         'Metadata dict' if job was found or 'None'.
         """
-        logger.info('Fetching metadata of job '+  job_id)
+        logger.info('Fetching metadata of job ' + job_id)
         job = self.deployment_client.get_job_metadata(
             project_id=self.env.project,
             job_id=job_id
@@ -117,7 +118,7 @@ class JobHandler:
         Returns:
             str: Status of job
         """
-        logger.info('Checking status of job '+  job_id)
+        logger.info('Checking status of job ' + job_id)
         job = self.deployment_client.get_job_metadata(
             project_id=self.env.project,
             job_id=job_id
@@ -198,7 +199,7 @@ class JobHandler:
         Args:
             job_id (str): Job ID.
         """
-        logger.info('Deleting job '+  job_id)
+        logger.info('Deleting job ' + job_id)
         self.deployment_client.delete_job(
             project_id=self.env.project,
             job_id=job_id
@@ -290,5 +291,5 @@ class JobHandler:
         action_id: str,
         action_execution: ResourceActionExecution = ResourceActionExecution()
     ) -> None:
-        #TODO: Implement this method after the backend changes
+        # TODO: Implement this method after the backend changes
         raise NotImplementedError

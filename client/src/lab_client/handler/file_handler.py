@@ -1,8 +1,7 @@
 from __future__ import absolute_import, division, print_function
-from fileinput import filename
 
 import os
-from typing import Dict, Iterator, List, Optional
+from typing import Iterator, List, Optional
 
 from contaxy.clients import FileClient
 from contaxy.schema import File
@@ -13,6 +12,7 @@ import sys
 from lab_client.utils import file_handler_utils, request_utils
 from zipfile import ZipFile
 import shutil
+
 
 class FileHandler:
     def __init__(self, env, file_client: FileClient):
@@ -246,6 +246,6 @@ class FileHandler:
     ) -> File:
 
         metadata_file = self.file_client.get_file_metadata(project_id,
-            file_key, version)
+                                                           file_key, version)
 
         return metadata_file
