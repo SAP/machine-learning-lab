@@ -46,7 +46,7 @@ function ProjectCard(props) {
   return (
     <>
       <Grid item>
-        <Card className={`${className} card`}>
+        <Card className={`${className} card`} style={{ width: '400px' }}>
           <CardHeader
             avatar={
               <Avatar
