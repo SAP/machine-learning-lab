@@ -46,7 +46,7 @@ function ProjectCard(props) {
   return (
     <>
       <Grid item>
-        <Card className={`${className} card`} style={{ width: '400px' }}>
+        <Card className={`${className} card`}>
           <CardHeader
             avatar={
               <Avatar
@@ -106,6 +106,7 @@ const StyledProjectCard = styled(ProjectCard)`
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 400px;
   }
 
   &.cardContent {
