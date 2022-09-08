@@ -78,7 +78,8 @@ def deploy_mlflow_server(
     )
     host = str(parse.urlparse(os.getenv("CONTAXY_API_ENDPOINT")).netloc)
     service_input = create_mlflow_server_service_input(
-        mlflow_input, token, project_id, host)
+        mlflow_input, token, project_id, host
+    )
     try:
         service = component_manager.get_service_manager().deploy_service(
             project_id=project_id, service_input=service_input
