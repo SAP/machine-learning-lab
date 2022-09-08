@@ -1,32 +1,26 @@
-from datetime import timedelta
 import os
+from datetime import timedelta
 from typing import Any, List, Optional
 from urllib import parse
 
 from contaxy.operations.components import ComponentOperations
-from contaxy.utils.auth_utils import get_api_token
-
 from contaxy.schema import Service, ServiceInput
 from contaxy.schema.auth import USER_ID_PARAM
-from contaxy.schema.deployment import (
-    ACTION_START,
-    SERVICE_ID_PARAM,
-)
+from contaxy.schema.deployment import ACTION_START, SERVICE_ID_PARAM
 from contaxy.schema.exceptions import (
     CREATE_RESOURCE_RESPONSES,
     ClientValueError,
     ResourceAlreadyExistsError,
 )
-
 from contaxy.utils import fastapi_utils
-
+from contaxy.utils.auth_utils import get_api_token
 from fastapi import Depends, FastAPI, Query, Response, status
 from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
 
-from lab_mlflow_manager.utils import CONTAXY_API_ENDPOINT, get_component_manager
 from lab_mlflow_manager.config import settings
-from lab_mlflow_manager.schema import MLFlow, MLFlowInput, MLFlowCompute
+from lab_mlflow_manager.schema import MLFlow, MLFlowCompute, MLFlowInput
+from lab_mlflow_manager.utils import CONTAXY_API_ENDPOINT, get_component_manager
 
 LABEL_EXTENSION_DEPLOYMENT_TYPE = "ctxy.mlflowExtension.deploymentType"
 
