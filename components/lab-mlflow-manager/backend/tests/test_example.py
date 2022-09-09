@@ -1,6 +1,7 @@
 from unittest.mock import Mock
 
 import pytest
+
 from lab_mlflow_manager.app import example_endpoint
 
 
