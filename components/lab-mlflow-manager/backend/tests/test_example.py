@@ -1,7 +1,7 @@
 from unittest.mock import Mock
 
 import pytest
-from mlflow.app import example_endpoint
+from lab_mlflow_manager.app import example_endpoint
 
 
 @pytest.mark.unit
