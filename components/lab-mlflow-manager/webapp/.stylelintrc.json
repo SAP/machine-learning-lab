@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "stylelint-config-recommended",
+    "stylelint-config-prettier"
+  ],
+  "rules": {
+    "no-empty-source": null
+  }
+}

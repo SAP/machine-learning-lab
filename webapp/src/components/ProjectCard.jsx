@@ -106,6 +106,7 @@ const StyledProjectCard = styled(ProjectCard)`
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 400px;
   }
 
   &.cardContent {

@@ -1,7 +1,7 @@
 import os
 from typing import Optional
 
-from contaxy.clients import AuthClient, FileClient
+from contaxy.clients import AuthClient, FileClient, ExtensionClient
 from contaxy.clients import DeploymentClient
 from contaxy.clients.shared import BaseUrlSession
 from contaxy.config import API_TOKEN_NAME
@@ -10,6 +10,7 @@ from contaxy.schema import File
 from lab_client.handler.file_handler import FileHandler
 from lab_client.handler.job_handler import JobHandler
 from lab_client.handler.service_handler import ServiceHandler
+from lab_client.handler.mlflow_handler import MLFlowHandler
 from lab_client.utils.text_utils import simplify
 
 
@@ -79,10 +80,12 @@ class Environment:
         self._auth_client = AuthClient(self._endpoint_client)
         self._file_client = FileClient(self._endpoint_client)
         self._deployment_client = DeploymentClient(self._endpoint_client)
+        self._extension_client = ExtensionClient(self._endpoint_client)
 
         self._file_handler = None
         self._job_handler = None
         self._service_handler = None
+        self._mlflow_handler = None
 
         self._check_connection()
 
@@ -298,3 +301,19 @@ class Environment:
         """
         return self.file_handler.get_file_metadata(project, key, version)
 
+    @property
+    def mlflow_handler(self) -> MLFlowHandler:
+        if self._mlflow_handler is None:
+            self._mlflow_handler = MLFlowHandler(self, self._extension_client)
+
+        return self._mlflow_handler
+
+    def setup_mlflow(self) -> None:
+        """
+        Sets up the MLflow environment.
+
+        * Uses the contaxy API to check if the ML Flow extension is installed
+        * Uses the ML Flow extension API to check if the ML Flow server is running (and if not, starts it)
+        * Sets the tracking URI and token environment variables
+        """
+        return self.mlflow_handler.setup_mlflow()
