@@ -33,5 +33,9 @@ def main(args: dict) -> None:
 
 
 if __name__ == "__main__":
-    args = build_utils.parse_arguments()
+    parser = ArgumentParser()
+    parser.add_argument(
+        f"--contaxy-version", help="Version of the contaxy library to use."
+    )
+    args = build_utils.parse_arguments(argument_parser=parser)
     main(args)
