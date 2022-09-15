@@ -5,6 +5,8 @@ from typing import Iterator, List, Optional
 
 from contaxy.clients import FileClient
 from contaxy.schema import File
+from contaxy.schema.shared import MAX_DISPLAY_NAME_LENGTH
+
 from loguru import logger
 import tqdm
 import sys
@@ -89,6 +91,10 @@ class FileHandler:
 
         if file_name is None:
             file_name = file_path.split(os.sep)[-1]
+
+        if len(file_name) > MAX_DISPLAY_NAME_LENGTH:
+            raise Exception("Error in uploading file " + file_name + ". File name is more than " + str(MAX_DISPLAY_NAME_LENGTH) + " characters.")
+            
         with open(file_path, "rb") as f:
             file = self.file_client.upload_file(
                 self.env.project, f"{data_type}s/{file_name}", f, metadata=metadata

@@ -5,7 +5,8 @@ from lab_client import Environment
 from .conftest import test_settings
 import requests
 import pytest
-
+import random, string
+from contaxy.schema.shared import MAX_DISPLAY_NAME_LENGTH
 
 @pytest.mark.integration
 class TestFile:
@@ -151,3 +152,17 @@ class TestFile:
         for _, _, files in os.walk(local_path):
             for filename in files:
                 assert filename == tf_file_2
+    
+    @pytest.mark.xfail(raises=Exception)
+    def test_file_upload_for_characters_error(self) -> None:
+        env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
+                          lab_api_token=test_settings.LAB_TOKEN,
+                          project=test_settings.LAB_PROJECT)
+        letters = string.ascii_lowercase
+        prefix_str = ''.join(random.choice(letters) for i in range(MAX_DISPLAY_NAME_LENGTH))
+        tf = tempfile.NamedTemporaryFile(prefix=prefix_str)
+        sample_text = "This is a sample text\nWith two lines"
+        with open(tf.name, 'w') as f:
+            f.write(sample_text)
+            f.seek(0)
+            env.upload_file(tf.name, "dataset")
