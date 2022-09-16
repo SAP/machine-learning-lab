@@ -52,29 +52,30 @@ def main(args: dict) -> None:
     if args.get(build_utils.FLAG_CHECK):
         build_python.code_checks(exit_on_error=True, safety=False)
 
-    if args.get(build_utils.FLAG_TEST):
-        build_utils.run("pipenv run coverage erase", exit_on_error=False)
-
-        test_markers = args.get(build_utils.FLAG_TEST_MARKER)
-
-        # if the test_markers list exists, join those markers via "or". pytest will ignore markers it does not know
-        pytest_marker = (
-            "unit"
-            if (not isinstance(test_markers, list) or test_markers == [])
-            else " or ".join(test_markers)
-        )
-        if isinstance(test_markers, list) and INTEGRATION_TEST_MARKER in test_markers:
-            pytest_marker = "integration"
-        # Activated Python Environment (3.8)
-        # TODO: this is not needed since it is the env installed via make: build_python.install_build_env()
-        # Run pytest in pipenv environment
-        build_utils.run(
-            f"pipenv run pytest tests -m {pytest_marker} --cov=src --cov-append --cov-config=setup.cfg --cov-report=xml --cov-report term --cov-report=html",
-            exit_on_error=True,
-        )
-
-        # Update pipfile.lock when all tests are successfull (lock environment)
-        build_utils.run("pipenv lock", exit_on_error=True)
+    # TODO: Write unit tests for mlflow extension
+    # if args.get(build_utils.FLAG_TEST):
+    #     build_utils.run("pipenv run coverage erase", exit_on_error=False)
+    #
+    #     test_markers = args.get(build_utils.FLAG_TEST_MARKER)
+    #
+    #     # if the test_markers list exists, join those markers via "or". pytest will ignore markers it does not know
+    #     pytest_marker = (
+    #         "unit"
+    #         if (not isinstance(test_markers, list) or test_markers == [])
+    #         else " or ".join(test_markers)
+    #     )
+    #     if isinstance(test_markers, list) and INTEGRATION_TEST_MARKER in test_markers:
+    #         pytest_marker = "integration"
+    #     # Activated Python Environment (3.8)
+    #     # TODO: this is not needed since it is the env installed via make: build_python.install_build_env()
+    #     # Run pytest in pipenv environment
+    #     build_utils.run(
+    #         f"pipenv run pytest tests -m {pytest_marker} --cov=src --cov-append --cov-config=setup.cfg --cov-report=xml --cov-report term --cov-report=html",
+    #         exit_on_error=True,
+    #     )
+    #
+    #     # Update pipfile.lock when all tests are successfull (lock environment)
+    #     build_utils.run("pipenv lock", exit_on_error=True)
 
     if args.get(build_utils.FLAG_RELEASE):
         # Create API documentation via lazydocs
