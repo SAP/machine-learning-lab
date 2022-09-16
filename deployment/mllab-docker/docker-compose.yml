@@ -112,25 +112,27 @@ services:
       display_priority: 95
 
     # Artifact, parameter and metric UI and backend
-    #  lab-mlflow-manager:
-    #    container_name: pylab-p-ctxy-global-s-lab-mlflow-manager
-    #    image: lab-mlflow-manager
-    #    environment:
-    #      - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
-    #      - CONTAXY_DEPLOYMENT_NAME=pylab-p-ctxy-global-s-mlflow
-    #      - CONTAXY_SERVICE_URL=/projects/ctxy-global/services/pylab-p-ctxy-global-s-mlflow/access/8080
-    #    labels:
-    #      ctxy.deploymentType: "extension"
-    #      ctxy.deploymentName: "pylab-p-ctxy-global-s-lab-mlflow-manager"
-    #      ctxy.displayName: "MLFlow Server"
-    #      ctxy.endpoints: "8080"
-    #      ctxy.namespace: "pylab"
-    #      ctxy.projectName: "ctxy-global"
-    #      ctxy.extensionType: "global-extension"
-    #      ctxy.icon: "science"
-    #      ctxy.ui_extension_endpoint: "8080/app#/mlflow-server"
-    #      ctxy.api_extension_endpoint: "8080/api"
-    #      display_priority: 95
+    lab-mlflow-manager:
+      container_name: pylab-p-ctxy-global-s-lab-mlflow-manager
+      image: lab-mlflow-manager
+      environment:
+        - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
+        - CONTAXY_DEPLOYMENT_NAME=pylab-p-ctxy-global-s-mlflow
+        - CONTAXY_SERVICE_URL=/projects/ctxy-global/services/pylab-p-ctxy-global-s-mlflow/access/8080
+        - MLFLOW_SERVER_IMAGE=lab-mlflow-server
+        - MLFLOW_SERVER_IDLE_TIMEOUT=86400 # 24 hours
+      labels:
+        ctxy.deploymentType: "extension"
+        ctxy.deploymentName: "pylab-p-ctxy-global-s-lab-mlflow-manager"
+        ctxy.displayName: "Lab MLflow Manager"
+        ctxy.endpoints: "8080"
+        ctxy.namespace: "pylab"
+        ctxy.projectName: "ctxy-global"
+        ctxy.extensionType: "global-extension"
+        ctxy.icon: "science"
+        ctxy.ui_extension_endpoint: "8080/app#/mlflow-server"
+        ctxy.api_extension_endpoint: "8080/api"
+        display_priority: 95
 
 #secrets:
 #  ssl_cert:

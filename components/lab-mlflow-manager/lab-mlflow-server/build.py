@@ -2,14 +2,11 @@ import os
 from argparse import ArgumentParser
 
 from universal_build import build_utils
-from universal_build.helpers import build_docker, build_python, openapi_utils
+from universal_build.helpers import build_docker
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
-WEBAPP_COMPONENT = "webapp"
-PYTHON_LIB_COMPONENT = "backend"
-MLFLOW_SERVER_COMPONENT = "lab-mlflow-server"
-COMPONENT_NAME = "lab-mlflow-manager"
+COMPONENT_NAME = "lab-mlflow-server"
 
 
 def main(args: dict) -> None:
@@ -20,15 +17,9 @@ def main(args: dict) -> None:
 
     version = args.get(build_utils.FLAG_VERSION)
 
-    # Build python lib
-    build_utils.build(PYTHON_LIB_COMPONENT, args)
-
-    # Build MLflow server image
-    build_utils.build(MLFLOW_SERVER_COMPONENT, args)
-
     if args.get(build_utils.FLAG_MAKE):
-        build_utils.build(WEBAPP_COMPONENT, args)
-
+        os.environ["BUILDKIT_PROGRESS"] = "tty"
+        build_utils.run("docker build -t lab-mlflow-server:0.1.0-dev -t lab-mlflow-server:latest  ./")
         build_docker.build_docker_image(
             COMPONENT_NAME, version, exit_on_error=True)
 

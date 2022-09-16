@@ -12,9 +12,9 @@ function MlFlowServerStatusStopped({ onStartMlFlowServer }) {
         textAlign: 'center',
       }}
     >
-      <h1>Your ML Flow Server is Stopped!</h1>
+      <h1>Your MLflow Server is Stopped!</h1>
       <p>
-        The ML Flow server is your project&apos;s data science environment. It
+        The MLflow server is your project&apos;s experiment tracker. It
         allows you to keep track of metrics, parameters and artifacts of
         different experiments.
       </p>
@@ -24,7 +24,7 @@ function MlFlowServerStatusStopped({ onStartMlFlowServer }) {
         color="secondary"
         onClick={onStartMlFlowServer}
       >
-        Start ML Flow Server Now
+        Start MLflow Server Now
       </Button>
     </Box>
   );

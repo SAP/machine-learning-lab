@@ -18,10 +18,8 @@ class MLFlowHandler:
         * Uses the ML Flow extension API to check if the ML Flow server is running (and if not, starts it)
         * Sets the tracking URI and token environment variables
         """
-        extension_display_name = "MLFlow Server"
+        extension_display_name = "Lab MLflow Manager"
         mlflow_extension = self._get_extension(extension_display_name)
-        if not self._is_extension_running(mlflow_extension):
-            self._create_mlflow_server(mlflow_extension)
         tracking_uri = self._get_mlflow_tracking_uri(mlflow_extension)
         self._set_mlflow_env_vars(tracking_uri=tracking_uri, token=self.env.lab_api_token)
 
@@ -30,19 +28,26 @@ class MLFlowHandler:
         all_extensions = self._extension_client.list_extensions(global_project_name)
         for extension in all_extensions:
             if extension.display_name == target_extension:
+                if extension.status != "running":
+                    raise ExtensionNotRunningError("MLflow extension is installed but not running.")
                 return extension
         raise ExtensionNotInstalledError(
             "ML Flow extension is not installed on this ML Lab instance.")
 
-    def _is_extension_running(self, extension: Extension) -> bool:
-        return extension.status == "running"
+    def _get_mlflow_server(self, extension: Extension) -> dict:
+        endpoint = self._get_mlflow_backend_api_endpoint(
+            extension) + "/projects/" + self.env.project + "/mlflow-server"
+        response = requests.get(endpoint, headers={"Authorization": "Bearer " + self.env.lab_api_token})
+        mlflow_server_list = response.json()
+        return mlflow_server_list[0] if len(mlflow_server_list) > 0 else None
 
-    def _create_mlflow_server(self, extension: Extension) -> None:
+    def _create_mlflow_server(self, extension: Extension) -> dict:
         endpoint = self._get_mlflow_backend_api_endpoint(
             extension) + "/projects/" + self.env.project + "/mlflow-server"
         body = {"is_stopped": False}
-        requests.post(
+        response = requests.post(
             endpoint, json=body, headers={"Authorization": "Bearer " + self.env.lab_api_token})
+        return response.json()
 
     def _start_mlflow_server(self, extension: Extension, server_id: str) -> None:
         endpoint = self._get_mlflow_backend_api_endpoint(
@@ -61,15 +66,12 @@ class MLFlowHandler:
             endpoint, headers={"Authorization": "Bearer " + self.env.lab_api_token}).json()
 
         if len(response) == 0:
-            self._create_mlflow_server(extension)
-            # TODO: think of adding max tries or sleep function
-            return self._get_mlflow_tracking_uri(extension)
+            mlflow_server = self._create_mlflow_server(extension)
+        else:
+            mlflow_server = response[0]
 
-        mlflow_server = response[0]
         if mlflow_server["status"] == "stopped":
             self._start_mlflow_server(extension, mlflow_server["id"])
-            # TODO: think of adding max tries or sleep function
-            return self._get_mlflow_tracking_uri(extension)
 
         base_url = self.env.lab_endpoint.replace("/api", "")
         # [:-2] removes trailing slash and 'b' from the url. Removing 'b' uses nginx to talk to the api with the full path
@@ -89,6 +91,15 @@ class MLFlowHandler:
 class ExtensionNotInstalledError(Exception):
     """
     Exception raised when the ML Flow extension is not installed on the Lab instance.
+    """
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class ExtensionNotRunningError(Exception):
+    """
+    Exception raised when the MLflow extension is installed but not running
     """
 
     def __init__(self, message):
