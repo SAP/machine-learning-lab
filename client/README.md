@@ -5,9 +5,7 @@ This library is a high-level abstraction of Contaxy's client library.
 ## How to install
 
 ```shell
-git clone https://github.wdf.sap.corp/ml-foundation/ml-lab-ctxy-py
-cd ml-lab-ctxy-py
-CTXY_PACKAGE_PATH="/path/to/contaxy/backend" pip install -e .
+pip install 'git+https://github.com/SAP/machine-learning-lab.git#egg=lab-client&subdirectory=client'
 ```
 
 ## Usage
@@ -15,17 +13,11 @@ CTXY_PACKAGE_PATH="/path/to/contaxy/backend" pip install -e .
 After installation, the package can be imported:
 
 ```python
-import lab_client
+from lab_client import Environment
+
+# Initialize environment
+env = Environment(project="project-id", lab_endpoint="https://ml-lab-deployment/api", lab_token="project-token")
+
+env.file_handler.list_remote_files() 
+
 ```
-
-## Current progress:
-
-- [x] upload_file
-- [x] get_file
-- [x] print_info
-- [ ] cleanup
-- [ ] upload_folder
-
-Experiment related functions:
-- [ ] create_file_path
-- [ ] create_experiment
