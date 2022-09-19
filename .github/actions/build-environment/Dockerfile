@@ -33,13 +33,12 @@ RUN \
 
 # Update node and yarn version
 RUN apt-get update \
-    && curl -sL https://deb.nodesource.com/setup_17.x | bash - \
+    && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y --no-install-recommends nodejs \
     && npm install -g yarn@1 \
     # Clean up
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-ENV NODE_OPTIONS="--openssl-legacy-provider"
 
 COPY extended-entrypoint.sh /extended-entrypoint.sh
 
