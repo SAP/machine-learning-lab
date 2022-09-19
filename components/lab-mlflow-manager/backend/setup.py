@@ -48,7 +48,7 @@ setup(
     install_requires=[
         "fastapi",
         "loguru",
-        "contaxy==0.0.19",
+        "contaxy==0.0.20",
         "email-validator"
     ],
     # deprecated: dependency_links=dependency_links,

@@ -1,5 +1,6 @@
 import os
-from pathlib import Path
+import re
+from argparse import ArgumentParser
 
 from universal_build import build_utils
 from universal_build.helpers import build_python
@@ -13,12 +14,19 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 INTEGRATION_TEST_MARKER = "integration"
 
 
+def update_contaxy_version(file_path, contaxy_version):
+    with open(file_path, "r+") as f:
+        data = f.read()
+        f.seek(0)
+        f.write(re.sub(r'\"contaxy==[^\"]*\"', f'"contaxy=={contaxy_version}"', data))
+        f.truncate()
+
+
 def main(args: dict) -> None:
     # set current path as working dir
     os.chdir(HERE)
 
     version = args.get(build_utils.FLAG_VERSION)
-
     if version:
         # Update version in _about.py
         build_python.update_version(
@@ -27,12 +35,16 @@ def main(args: dict) -> None:
             exit_on_error=True,
         )
 
+    contaxy_version = args.get("contaxy-version")
+    if contaxy_version:
+        update_contaxy_version("./setup.py", contaxy_version)
+
     if args.get(build_utils.FLAG_MAKE):
         # Install pipenv dev requirements
         build_python.install_build_env(exit_on_error=True)
 
         # Generate the OpenAPI spec so that clients can be generated
-        # build_utils.run("pipenv run ctxy export-openapi-specs ./openapi-spec.json")
+        # build_utils.run("pipenv run ctxy-workspace export-openapi-specs ./openapi-spec.json")
 
         # Build distribution via setuptools
         build_python.build_distribution(exit_on_error=True)
@@ -70,15 +82,19 @@ def main(args: dict) -> None:
             github_url=GITHUB_URL, main_package=MAIN_PACKAGE, exit_on_error=True
         )
         # Publish distribution on pypi
-        build_python.publish_pypi_distribution(
-            pypi_token=args.get(build_python.FLAG_PYPI_TOKEN),
-            pypi_repository=args.get(build_python.FLAG_PYPI_REPOSITORY),
-        )
+        # build_python.publish_pypi_distribution(
+        #     pypi_token=args.get(build_python.FLAG_PYPI_TOKEN),
+        #     pypi_repository=args.get(build_python.FLAG_PYPI_REPOSITORY),
+        # )
 
         # TODO: Publish coverage report: if private repo set CODECOV_TOKEN="token" or use -t
         # build_utils.run("curl -s https://codecov.io/bash | bash -s", exit_on_error=False)
 
 
 if __name__ == "__main__":
-    args = build_python.parse_arguments()
+    parser = ArgumentParser()
+    parser.add_argument(
+        f"--contaxy-version", help="Version of the contaxy library to use."
+    )
+    args = build_python.parse_arguments(argument_parser=parser)
     main(args)
