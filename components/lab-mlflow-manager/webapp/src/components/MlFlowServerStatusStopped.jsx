@@ -14,9 +14,9 @@ function MlFlowServerStatusStopped({ onStartMlFlowServer }) {
     >
       <h1>Your MLflow Server is Stopped!</h1>
       <p>
-        The MLflow server is your project&apos;s experiment tracker. It
-        allows you to keep track of metrics, parameters and artifacts of
-        different experiments.
+        The MLflow server is your project&apos;s experiment tracker. It allows
+        you to keep track of metrics, parameters and artifacts of different
+        experiments.
       </p>
       <Button
         variant="outlined"
