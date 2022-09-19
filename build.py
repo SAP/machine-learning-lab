@@ -11,6 +11,7 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 LAB_COMPONENTS = "components"
 WEBAPP_COMPONENT = "webapp"
+DOCS_COMPONENT = "docs"
 
 PROJECT_NAME = "lab-backend"
 
@@ -40,6 +41,9 @@ def main(args: dict) -> None:
 
     # Build the webapp
     build_utils.build(WEBAPP_COMPONENT, args)
+
+    #Build the docs
+    build_utils.build(DOCS_COMPONENT, args)
 
     # Build ML Lab docker image
     if args.get(build_utils.FLAG_MAKE):
