@@ -57,7 +57,7 @@ export function useServices(projectId) {
   const apiCall = useCallback(async () => {
     try {
       const services = await servicesApi.listServices(projectId);
-      return services;
+      return services.reverse(); // Reverse list so newer entries are in the front
     } catch (err) {
       return [];
     }
@@ -71,7 +71,7 @@ export function useJobs(projectId) {
   const apiCall = useCallback(async () => {
     try {
       const jobs = await jobsApi.listJobs(projectId);
-      return jobs;
+      return jobs.reverse(); // Reverse list so newer entries are in the front
     } catch (err) {
       return [];
     }

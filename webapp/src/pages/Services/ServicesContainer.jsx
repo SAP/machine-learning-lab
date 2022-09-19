@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 
 import MaterialTable from 'material-table';
 
+import moment from 'moment';
+
 const COLUMNS = [
   {
     field: 'status',
@@ -29,7 +31,11 @@ const COLUMNS = [
     field: 'started_at',
     title: 'Started At',
     align: 'left',
-    render: (rowData) => rowData.started_at?.getTime(),
+    type: 'date',
+    defaultSort: 'desc',
+    // render: (rowData) => rowData.started_at?.getTime(),
+    render: (rowData) =>
+      rowData.started_at ? moment(rowData.started_at).fromNow() : '',
   },
 ];
 

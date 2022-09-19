@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 
 import MaterialTable from 'material-table';
 
+import moment from 'moment';
+
 const COLUMNS = [
   {
     field: 'status',
@@ -23,13 +25,16 @@ const COLUMNS = [
     field: 'started_at',
     title: 'Started At',
     align: 'left',
-    render: (rowData) => rowData.started_at?.getTime(),
+    defaultSort: 'desc',
+    render: (rowData) =>
+      rowData.started_at ? moment(rowData.started_at).fromNow() : '',
   },
   {
     field: 'finishedAt',
     title: 'Finished At',
     align: 'left',
-    render: (rowData) => rowData.stopped_at?.getTime(),
+    render: (rowData) =>
+      rowData.stopped_at ? moment(rowData.stopped_at).fromNow() : '',
   },
 ];
 
@@ -53,6 +58,7 @@ function JobsContainer(props) {
       data={data}
       options={{
         filtering: true,
+        sorting: true,
         columnsButton: false,
         exportButton: true,
         exportFileName: 'data',
