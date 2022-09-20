@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-4.6.3">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-4.6.3">
     
     
       
@@ -159,7 +159,7 @@
 
   
 
-<a href="https://github.com/sap/machine-learning-lab/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -206,7 +206,7 @@
 
   
 
-<a href="https://github.com/sap/machine-learning-lab/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -577,6 +577,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../administration/external-oidc-authentication/" title="External OIDC Authentication" class="md-nav__link">
+      External OIDC Authentication
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -842,6 +854,11 @@
         <td>false</td>
     </tr>
     <tr>
+        <td>LAB_SSL_ROOT</td>
+        <td>The path on the host system to the folder containing a custom ssl certificate. The folder must contain a cert.crt and cert.key file. This folder is mounted into the ML Lab container, so to renew the certificate it must be replaced on the host system and the ML Lab container has to be restarted. If the <i>LAB_SSL_ROOT</i> variable is not set, ML Lab will look for a volume named lab_ssl. If no such named volume exists, a self signed certificate will be generated. The <i>LAB_SSL_ROOT</i> variable is only valid for docker local mode as secretes are used on Kubernetes.
+        <td>(optional)</td>
+    </tr>
+    <tr>
         <td>LAB_NAMESPACE</td>
         <td>The namespace used for the ML Lab installation. At the moment, we suggest to not change this value.</td>
         <td>lab</td>
@@ -888,7 +905,7 @@
     </tr>
     <tr>
         <td>ALLOW_SELF_REGISTRATIONS</td>
-        <td>If true, ML Lab will allow user self registrations via register dialog.</td>
+        <td>If true, ML Lab will allow user self registrations via register dialog or automatically create users if external OIDC authentication is enabled.</td>
         <td>true</td>
     </tr>
     <tr>
@@ -928,6 +945,26 @@
         </td>
         <td>Default DockerHub registry</td>
     </tr>
+    <tr>
+        <td>LAB_EXTERNAL_OIDC_AUTH_URL</td>
+        <td>The authorization endpoint used for external OIDC authentication. The client will be redirected to this page to authenticate with the external authentication provider. For detailed information see: <a href="../../administration/external-oidc-authentication">External OIDC Authentication</a></td>
+        <td>(optional)</td>
+    </tr>
+    <tr>
+        <td>LAB_EXTERNAL_OIDC_TOKEN_URL</td>
+        <td>The token endpoint used for external OIDC authentication. It will be used by the backend to obtain the OIDC identity token in exchange for an authorization code. For detailed information see: <a href="../../administration/external-oidc-authentication">External OIDC Authentication</a></td>
+        <td>(optional)</td>
+    </tr>
+    <tr>
+        <td>LAB_EXTERNAL_OIDC_CLIENT_ID</td>
+        <td>The OAuth 2.0 client identifier used for external OIDC authentication. For detailed information see: <a href="../../administration/external-oidc-authentication">External OIDC Authentication</a></td>
+        <td>(optional)</td>
+    </tr>
+    <tr>
+        <td>LAB_EXTERNAL_OIDC_CLIENT_SECRET</td>
+        <td>The OAuth 2.0 client secret used for external OIDC authentication. For detailed information see: <a href="../../administration/external-oidc-authentication">External OIDC Authentication</a></td>
+        <td>(optional)</td>
+    </tr>
 </table>
 
 <h4 id="proxy">Proxy<a class="headerlink" href="#proxy" title="Permanent link">&para;</a></h4>
@@ -937,17 +974,17 @@
 <p>To start  ML Lab in a single-host (local) deployment execute:</p>
 <div class="highlight"><pre><span></span><code>docker run --rm --env <span class="nv">LAB_PORT</span><span class="o">=</span><span class="m">8091</span> -v /var/run/docker.sock:/var/run/docker.sock --env <span class="nv">LAB_ACTION</span><span class="o">=</span>install lab-service:latest
 </code></pre></div>
-
-<p>After the installation is finished (after several minutes depending on intranet speed), visit <code>http://&lt;HOSTIP&gt;:8091</code> and login with <code>admin:admin</code>.</p>
+<p>After the installation is finished (after several minutes depending on internet speed), visit <code>http://&lt;HOSTIP&gt;:8091</code> and login with <code>admin:admin</code>.</p>
 <p><strong>Enable SSL</strong></p>
-<p>For SSL setup, create the certificates and mount them into the container's directory at <code>/resources/ssl</code> (<code>-v /workspace/ssl:/resources/ssl:ro</code>) and start with <code>--env SERVICE_SSL_ENABLED=true</code>:</p>
+<p>For SSL setup, create the certificate (files must be called cert.crt and cert.key) and specify their path on the host machine via the <code>LAB_SSL_ROOT</code> environment variable. Additionally you need to set <code>SERVICE_SSL_ENABLED</code> to true:
 <div class="highlight"><pre><span></span><code>docker run --rm --env <span class="nv">LAB_PORT</span><span class="o">=</span><span class="m">8091</span> <span class="se">\</span>
+    --env <span class="nv">SERVICE_SSL_ENABLED</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+    --env <span class="nv">LAB_SSL_ROOT</span><span class="o">=</span>/workspace/ssl <span class="se">\</span>
     -v /var/run/docker.sock:/var/run/docker.sock <span class="se">\</span>
-    -v /workspace/ssl:/resources/ssl:ro <span class="se">\</span>
     lab-service:latest
-</code></pre></div>
-
-<p>If you don't provide certificates, a self-signed certificate is generated and used. Be aware that applications such as your browser might not trust the certificate.</p>
+</code></pre></div></p>
+<p>Alternatively, instead of specifying <code>LAB_SSL_ROOT</code>, the certificate can be provided in a docker volume named <code>lab_ssl</code>.
+If you don't provide a custom certificate, a self-signed certificate is generated and used. Be aware that applications such as your browser might not trust the certificate.</p>
 <h3 id="install-with-kubernetes-mode-own-cluster">Install with Kubernetes Mode (Own Cluster)<a class="headerlink" href="#install-with-kubernetes-mode-own-cluster" title="Permanent link">&para;</a></h3>
 <p>These steps are for a custom cluster that does not use a hyperscaler / automated infrastructure in the background. If you have a managed cluster (such as AWS EKS), then please follow the steps in the next Section.</p>
 <div class="admonition info">
@@ -967,7 +1004,6 @@ apt-get install nfs-common
 <span class="c1"># Hence, when creating a Lab for default namespace &#39;lab&#39;:</span>
 mkdir -p /workspace/lab/lab/data
 </code></pre></div>
-
 <p><strong>Installation</strong></p>
 <div class="highlight"><pre><span></span><code><span class="c1"># On Mac: in ~/.kube/config for &#39;server&#39; field replace &#39;localhost&#39; with &#39;docker.for.mac.localhost&#39;</span>
 docker run --rm --env <span class="nv">LAB_PORT</span><span class="o">=</span><span class="m">30001</span> <span class="se">\</span>
@@ -977,7 +1013,6 @@ docker run --rm --env <span class="nv">LAB_PORT</span><span class="o">=</span><s
     --env <span class="nv">LAB_DATA_ROOT</span><span class="o">=</span>/workspace/lab/stulabdio/data <span class="se">\</span>
     lab-service:latest
 </code></pre></div>
-
 <p>After installation is finished (after several minutes depending on intranet speed), visit <code>http://&lt;HOSTIP&gt;:30001</code> and login with <code>admin:admin</code>.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -994,7 +1029,6 @@ docker run --rm --env <span class="nv">LAB_PORT</span><span class="o">=</span><s
     -v /workspace/ssl:/resources/ssl:ro <span class="se">\</span>
     lab-service:latest
 </code></pre></div>
-
 <p>The files have to be named <code>cert.crt</code> and <code>cert.key</code> .</p>
 <h3 id="install-with-kubernetes-managed-cluster-such-as-aws-eks">Install with Kubernetes (Managed Cluster such as AWS EKS)<a class="headerlink" href="#install-with-kubernetes-managed-cluster-such-as-aws-eks" title="Permanent link">&para;</a></h3>
 <p>TODO</p>
@@ -1003,7 +1037,7 @@ docker run --rm --env <span class="nv">LAB_PORT</span><span class="o">=</span><s
 In this setup mode, ML Lab accesses the cluster via its ServiceAccount permissions and <em>not</em> via a mounted kube-config.</p>
 <div class="admonition warn">
 <p class="admonition-title">Costs</p>
-<p>As volumes are created automatically on the infrastructure based on the Kubernetes persistent volume claims, make sure to have an eye on your costs and set the size for the volume via the respective environment variables accordingly. Even when deleting the Kuberentes PersistentVolume and PersistentVolumeClaim resources, the actual volumes might still exist on the cloud provider and have to be deleted manually. </p>
+<p>As volumes are created automatically on the infrastructure based on the Kubernetes persistent volume claims, make sure to have an eye on your costs and set the size for the volume via the respective environment variables accordingly. Even when deleting the Kuberentes PersistentVolume and PersistentVolumeClaim resources, the actual volumes might still exist on the cloud provider and have to be deleted manually.  </p>
 </div>
 <h2 id="after-installation">After Installation<a class="headerlink" href="#after-installation" title="Permanent link">&para;</a></h2>
 <p>Please makes sure to change the <code>admin</code> password (<code>User-menu -&gt; Change Password</code>) after the installation was successful. We also recommend to activate a data backup job as described <a href="../../administration/backup-data/">here</a>. Check out the administration section in this documentation for more information on how to <a href="../../administration/update-lab/">update</a>/<a href="../../administration/uninstall-lab/">uninstall</a> Lab, or <a href="../../administration/manage-services/">manage services</a>.</p>
@@ -1087,7 +1121,7 @@ In this setup mode, ML Lab accesses the cluster via its ServiceAccount permissio
     
       <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.1.2",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.3.1",url:{base:"../.."}})</script>
       
     
     <script>

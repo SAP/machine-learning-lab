@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-4.6.3">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-4.6.3">
     
     
       
@@ -159,7 +159,7 @@
 
   
 
-<a href="https://github.com/sap/machine-learning-lab/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -206,7 +206,7 @@
 
   
 
-<a href="https://github.com/sap/machine-learning-lab/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -594,6 +594,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../administration/external-oidc-authentication/" title="External OIDC Authentication" class="md-nav__link">
+      External OIDC Authentication
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -888,12 +900,10 @@
 <span class="c1"># Run the job. To run the job in background, set check_status to False.</span>
 <span class="n">job_handler</span><span class="o">.</span><span class="n">run_job</span><span class="p">(</span><span class="n">demo_job</span><span class="p">,</span> <span class="n">check_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
-
 <h3 id="docker-infrastructure">Docker Infrastructure<a class="headerlink" href="#docker-infrastructure" title="Permanent link">&para;</a></h3>
 <p>Since the job is just a normal Docker container, you can run it on any Docker infrastructure via <a href="https://docs.docker.com/engine/reference/run/"><code>docker run</code></a> and provide the required parameters via <code>--env</code>:</p>
 <div class="highlight"><pre><span></span><code>docker run -d --env <span class="nv">EXAMPLE_PARAMETER</span><span class="o">=</span>example &lt;YOUR_JOB_DOCKER_IMAGE&gt;
 </code></pre></div>
-
 <h3 id="kubernetes-infrastructure">Kubernetes Infrastructure<a class="headerlink" href="#kubernetes-infrastructure" title="Permanent link">&para;</a></h3>
 <p>For Kubernetes, please refer to <a href="https://kubernetes.io/docs/reference/kubectl/docker-cli-to-kubectl/">this guide</a>.</p>
 <h2 id="run-job-via-workspace-image">Run job via workspace image<a class="headerlink" href="#run-job-via-workspace-image" title="Permanent link">&para;</a></h2>
@@ -902,7 +912,6 @@
 <p>You can execute code directly from Git, Mercurial, Subversion, or Bazaar by using the pip-vcs format as described in <a href="https://pip.pypa.io/en/stable/reference/pip_install/#vcs-support">this guide</a>. For example, to execute code from a <a href="https://github.com/ml-tooling/ml-workspace/tree/develop/docker-res/tests/ml-job">subdirectory</a> of a git repository, just run:</p>
 <div class="highlight"><pre><span></span><code>docker run --env <span class="nv">EXECUTE_CODE</span><span class="o">=</span><span class="s2">&quot;git+https://github.com/ml-tooling/ml-workspace.git#subdirectory=docker-res/tests/ml-job&quot;</span> mltooling/ml-workspace:latest
 </code></pre></div>
-
 <div class="admonition info">
 <p class="admonition-title">Select branches, commits, or tags</p>
 <p>For additional information on how to specify branches, commits, or tags please refer to <a href="https://pip.pypa.io/en/stable/reference/pip_install/#vcs-support">this guide</a>.</p>
@@ -911,7 +920,6 @@
 <p>In the following example, we mount and execute the current working directory (expected to contain our code) into the <code>/workspace/ml-job/</code> directory of the workspace:</p>
 <div class="highlight"><pre><span></span><code>docker run -v <span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">:/workspace/ml-job/&quot;</span> --env <span class="nv">EXECUTE_CODE</span><span class="o">=</span><span class="s2">&quot;/workspace/ml-job/&quot;</span> mltooling/ml-workspace:latest
 </code></pre></div>
-
 <h3 id="run-code-from-lab-data">Run code from Lab data<a class="headerlink" href="#run-code-from-lab-data" title="Permanent link">&para;</a></h3>
 <p>You can also run the job via data uploaded to Lab (single script or packaged code) by specifing the key via the <code>EXECUTE_CODE</code> variable.</p>
 <h3 id="install-dependencies">Install Dependencies<a class="headerlink" href="#install-dependencies" title="Permanent link">&para;</a></h3>
@@ -926,20 +934,19 @@
 <p>You can test your job code within the workspace (started normally with interactive tools) by executing the following python script:</p>
 <div class="highlight"><pre><span></span><code>python /resources/scripts/execute_code.py /path/to/your/job
 </code></pre></div>
-
 <h3 id="build-a-custom-job-image">Build a custom job image<a class="headerlink" href="#build-a-custom-job-image" title="Permanent link">&para;</a></h3>
 <p>It is also possible to embed your code directly into a custom job image, as shown below:</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">mltooling/ml-workspace:latest</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">mltooling/ml-workspace:latest</span>
 
 <span class="c"># Add job code to image</span>
-<span class="k">COPY</span> ml-job /workspace/ml-job
-<span class="k">ENV</span> <span class="nv">EXECUTE_CODE</span><span class="o">=</span>/workspace/ml-job
+<span class="k">COPY</span><span class="w"> </span>ml-job /workspace/ml-job
+<span class="k">ENV</span><span class="w"> </span><span class="nv">EXECUTE_CODE</span><span class="o">=</span>/workspace/ml-job
 
 <span class="c"># Install requirements only</span>
-<span class="k">RUN</span> python /resources/scripts/execute_code.py --requirements-only
+<span class="k">RUN</span><span class="w"> </span>python /resources/scripts/execute_code.py --requirements-only
 
 <span class="c"># Execute only the code at container startup</span>
-<span class="k">CMD</span> <span class="p">[</span><span class="s2">&quot;python&quot;</span><span class="p">,</span> <span class="s2">&quot;/resources/docker-entrypoint.py&quot;</span><span class="p">,</span> <span class="s2">&quot;--code-only&quot;</span><span class="p">]</span>
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;/resources/docker-entrypoint.py&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--code-only&quot;</span><span class="p">]</span>
 </code></pre></div>
                 
                   
@@ -1021,7 +1028,7 @@
     
       <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.1.2",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.3.1",url:{base:"../.."}})</script>
       
     
     <script>

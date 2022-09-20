@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-4.6.3">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-4.6.3">
     
     
       
@@ -159,7 +159,7 @@
 
   
 
-<a href="https://github.com/sap/machine-learning-lab/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -206,7 +206,7 @@
 
   
 
-<a href="https://github.com/sap/machine-learning-lab/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -520,6 +520,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../administration/external-oidc-authentication/" title="External OIDC Authentication" class="md-nav__link">
+      External OIDC Authentication
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -673,20 +685,24 @@
 <p>Above the dashboard you can see meta information of all experiments that have run. An experiment itself is a row and can have attributes that are shown as columns. Each experiment has a status, indicating whether the experiment has completed, failed, or is still running. There are also other status such as dead, queued, and interrupted. Those can occur by the nature of Jupyter notebook kernels.</p>
 <h2 id="expendable-rows">Expendable Rows<a class="headerlink" href="#expendable-rows" title="Permanent link">&para;</a></h2>
 <p>To get an idea of what you can track, you can expand the row to have a more consolidated view on different information types.</p>
-<p><a href="../images/exp-expendable-rows.gif"><img alt="Expendable Rows" src="../images/exp-expendable-rows.gif" /></a>
-<!-- <div style="width:100%; margin:auto"><img src="../images/exp-expendable-rows.gif" alt="drawing"/></div> --></p>
+<p><a href="../images/exp-expendable-rows.gif"><img alt="Expendable Rows" src="../images/exp-expendable-rows.gif" /></a></p>
+<!-- <div style="width:100%; margin:auto"><img src="../images/exp-expendable-rows.gif" alt="drawing"/></div> -->
+
 <p>Not only can you find all the defined metrics for your experiment but also dependencies, used artifacts, host information (such as CPU, OS, number of cores, python version, workspace version and number of GPUs), Git information and all defined parameters and files that you can download directly. To improve reproducibility, you can store your datasets you used for training and testing your model here, so that others easily can take the same dataset you used.</p>
 <h2 id="grouping">Grouping<a class="headerlink" href="#grouping" title="Permanent link">&para;</a></h2>
 <p>Another handy feature of the Experiment Dashboard is the grouping of attributes. You can easily group attributes, resulting in a tree view. This makes it easy to group experiments by operators of the project, status, or parameters. Additionally, it is possible to combine attributes leading to a nested tree view.</p>
-<p><a href="../images/exp-grouping.gif"><img alt="Grouping" src="../images/exp-grouping.gif" /></a>
-<!-- <div style="width:100%; margin:auto"><img src="../images/exp-grouping.gif" alt="drawing"/></div> --></p>
+<p><a href="../images/exp-grouping.gif"><img alt="Grouping" src="../images/exp-grouping.gif" /></a></p>
+<!-- <div style="width:100%; margin:auto"><img src="../images/exp-grouping.gif" alt="drawing"/></div> -->
+
 <h2 id="search">Search<a class="headerlink" href="#search" title="Permanent link">&para;</a></h2>
 <p>Within the Dashboard you have two options to filter for specific values. Either you use the overall search for any string matching each column, as shown in the gif below or you use filters dedicated for a specific column.</p>
-<p><a href="../images/exp-search.gif"><img alt="Search" src="../images/exp-search.gif" /></a>
-<!-- <div style="width:100%; margin:auto"><img src="../images/exp-search.gif" alt="drawing"/></div> --></p>
+<p><a href="../images/exp-search.gif"><img alt="Search" src="../images/exp-search.gif" /></a></p>
+<!-- <div style="width:100%; margin:auto"><img src="../images/exp-search.gif" alt="drawing"/></div> -->
+
 <p>The latter comes with the advantage that you can use comparative expressions. By clicking on the icon filter of the result column, you can choose operands such as greater than, greater, less and so on. By now, there are custom filters for date, text, and numbers.</p>
-<p><a href="../images/exp-comparative-expressions.png"><img alt="Comparative Expressions" src="../images/exp-comparative-expressions.png" /></a>
-<!-- <div style="width:100%; margin:auto"><img src="../images/exp-comparative-expressions.png" alt="drawing"/></div> --></p>
+<p><a href="../images/exp-comparative-expressions.png"><img alt="Comparative Expressions" src="../images/exp-comparative-expressions.png" /></a></p>
+<!-- <div style="width:100%; margin:auto"><img src="../images/exp-comparative-expressions.png" alt="drawing"/></div> -->
+
 <h2 id="attribute-selection">Attribute Selection<a class="headerlink" href="#attribute-selection" title="Permanent link">&para;</a></h2>
 <p>By default you are looking at the Dashboard with a basic set of columns. Those were curated by us as we think they give a good overview at the first glance. In case you want to compare other attributes as well, like parameters or metrics, you can do so by choosing them after clicking on the <strong>Columns button</strong>. We gathered all attributes based on the experiments you have run so far at this point, meaning there will only attributes show up you used once.</p>
 <p><a href="../images/exp-attribute-selection.gif"><img alt="Attribute Selection" src="../images/exp-attribute-selection.gif" /></a></p>
@@ -776,7 +792,7 @@
     
       <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.1.2",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.3.1",url:{base:"../.."}})</script>
       
     
     <script>

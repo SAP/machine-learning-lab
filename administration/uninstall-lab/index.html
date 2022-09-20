@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-4.6.3">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-4.6.3">
     
     
       
@@ -159,7 +159,7 @@
 
   
 
-<a href="https://github.com/sap/machine-learning-lab/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -206,7 +206,7 @@
 
   
 
-<a href="https://github.com/sap/machine-learning-lab/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -456,6 +456,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../external-oidc-authentication/" title="External OIDC Authentication" class="md-nav__link">
+      External OIDC Authentication
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -555,7 +567,6 @@
 <p>All docker resources of an ML Lab installation are labeled by the used <code>LAB_NAMESPACE</code> (default=<code>lab</code>). These docker resources related to a ML Lab installation (regardless if it is installed in docker, or kubernetes mode) can be removed via a convenient <code>docker run</code> command:</p>
 <div class="highlight"><pre><span></span><code>docker run --rm --env <span class="nv">LAB_ACTION</span><span class="o">=</span>uninstall -v /var/run/docker.sock:/var/run/docker.sock lab-service:latest
 </code></pre></div>
-
 <p>All resources started outside of the ML Lab instance, e.g. <a href="../backup-data">Backup Jobs</a>, need to be removed manually. If you have used another <code>LAB_NAMESPACE</code> than the default one (<code>lab</code>), you need to specify this namespace as well (<code>--env LAB_NAMESPACE="YOUR_NAMESPACE"</code>).</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -641,7 +652,7 @@
     
       <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.1.2",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.3.1",url:{base:"../.."}})</script>
       
     
     <script>

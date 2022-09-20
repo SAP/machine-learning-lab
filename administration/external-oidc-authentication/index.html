@@ -13,7 +13,7 @@
         <meta name="description" content="Documentation for the Machine Learning Lab">
       
       
-        <link rel="canonical" href="https://sap.github.io/machine-learning-lab/architecture/architecture/">
+        <link rel="canonical" href="https://sap.github.io/machine-learning-lab/administration/external-oidc-authentication/">
       
       
         <meta name="author" content="Lukas Masuch & Benjamin Räthlein">
@@ -42,7 +42,7 @@
     
     
       
-        <title>ML Lab Architecture - Machine Learning Lab</title>
+        <title>External OIDC Authentication - Machine Learning Lab</title>
       
     
     
@@ -91,7 +91,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#architecture" tabindex="0" class="md-skip">
+      <a href="#external-oidc-authentication" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -117,7 +117,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                ML Lab Architecture
+                External OIDC Authentication
               
             </span>
           
@@ -382,10 +382,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" checked>
     
     <label class="md-nav__link" for="nav-6">
       Administration
@@ -403,7 +405,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../administration/update-lab/" title="Update ML Lab" class="md-nav__link">
+    <a href="../update-lab/" title="Update ML Lab" class="md-nav__link">
       Update ML Lab
     </a>
   </li>
@@ -415,7 +417,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../administration/uninstall-lab/" title="Uninstall ML Lab" class="md-nav__link">
+    <a href="../uninstall-lab/" title="Uninstall ML Lab" class="md-nav__link">
       Uninstall ML Lab
     </a>
   </li>
@@ -427,7 +429,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../administration/manage-services/" title="Manage Services" class="md-nav__link">
+    <a href="../manage-services/" title="Manage Services" class="md-nav__link">
       Manage Services
     </a>
   </li>
@@ -439,58 +441,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../administration/backup-data/" title="Backup Data" class="md-nav__link">
+    <a href="../backup-data/" title="Backup Data" class="md-nav__link">
       Backup Data
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../administration/external-oidc-authentication/" title="External OIDC Authentication" class="md-nav__link">
-      External OIDC Authentication
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-  
-
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-    
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7" checked>
-    
-    <label class="md-nav__link" for="nav-7">
-      Architecture
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-7">
-        Architecture
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../machine-learning-lifecycle/" title="ML Lifecycle" class="md-nav__link">
-      ML Lifecycle
     </a>
   </li>
 
@@ -509,10 +461,101 @@
       
     
     
-    <a href="./" title="ML Lab Architecture" class="md-nav__link md-nav__link--active">
-      ML Lab Architecture
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        External OIDC Authentication
+      </label>
+    
+    <a href="./" title="External OIDC Authentication" class="md-nav__link md-nav__link--active">
+      External OIDC Authentication
     </a>
     
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-ml-lab-authentication-flow" class="md-nav__link">
+    The ML Lab Authentication Flow
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-external-oidc-authentication-with-azure-ad" class="md-nav__link">
+    Setup external OIDC authentication with Azure AD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-external-oidc-authentication-with-dex" class="md-nav__link">
+    Setup external OIDC authentication with Dex
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Architecture
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Architecture
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../architecture/machine-learning-lifecycle/" title="ML Lifecycle" class="md-nav__link">
+      ML Lifecycle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../architecture/architecture/" title="ML Lab Architecture" class="md-nav__link">
+      ML Lab Architecture
+    </a>
   </li>
 
         
@@ -550,6 +593,36 @@
     
   
   
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-ml-lab-authentication-flow" class="md-nav__link">
+    The ML Lab Authentication Flow
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-external-oidc-authentication-with-azure-ad" class="md-nav__link">
+    Setup external OIDC authentication with Azure AD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-external-oidc-authentication-with-dex" class="md-nav__link">
+    Setup external OIDC authentication with Dex
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -560,23 +633,43 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/sap/machine-learning-lab/edit/master/docs/architecture/architecture.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/sap/machine-learning-lab/edit/master/docs/administration/external-oidc-authentication.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
-<p>The following figure displays the different resource types managed by the ML Lab container. The resources <em>Minio</em>, <em>Mongo</em>, and <em>NFS</em> exist once.</p>
-<p>All traffic goes through the ML Lab container. It was designed to scale horizontally, although this functionality has not been thoroughly tested yet. So far, no performance issues were observed as the heavy load happens inside the Service or Workspace containers, such as running Python code. </p>
-<p><em>Workspace</em> containers are started for each user. Indifinetely <em>Services</em> and <em>Jobs</em> can exist within each project, only limited by the underlying infrastructure. In Kubernetes, an admin can theoretically scale a single <em>Service</em> manually.</p>
-<p>By ML Lab created resources follow a naming pattern and are assigned specific labels (Docker &amp; Kubernetes) that assign them to specific projects. By doing so, the capabilities of the underlying infrastructure technology is leveraged.</p>
-<!-- and resources are coupled quite loosely, resulting in reduced maintenance on other parts such as databases. -->
-
-<p><a href="../images/lab-architecture-resources.pdf"><img alt="ML Lab Resources" src="../images/lab-architecture-resources.png" /></a></p>
-<p>The next figure visualizes the most important components within the ML Lab container. Inside of the ML Lab container, the nginx proxy is the first request handler. It determines whether the request goes to the Java backend, which is also hosted inside of the ML Lab container, or whether it goes to another container.</p>
-<p><a href="../images/lab-architecture-backend-container.pdf"><img alt="ML Lab Container" src="../images/lab-architecture-backend-container.png" /></a></p>
-<p>The following diagram shows the routing of requests with respect to the ML Lab container in more detail.</p>
-<p><a href="../images/lab-architecture-request-routing.pdf"><img alt="ML Lab Request Routing" src="../images/lab-architecture-request-routing.png" /></a></p>
-<p>The following figure gives an high-level overview of the concepts that exist withtin the ML Lab world.</p>
-<p><a href="../images/lab-architecture-concepts.pdf"><img alt="ML Lab Concepts" src="../images/lab-architecture-concepts.png" /></a></p>
+                <h1 id="external-oidc-authentication">External OIDC Authentication<a class="headerlink" href="#external-oidc-authentication" title="Permanent link">&para;</a></h1>
+<p>By default, ML Lab offers authentication via username and password.
+Users are either allowed to self-register or an admin needs to create their account and set an initial password.
+This approach is simple but not always the safest as users might choose weak passwords or do not change them regularly.
+That is why ML Lab allows the configuration of an external OIDC authentication provider (Azure AD, GitHub, etc.) to delegate the authentication to a third party.
+OIDC is a simple identity layer on top of the OAuth 2.0 protocol and is supported by many authentication providers.</p>
+<h2 id="the-ml-lab-authentication-flow">The ML Lab Authentication Flow<a class="headerlink" href="#the-ml-lab-authentication-flow" title="Permanent link">&para;</a></h2>
+<p><a href="../images/ml-lab-authentication-flow.png"><img alt="ML Lab Authentication Flow" src="../images/ml-lab-authentication-flow.png" /></a></p>
+<p>The sequence diagram above shows how ML Lab interacts with the external OIDC authentication provider.
+After the user visits the login page, the browser is redirected to the external OIDC authentication endpoint which was configured via the environment variable <code>LAB_EXTERNAL_OIDC_AUTH_URL</code>.
+Once the user authenticated successfully, the browser is redirected back to ML Lab backend.
+It uses the configured external OIDC token URL (environment variable <code>LAB_EXTERNAL_OIDC_TOKEN_URL</code>), the client ID (environment variable <code>LAB_EXTERNAL_OIDC_CLIENT_ID</code>) and client secret (environment variable <code>LAB_EXTERNAL_OIDC_CLIENT_SECRET</code>) to request the user's OIDC identity token.
+This token contains the user's e-mail address which functions as the username.
+An ML Lab JWT token is set as a cookie in the user's browser so ML Lab can be used without further authentication.</p>
+<h2 id="setup-external-oidc-authentication-with-azure-ad">Setup external OIDC authentication with Azure AD<a class="headerlink" href="#setup-external-oidc-authentication-with-azure-ad" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Open the Azure portal, navigate to the Azure Active Directory" page and select "App registration" from the left side menu.</li>
+<li>Click on the "Endpoints" tab.
+The value shown for "OAuth 2.0 authorization endpoint (v2)" must be used for the <code>LAB_EXTERNAL_OIDC_AUTH_URL</code> environment variable.
+The value shown for "OAuth 2.0 token endpoint (v2)" must be used for the <code>LAB_EXTERNAL_OIDC_TOKEN_URL</code> environment variable.</li>
+<li>Click on the tab "New registration" and create a new app registration for ML Lab.</li>
+<li>On the "Overview" page, copy the value of the "Application (client) ID" field. It will be used for the <code>LAB_EXTERNAL_OIDC_CLIENT_ID</code> environment variable.</li>
+<li>On the left side menu choose "Certificates &amp; secrets" and click on "New client secret". Choose a name and expiration time. After that, copy the value of new newly created client secret.
+It will be use for the <code>LAB_EXTERNAL_OIDC_CLIENT_SECRET</code> environment variable. The "ID" field is not required.</li>
+<li>On the left side menu choose "Authentication" and click on "Add a platform".
+There choose the "Web" platform and add the callback URL of your ML Lab instance (https://&lt;insert-your-host&gt;/api/auth/oidc/callback). Save your changes afterwards.</li>
+<li>Now you can install the ML Lab like described <a href="../../installation/install-lab/">here</a> and set the required environment variables.</li>
+</ol>
+<h2 id="setup-external-oidc-authentication-with-dex">Setup external OIDC authentication with Dex<a class="headerlink" href="#setup-external-oidc-authentication-with-dex" title="Permanent link">&para;</a></h2>
+<p>Dex is and identity service that uses OpenID Connect (OIDC) and provides a range of connectors to other authentication methods like SAML 2.0, LDAP, GitHub Oauth 2.0 and many more.
+Detailed information on how to setup Dex can be found here: <a href="https://github.com/dexidp/dex">https://github.com/dexidp/dex</a>
+It can be run as a docker container alongside ML Lab.
+In the dex configuration file the client id and secret can be specified.
+After starting Dex, the authentication and token URL can be found at <code>/dex/.well-known/openid-configuration</code>.</p>
                 
                   
                 
@@ -598,7 +691,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../machine-learning-lifecycle/" title="ML Lifecycle" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../backup-data/" title="Backup Data" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -607,19 +700,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                ML Lifecycle
+                Backup Data
               </span>
             </div>
           </a>
         
         
-          <a href="../../faq/" title="FAQ" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../architecture/machine-learning-lifecycle/" title="ML Lifecycle" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                FAQ
+                ML Lifecycle
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

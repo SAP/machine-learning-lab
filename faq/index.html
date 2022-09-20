@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-4.6.3">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-4.6.3">
     
     
       
@@ -159,7 +159,7 @@
 
   
 
-<a href="https://github.com/sap/machine-learning-lab/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -206,7 +206,7 @@
 
   
 
-<a href="https://github.com/sap/machine-learning-lab/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -445,6 +445,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../administration/external-oidc-authentication/" title="External OIDC Authentication" class="md-nav__link">
+      External OIDC Authentication
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -550,32 +562,50 @@
                 
                 
                 <h1 id="faq">FAQ<a class="headerlink" href="#faq" title="Permanent link">&para;</a></h1>
-<details class="question"><summary>I have problems with my containers. What should I do?</summary><p>The range of issues can be big. A good first thing would be to have a look into the container logs, either via the <a href="../administration/manage-services/">Service Administration Dashboard</a> (accessible in the web app for admin users) or via command line on the host system. It might also help to just restart you server.</p>
+<details class="question">
+<summary>I have problems with my containers. What should I do?</summary>
+<p>The range of issues can be big. A good first thing would be to have a look into the container logs, either via the <a href="../administration/manage-services/">Service Administration Dashboard</a> (accessible in the web app for admin users) or via command line on the host system. It might also help to just restart you server.</p>
 <p>For debugging you should remember that ML Lab is an ensemble of various containers, whereas all traffic must pass through the ML Lab backend container. All logs are printed to stdout of the container, so you can see the logs via <code>docker logs lab-backend</code>. This should give you already a good hint about the problem. When the error happens with certain functionalities, for example accessing a tool in the workspace, also have a look at the respective workspace container logs.</p>
 <p>More logs are shown if you start ML Lab with the environment variable <code>LAB_DEBUG=true</code> (e.g. in Kubernetes-mode, you will see the Kubernetes client requests &amp; responses).</p>
 </details>
-<details class="question"><summary>A user has a problem with their workspace</summary><p>An ML Lab admin is able to access each user's workspace via the url <code>/workspace/id/{userid}</code>. This allows you to enter a user's workspace and perform debugging there.</p>
+<details class="question">
+<summary>A user has a problem with their workspace</summary>
+<p>An ML Lab admin is able to access each user's workspace via the url <code>/workspace/id/{userid}</code>. This allows you to enter a user's workspace and perform debugging there.</p>
 </details>
-<details class="question"><summary>What if a user reports "Cannot save file" error?</summary><p>That error has likely to do something with the filesystem and the lack of available storage. Go to the host where the data is stored and check the available storage via <code>df -h</code>. 
+<details class="question">
+<summary>What if a user reports "Cannot save file" error?</summary>
+<p>That error has likely to do something with the filesystem and the lack of available storage. Go to the host where the data is stored and check the available storage via <code>df -h</code>. 
 Afterwards, try to dig deeper with the <code>du -sh /some/path/*</code> (sum the size of the directories) and/or the <code>docker ps -sa</code> (show the sizes of the containers) commands.</p>
 </details>
-<details class="question"><summary>What to do about unreachable workspaces?</summary><p>Sometimes we observed that a workspace cannot be reached. The logs hint into the direction that not all processes inside the container might have started. So, use the ML Lab's <code>/reset</code> API to remove and recreate the container. If something does not work in Kubernetes, check whether the Deployment and the Service resource belonging to a Workspace still exist, and remove them manually. Then execute the <code>/reset</code> API method again or reload the webapp page  to trigger recreation.<br />
+<details class="question">
+<summary>What to do about unreachable workspaces?</summary>
+<p>Sometimes we observed that a workspace cannot be reached. The logs hint into the direction that not all processes inside the container might have started. So, use the ML Lab's <code>/reset</code> API to remove and recreate the container. If something does not work in Kubernetes, check whether the Deployment and the Service resource belonging to a Workspace still exist, and remove them manually. Then execute the <code>/reset</code> API method again or reload the webapp page  to trigger recreation.<br />
 Please not that the reset method removes the container and re-creates it. It is not the same as restarting. Everything not stored in the workspace's <code>/workspace</code> path will be reset to the workspace image state (including installed libraries etc.).</p>
 </details>
-<details class="question"><summary>What do I have to know about Data Storage?</summary><p>The ML Lab container does not persist data, but the Minio, Mongo, and workspace containers.
+<details class="question">
+<summary>What do I have to know about Data Storage?</summary>
+<p>The ML Lab container does not persist data, but the Minio, Mongo, and workspace containers.
 In Docker-local, by default, for all of them named Docker volumes are created and mounted. You can pass a host path instead via the <code>HOST_ROOT_DATA_MOUNT_PATH</code> environment variable. If this is set, also the mounts for workspaces have the same host path root; this can be overridden via <code>LAB_DATA_WORKSPACE_ROOT</code>.</p>
 <p>In managed Kubernetes, a PersistentVolume is created for Minio, Mongo, and the workspace containers. The amount of storage available has to be defined during ML Lab startup via an environment variable.</p>
 <p>In manual Kubernetes, the node has to be tainted where the Minio, Mongo, and NFS pods always start. They always start on the same node so that they can mount directories from the host file system as in Docker-local. The only difference is that workspaces do not mount the host file system directly but they mount a subdirectory from the started NFS pod.</p>
 <p>Everything that a user stores in the workspace container under the <code>/workspace</code> directory is persisted on the file system. Everything else is persisted within the container and also consumes disk storage. However, it is deleted when the container is removed; a Docker restart is not enough (ML Lab has a /reset Endpoint for triggering a removal &amp; recreation)!</p>
 </details>
-<details class="question"><summary>How to create new users (in case self-registration is disabled)?</summary><p>When ML Lab was started via the environment flag <code>ALLOW_SELF_REGISTRATIONS=false</code>, only the admin user can login. Via the REST API (e.g. by using the explorer), the admin can create new users. The endpoint is <code>POST /api/auth/users</code>. Note that the JWT secret which was used for the ML Lab deployment has to be passed here.</p>
+<details class="question">
+<summary>How to create new users (in case self-registration is disabled)?</summary>
+<p>When ML Lab was started via the environment flag <code>ALLOW_SELF_REGISTRATIONS=false</code>, only the admin user can login. Via the REST API (e.g. by using the explorer), the admin can create new users. The endpoint is <code>POST /api/auth/users</code>. Note that the JWT secret which was used for the ML Lab deployment has to be passed here.</p>
 </details>
-<details class="question"><summary>Does ML Lab capture any metrics?</summary><p>The ML Lab webapp has a management dashboard at <code>/app/#/management</code> containing some metrics. However, the underlying implementation requires a multiple load of the page until all metrics are up to date: load the page, wait a little bit, and reload it again - if needed, repeat a few times.</p>
+<details class="question">
+<summary>Does ML Lab capture any metrics?</summary>
+<p>The ML Lab webapp has a management dashboard at <code>/app/#/management</code> containing some metrics. However, the underlying implementation requires a multiple load of the page until all metrics are up to date: load the page, wait a little bit, and reload it again - if needed, repeat a few times.</p>
 </details>
-<details class="question"><summary>How to clean up ML Lab?</summary><p>The <code>DELETE /api/auth/users/{user}</code> endpoint removes a user from Mongo, its workspace, and its private Minio bucket. Though, it does not remove the persisted volume previously mounted into the user's /workspace ; this has to be done manually on the host. If ML Lab was started with the <code>$LAB_DATA_ROOT</code> or <code>$LAB_DATA_WORKSPACE_ROOT</code> variables, no Docker-volumes are used but an absolute host path that has to be cleaned.
+<details class="question">
+<summary>How to clean up ML Lab?</summary>
+<p>The <code>DELETE /api/auth/users/{user}</code> endpoint removes a user from Mongo, its workspace, and its private Minio bucket. Though, it does not remove the persisted volume previously mounted into the user's /workspace ; this has to be done manually on the host. If ML Lab was started with the <code>$LAB_DATA_ROOT</code> or <code>$LAB_DATA_WORKSPACE_ROOT</code> variables, no Docker-volumes are used but an absolute host path that has to be cleaned.
 The <code>DELETE /api/projects/{projectName}</code> endpoint deletes a project, all belonging experiments and the data from Minio.</p>
 </details>
-<details class="question"><summary>I cannot login to ML Lab</summary><p>If you get an error message like "Request has been terminated" on the login page, this is an indicator that you might have network issues such as being in the wrong network, e.g. when a VPN would be required.</p>
+<details class="question">
+<summary>I cannot login to ML Lab</summary>
+<p>If you get an error message like "Request has been terminated" on the login page, this is an indicator that you might have network issues such as being in the wrong network, e.g. when a VPN would be required.</p>
 </details>
                 
                   
@@ -643,7 +673,7 @@ The <code>DELETE /api/projects/{projectName}</code> endpoint deletes a project, 
     
       <script src="../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.1.2",url:{base:".."}})</script>
+      <script>app.initialize({version:"1.3.1",url:{base:".."}})</script>
       
     
     <script>

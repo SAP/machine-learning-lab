@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-4.6.3">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-4.6.3">
     
     
       
@@ -159,7 +159,7 @@
 
   
 
-<a href="https://github.com/sap/machine-learning-lab/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -206,7 +206,7 @@
 
   
 
-<a href="https://github.com/sap/machine-learning-lab/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/sap/machine-learning-lab" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -492,6 +492,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../external-oidc-authentication/" title="External OIDC Authentication" class="md-nav__link">
+      External OIDC Authentication
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -635,7 +647,6 @@
     -e <span class="s2">&quot;VOLUMERIZE_JOBBER_TIME=0 0 3 */2 * *&quot;</span> <span class="se">\</span>
     blacklabelops/volumerize:1.5.0
 </code></pre></div>
-
 <h2 id="example-kubernetes">Example: Kubernetes<a class="headerlink" href="#example-kubernetes" title="Permanent link">&para;</a></h2>
 <p>In a Kubernetes Lab instance, the persisted data is on the manager node's filesystem in the folder specified with <code>LAB_DATA_ROOT</code> during the installation process. In the following example, the <code>LAB_DATA_ROOT</code> is <code>/lab/data/</code> which means that the Minio data is persisted at <code>/lab/data/lab-minio</code> and the Mongo data at <code>/lab/data/lab-mongo</code> on the file system of the manager node.</p>
 <p>The backup is scheduled for every 2 days at 3am as well. Instead of backing up the data on the local filesystem (as shown in the Docker local example) we will use rsync for this example to move the data to a remote machine specified via <code>rsync://10.12.345.678//lab/backup</code>. In order to be able to connect, valid key information needs to be provided (<code>id_rsa</code> and <code>known_hosts</code>) as demonstrated below:</p>
@@ -689,13 +700,13 @@
           </a>
         
         
-          <a href="../../architecture/machine-learning-lifecycle/" title="ML Lifecycle" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../external-oidc-authentication/" title="External OIDC Authentication" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                ML Lifecycle
+                External OIDC Authentication
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -733,7 +744,7 @@
     
       <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.1.2",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.3.1",url:{base:"../.."}})</script>
       
     
     <script>
