@@ -21,8 +21,8 @@ def create_test_workspace_input(display_name: str) -> WorkspaceInput:
         container_image="mltooling/ml-workspace-minimal",
         display_name=display_name,
         compute=WorkspaceCompute(
-            cpus=1,
-            memory=1000,
+            cpus=4,
+            memory=4000,
         ),
     )
 
