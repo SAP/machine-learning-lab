@@ -1,0 +1,65 @@
+{
+  "name": "contaxy-webapp",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "./",
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "^5.2.1",
+    "superagent": "^6.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.15.0",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.0",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
+    "prettier": "^2.2.1",
+    "react-is": "^17.0.1",
+    "react-scripts": "5.0.1",
+    "stylelint": "^13.8.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-standard": "^20.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "start-debug": "REACT_APP_CONTAXY_ENDPOINT=http://localhost:30010/api REACT_APP_EXTENSION_ENDPOINT=http://localhost:8080/ yarn start",
+    "container": "run(){ docker build -t project-template-dev ../.github/actions/build-environment && echo 'Starting the container. That can take a moment...' && docker run -it --rm -p 3000:3000 -p 6006:6006 -v $(pwd):/workspace:delegated --entrypoint \"/bin/bash\" project-template-dev -c \"cd workspace/ && yarn $1\"; }; run",
+    "build": "react-scripts --openssl-legacy-provider build",
+    "test": "react-scripts test a --watchAll=false",
+    "test-interactive": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "yarn run lint:js ; yarn run lint:css",
+    "lint:js": "eslint --ext js,jsx src/",
+    "lint:css": "stylelint 'src/**/*.css'",
+    "prettier": "prettier --config .prettierrc --write ."
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "browser": {
+    "fs": false
+  },
+  "resolutions": {
+    "babel-loader": "8.1.0"
+  }
+}
