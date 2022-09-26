@@ -9,7 +9,6 @@ from contaxy.schema.auth import USER_ID_PARAM
 from contaxy.schema.exceptions import CREATE_RESOURCE_RESPONSES
 from contaxy.utils import fastapi_utils
 from fastapi import Depends, FastAPI, status
-from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
 
 from lab_job_scheduler.utils import CONTAXY_API_ENDPOINT, get_component_manager
