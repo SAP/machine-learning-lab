@@ -128,6 +128,8 @@ def update_schedule(
 def get_job_from_job_input(job_input: ScheduledJobInput) -> ScheduledJob:
     return ScheduledJob(
         cron_string=job_input.cron_string,
+        display_name=job_input.display_name,
+        container_image=job_input.container_image,
         job_id=str(uuid.uuid4()),
     )
 

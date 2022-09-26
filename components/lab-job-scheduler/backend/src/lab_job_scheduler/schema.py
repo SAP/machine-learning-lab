@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
-import uuid
-import datetime
+from contaxy.schema.shared import MAX_DISPLAY_NAME_LENGTH
+from contaxy.schema.shared import MIN_DISPLAY_NAME_LENGTH
 
 
 class ScheduledJobInput(BaseModel):
@@ -9,14 +9,20 @@ class ScheduledJobInput(BaseModel):
         description="The cron string that defines the schedule.",
         example="0 1 * * *"
     )
-
-
-class ScheduledJob(BaseModel):
-    cron_string: str = Field(
+    container_image: str = Field(
         ...,
-        description="The cron string that defines the schedule.",
-        example="0 1 * * *"
+        example="mltooling/ml-workspace-minimal:latest",
+        max_length=2000,
+        description="The container image used for executing this job.",
     )
+    display_name: str = Field(
+        "Default Job",
+        max_length=MAX_DISPLAY_NAME_LENGTH,
+        description="A user-defined human-readable name of the job. The name can be up to 128 characters long and can consist of any UTF-8 character.",
+    )
+
+
+class ScheduledJob(ScheduledJobInput):
     job_id: str = Field(
         ...,
         description="The ID of the job.",
