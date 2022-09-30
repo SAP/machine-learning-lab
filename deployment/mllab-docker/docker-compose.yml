@@ -3,7 +3,7 @@ services:
   # The main ML Lab backend container that serves as entrypoint for all traffic
   # Contains the contaxy server and hosts the ML Lab web app
   ml-lab-backend:
-    image: lab-backend:latest
+    image: ghcr.io/sap/machine-learning-lab/lab-backend:0.0.19
     container_name: ml-lab-backend
     ports:
       - "30010:8080"
@@ -91,7 +91,7 @@ services:
   # Workspace manager that allows users to spawn their machine learning workspaces
   lab-workspace-manager:
     container_name: pylab-p-ctxy-global-s-workspace-manager
-    image: lab-workspace-manager:latest
+    image: ghcr.io/sap/machine-learning-lab/lab-workspace-manager:0.0.19
     environment:
       - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
       - CONTAXY_DEPLOYMENT_NAME=pylab-p-ctxy-global-s-workspace-manager
@@ -112,36 +112,33 @@ services:
       display_priority: 95
 
   # MLflow integration for experiment tracking
-  #lab-mlflow-manager:
-  #  container_name: pylab-p-ctxy-global-s-lab-mlflow-manager
-  #  image: lab-mlflow-manager:latest
-  #  environment:
-  #    - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
-  #    - CONTAXY_DEPLOYMENT_NAME=pylab-p-ctxy-global-s-mlflow
-  #    - CONTAXY_SERVICE_URL=/projects/ctxy-global/services/pylab-p-ctxy-global-s-mlflow/access/8080
-  #    - MLFLOW_SERVER_IMAGE=lab-mlflow-server
-  #    - MLFLOW_SERVER_IDLE_TIMEOUT=86400 # 24 hours
-  #  labels:
-  #    ctxy.deploymentType: "extension"
-  #    ctxy.deploymentName: "pylab-p-ctxy-global-s-lab-mlflow-manager"
-  #    ctxy.displayName: "MLflow Experiments"
-  #    ctxy.endpoints: "8080"
-  #    ctxy.namespace: "pylab"
-  #    ctxy.projectName: "ctxy-global"
-  #    ctxy.extensionType: "global-extension"
-  #    ctxy.icon: "science"
-  #    ctxy.ui_extension_endpoint: "8080/app#/mlflow-server"
-  #    ctxy.api_extension_endpoint: "8080/api"
-  #    display_priority: 95
+  lab-mlflow-manager:
+    container_name: pylab-p-ctxy-global-s-lab-mlflow-manager
+    image: ghcr.io/sap/machine-learning-lab/lab-mlflow-manager:0.0.19
+    environment:
+      - CONTAXY_API_ENDPOINT=http://ml-lab-backend:8080/api
+      - CONTAXY_DEPLOYMENT_NAME=pylab-p-ctxy-global-s-mlflow
+      - CONTAXY_SERVICE_URL=/projects/ctxy-global/services/pylab-p-ctxy-global-s-mlflow/access/8080
+      - MLFLOW_SERVER_IMAGE=ghcr.io/sap/machine-learning-lab/lab-mlflow-server:0.0.19
+      - MLFLOW_SERVER_IDLE_TIMEOUT=86400 # 24 hours
+    labels:
+      ctxy.deploymentType: "extension"
+      ctxy.deploymentName: "pylab-p-ctxy-global-s-lab-mlflow-manager"
+      ctxy.displayName: "MLflow Experiments"
+      ctxy.endpoints: "8080"
+      ctxy.namespace: "pylab"
+      ctxy.projectName: "ctxy-global"
+      ctxy.extensionType: "global-extension"
+      ctxy.icon: "science"
+      ctxy.ui_extension_endpoint: "8080/app#/mlflow-server"
+      ctxy.api_extension_endpoint: "8080/api"
+      display_priority: 95
 
 #secrets:
 #  ssl_cert:
-#    file: /docker_mount/ssl/cert.crt
+#    file: /etc/ssl/certs/mllab-cert.crt
 #  ssl_key:
-#    file: /docker_mount/ssl/cert.key
+#    file: /etc/ssl/certs/mllab-cert.key
 volumes:
-  lab-postgres-data:
-    # External volumes need to be manually created with "docker volume create contaxy-postgres-data"
-#    external: true
-  lab-s3-data:
-#    external: true
+  lab-postgres-data: {}
+  lab-s3-data: {}
