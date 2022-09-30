@@ -3,9 +3,10 @@ import json
 from textwrap import indent
 import uuid
 from typing import Any
+import datetime
+import functools
 
 from contaxy.operations.components import ComponentOperations
-from contaxy.schema.auth import USER_ID_PARAM
 from contaxy.schema.exceptions import CREATE_RESOURCE_RESPONSES
 from contaxy.utils import fastapi_utils
 from fastapi import Depends, FastAPI, status
@@ -13,6 +14,8 @@ from starlette.middleware.cors import CORSMiddleware
 
 from lab_job_scheduler.utils import CONTAXY_API_ENDPOINT, get_component_manager
 from lab_job_scheduler.schema import ScheduledJob, ScheduledJobInput
+from lab_job_scheduler.config import JOB_INTERVAL
+from lab_job_scheduler import executor
 
 app = FastAPI()
 # Patch FastAPI to allow relative path resolution.
@@ -25,6 +28,17 @@ if "BACKEND_CORS_ORIGINS" in os.environ:
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+    )
+
+
+# Startup event to run scheduled jobs
+@app.on_event("startup")
+def on_startup() -> None:
+    token = os.environ["CONTAXY_API_TOKEN"]  # TODO: Use a better way to get the token.
+    component_manager: ComponentOperations = get_component_manager(token=token)
+    fastapi_utils.schedule_call(
+        func=functools.partial(executor.run_scheduled_jobs, component_manager),
+        interval=datetime.timedelta(seconds=JOB_INTERVAL),
     )
 
 
@@ -125,11 +139,11 @@ def update_schedule(
                                    collection_id="schedules", key=job_id, json_document=json.dumps((job.dict())))
 
 
-def get_job_from_job_input(job_input: ScheduledJobInput) -> ScheduledJob:
+def get_job_from_job_input(job_schedule: ScheduledJobInput) -> ScheduledJob:
     return ScheduledJob(
-        cron_string=job_input.cron_string,
-        display_name=job_input.display_name,
-        container_image=job_input.container_image,
+        cron_string=job_schedule.cron_string,
+        job_input=job_schedule.job_input,
+        created=datetime.datetime.now().isoformat(),
         job_id=str(uuid.uuid4()),
     )
 
