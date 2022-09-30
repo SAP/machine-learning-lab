@@ -24,6 +24,18 @@ def update_contaxy_version(file_path, contaxy_version):
         f.truncate()
 
 
+def update_mllab_version_in_docker_compose_file(file_path, mllab_version):
+    with open(file_path, "r+") as f:
+        content = f.read()
+        f.seek(0)
+        updated_content = re.sub(
+            r'ghcr.io/sap/machine-learning-lab/(.*):.*',
+            fr'ghcr.io/sap/machine-learning-lab/\1:{mllab_version}', content
+        )
+        f.write(updated_content)
+        f.truncate()
+
+
 def main(args: dict) -> None:
     """Execute all component builds."""
 
@@ -42,7 +54,7 @@ def main(args: dict) -> None:
     # Build the webapp
     build_utils.build(WEBAPP_COMPONENT, args)
 
-    #Build the docs
+    # Build the docs
     build_utils.build(DOCS_COMPONENT, args)
 
     # Build ML Lab docker image
@@ -54,6 +66,7 @@ def main(args: dict) -> None:
     # build_docker.lint_dockerfile(exit_on_error=True)
 
     if args.get(build_utils.FLAG_RELEASE):
+        update_mllab_version_in_docker_compose_file("deployment/mllab-docker/docker-compose.yml", version)
         build_docker.release_docker_image(
             PROJECT_NAME,
             args[build_utils.FLAG_VERSION],
