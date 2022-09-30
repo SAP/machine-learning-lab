@@ -18,7 +18,7 @@ class MLFlowHandler:
         * Uses the ML Flow extension API to check if the ML Flow server is running (and if not, starts it)
         * Sets the tracking URI and token environment variables
         """
-        extension_display_name = "Lab MLflow Manager"
+        extension_display_name = "MLflow Experiments"
         mlflow_extension = self._get_extension(extension_display_name)
         tracking_uri = self._get_mlflow_tracking_uri(mlflow_extension)
         self._set_mlflow_env_vars(tracking_uri=tracking_uri, token=self.env.lab_api_token)

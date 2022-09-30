@@ -124,7 +124,7 @@ services:
   #  labels:
   #    ctxy.deploymentType: "extension"
   #    ctxy.deploymentName: "pylab-p-ctxy-global-s-lab-mlflow-manager"
-  #    ctxy.displayName: "Lab MLflow Manager"
+  #    ctxy.displayName: "MLflow Experiments"
   #    ctxy.endpoints: "8080"
   #    ctxy.namespace: "pylab"
   #    ctxy.projectName: "ctxy-global"
