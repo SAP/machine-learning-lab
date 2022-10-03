@@ -15,7 +15,7 @@ from starlette.middleware.cors import CORSMiddleware
 from lab_job_scheduler.utils import CONTAXY_API_ENDPOINT, get_component_manager
 from lab_job_scheduler.schema import ScheduledJob, ScheduledJobInput
 from lab_job_scheduler.config import JOB_INTERVAL
-from lab_job_scheduler import executor
+from lab_job_scheduler import job_deployer
 
 app = FastAPI()
 # Patch FastAPI to allow relative path resolution.
@@ -37,7 +37,7 @@ def on_startup() -> None:
     token = os.environ["CONTAXY_API_TOKEN"]  # TODO: Use a better way to get the token.
     component_manager: ComponentOperations = get_component_manager(token=token)
     fastapi_utils.schedule_call(
-        func=functools.partial(executor.run_scheduled_jobs, component_manager),
+        func=functools.partial(job_deployer.run_scheduled_jobs, component_manager),
         interval=datetime.timedelta(seconds=JOB_INTERVAL),
     )
 
