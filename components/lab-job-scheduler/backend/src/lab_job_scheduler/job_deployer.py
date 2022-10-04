@@ -5,6 +5,7 @@ from typing import List
 from lab_job_scheduler.schema import ScheduledJob
 import json
 from loguru import logger
+from typing import Optional
 
 
 def run_scheduled_jobs(component_manager: ComponentOperations):
@@ -28,13 +29,12 @@ def get_all_jobs_from_db(component_manager: ComponentOperations, project_id: str
     return [ScheduledJob(**json.loads(document.json_value)) for document in documents]
 
 
-def is_due(job: ScheduledJob) -> bool:
+def is_due(job: ScheduledJob, reference_time: Optional[datetime]) -> bool:
     """Checks if a job is due."""
+    if not reference_time:
+        reference_time = datetime.now()
     next_run_time = get_next_run_time(job)
-    current_time = datetime.now()
-    if next_run_time <= current_time:
-        return True
-    return False
+    return next_run_time <= reference_time
 
 
 def get_next_run_time(job: ScheduledJob) -> datetime:
