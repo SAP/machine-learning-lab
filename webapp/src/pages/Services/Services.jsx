@@ -80,7 +80,8 @@ function Services(props) {
         showAppDialog(LogsDialog, {
           title: 'Logs',
           projectId,
-          serviceId,
+          id: serviceId,
+          type: 'service',
         });
       } catch (err) {
         showStandardSnackbar('Could not load service logs');

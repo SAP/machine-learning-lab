@@ -12,19 +12,25 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 
-import { servicesApi } from '../../services/contaxy-api';
+import { jobsApi, servicesApi } from '../../services/contaxy-api';
 
 function LogsDialog(props) {
-  const { onClose, title, projectId, serviceId } = props;
+  const { onClose, title, projectId, id, type } = props;
 
   const [logs, setLogs] = useState(null);
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    servicesApi.getServiceLogs(projectId, serviceId).then((l) => {
-      setLogs(l);
-    });
-  }, [projectId, serviceId]);
+    if (type === 'service') {
+      servicesApi.getServiceLogs(projectId, id).then((l) => {
+        setLogs(l);
+      });
+    } else if (type === 'job') {
+      jobsApi.getJobLogs(projectId, id).then((l) => {
+        setLogs(l);
+      });
+    }
+  }, [projectId, id, type]);
 
   const contentElement = (
     <DialogContentText style={{ whiteSpace: 'pre-line' }}>
@@ -33,7 +39,11 @@ function LogsDialog(props) {
   );
 
   const onRefresh = async () => {
-    setLogs(await servicesApi.getServiceLogs(projectId, serviceId));
+    if (type === 'service') {
+      setLogs(await servicesApi.getServiceLogs(projectId, id));
+    } else if (type === 'job') {
+      setLogs(await jobsApi.getJobLogs(projectId, id));
+    }
   };
 
   const handleCheck = (event) => {
@@ -43,17 +53,19 @@ function LogsDialog(props) {
   useEffect(() => {
     let intervalId = null;
     if (checked) {
-      intervalId = setInterval(() => {
-        servicesApi.getServiceLogs(projectId, serviceId).then((l) => {
-          setLogs(l);
-        });
+      intervalId = setInterval(async () => {
+        if (type === 'service') {
+          setLogs(await servicesApi.getServiceLogs(projectId, id));
+        } else if (type === 'job') {
+          setLogs(await jobsApi.getJobLogs(projectId, id));
+        }
       }, 5000);
     }
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [checked, projectId, serviceId]);
+  }, [checked, projectId, id, type]);
 
   return (
     <Dialog open>
@@ -81,7 +93,8 @@ LogsDialog.propTypes = {
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   projectId: PropTypes.string.isRequired,
-  serviceId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(['service', 'job']).isRequired,
 };
 
 LogsDialog.defaultProps = {

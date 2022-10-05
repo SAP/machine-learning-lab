@@ -15,6 +15,7 @@ import { jobsApi } from '../../services/contaxy-api';
 import ContentDialog from '../../components/Dialogs/ContentDialog';
 import GlobalStateContainer from '../../app/store';
 import JobsContainer from './JobsContainer';
+import LogsDialog from '../../components/Dialogs/LogsDialog';
 import showStandardSnackbar from '../../app/showStandardSnackbar';
 
 function Jobs(props) {
@@ -71,8 +72,12 @@ function Jobs(props) {
   const onShowJobLogs = useCallback(
     async (projectId, jobId) => {
       try {
-        const logs = await jobsApi.getJobLogs(projectId, jobId);
-        showAppDialog(ContentDialog, { content: logs, title: 'Logs' });
+        showAppDialog(LogsDialog, {
+          title: 'Logs',
+          projectId,
+          id: jobId,
+          type: 'job',
+        });
       } catch (err) {
         showStandardSnackbar('Could not load logs');
       }
