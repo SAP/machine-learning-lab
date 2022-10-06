@@ -7,7 +7,6 @@ import byteSize from 'byte-size';
 import styled from 'styled-components';
 
 import Button from '@material-ui/core/Button';
-
 import moment from 'moment';
 
 import {
@@ -46,6 +45,7 @@ function Files(props) {
   const reloadFiles = useCallback(async () => {
     const files = await filesApi.listFiles(projectId, {
       prefix: folder,
+      includeVersions: true,
     });
     if (componentIsMounted.current) {
       let totalSize = 0;
@@ -80,7 +80,9 @@ function Files(props) {
   const onFileDelete = useCallback(
     async (rowData) => {
       try {
-        await filesApi.deleteFile(projectId, rowData.key);
+        await filesApi.deleteFile(projectId, rowData.key, {
+          version: rowData.version,
+        });
         showStandardSnackbar(`Deleted file (${rowData.key})`);
         reloadFiles();
       } catch (err) {
@@ -93,7 +95,9 @@ function Files(props) {
   const onFileDownload = useCallback(
     (rowData) => {
       const a = document.createElement('a');
-      a.href = getFileDownloadUrl(projectId, rowData.key);
+      a.href = `${getFileDownloadUrl(projectId, rowData.key)}?version=${
+        rowData.version
+      }`;
       a.target = '_blank';
       a.download = rowData.name || 'download';
       a.click();
