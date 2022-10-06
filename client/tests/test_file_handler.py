@@ -151,3 +151,36 @@ class TestFile:
         for _, _, files in os.walk(local_path):
             for filename in files:
                 assert filename == tf_file_2
+
+    @pytest.mark.xfail(raises=Exception)
+    def test_file_upload_with_invalid_data_type(self) -> None:
+        env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
+                          lab_api_token=test_settings.LAB_TOKEN,
+                          project=test_settings.LAB_PROJECT)
+        tf = tempfile.NamedTemporaryFile()
+        sample_text = "This is a sample text\nWith two lines"
+        with open(tf.name, 'w') as f:
+            f.write(sample_text)
+            f.seek(0)
+            env.upload_file(tf.name, "datasets")
+
+    @pytest.mark.xfail(raises=Exception)
+    def test_folder_upload_with_invalid_data_type(self) -> None:
+        env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
+                          lab_api_token=test_settings.LAB_TOKEN,
+                          project=test_settings.LAB_PROJECT)
+        tf_dir = tempfile.TemporaryDirectory()
+
+        env.upload_folder(tf_dir.name, "models")
+
+    @pytest.mark.xfail(raises=Exception)
+    def test_list_file_with_invalid_data_type(self) -> None:
+        env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
+                          lab_api_token=test_settings.LAB_TOKEN,
+                          project=test_settings.LAB_PROJECT)
+        tf = tempfile.NamedTemporaryFile()
+        with open(tf.name, 'w') as f:
+            f.write("content")
+        env.upload_file(tf.name, "dataset")
+
+        env.file_handler.list_remote_files(data_type="datasets")
