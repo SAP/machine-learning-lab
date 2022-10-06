@@ -15,21 +15,21 @@ import ApiClient from '../ApiClient';
 import TokenType from './TokenType';
 
 /**
- * The ApiToken model module.
- * @module model/ApiToken
+ * The AccessToken model module.
+ * @module model/AccessToken
  * @version 0.0.11
  */
-class ApiToken {
+class AccessToken {
   /**
-   * Constructs a new <code>ApiToken</code>.
-   * @alias module:model/ApiToken
+   * Constructs a new <code>AccessToken</code>.
+   * @alias module:model/AccessToken
    * @param token {String} API Token.
    * @param tokenType {module:model/TokenType} The type of the token.
    * @param subject {String} Identifies the principal that is the subject of the token. Usually refers to the user to which the token is issued to.
    * @param scopes {Array.<String>} List of scopes associated with the token.
    */
   constructor(token, tokenType, subject, scopes) {
-    ApiToken.initialize(this, token, tokenType, subject, scopes);
+    AccessToken.initialize(this, token, tokenType, subject, scopes);
   }
 
   /**
@@ -45,15 +45,15 @@ class ApiToken {
   }
 
   /**
-   * Constructs a <code>ApiToken</code> from a plain JavaScript object, optionally creating a new instance.
+   * Constructs a <code>AccessToken</code> from a plain JavaScript object, optionally creating a new instance.
    * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
    * @param {Object} data The plain JavaScript object bearing properties of interest.
-   * @param {module:model/ApiToken} obj Optional instance to populate.
-   * @return {module:model/ApiToken} The populated <code>ApiToken</code> instance.
+   * @param {module:model/AccessToken} obj Optional instance to populate.
+   * @return {module:model/AccessToken} The populated <code>AccessToken</code> instance.
    */
   static constructFromObject(data, obj) {
     if (data) {
-      obj = obj || new ApiToken();
+      obj = obj || new AccessToken();
 
       if (data.hasOwnProperty('token')) {
         obj['token'] = ApiClient.convertToType(data['token'], 'String');
@@ -76,24 +76,6 @@ class ApiToken {
       if (data.hasOwnProperty('expires_at')) {
         obj['expires_at'] = ApiClient.convertToType(data['expires_at'], 'Date');
       }
-      if (data.hasOwnProperty('description')) {
-        obj['description'] = ApiClient.convertToType(
-          data['description'],
-          'String'
-        );
-      }
-      if (data.hasOwnProperty('created_by')) {
-        obj['created_by'] = ApiClient.convertToType(
-          data['created_by'],
-          'String'
-        );
-      }
-      if (data.hasOwnProperty('token_purpose')) {
-        obj['token_purpose'] = ApiClient.convertToType(
-          data['token_purpose'],
-          'String'
-        );
-      }
     }
     return obj;
   }
@@ -103,54 +85,36 @@ class ApiToken {
  * API Token.
  * @member {String} token
  */
-ApiToken.prototype['token'] = undefined;
+AccessToken.prototype['token'] = undefined;
 
 /**
  * The type of the token.
  * @member {module:model/TokenType} token_type
  */
-ApiToken.prototype['token_type'] = undefined;
+AccessToken.prototype['token_type'] = undefined;
 
 /**
  * Identifies the principal that is the subject of the token. Usually refers to the user to which the token is issued to.
  * @member {String} subject
  */
-ApiToken.prototype['subject'] = undefined;
+AccessToken.prototype['subject'] = undefined;
 
 /**
  * List of scopes associated with the token.
  * @member {Array.<String>} scopes
  */
-ApiToken.prototype['scopes'] = undefined;
+AccessToken.prototype['scopes'] = undefined;
 
 /**
  * Creation date of the token.
  * @member {Date} created_at
  */
-ApiToken.prototype['created_at'] = undefined;
+AccessToken.prototype['created_at'] = undefined;
 
 /**
  * Date at which the token expires and, thereby, gets revoked.
  * @member {Date} expires_at
  */
-ApiToken.prototype['expires_at'] = undefined;
+AccessToken.prototype['expires_at'] = undefined;
 
-/**
- * Short description about the context and usage of the token.
- * @member {String} description
- */
-ApiToken.prototype['description'] = undefined;
-
-/**
- * ID of the user that created this token.
- * @member {String} created_by
- */
-ApiToken.prototype['created_by'] = undefined;
-
-/**
- * The purpose of the token.
- * @member {String} token_purpose
- */
-ApiToken.prototype['token_purpose'] = undefined;
-
-export default ApiToken;
+export default AccessToken;

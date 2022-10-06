@@ -4,8 +4,9 @@ from typing import Any, List, Optional
 
 from contaxy.managers.components import ComponentManager
 from contaxy.managers.deployment.manager import ACTION_START
+from contaxy.operations import AuthOperations
 from contaxy.schema import Service, ServiceInput
-from contaxy.schema.auth import USER_ID_PARAM
+from contaxy.schema.auth import USER_ID_PARAM, AccessLevel, TokenType
 from contaxy.schema.deployment import SERVICE_ID_PARAM, DeploymentCompute, ServiceUpdate
 from contaxy.schema.exceptions import (
     CREATE_RESOURCE_RESPONSES,
@@ -13,7 +14,7 @@ from contaxy.schema.exceptions import (
     ClientValueError,
     ResourceAlreadyExistsError,
 )
-from contaxy.utils import fastapi_utils
+from contaxy.utils import auth_utils, fastapi_utils
 from fastapi import Depends, FastAPI, Query, Response, status
 from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
@@ -50,7 +51,9 @@ def is_ws_service(service: Service) -> bool:
     return service.metadata.get(LABEL_EXTENSION_DEPLOYMENT_TYPE, "") == "workspace"
 
 
-def create_ws_service_input(workspace_input: WorkspaceInput) -> ServiceInput:
+def create_ws_service_input(
+    workspace_input: WorkspaceInput, user_token: str
+) -> ServiceInput:
     return ServiceInput(
         container_image=workspace_input.container_image,
         display_name=f"WS {workspace_input.display_name}",
@@ -60,6 +63,7 @@ def create_ws_service_input(workspace_input: WorkspaceInput) -> ServiceInput:
             "SSH_JUMPHOST_TARGET": "{env.CONTAXY_DEPLOYMENT_NAME}",
             "SELF_ACCESS_TOKEN": "{env.CONTAXY_API_TOKEN}",
             "LAB_API_ENDPOINT": "{env.CONTAXY_API_ENDPOINT}",
+            "LAB_API_TOKEN": user_token,
         },
         metadata={LABEL_EXTENSION_DEPLOYMENT_TYPE: "workspace"},
         compute={
@@ -120,6 +124,18 @@ def create_ws_from_service(service: Service) -> Workspace:
     )
 
 
+def request_user_token(
+    user_id: str, workspace_name: str, auth_manager: AuthOperations
+) -> str:
+    return auth_manager.create_token(
+        scopes=[auth_utils.construct_permission("*", AccessLevel.ADMIN)],
+        token_type=TokenType.API_TOKEN,
+        token_subject=f"users/{user_id}",
+        description=f"User token for workspace '{workspace_name}'.",
+        token_purpose="workspace-user-token",
+    )
+
+
 @app.post(
     "/users/{user_id}/workspace",
     summary="Create a new personal workspace for the user.",
@@ -134,7 +150,10 @@ def deploy_workspace(
 ) -> Any:
     """Create a new personal workspace by creating a Contaxy service with a workspace image in the personal project."""
     logger.debug(f"Deploy workspace request for user {user_id}: {workspace_input}")
-    service_input = create_ws_service_input(workspace_input)
+    user_token = request_user_token(
+        user_id, workspace_input.display_name, component_manager.get_auth_manager()
+    )
+    service_input = create_ws_service_input(workspace_input, user_token)
     try:
         # Use the user's project which has the same id as the user
         service = component_manager.get_service_manager().deploy_service(

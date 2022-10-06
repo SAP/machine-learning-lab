@@ -18,5 +18,6 @@
   "project": "Project",
   "run": "Run",
   "service": "Service",
-  "service_plural": "Services"
+  "service_plural": "Services",
+  "user_plural": "Users"
 }
