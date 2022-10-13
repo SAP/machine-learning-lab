@@ -13,7 +13,7 @@ function App() {
         <Route path="/job-scheduler">
           <JobScheduler />
         </Route>
-        <Route path="*">Not Found. Visit /job-scheduler</Route>
+        <Route path="*">Not Found. Visit /job-scheduler?project=zohair</Route>
       </Switch>
       <div id="snackbar-container" />
     </div>

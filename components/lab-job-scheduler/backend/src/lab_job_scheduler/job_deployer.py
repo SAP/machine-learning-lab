@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from croniter import croniter
 from contaxy.operations.components import ComponentOperations
 from typing import List
@@ -29,7 +29,7 @@ def get_all_jobs_from_db(component_manager: ComponentOperations, project_id: str
     return [ScheduledJob(**json.loads(document.json_value)) for document in documents]
 
 
-def is_due(job: ScheduledJob, reference_time: Optional[datetime]) -> bool:
+def is_due(job: ScheduledJob, reference_time: Optional[datetime] = None) -> bool:
     """Checks if a job is due."""
     if not reference_time:
         reference_time = datetime.now()

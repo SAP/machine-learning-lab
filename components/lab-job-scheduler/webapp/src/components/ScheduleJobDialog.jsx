@@ -27,7 +27,7 @@ function ScheduleJobDialog(props) {
 
   const [jobSchedulerInput, setJobSchedulerInput] = useState({
     containerImage: '',
-    deploymentName: '',
+    displayName: '',
     deploymentParameters: {},
     deploymentEndpoints: [],
     cronString: '',
@@ -42,8 +42,8 @@ function ScheduleJobDialog(props) {
   const isContainerImageInvalid = VALID_IMAGE_NAME.test(
     jobSchedulerInput.containerImage
   );
-  const isDeploymentNameInvalid = !SERVICE_NAME_REGEX.test(
-    jobSchedulerInput.deploymentName
+  const isDisplayNameInvalid = !SERVICE_NAME_REGEX.test(
+    jobSchedulerInput.displayName
   );
   const isCronStringInvalid =
     jobSchedulerInput.cronString === ''
@@ -66,7 +66,6 @@ function ScheduleJobDialog(props) {
           name="containerImage"
           value={jobSchedulerInput.containerImage}
           onChange={onChange}
-          onBlur={() => {}} // TODO: add here the "caching" logic handling
           autoComplete="on"
           error={isContainerImageInvalid}
           helperText={
@@ -79,12 +78,12 @@ function ScheduleJobDialog(props) {
           required
           label="Deployment Name"
           type="text"
-          name="deploymentName"
-          value={jobSchedulerInput.deploymentName}
+          name="displayName"
+          value={jobSchedulerInput.displayName}
           onChange={onChange}
           autoComplete="on"
-          error={isDeploymentNameInvalid}
-          helperText={isDeploymentNameInvalid ? 'Name is not valid' : null}
+          error={isDisplayNameInvalid}
+          helperText={isDisplayNameInvalid ? 'Name is not valid' : null}
           fullWidth
           margin="dense"
         />
@@ -133,14 +132,14 @@ function ScheduleJobDialog(props) {
         <Button
           disabled={
             isContainerImageInvalid ||
-            isDeploymentNameInvalid ||
+            isDisplayNameInvalid ||
             isCronStringInvalid ||
             !jobSchedulerInput.containerImage
           }
           onClick={() => onDeploy(jobSchedulerInput, onClose)}
           color="primary"
         >
-          DEPLOY
+          SCHEDULE
         </Button>
       </DialogActions>
     </Dialog>
