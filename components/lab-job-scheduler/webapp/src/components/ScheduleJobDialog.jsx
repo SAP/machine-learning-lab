@@ -15,37 +15,47 @@ import Typography from '@material-ui/core/Typography';
 import KeyValueInputs from './KeyValueInputs';
 import ValueInputs from './ValueInputs';
 
+const cron = require('cron-validator');
+
 const VALID_IMAGE_NAME = new RegExp('[^a-zA-Z0-9-_:/.]');
 const SERVICE_NAME_REGEX = new RegExp(
   '^([a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9])?$'
 );
 
-function DeployContainerDialog(props) {
+function ScheduleJobDialog(props) {
   const { className, onClose, onDeploy } = props;
 
-  const [deploymentInput, setDeploymentInput] = useState({
+  const [jobSchedulerInput, setJobSchedulerInput] = useState({
     containerImage: '',
     deploymentName: '',
     deploymentParameters: {},
     deploymentEndpoints: [],
+    cronString: '',
   });
 
   const onChange = (e) =>
-    setDeploymentInput({ ...deploymentInput, [e.target.name]: e.target.value });
+    setJobSchedulerInput({
+      ...jobSchedulerInput,
+      [e.target.name]: e.target.value,
+    });
 
   const isContainerImageInvalid = VALID_IMAGE_NAME.test(
-    deploymentInput.containerImage
+    jobSchedulerInput.containerImage
   );
   const isDeploymentNameInvalid = !SERVICE_NAME_REGEX.test(
-    deploymentInput.deploymentName
+    jobSchedulerInput.deploymentName
   );
+  const isCronStringInvalid =
+    jobSchedulerInput.cronString === ''
+      ? false
+      : !cron.isValidCron(jobSchedulerInput.cronString);
 
   return (
     <Dialog open>
-      <DialogTitle>Add Deployment</DialogTitle>
+      <DialogTitle>Schedule Job</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Make a new deployment in the selected project based on the specific
+          Schedule a new job in the selected project based on the specific
           Docker image. Please make sure that the image is a compatible ML Lab
           service.
         </DialogContentText>
@@ -54,7 +64,7 @@ function DeployContainerDialog(props) {
           label="Container Image"
           type="text"
           name="containerImage"
-          value={deploymentInput.containerImage}
+          value={jobSchedulerInput.containerImage}
           onChange={onChange}
           onBlur={() => {}} // TODO: add here the "caching" logic handling
           autoComplete="on"
@@ -66,10 +76,11 @@ function DeployContainerDialog(props) {
           margin="dense"
         />
         <TextField
+          required
           label="Deployment Name"
           type="text"
           name="deploymentName"
-          value={deploymentInput.deploymentName}
+          value={jobSchedulerInput.deploymentName}
           onChange={onChange}
           autoComplete="on"
           error={isDeploymentNameInvalid}
@@ -83,8 +94,8 @@ function DeployContainerDialog(props) {
         </Typography>
         <KeyValueInputs
           onKeyValuePairChange={(keyValuePairs) => {
-            setDeploymentInput({
-              ...deploymentInput,
+            setJobSchedulerInput({
+              ...jobSchedulerInput,
               deploymentParameters: keyValuePairs,
             });
           }}
@@ -95,11 +106,24 @@ function DeployContainerDialog(props) {
         </Typography>
         <ValueInputs
           onValueInputsChange={(valueInputs) => {
-            setDeploymentInput({
-              ...deploymentInput,
+            setJobSchedulerInput({
+              ...jobSchedulerInput,
               deploymentEndpoints: valueInputs,
             });
           }}
+        />
+        <TextField
+          required
+          label="Cron String"
+          type="text"
+          name="cronString"
+          value={jobSchedulerInput.cronString}
+          onChange={onChange}
+          autoComplete="on"
+          error={isCronStringInvalid}
+          helperText={isCronStringInvalid ? 'Cron string is not valid' : null}
+          fullWidth
+          margin="dense"
         />
       </DialogContent>
       <DialogActions>
@@ -110,9 +134,10 @@ function DeployContainerDialog(props) {
           disabled={
             isContainerImageInvalid ||
             isDeploymentNameInvalid ||
-            !deploymentInput.containerImage
+            isCronStringInvalid ||
+            !jobSchedulerInput.containerImage
           }
-          onClick={() => onDeploy(deploymentInput, onClose)}
+          onClick={() => onDeploy(jobSchedulerInput, onClose)}
           color="primary"
         >
           DEPLOY
@@ -122,17 +147,17 @@ function DeployContainerDialog(props) {
   );
 }
 
-DeployContainerDialog.propTypes = {
+ScheduleJobDialog.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onDeploy: PropTypes.func.isRequired,
 };
 
-DeployContainerDialog.defaultProps = {
+ScheduleJobDialog.defaultProps = {
   className: '',
 };
 
-const StyledDeployContainerDialog = styled(DeployContainerDialog)`
+const StyledDeployContainerDialog = styled(ScheduleJobDialog)`
   &.subtitle {
     margin-top: 16px;
   }

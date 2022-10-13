@@ -8,6 +8,7 @@ import { ThemeProvider } from 'styled-components';
 
 import './index.css';
 import App from './pages/App';
+import AppDialogServiceProvider from './components/AppDialogServiceProvider';
 import theme from './utils/theme';
 
 ReactDOM.render(
@@ -15,7 +16,9 @@ ReactDOM.render(
     <MuiThemeProvider theme={theme}>
       <ThemeProvider theme={theme}>
         <HashRouter>
-          <App />
+          <AppDialogServiceProvider>
+            <App />
+          </AppDialogServiceProvider>
         </HashRouter>
       </ThemeProvider>
     </MuiThemeProvider>
