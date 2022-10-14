@@ -1,8 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { useCallback, useEffect, useState } from 'react';
-import superagent from 'superagent';
 
-import { EXTENSION_ENDPOINT } from '../utils/config';
+import { listScheduledJobs } from './job-scheduler-api';
 
 function useApiHook(apiCall, condition) {
   const sanitizedCondition = condition !== undefined ? condition : true;
@@ -38,4 +37,18 @@ function useApiHook(apiCall, condition) {
   }, [sanitizedCondition, reloadRequested, apiCall]);
 
   return [data, requestReload];
+}
+
+export function useScheduledJobs(projectId) {
+  const apiCall = useCallback(async () => {
+    try {
+      const jobs = await listScheduledJobs(projectId);
+      return jobs;
+    } catch (err) {
+      return [];
+    }
+  }, [projectId]);
+
+  const [data, reload] = useApiHook(apiCall, projectId);
+  return [data, reload];
 }

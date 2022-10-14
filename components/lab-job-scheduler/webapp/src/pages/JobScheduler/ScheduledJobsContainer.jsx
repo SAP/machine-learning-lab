@@ -1,42 +1,53 @@
 import MaterialTable from 'material-table';
 import React from 'react';
 
+import PropTypes from 'prop-types';
+
 const PAGE_SIZES = [5, 10, 15, 30, 50, 75, 100];
 
-function ScheduledJobsContainer() {
-  const COLUMNS = [
-    {
-      field: 'status',
-      title: 'Status',
-      numeric: false,
-      align: 'left',
-    },
-    {
-      field: 'name',
-      title: 'Name',
-      numeric: false,
-      align: 'left',
-      render: (rowData) => rowData.display_name,
-    },
-    {
-      field: 'started_at',
-      title: 'Started At',
-      align: 'left',
-      render: (rowData) => rowData.started_at?.getTime(),
-    },
-    {
-      field: 'finishedAt',
-      title: 'Finished At',
-      align: 'left',
-      render: (rowData) => rowData.stopped_at?.getTime(),
-    },
-  ];
+const COLUMNS = [
+  {
+    field: 'name',
+    title: 'Name',
+    numeric: false,
+    align: 'left',
+    render: (rowData) => rowData.job_input?.display_name,
+  },
+  {
+    field: 'image',
+    title: 'Image',
+    numeric: false,
+    align: 'left',
+    render: (rowData) => rowData.job_input?.container_image,
+  },
+  {
+    field: 'schedule',
+    title: 'Schedule',
+    align: 'left',
+    render: (rowData) => rowData.cron_string,
+  },
+  {
+    field: 'lastExecuted',
+    title: 'Last Executed',
+    align: 'left',
+    render: (rowData) =>
+      rowData.last_run ? new Date(rowData.last_run).toLocaleString() : null,
+  },
+  {
+    field: 'addedAt',
+    title: 'Added at',
+    align: 'left',
+    render: (rowData) => new Date(rowData.created).toLocaleString(),
+  },
+];
 
+function ScheduledJobsContainer(props) {
+  const { data, onReload, onScheduledJobDelete } = props;
   return (
     <MaterialTable
       title="Scheduled Jobs"
       columns={COLUMNS}
-      data={[]}
+      data={data}
       options={{
         filtering: true,
         columnsButton: false,
@@ -61,42 +72,14 @@ function ScheduledJobsContainer() {
         {
           icon: 'autorenew',
           isFreeAction: true,
-          onClick: () => console.log('reloaded'),
+          onClick: () => onReload(),
           tooltip: 'Reload',
-        },
-        {
-          icon: 'login',
-          iconProps: { className: `` },
-          onClick: (event, rowData) => {
-            console.log(event);
-            console.log(rowData);
-          },
-          tooltip: 'Access job',
-        },
-        {
-          icon: 'code',
-          iconProps: { className: `` },
-          onClick: (event, rowData) => {
-            console.log(event);
-            console.log(rowData);
-          },
-          tooltip: 'Show job metadata',
-        },
-        {
-          icon: 'assignment',
-          iconProps: { className: `` },
-          onClick: (event, rowData) => {
-            console.log(event);
-            console.log(rowData);
-          },
-          tooltip: 'Display logs',
         },
         {
           icon: 'delete',
           iconProps: { className: `` },
           onClick: (event, rowData) => {
-            console.log(event);
-            console.log(rowData);
+            onScheduledJobDelete(rowData);
           },
           tooltip: 'Delete job',
         },
@@ -104,5 +87,17 @@ function ScheduledJobsContainer() {
     />
   );
 }
+
+ScheduledJobsContainer.propTypes = {
+  data: PropTypes.arrayOf(Object),
+  onReload: PropTypes.func,
+  onScheduledJobDelete: PropTypes.func,
+};
+
+ScheduledJobsContainer.defaultProps = {
+  data: [],
+  onReload: () => {},
+  onScheduledJobDelete: () => {},
+};
 
 export default ScheduledJobsContainer;

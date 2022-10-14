@@ -12,6 +12,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+import cronstrue from 'cronstrue';
+
 import KeyValueInputs from './KeyValueInputs';
 import ValueInputs from './ValueInputs';
 
@@ -124,6 +126,11 @@ function ScheduleJobDialog(props) {
           fullWidth
           margin="dense"
         />
+        <Typography className={`${className} subtitle`} variant="subtitle2">
+          {!isCronStringInvalid && jobSchedulerInput.cronString !== ''
+            ? `${cronstrue.toString(jobSchedulerInput.cronString)}.`
+            : null}
+        </Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">

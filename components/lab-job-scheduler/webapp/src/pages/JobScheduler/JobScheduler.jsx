@@ -1,13 +1,17 @@
 import { useLocation } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { useShowAppDialog } from '../../components/AppDialogServiceProvider';
 import ScheduleJobDialog from '../../components/ScheduleJobDialog';
 import ScheduledJobsContainer from './ScheduledJobsContainer';
 import showStandardSnackbar from '../../components/showStandardSnackbar';
 
-import scheduleJob from '../../services/job-sceduler-api';
+import {
+  deleteScheduledJob,
+  scheduleJob,
+} from '../../services/job-scheduler-api';
+import { useScheduledJobs } from '../../services/api-hooks';
 
 const buttonStyle = {
   margin: '8px 0px',
@@ -24,6 +28,33 @@ function JobScheduler() {
   const showAppDialog = useShowAppDialog();
   const query = useQuery();
   const projectId = query.get('project');
+  const [scheduledJobs, reloadScheduledJobs] = useScheduledJobs(projectId);
+
+  const onScheduledJobDelete = useCallback(
+    async (pid, jobId) => {
+      try {
+        await deleteScheduledJob(pid, jobId);
+        showStandardSnackbar(`Deleted scheduled job '${jobId}'`);
+        reloadScheduledJobs();
+      } catch (err) {
+        showStandardSnackbar(`Could not delete scheduled job '${jobId}'`);
+      }
+    },
+    [reloadScheduledJobs]
+  );
+
+  const scheduledJobsContainer = useMemo(
+    () => (
+      <ScheduledJobsContainer
+        data={scheduledJobs}
+        onReload={reloadScheduledJobs}
+        onScheduledJobDelete={(rowData) =>
+          onScheduledJobDelete(projectId, rowData.job_id)
+        }
+      />
+    ),
+    [projectId, scheduledJobs, onScheduledJobDelete, reloadScheduledJobs]
+  );
 
   const onJobSchedule = () => {
     showAppDialog(ScheduleJobDialog, {
@@ -53,7 +84,7 @@ function JobScheduler() {
           await scheduleJob(projectId, scheduleJobInput);
           showStandardSnackbar(`Scheduled job '${displayName}'`);
           onClose();
-          // reloadJobs();
+          reloadScheduledJobs();
         } catch (err) {
           showStandardSnackbar(`Could not schedule '${displayName}'.`);
         }
@@ -72,7 +103,7 @@ function JobScheduler() {
       >
         Schedule Job
       </Button>
-      <ScheduledJobsContainer />
+      {scheduledJobsContainer}
     </div>
   );
 }
