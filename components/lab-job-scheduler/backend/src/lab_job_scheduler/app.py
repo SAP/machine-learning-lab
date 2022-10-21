@@ -10,7 +10,7 @@ from croniter import croniter
 from contaxy.operations.components import ComponentOperations
 from contaxy.schema.exceptions import CREATE_RESOURCE_RESPONSES
 from contaxy.utils import fastapi_utils
-from fastapi import Depends, FastAPI, status
+from fastapi import Depends, FastAPI, status, HTTPException
 from starlette.middleware.cors import CORSMiddleware
 
 from lab_job_scheduler.utils import CONTAXY_API_ENDPOINT, get_component_manager
@@ -108,6 +108,12 @@ def list_schedule(
     project_id: str,
     job_id: str,
 ) -> Any:
+    if project_id not in cached_scheduled_jobs:
+        raise HTTPException(status_code=404, detail="Project not found.")
+
+    if job_id not in cached_scheduled_jobs[project_id]:
+        raise HTTPException(status_code=404, detail="Job not found.")
+
     return cached_scheduled_jobs[project_id][job_id]
 
 
