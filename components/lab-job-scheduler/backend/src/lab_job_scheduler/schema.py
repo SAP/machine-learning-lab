@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import List
 from contaxy.schema.shared import MAX_DISPLAY_NAME_LENGTH
 from contaxy.schema.shared import MIN_DISPLAY_NAME_LENGTH
 from contaxy.schema.deployment import JobInput

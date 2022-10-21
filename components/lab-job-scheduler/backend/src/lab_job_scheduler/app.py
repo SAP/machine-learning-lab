@@ -2,7 +2,7 @@ import os
 import json
 from textwrap import indent
 import uuid
-from typing import Any
+from typing import Any, Dict, List
 import datetime
 import functools
 from croniter import croniter
@@ -31,14 +31,31 @@ if "BACKEND_CORS_ORIGINS" in os.environ:
         allow_headers=["*"],
     )
 
+# maps project_id to job_id to job. Used to minimize database calls.
+cached_scheduled_jobs: Dict[str, Dict[str, ScheduledJob]] = {}
 
 # Startup event to run scheduled jobs
+
+
 @app.on_event("startup")
 def on_startup() -> None:
     token = os.environ["CONTAXY_API_TOKEN"]  # TODO: Use a better way to get the token.
     component_manager: ComponentOperations = get_component_manager(token=token)
+
+    # cache all scheduled jobs from the database
+    for project in component_manager.get_project_manager().list_projects():
+        scheduled_jobs = get_all_scheduled_jobs_from_db(
+            component_manager, project.id)
+
+        if project.id not in cached_scheduled_jobs:
+            cached_scheduled_jobs[project.id] = {}
+
+        for job in scheduled_jobs:
+            cached_scheduled_jobs[project.id][job.job_id] = job
+
     fastapi_utils.schedule_call(
-        func=functools.partial(job_deployer.run_scheduled_jobs, component_manager),
+        func=functools.partial(job_deployer.run_scheduled_jobs,
+                               cached_scheduled_jobs, component_manager),
         interval=datetime.timedelta(seconds=JOB_INTERVAL),
     )
 
@@ -56,8 +73,14 @@ def create_schedule(
 ) -> Any:
     job = get_job_from_job_input(job_input)
     db = component_manager.get_json_db_manager()
-    return db.create_json_document(project_id=project_id,
+    resp = db.create_json_document(project_id=project_id,
                                    collection_id="schedules", key=job.job_id, json_document=json.dumps((job.dict())))
+
+    if project_id not in cached_scheduled_jobs:
+        cached_scheduled_jobs[project_id] = {}
+    cached_scheduled_jobs[project_id][job.job_id] = job
+
+    return resp
 
 
 @app.get(
@@ -68,11 +91,11 @@ def create_schedule(
 )
 def list_schedules(
     project_id: str,
-    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
-    db = component_manager.get_json_db_manager()
-    documents = db.list_json_documents(project_id=project_id, collection_id="schedules")
-    return [json.loads(document.json_value) for document in documents]
+    if project_id not in cached_scheduled_jobs:
+        return []
+
+    return list(cached_scheduled_jobs[project_id].values())
 
 
 @app.get(
@@ -84,12 +107,8 @@ def list_schedules(
 def list_schedule(
     project_id: str,
     job_id: str,
-    component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
-    db = component_manager.get_json_db_manager()
-    document = db.get_json_document(
-        project_id=project_id, collection_id="schedules", key=job_id)
-    return json.loads(document.json_value)
+    return cached_scheduled_jobs[project_id][job_id]
 
 
 @app.delete(
@@ -103,7 +122,8 @@ def delete_schedules(
     component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     db = component_manager.get_json_db_manager()
-    return db.delete_json_collection(project_id=project_id, collection_id="schedules")
+    db.delete_json_collection(project_id=project_id, collection_id="schedules")
+    cached_scheduled_jobs[project_id] = {}
 
 
 @app.delete(
@@ -118,8 +138,9 @@ def delete_schedule(
     component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
     db = component_manager.get_json_db_manager()
-    return db.delete_json_document(
+    db.delete_json_document(
         project_id=project_id, collection_id="schedules", key=job_id)
+    del cached_scheduled_jobs[project_id][job_id]
 
 
 @app.post(
@@ -136,13 +157,15 @@ def update_schedule(
 ) -> Any:
     job = get_job_from_job_input(job_input)
     db = component_manager.get_json_db_manager()
-    return db.update_json_document(project_id=project_id,
+    resp = db.update_json_document(project_id=project_id,
                                    collection_id="schedules", key=job_id, json_document=json.dumps((job.dict())))
+    cached_scheduled_jobs[project_id][job_id] = job
+    return resp
 
 
 @app.get(
     "/executor/info",
-    summary="Display information about executor",
+    summary="Display information about the executor",
     status_code=status.HTTP_200_OK,
     responses={**CREATE_RESOURCE_RESPONSES},
 )
@@ -150,6 +173,15 @@ def executor_info() -> Any:
     return {
         "execution_frequency": JOB_INTERVAL,
     }
+
+
+def get_all_scheduled_jobs_from_db(component_manager: ComponentOperations, project_id: str) -> List[ScheduledJob]:
+    """Returns all jobs from the database."""
+    db = component_manager.get_json_db_manager()
+    documents = db.list_json_documents(
+        project_id=project_id, collection_id="schedules"
+    )
+    return [ScheduledJob(**json.loads(document.json_value)) for document in documents]
 
 
 def get_job_from_job_input(job_schedule: ScheduledJobInput) -> ScheduledJob:
