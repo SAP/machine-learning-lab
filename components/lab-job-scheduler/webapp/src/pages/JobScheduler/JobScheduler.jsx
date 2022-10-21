@@ -11,7 +11,7 @@ import {
   deleteScheduledJob,
   scheduleJob,
 } from '../../services/job-scheduler-api';
-import { useScheduledJobs } from '../../services/api-hooks';
+import { useExecutorInfo, useScheduledJobs } from '../../services/api-hooks';
 
 const buttonStyle = {
   margin: '8px 0px',
@@ -29,6 +29,7 @@ function JobScheduler() {
   const query = useQuery();
   const projectId = query.get('project');
   const [scheduledJobs, reloadScheduledJobs] = useScheduledJobs(projectId);
+  const [executorInfo] = useExecutorInfo();
 
   const onScheduledJobDelete = useCallback(
     async (pid, jobId) => {
@@ -51,9 +52,16 @@ function JobScheduler() {
         onScheduledJobDelete={(rowData) =>
           onScheduledJobDelete(projectId, rowData.job_id)
         }
+        executionFrequency={executorInfo.execution_frequency}
       />
     ),
-    [projectId, scheduledJobs, onScheduledJobDelete, reloadScheduledJobs]
+    [
+      projectId,
+      scheduledJobs,
+      onScheduledJobDelete,
+      reloadScheduledJobs,
+      executorInfo,
+    ]
   );
 
   const onJobSchedule = () => {

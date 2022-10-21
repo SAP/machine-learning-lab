@@ -66,16 +66,16 @@ services:
 
   # Web interface to access postgres DB
   # (ATTENTION: uncommenting gives access to the DB without authentication)
-  # pgweb:
-  #   container_name: pgweb
-  #   restart: always
-  #   image: sosedoff/pgweb
-  #   # ports:
-  #   #   - "30012:8081"
-  #   environment:
-  #     - DATABASE_URL=postgres://postgres:postgres-password-change-me@postgres:5432/postgres?sslmode=disable
-  #   depends_on:
-  #     - postgres
+  pgweb:
+    container_name: pgweb
+    restart: always
+    image: sosedoff/pgweb
+    ports:
+      - "30012:8081"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres-password-change-me@postgres:5432/postgres?sslmode=disable
+    depends_on:
+      - postgres
 
   # Minio object storage used by the contaxy server in the ML Lab backend
   s3:
@@ -126,7 +126,7 @@ services:
     labels:
       ctxy.deploymentType: "extension"
       ctxy.deploymentName: "pylab-p-ctxy-global-s-lab-mlflow-manager"
-      ctxy.displayName: "MLFlow Server"
+      ctxy.displayName: "MLflow Experiments"
       ctxy.endpoints: "8080"
       ctxy.namespace: "pylab"
       ctxy.projectName: "ctxy-global"

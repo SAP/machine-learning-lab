@@ -50,3 +50,18 @@ export async function deleteScheduledJob(projectId, jobId) {
     throw err;
   }
 }
+
+export async function getExecutorInfo() {
+  try {
+    const resp = await superagent
+      .get(`${EXTENSION_ENDPOINT}/executor/info`)
+      .withCredentials();
+    return resp.body;
+  } catch (err) {
+    let message = err.response?.body?.detail;
+    if (typeof message === 'undefined') {
+      message = 'Unknown error.';
+    }
+    throw err;
+  }
+}

@@ -18,6 +18,7 @@ def run_scheduled_jobs(component_manager: ComponentOperations):
                 logger.info(f"Deploying job {job.job_id}")
                 deploy_job(job, component_manager, project.id)
                 update_last_run(job, component_manager, project.id)
+                update_next_run(job, component_manager, project.id)
 
 
 def get_all_jobs_from_db(component_manager: ComponentOperations, project_id: str) -> List[ScheduledJob]:
@@ -57,6 +58,18 @@ def deploy_job(job: ScheduledJob, component_manager: ComponentOperations, projec
 def update_last_run(job: ScheduledJob, component_manager: ComponentOperations, project_id: str):
     """Updates the last run of a job."""
     job.last_run = datetime.now().isoformat()
+    db = component_manager.get_json_db_manager()
+    db.update_json_document(
+        project_id=project_id,
+        collection_id="schedules",
+        key=job.job_id,
+        json_document=json.dumps(job.dict()),
+    )
+
+
+def update_next_run(job: ScheduledJob, component_manager: ComponentOperations, project_id: str):
+    """Updates the next run of a job."""
+    job.next_run = get_next_run_time(job).isoformat()
     db = component_manager.get_json_db_manager()
     db.update_json_document(
         project_id=project_id,

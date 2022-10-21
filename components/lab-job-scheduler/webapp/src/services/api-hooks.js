@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { useCallback, useEffect, useState } from 'react';
 
-import { listScheduledJobs } from './job-scheduler-api';
+import { getExecutorInfo, listScheduledJobs } from './job-scheduler-api';
 
 function useApiHook(apiCall, condition) {
   const sanitizedCondition = condition !== undefined ? condition : true;
@@ -50,5 +50,19 @@ export function useScheduledJobs(projectId) {
   }, [projectId]);
 
   const [data, reload] = useApiHook(apiCall, projectId);
+  return [data, reload];
+}
+
+export function useExecutorInfo() {
+  const apiCall = useCallback(async () => {
+    try {
+      const info = await getExecutorInfo();
+      return info;
+    } catch (err) {
+      return [];
+    }
+  }, []);
+
+  const [data, reload] = useApiHook(apiCall);
   return [data, reload];
 }

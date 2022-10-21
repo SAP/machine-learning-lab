@@ -5,6 +5,7 @@ import uuid
 from typing import Any
 import datetime
 import functools
+from croniter import croniter
 
 from contaxy.operations.components import ComponentOperations
 from contaxy.schema.exceptions import CREATE_RESOURCE_RESPONSES
@@ -139,13 +140,33 @@ def update_schedule(
                                    collection_id="schedules", key=job_id, json_document=json.dumps((job.dict())))
 
 
+@app.get(
+    "/executor/info",
+    summary="Display information about executor",
+    status_code=status.HTTP_200_OK,
+    responses={**CREATE_RESOURCE_RESPONSES},
+)
+def executor_info() -> Any:
+    return {
+        "execution_frequency": JOB_INTERVAL,
+    }
+
+
 def get_job_from_job_input(job_schedule: ScheduledJobInput) -> ScheduledJob:
     return ScheduledJob(
         cron_string=job_schedule.cron_string,
         job_input=job_schedule.job_input,
         created=datetime.datetime.now().isoformat(),
         job_id=str(uuid.uuid4()),
+        next_run=get_next_run_time(job_schedule).isoformat(),
     )
+
+
+def get_next_run_time(job_schedule: ScheduledJobInput) -> datetime.datetime:
+    """Returns the next run time of a job."""
+    base = datetime.datetime.now()
+    cron = croniter(job_schedule.cron_string, base)
+    return cron.get_next(datetime.datetime)
 
 
 if __name__ == "__main__":
