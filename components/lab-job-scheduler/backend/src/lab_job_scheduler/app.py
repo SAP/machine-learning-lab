@@ -146,7 +146,9 @@ def delete_schedule(
     db = component_manager.get_json_db_manager()
     db.delete_json_document(
         project_id=project_id, collection_id="schedules", key=job_id)
-    del cached_scheduled_jobs[project_id][job_id]
+
+    if project_id in cached_scheduled_jobs and job_id in cached_scheduled_jobs[project_id]:
+        del cached_scheduled_jobs[project_id][job_id]
 
 
 @app.post(
@@ -165,6 +167,10 @@ def update_schedule(
     db = component_manager.get_json_db_manager()
     resp = db.update_json_document(project_id=project_id,
                                    collection_id="schedules", key=job_id, json_document=json.dumps((job.dict())))
+
+    if project_id not in cached_scheduled_jobs:
+        cached_scheduled_jobs[project_id] = {}
+
     cached_scheduled_jobs[project_id][job_id] = job
     return resp
 
