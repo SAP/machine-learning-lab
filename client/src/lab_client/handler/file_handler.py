@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 import os
-from typing import Iterator, List, Optional
+from typing import Iterator, List, Literal, Optional
 
 from contaxy.clients import FileClient
 from contaxy.schema import File
@@ -13,6 +13,7 @@ from lab_client.utils import file_handler_utils, request_utils
 from zipfile import ZipFile
 import shutil
 
+VALID_DATATYPES = ['dataset', 'model']
 
 class FileHandler:
     def __init__(self, env, file_client: FileClient):
@@ -65,7 +66,7 @@ class FileHandler:
     def upload_file(
         self,
         file_path: str,
-        data_type: str,
+        data_type: Literal['model', 'dataset'],
         metadata: dict = None,
         file_name: str = None,
     ) -> str:
@@ -79,6 +80,9 @@ class FileHandler:
         Returns:
             Key of the uploaded file.
         """
+        if data_type not in VALID_DATATYPES:
+            raise Exception("Invalid data type specified. Possible values are `model` or `dataset`")
+
         if os.path.isdir(file_path):
             logger.info("Path is a folder, uploading as folder instead.")
             return self.upload_folder(
@@ -98,7 +102,7 @@ class FileHandler:
     def upload_folder(
         self,
         folder_path: str,
-        data_type: str,
+        data_type: Literal['model', 'dataset'],
         metadata: dict = None,
         file_name: str = None,
     ) -> str:
@@ -112,6 +116,9 @@ class FileHandler:
         Returns:
             Key of the uploaded (zipped) folder.
         """
+        if data_type not in VALID_DATATYPES:
+            raise Exception("Invalid data type specified. Possible values are `model` or `dataset`")
+
         if os.path.isfile(folder_path):
             logger.info("Path is a file, uploading as file instead.")
             return self.upload_file(folder_path,
@@ -135,16 +142,19 @@ class FileHandler:
         return key
 
     def list_remote_files(
-        self, data_type: str = None, prefix: str = None
+        self, data_type: Literal['model', 'dataset'] = None, prefix: str = None
     ) -> List[File]:
         """List remote files from Lab instance.
 
         Args:
-            data_type (string): Data type to filter files (dataset, model...)
+            data_type (literal): Data type to filter files (dataset, model...)
             prefix (string): Key prefix to filter files. If `data_type` is provided as well, the prefix will be used to filter files from the data type.
         Returns:
             List of found `Files`
         """
+        if data_type not in VALID_DATATYPES:
+            raise Exception("Invalid data type specified. Possible values are `model` or `dataset`")
+
         path = ""
         if data_type:
             path += f"{data_type}s/"

@@ -3,19 +3,18 @@ import superagent from 'superagent';
 import { EXTENSION_ENDPOINT } from '../utils/config';
 import showStandardSnackbar from '../app/showStandardSnackbar';
 
-export async function deployServer(projectId, workspaceInfo) {
+export async function deployServer(projectId) {
   try {
     await superagent
       .post(`${EXTENSION_ENDPOINT}/projects/${projectId}/mlflow-server`)
       .withCredentials()
-      .send(workspaceInfo)
       .set('Content-Type', 'application/json');
   } catch (err) {
     let message = err.response?.body?.detail;
     if (typeof message === 'undefined') {
       message = 'Unknown error.';
     }
-    showStandardSnackbar(`Failed to deploy ML Flow server! ${message}`);
+    showStandardSnackbar(`Failed to deploy MLflow server! ${message}`);
     throw err;
   }
 }
@@ -33,6 +32,6 @@ export async function startServer(projectId, workspaceId) {
     if (typeof message === 'undefined') {
       message = 'Unknown error.';
     }
-    showStandardSnackbar(`Failed to start ML Flow server! ${message}`);
+    showStandardSnackbar(`Failed to start MLflow server! ${message}`);
   }
 }

@@ -11,7 +11,7 @@ function MlFlowServerStatusPending() {
         textAlign: 'center',
       }}
     >
-      <h1>Your ML Flow Server is Starting</h1>
+      <h1>Your MLflow Server is Starting</h1>
       <LinearProgress />
     </Box>
   );

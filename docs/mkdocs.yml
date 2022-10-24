@@ -1,0 +1,83 @@
+# Project information
+site_name: Machine Learning Lab
+site_description: Documentation for the Machine Learning Lab
+site_author: Lukas Masuch & Benjamin Räthlein
+site_url: https://sap.github.io/machine-learning-lab/
+
+# Repository
+repo_name: sap/machine-learning-lab
+repo_url: https://github.com/sap/machine-learning-lab
+
+# Theme
+theme:
+  name: 'material'
+  custom_dir: 'custom_theme'
+  language: 'en'
+  # favicon: 'images/favicon.ico'
+
+# Extensions:
+markdown_extensions:
+  - admonition
+  - footnotes
+  - toc:
+      permalink: true
+  - codehilite:
+      guess_lang: false
+  - pymdownx.details
+  - pymdownx.emoji
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.progressbar
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - pymdownx.smartsymbols
+  - pymdownx.inlinehilite
+  - pymdownx.critic
+  - pymdownx.caret
+
+# Page tree
+nav:
+  - About ML Lab: index.md
+  - Getting Started: getting-started.md
+  - ML Lab Walkthrough: walkthrough/lab-walkthrough.md
+  - Installation: installation/install-lab.md
+  - Usage:
+    - Core Concepts: usage/core-concepts.md
+    - Workspace: usage/lab-workspace.md
+    - ML Lab Python Client: usage/lab-python-client.md
+    - ML Lab REST API: usage/lab-api.md
+    - Experiments Dashboard: usage/experiments-dashboard.md
+    - How to create a Service: usage/how-to-create-a-service.md
+    - How to create a Job: usage/how-to-create-a-job.md
+  - Administration:
+    - Update ML Lab: administration/update-lab.md
+    - Uninstall ML Lab: administration/uninstall-lab.md
+    - Manage Services: administration/manage-services.md
+    - Backup Data: administration/backup-data.md
+    - External OIDC Authentication: administration/external-oidc-authentication.md
+  - Architecture:
+    - ML Lifecycle: architecture/machine-learning-lifecycle.md
+    - ML Lab Architecture: architecture/architecture.md
+  - FAQ: faq.md
+
+# Options
+extra:
+  logo: 'images/logo.svg'
+  feature:
+    tabs: false
+  palette:
+    primary: indigo
+    accent: indigo
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
+  social:
+    - type: github-alt
+      link: https://github.com/sap/machine-learning-lab
+
+extra_css: [css/mllab.css]

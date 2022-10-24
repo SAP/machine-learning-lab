@@ -30,7 +30,7 @@ find /etc/nginx/ -name "*.conf" -exec  sed -s -i "s/\${RESOLVER}/${resolver}/g" 
 
 # Configure SSL variables in nginx
 if [[ "${SERVICE_SSL_ENABLED,,}" == true ]]; then
-    sed -i "s|listen 8081;|listen 8081 ssl;|g" /etc/nginx/nginx.conf;
+    sed -i "s|# listen 443 ssl;|listen 443 ssl;|g" /etc/nginx/nginx.conf;
     sed -i "s|# ssl_certificate \${SSL_CERTIFICATE_PATH};|ssl_certificate ${_SSL_RESOURCES_PATH}/cert.crt;|g" /etc/nginx/nginx.conf;
     sed -i "s|# ssl_certificate_key \${SSL_CERTIFICATE_KEY_PATH};|ssl_certificate_key ${_SSL_RESOURCES_PATH}/cert.key;|g" /etc/nginx/nginx.conf;
 fi
@@ -57,7 +57,11 @@ nginx -c /etc/nginx/nginx.conf
 nohup env -i /usr/local/sbin/sshd -D -e -f /etc/ssh/sshd_config &>/var/log/ssh.log &
 
 # Start the sslh server
-/usr/sbin/sslh-select --background -p 0.0.0.0:8080 --ssh 127.0.0.1:22 --http 127.0.0.1:8081 --ssl 127.0.0.1:8081
+if [[ "${SERVICE_SSL_ENABLED,,}" == true ]]; then
+  /usr/sbin/sslh-select --background -p 0.0.0.0:8080 --ssh 127.0.0.1:22 --ssl 127.0.0.1:443
+else
+  /usr/sbin/sslh-select --background -p 0.0.0.0:8080 --ssh 127.0.0.1:22 --http 127.0.0.1:80
+fi
 
 # Set the gunicorn / fastAPI port
 export PORT=8090

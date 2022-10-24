@@ -27,9 +27,9 @@ function MLFlowServer() {
   const [mlflowServers, reloadMlflowServers] = useServer(projectId);
 
   useEffect(() => {
-    // Deploy default ML Flow server if no server is deployed
+    // Deploy default MLflow server if no server is deployed
     if (!isDeploymentLoading && mlflowServers?.length === 0) {
-      deployServer(projectId, { is_stopped: true }).then(() => {
+      deployServer(projectId).then(() => {
         setIsDeploymentLoading(false);
         reloadMlflowServers();
       });
@@ -54,7 +54,7 @@ function MLFlowServer() {
   if (mlflowServers === null || mlflowServers.length === 0) {
     content = null;
   } else {
-    // Always show first ML Flow server. Multiple ML Flow servers are not implemented for now.
+    // Always show first MLflow server. Multiple MLflow servers are not implemented for now.
     const mlflowServer = mlflowServers[0];
     if (isServerLoading || mlflowServer.status === 'pending') {
       content = <MlFlowServerStatusPending className="mlflow-server-content" />;

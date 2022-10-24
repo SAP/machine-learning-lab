@@ -8,6 +8,7 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 WEBAPP_COMPONENT = "webapp"
 PYTHON_LIB_COMPONENT = "backend"
+MLFLOW_SERVER_COMPONENT = "lab-mlflow-server"
 COMPONENT_NAME = "lab-mlflow-manager"
 
 
@@ -21,6 +22,9 @@ def main(args: dict) -> None:
 
     # Build python lib
     build_utils.build(PYTHON_LIB_COMPONENT, args)
+
+    # Build MLflow server image
+    build_utils.build(MLFLOW_SERVER_COMPONENT, args)
 
     if args.get(build_utils.FLAG_MAKE):
         build_utils.build(WEBAPP_COMPONENT, args)
