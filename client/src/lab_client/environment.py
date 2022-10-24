@@ -1,5 +1,5 @@
 import os
-from typing import Optional
+from typing import Optional, Literal
 
 from contaxy.clients import AuthClient, FileClient, ExtensionClient
 from contaxy.clients import DeploymentClient
@@ -236,7 +236,7 @@ class Environment:
     def upload_file(
         self,
         file_path: str,
-        data_type: str,
+        data_type: Literal['model', 'dataset'],
         metadata: dict = None,
         file_name: str = None,
     ) -> str:
@@ -270,7 +270,7 @@ class Environment:
     def upload_folder(
         self,
         folder_path: str,
-        data_type: str,
+        data_type: Literal['model', 'dataset'],
         metadata: dict = None,
         file_name: str = None,
     ) -> str:
