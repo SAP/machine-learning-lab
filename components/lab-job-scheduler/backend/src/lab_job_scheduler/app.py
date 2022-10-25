@@ -100,7 +100,7 @@ def list_schedules(
 
 @app.get(
     "/project/{project_id}/schedule/{job_id}",
-    summary="List a job schedule",
+    summary="Get a job schedule",
     status_code=status.HTTP_200_OK,
     responses={**CREATE_RESOURCE_RESPONSES},
 )
