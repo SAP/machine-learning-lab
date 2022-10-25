@@ -6,6 +6,7 @@ from typing import Any, Dict, List
 import datetime
 import functools
 from croniter import croniter
+from contaxy.utils import id_utils
 
 from contaxy.operations.components import ComponentOperations
 from contaxy.schema.exceptions import CREATE_RESOURCE_RESPONSES
@@ -201,7 +202,7 @@ def get_job_from_job_input(job_schedule: ScheduledJobInput) -> ScheduledJob:
         cron_string=job_schedule.cron_string,
         job_input=job_schedule.job_input,
         created=datetime.datetime.now().isoformat(),
-        job_id=str(uuid.uuid4()),
+        job_id=id_utils.generate_short_uuid(),
         next_run=get_next_run_time(job_schedule).isoformat(),
     )
 
