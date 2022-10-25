@@ -15,10 +15,8 @@ def run_scheduled_jobs(cached_scheduled_jobs: Dict[str, Dict[str, ScheduledJob]]
             if is_due(job):
                 logger.info(f"Deploying job {job_id}")
                 deploy_job(job, component_manager, project_id)
-                update_last_run(job, component_manager,
-                                project_id, cached_scheduled_jobs)
-                update_next_run(job, component_manager,
-                                project_id, cached_scheduled_jobs)
+                update_db(job, component_manager,
+                          project_id, cached_scheduled_jobs)
 
 
 def is_due(job: ScheduledJob, reference_time: Optional[datetime] = None) -> bool:
@@ -45,21 +43,9 @@ def deploy_job(job: ScheduledJob, component_manager: ComponentOperations, projec
         project_id=project_id, job_input=job.job_input)
 
 
-def update_last_run(job: ScheduledJob, component_manager: ComponentOperations, project_id: str, cached_scheduled_jobs: Dict[str, Dict[str, ScheduledJob]]):
-    """Updates the last run of a job."""
+def update_db(job: ScheduledJob, component_manager: ComponentOperations, project_id: str, cached_scheduled_jobs: Dict[str, Dict[str, ScheduledJob]]):
+    """Updates the last run and next run of a job."""
     job.last_run = datetime.now().isoformat()
-    db = component_manager.get_json_db_manager()
-    db.update_json_document(
-        project_id=project_id,
-        collection_id="schedules",
-        key=job.job_id,
-        json_document=json.dumps(job.dict()),
-    )
-    cached_scheduled_jobs[project_id][job.job_id].last_run = job.last_run
-
-
-def update_next_run(job: ScheduledJob, component_manager: ComponentOperations, project_id: str, cached_scheduled_jobs: Dict[str, Dict[str, ScheduledJob]]):
-    """Updates the next run of a job."""
     job.next_run = get_next_run_time(job).isoformat()
     db = component_manager.get_json_db_manager()
     db.update_json_document(
@@ -68,4 +54,5 @@ def update_next_run(job: ScheduledJob, component_manager: ComponentOperations, p
         key=job.job_id,
         json_document=json.dumps(job.dict()),
     )
+    cached_scheduled_jobs[project_id][job.job_id].last_run = job.last_run
     cached_scheduled_jobs[project_id][job.job_id].next_run = job.next_run
