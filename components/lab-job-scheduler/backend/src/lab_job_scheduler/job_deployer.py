@@ -6,10 +6,12 @@ from lab_job_scheduler.schema import ScheduledJob
 import json
 from loguru import logger
 from typing import Optional
+import threading
 
 
-def run_scheduled_jobs(cached_scheduled_jobs: Dict[str, Dict[str, ScheduledJob]], component_manager: ComponentOperations):
+def run_scheduled_jobs(cached_scheduled_jobs: Dict[str, Dict[str, ScheduledJob]], lock: threading.Lock, component_manager: ComponentOperations):
     """Runs all scheduled jobs."""
+    lock.acquire()
     for project_id, jobs in cached_scheduled_jobs.items():
         for job_id, job in jobs.items():
             if is_due(job):
@@ -17,6 +19,8 @@ def run_scheduled_jobs(cached_scheduled_jobs: Dict[str, Dict[str, ScheduledJob]]
                 deploy_job(job, component_manager, project_id)
                 update_db(job, component_manager,
                           project_id, cached_scheduled_jobs)
+
+    lock.release()
 
 
 def is_due(job: ScheduledJob, reference_time: Optional[datetime] = None) -> bool:

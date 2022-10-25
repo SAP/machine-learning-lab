@@ -7,6 +7,7 @@ import datetime
 import functools
 from croniter import croniter
 from contaxy.utils import id_utils
+import threading
 
 from contaxy.operations.components import ComponentOperations
 from contaxy.schema.exceptions import CREATE_RESOURCE_RESPONSES
@@ -35,6 +36,8 @@ if "BACKEND_CORS_ORIGINS" in os.environ:
 # maps project_id to job_id to job. Used to minimize database calls.
 cached_scheduled_jobs: Dict[str, Dict[str, ScheduledJob]] = {}
 
+lock = threading.Lock()
+
 # Startup event to run scheduled jobs
 
 
@@ -42,6 +45,8 @@ cached_scheduled_jobs: Dict[str, Dict[str, ScheduledJob]] = {}
 def on_startup() -> None:
     token = os.environ["CONTAXY_API_TOKEN"]  # TODO: Use a better way to get the token.
     component_manager: ComponentOperations = get_component_manager(token=token)
+
+    lock.acquire()
 
     # cache all scheduled jobs from the database
     for project in component_manager.get_project_manager().list_projects():
@@ -54,9 +59,11 @@ def on_startup() -> None:
         for job in scheduled_jobs:
             cached_scheduled_jobs[project.id][job.job_id] = job
 
+    lock.release()
+
     fastapi_utils.schedule_call(
         func=functools.partial(job_deployer.run_scheduled_jobs,
-                               cached_scheduled_jobs, component_manager),
+                               cached_scheduled_jobs, lock, component_manager),
         interval=datetime.timedelta(seconds=JOB_INTERVAL),
     )
 
@@ -77,9 +84,13 @@ def create_schedule(
     resp = db.create_json_document(project_id=project_id,
                                    collection_id="schedules", key=job.job_id, json_document=json.dumps((job.dict())))
 
+    lock.acquire()
+
     if project_id not in cached_scheduled_jobs:
         cached_scheduled_jobs[project_id] = {}
     cached_scheduled_jobs[project_id][job.job_id] = job
+
+    lock.release()
 
     return resp
 
@@ -93,10 +104,17 @@ def create_schedule(
 def list_schedules(
     project_id: str,
 ) -> Any:
+
+    lock.acquire()
+
     if project_id not in cached_scheduled_jobs:
         return []
 
-    return list(cached_scheduled_jobs[project_id].values())
+    output = list(cached_scheduled_jobs[project_id].values())
+
+    lock.release()
+
+    return output
 
 
 @app.get(
@@ -109,13 +127,20 @@ def list_schedule(
     project_id: str,
     job_id: str,
 ) -> Any:
+
+    lock.acquire()
+
     if project_id not in cached_scheduled_jobs:
         raise HTTPException(status_code=404, detail="Project not found.")
 
     if job_id not in cached_scheduled_jobs[project_id]:
         raise HTTPException(status_code=404, detail="Job not found.")
 
-    return cached_scheduled_jobs[project_id][job_id]
+    output = cached_scheduled_jobs[project_id][job_id]
+
+    lock.release()
+
+    return output
 
 
 @app.delete(
@@ -130,7 +155,12 @@ def delete_schedules(
 ) -> Any:
     db = component_manager.get_json_db_manager()
     db.delete_json_collection(project_id=project_id, collection_id="schedules")
+
+    lock.acquire()
+
     cached_scheduled_jobs[project_id] = {}
+
+    lock.release()
 
 
 @app.delete(
@@ -148,8 +178,12 @@ def delete_schedule(
     db.delete_json_document(
         project_id=project_id, collection_id="schedules", key=job_id)
 
+    lock.acquire()
+
     if project_id in cached_scheduled_jobs and job_id in cached_scheduled_jobs[project_id]:
         del cached_scheduled_jobs[project_id][job_id]
+
+    lock.release()
 
 
 @app.post(
@@ -169,10 +203,15 @@ def update_schedule(
     resp = db.update_json_document(project_id=project_id,
                                    collection_id="schedules", key=job_id, json_document=json.dumps((job.dict())))
 
+    lock.acquire()
+
     if project_id not in cached_scheduled_jobs:
         cached_scheduled_jobs[project_id] = {}
 
     cached_scheduled_jobs[project_id][job_id] = job
+
+    lock.release()
+
     return resp
 
 
