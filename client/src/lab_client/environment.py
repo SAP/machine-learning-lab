@@ -1,5 +1,6 @@
+from datetime import datetime
 import os
-from typing import Optional, Literal
+from typing import Optional, Literal, List
 
 from contaxy.clients import AuthClient, FileClient, ExtensionClient
 from contaxy.clients import DeploymentClient
@@ -300,6 +301,43 @@ class Environment:
             The metadata Dictionary of the file.
         """
         return self.file_handler.get_file_metadata(project, key, version)
+
+    def delete_remote_file(
+        self, key: str, version: Optional[str] = None, keep_latest_version: bool = False
+    ) -> None:
+        """Deletes a file based on the specified 'key'.
+
+        Args:
+            key (str): Key or url of the requested file.
+            version (Optional[str], optional): Version of the file to be deleted. Defaults to None.
+            keep_latest_version (bool, optional): _description_. Defaults to False.
+        """
+        self.file_handler.delete_remote_file(key, version, keep_latest_version)
+
+    def delete_remote_files(
+        self, date_from: Optional[datetime] = None, date_to: Optional[datetime] = None
+    ) -> None:
+        """Deletes all files (models/datasets) of a project.
+
+        Args:
+            date_from (Optional[datetime], optional): The start date (in UTC format) from which the file has to be deleted. If none, all files will be deleted.
+            date_to (Optional[datetime], optional): The end date (in UTC format) until which the file has to be deleted. If none, all files will be deleted.
+        """
+        self.file_handler.delete_remote_files(date_from, date_to)
+
+    def list_remote_files(
+        self, data_type: Literal['model', 'dataset'] = None, prefix: str = None
+    ) -> List[File]:
+        """Lists all the remote files.
+
+        Args:
+            data_type (Literal['model', 'dataset'], optional): The date type of the files to list. Defaults to None.
+            prefix (str, optional): The file name prefix. If 'None', all files would be listed.
+
+        Returns:
+            List[File]: List of the remote files.
+        """
+        return self.file_handler.list_remote_files(data_type, prefix)
 
     @property
     def mlflow_handler(self) -> MLFlowHandler:

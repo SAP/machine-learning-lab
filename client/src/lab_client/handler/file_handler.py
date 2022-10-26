@@ -12,6 +12,7 @@ import sys
 from lab_client.utils import file_handler_utils, request_utils
 from zipfile import ZipFile
 import shutil
+from datetime import datetime
 
 VALID_DATATYPES = ['dataset', 'model']
 
@@ -182,6 +183,21 @@ class FileHandler:
             keep_latest_version=keep_latest_version,
         )
 
+    def delete_remote_files(
+        self, date_from: Optional[datetime] = None, date_to: Optional[datetime] = None
+    ) -> None:
+        """
+        Delete a file from remote storage.
+        # Arguments
+            key: Key of the file.
+            keep_latest_version: If `True` the latest file version will be kept.
+        """
+        self.file_client.delete_files(
+            project_id=self.env.project,
+            date_from=date_from,
+            date_to=date_to
+        )
+
     def resolve_path_from_key(self, key: str, version: Optional[str] = None) -> str:
         """
         Return the local path for a given key.
@@ -259,3 +275,4 @@ class FileHandler:
                                                            file_key, version)
 
         return metadata_file
+
