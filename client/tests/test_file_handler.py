@@ -5,7 +5,7 @@ from lab_client import Environment
 from .conftest import test_settings
 import requests
 import pytest
-
+from datetime import datetime, timedelta, timezone
 
 @pytest.mark.integration
 class TestFile:
@@ -184,3 +184,65 @@ class TestFile:
         env.upload_file(tf.name, "dataset")
 
         env.file_handler.list_remote_files(data_type="datasets")
+
+    @pytest.mark.xfail(raises=Exception)
+    def test_delete_single_file(self) -> None:
+        env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
+                          lab_api_token=test_settings.LAB_TOKEN,
+                          project=test_settings.LAB_PROJECT)
+
+        tf = tempfile.NamedTemporaryFile()
+        with open(tf.name, 'w') as f:
+            f.write("content 1")
+            f.close()
+        key = env.upload_file(tf.name, "dataset")
+
+        env.delete_remote_file(key)
+        # This should throw a 404 error as file will not be present.
+        env.get_file(key)
+
+    def test_delete_files_within_time_window(self) -> None:
+        env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
+                          lab_api_token=test_settings.LAB_TOKEN,
+                          project=test_settings.LAB_PROJECT)
+
+        # Clear/Delete all files initially.
+        env.delete_remote_files()
+
+        # Test that files within the date window are deleted.
+        tf = tempfile.NamedTemporaryFile(prefix='abcd_')
+        with open(tf.name, 'w') as f:
+            f.write("content 1")
+            f.close()
+        env.upload_file(tf.name, "dataset")
+
+        date_from = datetime.now(timezone.utc) - timedelta(days=1)
+        date_to = datetime.now(timezone.utc) + timedelta(days=1)
+
+        env.delete_remote_files(date_from, date_to)
+
+        files = env.list_remote_files(data_type='dataset')
+        assert len(files) == 0
+
+    def test_delete_files_outside_time_window(self) -> None:
+        env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
+                          lab_api_token=test_settings.LAB_TOKEN,
+                          project=test_settings.LAB_PROJECT)
+
+        # Clear/Delete all files initially.
+        env.delete_remote_files()
+
+        # Test that files outside the date window are not deleted.
+        tf = tempfile.NamedTemporaryFile(prefix='qwertz_')
+        with open(tf.name, 'w') as f:
+            f.write("content 1")
+            f.close()
+        env.upload_file(tf.name, "dataset")
+
+        date_from = datetime.now(timezone.utc) - timedelta(days=3)
+        date_to = datetime.now(timezone.utc) - timedelta(days=2)
+
+        env.delete_remote_files(date_from, date_to)
+
+        files = env.list_remote_files(data_type="dataset")
+        assert len(files) == 1
