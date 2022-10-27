@@ -11,16 +11,14 @@ import threading
 
 def run_scheduled_jobs(cached_scheduled_jobs: Dict[str, Dict[str, ScheduledJob]], lock: threading.Lock, component_manager: ComponentOperations):
     """Runs all scheduled jobs."""
-    lock.acquire()
-    for project_id, jobs in cached_scheduled_jobs.items():
-        for job_id, job in jobs.items():
-            if is_due(job):
-                logger.info(f"Deploying job {job_id}")
-                deploy_job(job, component_manager, project_id)
-                update_db(job, component_manager,
-                          project_id, cached_scheduled_jobs)
-
-    lock.release()
+    with lock:
+        for project_id, jobs in cached_scheduled_jobs.items():
+            for job_id, job in jobs.items():
+                if is_due(job):
+                    logger.info(f"Deploying job {job_id}")
+                    deploy_job(job, component_manager, project_id)
+                    update_db(job, component_manager,
+                              project_id, cached_scheduled_jobs)
 
 
 def is_due(job: ScheduledJob, reference_time: Optional[datetime] = None) -> bool:

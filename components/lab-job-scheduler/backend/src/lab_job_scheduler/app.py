@@ -46,20 +46,18 @@ def on_startup() -> None:
     token = os.environ["CONTAXY_API_TOKEN"]  # TODO: Use a better way to get the token.
     component_manager: ComponentOperations = get_component_manager(token=token)
 
-    lock.acquire()
+    with lock:
 
-    # cache all scheduled jobs from the database
-    for project in component_manager.get_project_manager().list_projects():
-        scheduled_jobs = get_all_scheduled_jobs_from_db(
-            component_manager, project.id)
+        # cache all scheduled jobs from the database
+        for project in component_manager.get_project_manager().list_projects():
+            scheduled_jobs = get_all_scheduled_jobs_from_db(
+                component_manager, project.id)
 
-        if project.id not in cached_scheduled_jobs:
-            cached_scheduled_jobs[project.id] = {}
+            if project.id not in cached_scheduled_jobs:
+                cached_scheduled_jobs[project.id] = {}
 
-        for job in scheduled_jobs:
-            cached_scheduled_jobs[project.id][job.job_id] = job
-
-    lock.release()
+            for job in scheduled_jobs:
+                cached_scheduled_jobs[project.id][job.job_id] = job
 
     fastapi_utils.schedule_call(
         func=functools.partial(job_deployer.run_scheduled_jobs,
@@ -84,13 +82,10 @@ def create_schedule(
     resp = db.create_json_document(project_id=project_id,
                                    collection_id="schedules", key=job.job_id, json_document=json.dumps((job.dict())))
 
-    lock.acquire()
-
-    if project_id not in cached_scheduled_jobs:
-        cached_scheduled_jobs[project_id] = {}
-    cached_scheduled_jobs[project_id][job.job_id] = job
-
-    lock.release()
+    with lock:
+        if project_id not in cached_scheduled_jobs:
+            cached_scheduled_jobs[project_id] = {}
+        cached_scheduled_jobs[project_id][job.job_id] = job
 
     return resp
 
@@ -105,14 +100,11 @@ def list_schedules(
     project_id: str,
 ) -> Any:
 
-    lock.acquire()
+    with lock:
+        if project_id not in cached_scheduled_jobs:
+            return []
 
-    if project_id not in cached_scheduled_jobs:
-        return []
-
-    output = list(cached_scheduled_jobs[project_id].values())
-
-    lock.release()
+        output = list(cached_scheduled_jobs[project_id].values())
 
     return output
 
@@ -128,17 +120,14 @@ def list_schedule(
     job_id: str,
 ) -> Any:
 
-    lock.acquire()
+    with lock:
+        if project_id not in cached_scheduled_jobs:
+            raise HTTPException(status_code=404, detail="Project not found.")
 
-    if project_id not in cached_scheduled_jobs:
-        raise HTTPException(status_code=404, detail="Project not found.")
+        if job_id not in cached_scheduled_jobs[project_id]:
+            raise HTTPException(status_code=404, detail="Job not found.")
 
-    if job_id not in cached_scheduled_jobs[project_id]:
-        raise HTTPException(status_code=404, detail="Job not found.")
-
-    output = cached_scheduled_jobs[project_id][job_id]
-
-    lock.release()
+        output = cached_scheduled_jobs[project_id][job_id]
 
     return output
 
@@ -156,11 +145,8 @@ def delete_schedules(
     db = component_manager.get_json_db_manager()
     db.delete_json_collection(project_id=project_id, collection_id="schedules")
 
-    lock.acquire()
-
-    cached_scheduled_jobs[project_id] = {}
-
-    lock.release()
+    with lock:
+        cached_scheduled_jobs[project_id] = {}
 
 
 @app.delete(
@@ -178,12 +164,9 @@ def delete_schedule(
     db.delete_json_document(
         project_id=project_id, collection_id="schedules", key=job_id)
 
-    lock.acquire()
-
-    if project_id in cached_scheduled_jobs and job_id in cached_scheduled_jobs[project_id]:
-        del cached_scheduled_jobs[project_id][job_id]
-
-    lock.release()
+    with lock:
+        if project_id in cached_scheduled_jobs and job_id in cached_scheduled_jobs[project_id]:
+            del cached_scheduled_jobs[project_id][job_id]
 
 
 @app.post(
@@ -203,14 +186,11 @@ def update_schedule(
     resp = db.update_json_document(project_id=project_id,
                                    collection_id="schedules", key=job_id, json_document=json.dumps((job.dict())))
 
-    lock.acquire()
+    with lock:
+        if project_id not in cached_scheduled_jobs:
+            cached_scheduled_jobs[project_id] = {}
 
-    if project_id not in cached_scheduled_jobs:
-        cached_scheduled_jobs[project_id] = {}
-
-    cached_scheduled_jobs[project_id][job_id] = job
-
-    lock.release()
+        cached_scheduled_jobs[project_id][job_id] = job
 
     return resp
 
