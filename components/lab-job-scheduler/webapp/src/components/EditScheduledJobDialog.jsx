@@ -24,8 +24,8 @@ const SERVICE_NAME_REGEX = new RegExp(
   '^([a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9])?$'
 );
 
-function ScheduleJobDialog(props) {
-  const { className, onClose, onDeploy, defaults } = props;
+function EditScheduleJobDialog(props) {
+  const { className, onClose, onEdit, defaults, jobId } = props;
 
   const containerImage = defaults?.containerImage || '';
   const displayName = defaults?.displayName || '';
@@ -60,10 +60,10 @@ function ScheduleJobDialog(props) {
 
   return (
     <Dialog open>
-      <DialogTitle>Schedule Job</DialogTitle>
+      <DialogTitle>Edit Scheduled Job</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Schedule a new job in the selected project based on the specific
+          Edit a scheduled job in the selected project based on the specific
           Docker image. Please make sure that the image is a compatible ML Lab
           service.
         </DialogContentText>
@@ -149,20 +149,20 @@ function ScheduleJobDialog(props) {
             isCronStringInvalid ||
             !jobSchedulerInput.containerImage
           }
-          onClick={() => onDeploy(jobSchedulerInput, onClose)}
+          onClick={() => onEdit(jobSchedulerInput, jobId, onClose)}
           color="primary"
         >
-          SCHEDULE
+          EDIT
         </Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-ScheduleJobDialog.propTypes = {
+EditScheduleJobDialog.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func.isRequired,
-  onDeploy: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
   defaults: PropTypes.shape({
     containerImage: PropTypes.string,
     displayName: PropTypes.string,
@@ -171,14 +171,16 @@ ScheduleJobDialog.propTypes = {
     deploymentEndpoints: PropTypes.arrayOf(PropTypes.string),
     cronString: PropTypes.string,
   }),
+  jobId: PropTypes.string,
 };
 
-ScheduleJobDialog.defaultProps = {
+EditScheduleJobDialog.defaultProps = {
   className: '',
   defaults: {},
+  jobId: '',
 };
 
-const StyledDeployContainerDialog = styled(ScheduleJobDialog)`
+const StyledDeployContainerDialog = styled(EditScheduleJobDialog)`
   &.subtitle {
     margin-top: 16px;
   }

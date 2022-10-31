@@ -6,7 +6,13 @@ import PropTypes from 'prop-types';
 const PAGE_SIZES = [5, 10, 15, 30, 50, 75, 100];
 
 function ScheduledJobsContainer(props) {
-  const { data, onReload, onScheduledJobDelete, executionFrequency } = props;
+  const {
+    data,
+    onReload,
+    onScheduledJobDelete,
+    onScheduledJobEdit,
+    executionFrequency,
+  } = props;
 
   const getNextExecutionError = (seconds) => {
     let nextExecutionError = '';
@@ -98,6 +104,14 @@ function ScheduledJobsContainer(props) {
           tooltip: 'Reload',
         },
         {
+          icon: 'edit',
+          iconProps: { className: `` },
+          onClick: (event, rowData) => {
+            onScheduledJobEdit(rowData);
+          },
+          tooltip: 'Edit job',
+        },
+        {
           icon: 'delete',
           iconProps: { className: `` },
           onClick: (event, rowData) => {
@@ -114,6 +128,7 @@ ScheduledJobsContainer.propTypes = {
   data: PropTypes.arrayOf(Object),
   onReload: PropTypes.func,
   onScheduledJobDelete: PropTypes.func,
+  onScheduledJobEdit: PropTypes.func,
   executionFrequency: PropTypes.number,
 };
 
@@ -121,6 +136,7 @@ ScheduledJobsContainer.defaultProps = {
   data: [],
   onReload: () => {},
   onScheduledJobDelete: () => {},
+  onScheduledJobEdit: () => {},
   executionFrequency: 0,
 };
 

@@ -3,12 +3,14 @@ import Button from '@material-ui/core/Button';
 import React, { useCallback, useMemo } from 'react';
 
 import { useShowAppDialog } from '../../components/AppDialogServiceProvider';
+import EditScheduledJobDialog from '../../components/EditScheduledJobDialog';
 import ScheduleJobDialog from '../../components/ScheduleJobDialog';
 import ScheduledJobsContainer from './ScheduledJobsContainer';
 import showStandardSnackbar from '../../components/showStandardSnackbar';
 
 import {
   deleteScheduledJob,
+  editScheduledJob,
   scheduleJob,
 } from '../../services/job-scheduler-api';
 import { useExecutorInfo, useScheduledJobs } from '../../services/api-hooks';
@@ -31,6 +33,77 @@ function JobScheduler() {
   const [scheduledJobs, reloadScheduledJobs] = useScheduledJobs(projectId);
   const [executorInfo] = useExecutorInfo();
 
+  const onDeploy = useCallback(
+    async (
+      {
+        containerImage,
+        displayName,
+        deploymentParameters,
+        deploymentEndpoints,
+        cronString,
+      },
+      onClose
+    ) => {
+      const jobInput = {
+        container_image: containerImage,
+        display_name: displayName,
+        endpoints: deploymentEndpoints,
+        parameters: deploymentParameters,
+      };
+      const scheduleJobInput = {
+        cron_string: cronString,
+        job_input: jobInput,
+      };
+
+      onClose();
+      try {
+        await scheduleJob(projectId, scheduleJobInput);
+        showStandardSnackbar(`Scheduled job '${displayName}'`);
+        onClose();
+        reloadScheduledJobs();
+      } catch (err) {
+        showStandardSnackbar(`Could not schedule '${displayName}'.`);
+      }
+    },
+    [projectId, reloadScheduledJobs]
+  );
+
+  const onEdit = useCallback(
+    async (
+      {
+        containerImage,
+        displayName,
+        deploymentParameters,
+        deploymentEndpoints,
+        cronString,
+      },
+      jobId,
+      onClose
+    ) => {
+      const jobInput = {
+        container_image: containerImage,
+        display_name: displayName,
+        endpoints: deploymentEndpoints,
+        parameters: deploymentParameters,
+      };
+      const scheduleJobInput = {
+        cron_string: cronString,
+        job_input: jobInput,
+      };
+
+      onClose();
+      try {
+        await editScheduledJob(projectId, jobId, scheduleJobInput);
+        showStandardSnackbar(`Edited job '${displayName}'`);
+        onClose();
+        reloadScheduledJobs();
+      } catch (err) {
+        showStandardSnackbar(`Could not edit schedule '${displayName}'.`);
+      }
+    },
+    [projectId, reloadScheduledJobs]
+  );
+
   const onScheduledJobDelete = useCallback(
     async (pid, jobId) => {
       try {
@@ -44,6 +117,30 @@ function JobScheduler() {
     [reloadScheduledJobs]
   );
 
+  const onScheduledJobEdit = useCallback(
+    (
+      containerImage,
+      displayName,
+      deploymentParameters,
+      deploymentEndpoints,
+      cronString,
+      jobId
+    ) => {
+      showAppDialog(EditScheduledJobDialog, {
+        onEdit,
+        defaults: {
+          containerImage,
+          displayName,
+          deploymentParameters,
+          deploymentEndpoints,
+          cronString,
+        },
+        jobId,
+      });
+    },
+    [onEdit, showAppDialog]
+  );
+
   const scheduledJobsContainer = useMemo(
     () => (
       <ScheduledJobsContainer
@@ -52,6 +149,16 @@ function JobScheduler() {
         onScheduledJobDelete={(rowData) =>
           onScheduledJobDelete(projectId, rowData.job_id)
         }
+        onScheduledJobEdit={(rowData) =>
+          onScheduledJobEdit(
+            rowData.job_input.container_image,
+            rowData.job_input.display_name,
+            rowData.job_input.parameters,
+            rowData.job_input.endpoints,
+            rowData.cron_string,
+            rowData.job_id
+          )
+        }
         executionFrequency={executorInfo.execution_frequency}
       />
     ),
@@ -59,6 +166,7 @@ function JobScheduler() {
       projectId,
       scheduledJobs,
       onScheduledJobDelete,
+      onScheduledJobEdit,
       reloadScheduledJobs,
       executorInfo,
     ]
@@ -66,37 +174,7 @@ function JobScheduler() {
 
   const onJobSchedule = () => {
     showAppDialog(ScheduleJobDialog, {
-      onDeploy: async (
-        {
-          containerImage,
-          displayName,
-          deploymentParameters,
-          deploymentEndpoints,
-          cronString,
-        },
-        onClose
-      ) => {
-        const jobInput = {
-          container_image: containerImage,
-          display_name: displayName,
-          endpoints: deploymentEndpoints,
-          parameters: deploymentParameters,
-        };
-        const scheduleJobInput = {
-          cron_string: cronString,
-          job_input: jobInput,
-        };
-
-        onClose();
-        try {
-          await scheduleJob(projectId, scheduleJobInput);
-          showStandardSnackbar(`Scheduled job '${displayName}'`);
-          onClose();
-          reloadScheduledJobs();
-        } catch (err) {
-          showStandardSnackbar(`Could not schedule '${displayName}'.`);
-        }
-      },
+      onDeploy,
     });
   };
 

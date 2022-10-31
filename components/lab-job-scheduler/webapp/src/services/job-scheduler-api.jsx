@@ -20,6 +20,23 @@ export async function scheduleJob(projectId, scheduleJobInput) {
   }
 }
 
+export async function editScheduledJob(projectId, jobId, scheduleJobInput) {
+  try {
+    await superagent
+      .post(`${EXTENSION_ENDPOINT}/project/${projectId}/schedule/${jobId}`)
+      .withCredentials()
+      .send(scheduleJobInput)
+      .set('Content-Type', 'application/json');
+  } catch (err) {
+    let message = err.response?.body?.detail;
+    if (typeof message === 'undefined') {
+      message = 'Unknown error.';
+    }
+    showStandardSnackbar(`Failed to edit scheduled job! ${message}`);
+    throw err;
+  }
+}
+
 export async function listScheduledJobs(projectId) {
   try {
     const resp = await superagent

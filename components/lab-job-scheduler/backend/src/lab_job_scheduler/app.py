@@ -181,7 +181,7 @@ def update_schedule(
     job_id: str,
     component_manager: ComponentOperations = Depends(get_component_manager),
 ) -> Any:
-    job = get_job_from_job_input(job_input)
+    job = get_job_from_job_input(job_input, job_id)
     db = component_manager.get_json_db_manager()
     resp = db.update_json_document(project_id=project_id,
                                    collection_id="schedules", key=job_id, json_document=json.dumps((job.dict())))
@@ -216,12 +216,13 @@ def get_all_scheduled_jobs_from_db(component_manager: ComponentOperations, proje
     return [ScheduledJob(**json.loads(document.json_value)) for document in documents]
 
 
-def get_job_from_job_input(job_schedule: ScheduledJobInput) -> ScheduledJob:
+def get_job_from_job_input(job_schedule: ScheduledJobInput, job_id: str = None) -> ScheduledJob:
+
     return ScheduledJob(
         cron_string=job_schedule.cron_string,
         job_input=job_schedule.job_input,
         created=datetime.datetime.now().isoformat(),
-        job_id=id_utils.generate_short_uuid(),
+        job_id=id_utils.generate_short_uuid() if job_id is None else job_id,
         next_run=get_next_run_time(job_schedule).isoformat(),
     )
 
