@@ -33,6 +33,8 @@ function Jobs(props) {
           deploymentName,
           deploymentParameters,
           deploymentEndpoints,
+          minCpus,
+          minMemory,
         },
         onClose
       ) => {
@@ -41,6 +43,7 @@ function Jobs(props) {
           display_name: deploymentName,
           endpoints: deploymentEndpoints,
           parameters: deploymentParameters,
+          compute: { min_cpus: minCpus, min_memory: minMemory },
         };
         try {
           await await jobsApi.deployJob(activeProject.id, jobInput);
