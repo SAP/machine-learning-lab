@@ -89,6 +89,7 @@ setup(
             "uvicorn",
         ],
     },
+    setup_requires=['wheel'],
     include_package_data=True,
     classifiers=[
         # TODO: Update based on https://pypi.org/classifiers/
