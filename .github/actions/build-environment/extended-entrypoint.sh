@@ -2,6 +2,8 @@
 
 # Stops script execution if a command has an error
 set -e
+# Print command
+set -x
 
 # set default build args if not provided
 export CONTAXY_ENDPOINT=http://"$_HOST_IP":30010
@@ -47,12 +49,32 @@ fi
 pip install -r "$GITHUB_WORKSPACE/build_requirements.txt"
 
 
-# Call the original build-environment entrypoint (doing so, the logic does not have to be copied)
+# Copy code from the original build-environment entrypoint
 # Disable immediate stop so that the cleanup phase can run even if entrypoint-sh fails
 set +e
 
-echo "Run original entrypoint"
-/bin/bash /entrypoint.sh "$@"
+echo "Run build.py"
+# set default build args if not provided
+BUILD_ARGS="$INPUT_BUILD_ARGS"
+if [ -z "$BUILD_ARGS" ]; then
+    BUILD_ARGS="--check --make --test"
+fi
+if [ -n "$GITHUB_TOKEN" ]; then
+    echo "GitHub Token provided. Setting up GitHub URLs..."
+    # Use the github token to authenticate the git interaction (see this Stackoverflow answer: https://stackoverflow.com/a/57229018/5379273)
+    git config --global url."https://api:$GITHUB_TOKEN@github.com/".insteadOf "https://github.com/"
+    git config --global url."https://ssh:$GITHUB_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
+    git config --global url."https://git:$GITHUB_TOKEN@github.com/".insteadOf "git@github.com:"
+
+    BUILD_ARGS="$BUILD_ARGS --github-token=$GITHUB_TOKEN"
+fi
+# Navigate to working directory, if provided
+if [ -n "$INPUT_WORKING_DIRECTORY" ]; then
+    cd "$INPUT_WORKING_DIRECTORY"
+else
+    cd "$GITHUB_WORKSPACE"
+fi
+python -u build.py $BUILD_ARGS
 exit_code=$?
 
 echo "Cleanup Phase"
