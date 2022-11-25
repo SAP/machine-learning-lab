@@ -3,7 +3,8 @@ FROM python:3-slim
 WORKDIR /mlflow
 
 RUN apt update && apt install -y gcc git
-RUN pip install --no-cache-dir mlflow==1.28.0
+RUN pip install --no-cache-dir mlflow==1.25.0
+ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION python
 
 ADD mlflow-mllab-plugin mlflow-mllab-plugin
 RUN cd mlflow-mllab-plugin && pip install .
