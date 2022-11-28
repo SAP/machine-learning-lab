@@ -15,7 +15,8 @@ fi
 system_namespace=${SYSTEM_NAMESPACE}
 contaxy_base_url=${CONTAXY_BASE_URL}
 service_suffix="''"
-resolver=127.0.0.11
+# Read dns resolver address from /etc/resolv.conf
+resolver=$(awk '/nameserver/{a=(a?a" "$2:$2)} END{print a}' /etc/resolv.conf 2> /dev/null)
 
 if [[ "${DEPLOYMENT_MANAGER,,}" == k8s || "${DEPLOYMENT_MANAGER,,}" == kubernetes ]]; then
     service_suffix=".$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local";
