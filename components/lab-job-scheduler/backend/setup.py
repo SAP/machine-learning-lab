@@ -48,7 +48,11 @@ setup(
     install_requires=[
         "fastapi",
         "loguru",
-        "contaxy==0.0.19",
+        "contaxy==0.0.22",
+        "croniter",
+        "shortuuid",
+        "slugify",
+        "email-validator",
     ],
     # deprecated: dependency_links=dependency_links,
     extras_require={
