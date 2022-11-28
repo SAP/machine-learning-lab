@@ -5,6 +5,7 @@ services:
   ml-lab-backend:
     image: ghcr.io/sap/machine-learning-lab/lab-backend:0.0.21
     container_name: ml-lab-backend
+    privileged: true # Required for accessing the docker socket
     ports:
       - "30010:8080"
     volumes:
