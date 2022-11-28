@@ -42,6 +42,7 @@ dist/
 .python-version
 .installed.cfg
 *.egg
+*.eggs
 reqlib-metadata
 .mypy_cache/
 .venv
