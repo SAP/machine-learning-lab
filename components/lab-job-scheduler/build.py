@@ -1,4 +1,5 @@
 import os
+from argparse import ArgumentParser
 
 from universal_build import build_utils
 from universal_build.helpers import build_docker, build_python, openapi_utils
@@ -24,8 +25,7 @@ def main(args: dict) -> None:
     if args.get(build_utils.FLAG_MAKE):
         build_utils.build(WEBAPP_COMPONENT, args)
 
-        build_docker.build_docker_image(
-            COMPONENT_NAME, version, exit_on_error=True)
+        build_docker.build_docker_image(COMPONENT_NAME, version, exit_on_error=True)
 
     # TODO: Uncomment when dockerfile is finalized
     # if args.get(build_utils.FLAG_CHECK):
