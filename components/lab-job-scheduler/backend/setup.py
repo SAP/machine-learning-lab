@@ -84,6 +84,7 @@ setup(
             "uvicorn",
         ],
     },
+    setup_requires=['wheel'],
     include_package_data=True,
     package_data={
         # If there are data files included in your packages that need to be
