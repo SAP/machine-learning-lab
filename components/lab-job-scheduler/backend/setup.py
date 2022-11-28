@@ -50,6 +50,7 @@ setup(
         "loguru",
         "contaxy==0.0.22",
         "croniter",
+        "types-croniter",
         "shortuuid",
         "slugify",
         "email-validator",
@@ -85,8 +86,7 @@ setup(
             # TODO: Move to required when necessary
             "universal-build",
             "requests",
-            "uvicorn",
-            "types-croniter"
+            "uvicorn"
         ],
     },
     setup_requires=['wheel'],
