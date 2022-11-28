@@ -68,6 +68,17 @@ if [ -n "$GITHUB_TOKEN" ]; then
 
     BUILD_ARGS="$BUILD_ARGS --github-token=$GITHUB_TOKEN"
 fi
+if [ -n "$INPUT_CONTAINER_REGISTRY_USERNAME" ] && [ -n "$INPUT_CONTAINER_REGISTRY_PASSWORD" ]; then
+    echo "Container registry credentials provided. Logging in to registry..."
+    docker login $INPUT_CONTAINER_REGISTRY_URL -u "$INPUT_CONTAINER_REGISTRY_USERNAME" -p "$INPUT_CONTAINER_REGISTRY_PASSWORD"
+
+    if [ -n "$INPUT_CONTAINER_REGISTRY_URL" ]; then
+        BUILD_ARGS="$BUILD_ARGS --container-registry-url=$INPUT_CONTAINER_REGISTRY_URL"
+    fi
+
+    BUILD_ARGS="$BUILD_ARGS --container-registry-username=$INPUT_CONTAINER_REGISTRY_USERNAME"
+    BUILD_ARGS="$BUILD_ARGS --container-registry-password=$INPUT_CONTAINER_REGISTRY_PASSWORD"
+fi
 # Navigate to working directory, if provided
 if [ -n "$INPUT_WORKING_DIRECTORY" ]; then
     cd "$INPUT_WORKING_DIRECTORY"
