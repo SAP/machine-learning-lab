@@ -1,24 +1,21 @@
-import os
-import json
-from textwrap import indent
-import uuid
-from typing import Any, Dict, List
 import datetime
 import functools
-from croniter import croniter
-from contaxy.utils import id_utils
+import json
+import os
 import threading
+from typing import Any, Dict, List
 
 from contaxy.operations.components import ComponentOperations
 from contaxy.schema.exceptions import CREATE_RESOURCE_RESPONSES
-from contaxy.utils import fastapi_utils
-from fastapi import Depends, FastAPI, status, HTTPException
+from contaxy.utils import fastapi_utils, id_utils
+from croniter import croniter
+from fastapi import Depends, FastAPI, HTTPException, status
 from starlette.middleware.cors import CORSMiddleware
 
-from lab_job_scheduler.utils import CONTAXY_API_ENDPOINT, get_component_manager
-from lab_job_scheduler.schema import ScheduledJob, ScheduledJobInput
-from lab_job_scheduler.config import JOB_INTERVAL
 from lab_job_scheduler import job_deployer
+from lab_job_scheduler.config import JOB_INTERVAL
+from lab_job_scheduler.schema import ScheduledJob, ScheduledJobInput
+from lab_job_scheduler.utils import CONTAXY_API_ENDPOINT, get_component_manager
 
 app = FastAPI()
 # Patch FastAPI to allow relative path resolution.
@@ -51,7 +48,8 @@ def on_startup() -> None:
         # cache all scheduled jobs from the database
         for project in component_manager.get_project_manager().list_projects():
             scheduled_jobs = get_all_scheduled_jobs_from_db(
-                component_manager, project.id)
+                component_manager, project.id
+            )
 
             if project.id not in cached_scheduled_jobs:
                 cached_scheduled_jobs[project.id] = {}
@@ -60,8 +58,12 @@ def on_startup() -> None:
                 cached_scheduled_jobs[project.id][job.job_id] = job
 
     fastapi_utils.schedule_call(
-        func=functools.partial(job_deployer.run_scheduled_jobs,
-                               cached_scheduled_jobs, lock, component_manager),
+        func=functools.partial(
+            job_deployer.run_scheduled_jobs,
+            cached_scheduled_jobs,
+            lock,
+            component_manager,
+        ),
         interval=datetime.timedelta(seconds=JOB_INTERVAL),
     )
 
@@ -79,8 +81,12 @@ def create_schedule(
 ) -> Any:
     job = get_job_from_job_input(job_input)
     db = component_manager.get_json_db_manager()
-    resp = db.create_json_document(project_id=project_id,
-                                   collection_id="schedules", key=job.job_id, json_document=json.dumps((job.dict())))
+    resp = db.create_json_document(
+        project_id=project_id,
+        collection_id="schedules",
+        key=job.job_id,
+        json_document=json.dumps((job.dict())),
+    )
 
     with lock:
         if project_id not in cached_scheduled_jobs:
@@ -162,10 +168,14 @@ def delete_schedule(
 ) -> Any:
     db = component_manager.get_json_db_manager()
     db.delete_json_document(
-        project_id=project_id, collection_id="schedules", key=job_id)
+        project_id=project_id, collection_id="schedules", key=job_id
+    )
 
     with lock:
-        if project_id in cached_scheduled_jobs and job_id in cached_scheduled_jobs[project_id]:
+        if (
+            project_id in cached_scheduled_jobs
+            and job_id in cached_scheduled_jobs[project_id]
+        ):
             del cached_scheduled_jobs[project_id][job_id]
 
 
@@ -183,8 +193,12 @@ def update_schedule(
 ) -> Any:
     job = get_job_from_job_input(job_input, job_id)
     db = component_manager.get_json_db_manager()
-    resp = db.update_json_document(project_id=project_id,
-                                   collection_id="schedules", key=job_id, json_document=json.dumps((job.dict())))
+    resp = db.update_json_document(
+        project_id=project_id,
+        collection_id="schedules",
+        key=job_id,
+        json_document=json.dumps((job.dict())),
+    )
 
     with lock:
         if project_id not in cached_scheduled_jobs:
@@ -207,16 +221,18 @@ def executor_info() -> Any:
     }
 
 
-def get_all_scheduled_jobs_from_db(component_manager: ComponentOperations, project_id: str) -> List[ScheduledJob]:
+def get_all_scheduled_jobs_from_db(
+    component_manager: ComponentOperations, project_id: str
+) -> List[ScheduledJob]:
     """Returns all jobs from the database."""
     db = component_manager.get_json_db_manager()
-    documents = db.list_json_documents(
-        project_id=project_id, collection_id="schedules"
-    )
+    documents = db.list_json_documents(project_id=project_id, collection_id="schedules")
     return [ScheduledJob(**json.loads(document.json_value)) for document in documents]
 
 
-def get_job_from_job_input(job_schedule: ScheduledJobInput, job_id: str = None) -> ScheduledJob:
+def get_job_from_job_input(
+    job_schedule: ScheduledJobInput, job_id: str = None
+) -> ScheduledJob:
 
     return ScheduledJob(
         cron_string=job_schedule.cron_string,

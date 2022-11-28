@@ -86,6 +86,7 @@ setup(
             "universal-build",
             "requests",
             "uvicorn",
+            "types-croniter"
         ],
     },
     setup_requires=['wheel'],
