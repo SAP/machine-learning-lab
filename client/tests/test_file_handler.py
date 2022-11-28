@@ -216,7 +216,7 @@ class TestFile:
             f.close()
         env.upload_file(tf.name, "dataset")
 
-        date_from = datetime.now(timezone.utc) - timedelta(days=1)
+        date_from = datetime.now(timezone.utc)
         date_to = datetime.now(timezone.utc) + timedelta(days=1)
 
         env.delete_remote_files(date_from, date_to)

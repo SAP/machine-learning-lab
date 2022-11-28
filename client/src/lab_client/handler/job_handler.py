@@ -205,11 +205,13 @@ class JobHandler:
             job_id=job_id
         )
 
-    def delete_jobs(self) -> None:
+    def delete_jobs(self, date_from: Optional[datetime] = None, date_to: Optional[datetime] = None) -> None:
         """Deletes all jobs of a project.
         """
         self.deployment_client.delete_jobs(
-            project_id=self.env.project
+            project_id=self.env.project,
+            date_from=date_from,
+            date_to=date_to
         )
 
     def get_job_logs(

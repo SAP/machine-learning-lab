@@ -3,7 +3,7 @@ from contaxy.schema.deployment import JobInput, ServiceInput, ServiceUpdate
 from lab_client import Environment
 from .conftest import test_settings
 import pytest
-
+from datetime import datetime, timedelta, timezone
 
 @pytest.mark.integration
 class TestJob:
@@ -50,6 +50,52 @@ class TestJob:
         env.job_handler.delete_jobs()
         job_list = env.job_handler.list_jobs()
         assert len(job_list) == 0
+
+    def test_delete_jobs_within_time_period(self) -> None:
+        env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
+                          lab_api_token=test_settings.LAB_TOKEN,
+                          project=test_settings.LAB_PROJECT)
+
+        input = JobInput(
+            container_image='ubuntu:latest',
+            display_name='Job2',
+            command=['/bin/bash', '-c', '--'],
+            args=['sleep 5']
+        )
+        job_id = env.job_handler.deploy_job(input)
+
+        status = env.job_handler.wait_for_job_completion(job_id)
+        assert status == True
+
+        date_from = datetime.now(timezone.utc)
+        date_to = datetime.now(timezone.utc) + timedelta(days=1)
+
+        env.job_handler.delete_jobs(date_from, date_to)
+        job_list = env.job_handler.list_jobs()
+        assert len(job_list) == 0
+
+    def test_delete_jobs_outside_time_period(self) -> None:
+        env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
+                          lab_api_token=test_settings.LAB_TOKEN,
+                          project=test_settings.LAB_PROJECT)
+
+        input = JobInput(
+            container_image='ubuntu:latest',
+            display_name='Job2',
+            command=['/bin/bash', '-c', '--'],
+            args=['sleep 5']
+        )
+        job_id = env.job_handler.deploy_job(input)
+
+        status = env.job_handler.wait_for_job_completion(job_id)
+        assert status == True
+
+        date_from = datetime.now(timezone.utc) - timedelta(days=3)
+        date_to = datetime.now(timezone.utc) - timedelta(days=2)
+
+        env.job_handler.delete_jobs(date_from, date_to)
+        job_list = env.job_handler.list_jobs()
+        assert len(job_list) == 1
 
     def test_job_logs(self) -> None:
         env = Environment(lab_endpoint=test_settings.LAB_BACKEND,
