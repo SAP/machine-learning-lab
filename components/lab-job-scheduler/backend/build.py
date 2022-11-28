@@ -1,4 +1,5 @@
 import os
+import re
 from pathlib import Path
 
 from universal_build import build_utils
@@ -13,12 +14,19 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 INTEGRATION_TEST_MARKER = "integration"
 
 
+def update_contaxy_version(file_path, contaxy_version):
+    with open(file_path, "r+") as f:
+        data = f.read()
+        f.seek(0)
+        f.write(re.sub(r'\"contaxy==[^\"]*\"', f'"contaxy=={contaxy_version}"', data))
+        f.truncate()
+
+
 def main(args: dict) -> None:
     # set current path as working dir
     os.chdir(HERE)
 
     version = args.get(build_utils.FLAG_VERSION)
-
     if version:
         # Update version in _about.py
         build_python.update_version(
@@ -26,6 +34,10 @@ def main(args: dict) -> None:
             build_utils._Version.get_pip_compatible_string(str(version)),
             exit_on_error=True,
         )
+
+    contaxy_version = args.get("contaxy-version")
+    if contaxy_version:
+        update_contaxy_version("./setup.py", contaxy_version)
 
     if args.get(build_utils.FLAG_MAKE):
         # Install pipenv dev requirements
@@ -80,5 +92,9 @@ def main(args: dict) -> None:
 
 
 if __name__ == "__main__":
+    parser = ArgumentParser()
+    parser.add_argument(
+        f"--contaxy-version", help="Version of the contaxy library to use."
+    )
     args = build_python.parse_arguments()
     main(args)
