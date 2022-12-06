@@ -2,6 +2,7 @@ from contaxy.schema.deployment import JobInput
 from pydantic import BaseModel, Field
 from typing import Optional
 
+
 class ScheduledJobInput(BaseModel):
     cron_string: str = Field(
         ...,
