@@ -26,12 +26,12 @@ class ScheduledJob(ScheduledJobInput):
         example="2022-09-29T11:39:52.441287",
     )
     last_run: str = Field(
-        None,
+        ...,
         description="The last time the job was run in ISO format.",
         example="2022-09-29T11:39:52.441287",
     )
     next_run: str = Field(
-        None,
+        ...,
         description="The next time the job will be run in ISO format.",
         example="2022-09-29T11:39:52.441287",
     )
