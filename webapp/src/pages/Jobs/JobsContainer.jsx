@@ -44,6 +44,7 @@ function JobsContainer(props) {
   const {
     data,
     onReload,
+    onDeleteMany,
     onJobDelete,
     onShowJobActions,
     onShowJobLogs,
@@ -85,6 +86,12 @@ function JobsContainer(props) {
           tooltip: t('reload'),
         },
         {
+          icon: 'delete',
+          isFreeAction: true,
+          onClick: onDeleteMany,
+          tooltip: 'Delete Many',
+        },
+        {
           icon: 'login',
           iconProps: { className: `` },
           onClick: (event, rowData) => {
@@ -124,6 +131,7 @@ function JobsContainer(props) {
 JobsContainer.propTypes = {
   data: PropTypes.arrayOf(Object),
   onReload: PropTypes.func,
+  onDeleteMany: PropTypes.func,
   onJobDelete: PropTypes.func,
   onShowJobActions: PropTypes.func,
   onShowJobLogs: PropTypes.func,
@@ -133,6 +141,7 @@ JobsContainer.propTypes = {
 JobsContainer.defaultProps = {
   data: [],
   onReload: () => {},
+  onDeleteMany: () => {},
   onJobDelete: () => {},
   onShowJobActions: () => {},
   onShowJobLogs: () => {},
