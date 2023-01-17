@@ -15,8 +15,10 @@ import {
   getFileDownloadUrl,
   getFileUploadUrl,
 } from '../../services/contaxy-api';
+import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
 import FilesTable from './FilesTable';
 
+import ConfirmDeleteManyDialog from '../../components/Dialogs/DeleteMany';
 import GlobalStateContainer from '../../app/store';
 import UploadFilesDialog from '../../components/Dialogs/UploadFilesDialog';
 import Widget from '../../components/Widget';
@@ -27,6 +29,7 @@ function Files(props) {
   const { className, folder, uploadNote } = props;
   const [data, setData] = useState([]);
   const { activeProject } = GlobalStateContainer.useContainer();
+  const showAppDialog = useShowAppDialog();
   const projectId = activeProject.id;
   const [widgetData, setWidgetData] = useState({
     totalSize: '0',
@@ -90,6 +93,36 @@ function Files(props) {
     [projectId, reloadFiles]
   );
 
+  const onDeleteMany = useCallback(
+    async (projectId) => {
+      try {
+        showAppDialog(ConfirmDeleteManyDialog, {
+          dialogTitle: 'Delete Datasets',
+          dialogText: `Do you really want to delete the datasets?`,
+          onDelete: async (onClose, startDate, endDate) => {
+            try {
+              const opts = {
+                startDate: new Date(startDate),
+                endDate: new Date(endDate),
+              };
+              await filesApi.deleteFiles(projectId, opts);
+              showStandardSnackbar(`Deleted datasets`);
+              reloadFiles();
+            } catch (err) {
+              // showStandardSnackbar(
+              //   `Could not delete user ${rowData.id}! ${err.body.message}.`
+              // );
+            }
+            onClose();
+          },
+        });
+      } catch (err) {
+        showStandardSnackbar('Could not load files metadata');
+      }
+    },
+    [showAppDialog, reloadFiles]
+  );
+
   const onFileDownload = useCallback(
     (rowData) => {
       const a = document.createElement('a');
@@ -118,6 +151,7 @@ function Files(props) {
       data={data}
       onFileDownload={onFileDownload}
       onFileDelete={onFileDelete}
+      onDeleteMany={(rowData) => onDeleteMany(activeProject.id, rowData)}
       onReload={reloadFiles}
     />
   );
