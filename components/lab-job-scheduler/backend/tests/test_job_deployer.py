@@ -18,7 +18,7 @@ def job_without_last_run(job_input: JobInput):
     return ScheduledJob(
         job_id=str(uuid.uuid4()),
         created=datetime.datetime(2021, 1, 1, 0, 0, 0).isoformat(),
-        last_run=None,
+        last_run="",
         cron_string="0 1 * * *",
         job_input=job_input,
     )
