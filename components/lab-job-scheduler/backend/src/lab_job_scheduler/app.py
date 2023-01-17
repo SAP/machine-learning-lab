@@ -3,7 +3,7 @@ import functools
 import json
 import os
 import threading
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from contaxy.operations.components import ComponentOperations
 from contaxy.schema.exceptions import CREATE_RESOURCE_RESPONSES
@@ -231,7 +231,7 @@ def get_all_scheduled_jobs_from_db(
 
 
 def get_job_from_job_input(
-    job_schedule: ScheduledJobInput, job_id: str = None
+    job_schedule: ScheduledJobInput, job_id: Optional[str] = None
 ) -> ScheduledJob:
 
     return ScheduledJob(
