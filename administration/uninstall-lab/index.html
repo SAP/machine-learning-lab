@@ -565,7 +565,7 @@
                 
                 <h1 id="uninstall-ml-lab">Uninstall ML Lab<a class="headerlink" href="#uninstall-ml-lab" title="Permanent link">&para;</a></h1>
 <p>All docker resources of an ML Lab installation are labeled by the used <code>LAB_NAMESPACE</code> (default=<code>lab</code>). These docker resources related to a ML Lab installation (regardless if it is installed in docker, or kubernetes mode) can be removed via a convenient <code>docker run</code> command:</p>
-<div class="highlight"><pre><span></span><code>docker run --rm --env <span class="nv">LAB_ACTION</span><span class="o">=</span>uninstall -v /var/run/docker.sock:/var/run/docker.sock lab-service:latest
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--env<span class="w"> </span><span class="nv">LAB_ACTION</span><span class="o">=</span>uninstall<span class="w"> </span>-v<span class="w"> </span>/var/run/docker.sock:/var/run/docker.sock<span class="w"> </span>lab-service:latest
 </code></pre></div>
 <p>All resources started outside of the ML Lab instance, e.g. <a href="../backup-data">Backup Jobs</a>, need to be removed manually. If you have used another <code>LAB_NAMESPACE</code> than the default one (<code>lab</code>), you need to specify this namespace as well (<code>--env LAB_NAMESPACE="YOUR_NAMESPACE"</code>).</p>
 <div class="admonition warning">

@@ -972,16 +972,16 @@
 <h3 id="install-with-docker-local-mode">Install with Docker Local Mode<a class="headerlink" href="#install-with-docker-local-mode" title="Permanent link">&para;</a></h3>
 <p><em>Note: The install commands here are currently based on the scenario where you built the Docker images locally yourself. For seeing how to use ready images, please check the Readme of the GitHub repository <a href="https://github.com/SAP/machine-learning-lab#getting-started">here</a></em></p>
 <p>To start  ML Lab in a single-host (local) deployment execute:</p>
-<div class="highlight"><pre><span></span><code>docker run --rm --env <span class="nv">LAB_PORT</span><span class="o">=</span><span class="m">8091</span> -v /var/run/docker.sock:/var/run/docker.sock --env <span class="nv">LAB_ACTION</span><span class="o">=</span>install lab-service:latest
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--env<span class="w"> </span><span class="nv">LAB_PORT</span><span class="o">=</span><span class="m">8091</span><span class="w"> </span>-v<span class="w"> </span>/var/run/docker.sock:/var/run/docker.sock<span class="w"> </span>--env<span class="w"> </span><span class="nv">LAB_ACTION</span><span class="o">=</span>install<span class="w"> </span>lab-service:latest
 </code></pre></div>
 <p>After the installation is finished (after several minutes depending on internet speed), visit <code>http://&lt;HOSTIP&gt;:8091</code> and login with <code>admin:admin</code>.</p>
 <p><strong>Enable SSL</strong></p>
 <p>For SSL setup, create the certificate (files must be called cert.crt and cert.key) and specify their path on the host machine via the <code>LAB_SSL_ROOT</code> environment variable. Additionally you need to set <code>SERVICE_SSL_ENABLED</code> to true:
-<div class="highlight"><pre><span></span><code>docker run --rm --env <span class="nv">LAB_PORT</span><span class="o">=</span><span class="m">8091</span> <span class="se">\</span>
-    --env <span class="nv">SERVICE_SSL_ENABLED</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
-    --env <span class="nv">LAB_SSL_ROOT</span><span class="o">=</span>/workspace/ssl <span class="se">\</span>
-    -v /var/run/docker.sock:/var/run/docker.sock <span class="se">\</span>
-    lab-service:latest
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--env<span class="w"> </span><span class="nv">LAB_PORT</span><span class="o">=</span><span class="m">8091</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--env<span class="w"> </span><span class="nv">SERVICE_SSL_ENABLED</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--env<span class="w"> </span><span class="nv">LAB_SSL_ROOT</span><span class="o">=</span>/workspace/ssl<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>/var/run/docker.sock:/var/run/docker.sock<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>lab-service:latest
 </code></pre></div></p>
 <p>Alternatively, instead of specifying <code>LAB_SSL_ROOT</code>, the certificate can be provided in a docker volume named <code>lab_ssl</code>.
 If you don't provide a custom certificate, a self-signed certificate is generated and used. Be aware that applications such as your browser might not trust the certificate.</p>
@@ -994,24 +994,24 @@ If you don't provide a custom certificate, a self-signed certificate is generate
 <p><strong>Preparation</strong></p>
 <p>For the Kubernetes deployment, a few minor steps to prepare the host have to be made such as creating a directory where the data is stored etc. since Kubernetes does not have the concept of Docker's named volumes. The Kubernetes version of the ML Lab needs the kube config of the cluster as well as the access to the Docker socket.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># label the master node with role=master, as we use it in ML Lab</span>
-kubectl label nodes &lt;name-of-master-node&gt; <span class="nv">role</span><span class="o">=</span>master
+kubectl<span class="w"> </span>label<span class="w"> </span>nodes<span class="w"> </span>&lt;name-of-master-node&gt;<span class="w"> </span><span class="nv">role</span><span class="o">=</span>master
 
 <span class="c1"># install nfs-common for mounting nfs-service in workspace</span>
-apt-get install nfs-common
+apt-get<span class="w"> </span>install<span class="w"> </span>nfs-common
 
 <span class="c1"># create the data root directory that will be used by Kubernetes</span>
 <span class="c1"># Default is `/workspace/lab/&lt;namespace&gt;/data`</span>
 <span class="c1"># Hence, when creating a Lab for default namespace &#39;lab&#39;:</span>
-mkdir -p /workspace/lab/lab/data
+mkdir<span class="w"> </span>-p<span class="w"> </span>/workspace/lab/lab/data
 </code></pre></div>
 <p><strong>Installation</strong></p>
 <div class="highlight"><pre><span></span><code><span class="c1"># On Mac: in ~/.kube/config for &#39;server&#39; field replace &#39;localhost&#39; with &#39;docker.for.mac.localhost&#39;</span>
-docker run --rm --env <span class="nv">LAB_PORT</span><span class="o">=</span><span class="m">30001</span> <span class="se">\</span>
-    -v /root/.kube/config:/root/.kube/config <span class="se">\</span>
-    -v /var/run/docker.sock:/var/run/docker.sock <span class="se">\</span>
-    --env <span class="nv">SERVICES_RUNTIME</span><span class="o">=</span>k8s <span class="se">\</span>
-    --env <span class="nv">LAB_DATA_ROOT</span><span class="o">=</span>/workspace/lab/stulabdio/data <span class="se">\</span>
-    lab-service:latest
+docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--env<span class="w"> </span><span class="nv">LAB_PORT</span><span class="o">=</span><span class="m">30001</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>/root/.kube/config:/root/.kube/config<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>/var/run/docker.sock:/var/run/docker.sock<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--env<span class="w"> </span><span class="nv">SERVICES_RUNTIME</span><span class="o">=</span>k8s<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--env<span class="w"> </span><span class="nv">LAB_DATA_ROOT</span><span class="o">=</span>/workspace/lab/stulabdio/data<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>lab-service:latest
 </code></pre></div>
 <p>After installation is finished (after several minutes depending on intranet speed), visit <code>http://&lt;HOSTIP&gt;:30001</code> and login with <code>admin:admin</code>.</p>
 <div class="admonition tip">
@@ -1020,14 +1020,14 @@ docker run --rm --env <span class="nv">LAB_PORT</span><span class="o">=</span><s
 </div>
 <p><strong>Enable SSL</strong></p>
 <p>For SSL setup, create the certificates and mount them into the container's directory at <code>/resources/ssl</code> (<code>-v /workspace/ssl:/resources/ssl:ro</code>) and start with <code>--env SERVICE_SSL_ENABLED=true</code>:</p>
-<div class="highlight"><pre><span></span><code>docker run --rm --env <span class="nv">LAB_PORT</span><span class="o">=</span><span class="m">30001</span> <span class="se">\</span>
-    -v /root/.kube/config:/root/.kube/config <span class="se">\</span>
-    -v /var/run/docker.sock:/var/run/docker.sock <span class="se">\</span>
-    --env <span class="nv">SERVICES_RUNTIME</span><span class="o">=</span>k8s <span class="se">\</span>
-    --env <span class="nv">LAB_DATA_ROOT</span><span class="o">=</span>/workspace/lab/lab/data <span class="se">\</span>
-    --env <span class="nv">SERVICE_SSL_ENABLED</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
-    -v /workspace/ssl:/resources/ssl:ro <span class="se">\</span>
-    lab-service:latest
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--env<span class="w"> </span><span class="nv">LAB_PORT</span><span class="o">=</span><span class="m">30001</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>/root/.kube/config:/root/.kube/config<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>/var/run/docker.sock:/var/run/docker.sock<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--env<span class="w"> </span><span class="nv">SERVICES_RUNTIME</span><span class="o">=</span>k8s<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--env<span class="w"> </span><span class="nv">LAB_DATA_ROOT</span><span class="o">=</span>/workspace/lab/lab/data<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--env<span class="w"> </span><span class="nv">SERVICE_SSL_ENABLED</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>/workspace/ssl:/resources/ssl:ro<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>lab-service:latest
 </code></pre></div>
 <p>The files have to be named <code>cert.crt</code> and <code>cert.key</code> .</p>
 <h3 id="install-with-kubernetes-managed-cluster-such-as-aws-eks">Install with Kubernetes (Managed Cluster such as AWS EKS)<a class="headerlink" href="#install-with-kubernetes-managed-cluster-such-as-aws-eks" title="Permanent link">&para;</a></h3>

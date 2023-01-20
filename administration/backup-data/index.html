@@ -635,34 +635,34 @@
 <p>We recommend using <a href="https://github.com/blacklabelops/volumerize">Volumerize</a> to backup the persisted data of the Minio and Mongo Storage to one of the <a href="http://duplicity.nongnu.org/index.html">many supported backends</a> (e.g. filesystem, ssh, rsync, s3). With Volumerize, it is also possible to schedule periodic backups. Please refer to the <a href="https://github.com/blacklabelops/volumerize">Volumerize documentation</a> for all features and usage information. In the following two sections, we will show examples on how to use Volumerize to backup persisted data from a Docker-local and Kubernetes Lab instance.</p>
 <h2 id="example-docker-local">Example: Docker Local<a class="headerlink" href="#example-docker-local" title="Permanent link">&para;</a></h2>
 <p>Backup <code>lab-minio</code> and <code>lab-mongo</code> volumes every 2 days at 2am into the local folder that the following command is executed from (<code>$(pwd)</code>):</p>
-<div class="highlight"><pre><span></span><code>docker run -d --restart always --name lab-backup <span class="se">\</span>
-    -v lab-minio:/source/lab-minio:ro <span class="se">\</span>
-    -v lab-mongo:/source/lab-mongo:ro <span class="se">\</span>
-    -v lab-backup-cache:/volumerize-cache <span class="se">\</span>
-    -v <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/backup <span class="se">\</span>
-    -e <span class="s2">&quot;VOLUMERIZE_SOURCE=/source&quot;</span> <span class="se">\</span>
-    -e <span class="s2">&quot;VOLUMERIZE_TARGET=file:///backup&quot;</span> <span class="se">\</span>
-    -e <span class="s2">&quot;VOLUMERIZE_DUPLICITY_OPTIONS=--progress&quot;</span> <span class="se">\</span>
-    -e <span class="s2">&quot;TZ=Europe/Berlin&quot;</span> <span class="se">\</span>
-    -e <span class="s2">&quot;VOLUMERIZE_JOBBER_TIME=0 0 3 */2 * *&quot;</span> <span class="se">\</span>
-    blacklabelops/volumerize:1.5.0
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--restart<span class="w"> </span>always<span class="w"> </span>--name<span class="w"> </span>lab-backup<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>lab-minio:/source/lab-minio:ro<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>lab-mongo:/source/lab-mongo:ro<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>lab-backup-cache:/volumerize-cache<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/backup<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="s2">&quot;VOLUMERIZE_SOURCE=/source&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="s2">&quot;VOLUMERIZE_TARGET=file:///backup&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="s2">&quot;VOLUMERIZE_DUPLICITY_OPTIONS=--progress&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="s2">&quot;TZ=Europe/Berlin&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="s2">&quot;VOLUMERIZE_JOBBER_TIME=0 0 3 */2 * *&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>blacklabelops/volumerize:1.5.0
 </code></pre></div>
 <h2 id="example-kubernetes">Example: Kubernetes<a class="headerlink" href="#example-kubernetes" title="Permanent link">&para;</a></h2>
 <p>In a Kubernetes Lab instance, the persisted data is on the manager node's filesystem in the folder specified with <code>LAB_DATA_ROOT</code> during the installation process. In the following example, the <code>LAB_DATA_ROOT</code> is <code>/lab/data/</code> which means that the Minio data is persisted at <code>/lab/data/lab-minio</code> and the Mongo data at <code>/lab/data/lab-mongo</code> on the file system of the manager node.</p>
 <p>The backup is scheduled for every 2 days at 3am as well. Instead of backing up the data on the local filesystem (as shown in the Docker local example) we will use rsync for this example to move the data to a remote machine specified via <code>rsync://10.12.345.678//lab/backup</code>. In order to be able to connect, valid key information needs to be provided (<code>id_rsa</code> and <code>known_hosts</code>) as demonstrated below:</p>
-<div class="highlight"><pre><span></span><code>docker run -d -restart always --name lab-backup  <span class="se">\</span>
-    --name volumerize-backup <span class="se">\</span>
-    -v /lab/data/lab-minio:/source/lab-minio:ro <span class="se">\</span>
-    -v /lab/data/lab-mongo:/source/lab-mongo:ro <span class="se">\</span>
-    -v lab-backup-cache:/volumerize-cache <span class="se">\</span>
-    -v /lab/backup/backup_key:/root/.ssh/id_rsa <span class="se">\</span>
-    -v /root/.ssh/known_hosts:/root/.ssh/known_hosts <span class="se">\</span>
-    -e <span class="s2">&quot;VOLUMERIZE_SOURCE=/source&quot;</span> <span class="se">\</span>
-    -e <span class="s2">&quot;VOLUMERIZE_TARGET=rsync://10.12.345.678//lab/backup&quot;</span> <span class="se">\</span>
-    -e <span class="s2">&quot;VOLUMERIZE_DUPLICITY_OPTIONS=--progress&quot;</span> <span class="se">\</span>
-    -e <span class="s2">&quot;TZ=Europe/Berlin&quot;</span> <span class="se">\</span>
-    -e <span class="s2">&quot;VOLUMERIZE_JOBBER_TIME=0 0 3 */2 * *&quot;</span> <span class="se">\</span>
-    blacklabelops/volumerize:1.5.0
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-restart<span class="w"> </span>always<span class="w"> </span>--name<span class="w"> </span>lab-backup<span class="w">  </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>volumerize-backup<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>/lab/data/lab-minio:/source/lab-minio:ro<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>/lab/data/lab-mongo:/source/lab-mongo:ro<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>lab-backup-cache:/volumerize-cache<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>/lab/backup/backup_key:/root/.ssh/id_rsa<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span>/root/.ssh/known_hosts:/root/.ssh/known_hosts<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="s2">&quot;VOLUMERIZE_SOURCE=/source&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="s2">&quot;VOLUMERIZE_TARGET=rsync://10.12.345.678//lab/backup&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="s2">&quot;VOLUMERIZE_DUPLICITY_OPTIONS=--progress&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="s2">&quot;TZ=Europe/Berlin&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="s2">&quot;VOLUMERIZE_JOBBER_TIME=0 0 3 */2 * *&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>blacklabelops/volumerize:1.5.0
 </code></pre></div>
                 
                   

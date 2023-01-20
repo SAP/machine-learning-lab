@@ -570,7 +570,7 @@
 <p>For the update action, you should use the same configuration as used for the installed Lab instance. Especially, the <code>JWT_SECRET</code>, <code>SERVICES_RUNTIME</code>, and <code>SERVICE_SSL_ENABLED</code> are required to be the same values as used by the installed instance. Refer to the <a href="../../installation/install-lab/#configuration">installation section</a> for all possible configuration parameters.</p>
 </div>
 <p>To update, figure out the configuration of your installed Lab instance and run:</p>
-<div class="highlight"><pre><span></span><code>docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --env <span class="nv">LAB_ACTION</span><span class="o">=</span>update lab-service:&lt;NEW_VERSION&gt;
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>/var/run/docker.sock:/var/run/docker.sock<span class="w"> </span>--env<span class="w"> </span><span class="nv">LAB_ACTION</span><span class="o">=</span>update<span class="w"> </span>lab-service:&lt;NEW_VERSION&gt;
 </code></pre></div>
                 
                   
