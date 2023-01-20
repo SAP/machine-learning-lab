@@ -44,8 +44,15 @@ const COLUMNS = [
 ];
 
 function FilesTable(props) {
-  const { className, title, data, onFileDelete, onFileDownload, onReload } =
-    props;
+  const {
+    className,
+    title,
+    data,
+    onFileDelete,
+    onDeleteMany,
+    onFileDownload,
+    onReload,
+  } = props;
   return (
     <MaterialTable
       title={title || 'Files'}
@@ -88,6 +95,12 @@ function FilesTable(props) {
           tooltip: 'Download File',
         },
         {
+          icon: 'delete',
+          isFreeAction: true,
+          onClick: onDeleteMany,
+          tooltip: 'Delete Many',
+        },
+        {
           icon: 'content_copy',
           iconProps: { className: `${className} actionIcon` },
           onClick: (event, rowData) => {
@@ -116,6 +129,7 @@ FilesTable.propTypes = {
   data: PropTypes.arrayOf(Object),
   onFileDownload: PropTypes.func,
   onFileDelete: PropTypes.func,
+  onDeleteMany: PropTypes.func,
   onReload: PropTypes.func,
 };
 
@@ -124,6 +138,7 @@ FilesTable.defaultProps = {
   title: '',
   data: [],
   onFileDelete: () => {},
+  onDeleteMany: () => {},
   onFileDownload: () => {},
   onReload: () => {},
 };

@@ -9,9 +9,9 @@ import Button from '@material-ui/core/Button';
 import { useJobs } from '../../services/api-hooks';
 import { useShowAppDialog } from '../../app/AppDialogServiceProvider';
 import DeployServiceDialog from '../../components/Dialogs/DeployContainerDialog';
-// import Widget from '../components/Widget';
-// import WidgetsGrid from '../components/WidgetsGrid';
+
 import { jobsApi } from '../../services/contaxy-api';
+import ConfirmDeleteManyDialog from '../../components/Dialogs/DeleteMany';
 import ContentDialog from '../../components/Dialogs/ContentDialog';
 import GlobalStateContainer from '../../app/store';
 import JobsContainer from './JobsContainer';
@@ -56,6 +56,36 @@ function Jobs(props) {
       },
     });
   };
+
+  const onDeleteMany = useCallback(
+    async (projectId) => {
+      try {
+        showAppDialog(ConfirmDeleteManyDialog, {
+          dialogTitle: 'Delete Jobs',
+          dialogText: `Do you really want to delete the jobs?`,
+          onDelete: async (onClose, startDate, endDate) => {
+            try {
+              const opts = {
+                startDate: new Date(startDate),
+                endDate: new Date(endDate),
+              };
+              await jobsApi.deleteJobs(projectId, opts);
+              showStandardSnackbar(`Deleted jobs`);
+              reloadJobs();
+            } catch (err) {
+              // showStandardSnackbar(
+              //   `Could not delete user ${rowData.id}! ${err.body.message}.`
+              // );
+            }
+            onClose();
+          },
+        });
+      } catch (err) {
+        showStandardSnackbar('Could not load Job metadata');
+      }
+    },
+    [showAppDialog, reloadJobs]
+  );
 
   const onShowJobMetadata = useCallback(
     async (projectId, jobId) => {
@@ -108,6 +138,7 @@ function Jobs(props) {
         data={jobs}
         onReload={reloadJobs}
         onJobDelete={(rowData) => onJobDelete(activeProject.id, rowData.id)}
+        onDeleteMany={(rowData) => onDeleteMany(activeProject.id, rowData)}
         onShowJobActions={() => {}}
         onShowJobLogs={(rowData) => onShowJobLogs(activeProject.id, rowData.id)}
         onShowJobMetadata={(rowData) =>
@@ -119,6 +150,7 @@ function Jobs(props) {
       activeProject.id,
       jobs,
       onJobDelete,
+      onDeleteMany,
       // onShowJobActions,
       onShowJobLogs,
       onShowJobMetadata,
