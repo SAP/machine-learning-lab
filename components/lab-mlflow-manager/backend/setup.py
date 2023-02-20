@@ -66,7 +66,7 @@ setup(
             "mypy",
             "black",
             "pydocstyle",
-            "isort",
+            "isort==5.11.4",
             "lazydocs",
             "locust",
             # Test profiling

@@ -65,7 +65,7 @@ setup(
             "pytest-cov",
             "mypy",
             "black",
-            "isort",
+            "isort==5.11.4",
             "pydocstyle",
             "isort",
             "lazydocs",
