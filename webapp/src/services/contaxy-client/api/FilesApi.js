@@ -136,6 +136,8 @@ export default class FilesApi {
     };
     let queryParams = {
       extension_id: opts['extensionId'],
+      date_from: opts['startDate'],
+      date_to: opts['endDate'],
     };
     let headerParams = {};
     let formParams = {};
