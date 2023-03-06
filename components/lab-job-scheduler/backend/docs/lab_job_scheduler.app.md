@@ -32,7 +32,7 @@ on_startup() → None
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L71"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L70"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `create_schedule`
 
@@ -51,7 +51,7 @@ create_schedule(
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L99"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L98"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `list_schedules`
 
@@ -66,7 +66,7 @@ list_schedules(project_id: str) → Any
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L118"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L116"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `list_schedule`
 
@@ -81,7 +81,7 @@ list_schedule(project_id: str, job_id: str) → Any
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L141"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L138"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `delete_schedules`
 
@@ -99,7 +99,7 @@ delete_schedules(
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L158"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L155"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `delete_schedule`
 
@@ -118,7 +118,7 @@ delete_schedule(
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L182"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L179"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `update_schedule`
 
@@ -138,7 +138,7 @@ update_schedule(
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L212"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L209"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `executor_info`
 
@@ -153,7 +153,7 @@ executor_info() → Any
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L224"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L221"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_all_scheduled_jobs_from_db`
 
@@ -169,7 +169,7 @@ Returns all jobs from the database.
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L233"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L230"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_job_from_job_input`
 
@@ -187,7 +187,7 @@ get_job_from_job_input(
 
 ---
 
-<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L246"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/ml-tooling/contaxy/blob/main/components/lab-job-scheduler/backend/src/lab_job_scheduler/app.py#L242"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_next_run_time`
 
