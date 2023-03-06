@@ -71,6 +71,7 @@ setup(
             "black",
             "pydocstyle",
             "isort",
+            "colorama",
             "lazydocs",
             "locust",
             # Test profiling

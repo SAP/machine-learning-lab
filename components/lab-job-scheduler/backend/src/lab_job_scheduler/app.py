@@ -44,7 +44,6 @@ def on_startup() -> None:
     component_manager: ComponentOperations = get_component_manager(token=token)
 
     with lock:
-
         # cache all scheduled jobs from the database
         for project in component_manager.get_project_manager().list_projects():
             scheduled_jobs = get_all_scheduled_jobs_from_db(
@@ -105,7 +104,6 @@ def create_schedule(
 def list_schedules(
     project_id: str,
 ) -> Any:
-
     with lock:
         if project_id not in cached_scheduled_jobs:
             return []
@@ -125,7 +123,6 @@ def list_schedule(
     project_id: str,
     job_id: str,
 ) -> Any:
-
     with lock:
         if project_id not in cached_scheduled_jobs:
             raise HTTPException(status_code=404, detail="Project not found.")
@@ -233,7 +230,6 @@ def get_all_scheduled_jobs_from_db(
 def get_job_from_job_input(
     job_schedule: ScheduledJobInput, job_id: Optional[str] = None
 ) -> ScheduledJob:
-
     return ScheduledJob(
         cron_string=job_schedule.cron_string,
         job_input=job_schedule.job_input,

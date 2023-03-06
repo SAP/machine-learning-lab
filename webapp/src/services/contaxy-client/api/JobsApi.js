@@ -128,6 +128,8 @@ export default class JobsApi {
     };
     let queryParams = {
       extension_id: opts['extensionId'],
+      date_from: opts['startDate'],
+      date_to: opts['endDate'],
     };
     let headerParams = {};
     let formParams = {};

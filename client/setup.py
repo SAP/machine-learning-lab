@@ -66,6 +66,7 @@ setup(
             "mypy",
             "black",
             "isort",
+            "colorama",
             "pydocstyle",
             "isort",
             "lazydocs",
