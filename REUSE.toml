@@ -1,0 +1,10 @@
+version = 1
+SPDX-PackageName = "machine-learning-lab"
+SPDX-PackageSupplier = ["Lukas Masuch <lukas.masuch@sap.com>", "Benjamin Raethlein <benjamin.raethlein@sap.com>", "Erick David Santillan Perez <erick.david.santillan.perez@sap.com>", "Jan Kielmann <jan.kielmann@sap.com>"]
+SPDX-PackageDownloadLocation = "https://github.com/SAP/machine-learning-lab"
+
+[[annotations]]
+path = "**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "SAP SE and machine-learning-lab contributors"
+SPDX-License-Identifier = "Apache-2.0"
